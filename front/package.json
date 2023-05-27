@@ -1,0 +1,38 @@
+{
+  "name": "front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.3",
+    "@tanstack/react-query": "^4.29.11",
+    "@types/node": "20.2.4",
+    "@types/react": "18.2.7",
+    "@types/react-dom": "18.2.4",
+    "autoprefixer": "10.4.14",
+    "axios": "^1.4.0",
+    "clsx": "^1.2.1",
+    "dayjs": "^1.11.7",
+    "eslint": "8.41.0",
+    "eslint-config-next": "13.4.4",
+    "framer-motion": "^10.12.16",
+    "next": "13.4.4",
+    "postcss": "8.4.23",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
+    "react-icons": "^4.8.0",
+    "recoil": "^0.7.7",
+    "tailwindcss": "3.3.2",
+    "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.26",
+    "tailwind-styled-components": "^2.2.0"
+  }
+}
