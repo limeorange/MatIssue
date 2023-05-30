@@ -61,7 +61,7 @@ const RecipeInfoElementDiv = styled.div`
 const Divider = styled.div`
   height: 45px;
   border-color: #dbd8d0;
-  border-width: 1px;
+  border-width: 0.8px;
 `;
 
 export default RecipeInfo;
