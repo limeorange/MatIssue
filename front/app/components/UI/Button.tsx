@@ -1,53 +1,54 @@
 "use client";
 
-import clsx from "clsx";
+import styled from "styled-components";
 
+/** 버튼 컴포넌트 (type, fullWidth, fullRound, isBgColor, onClick, disabled) 인자로 전달가능 */
 type ButtonProps = {
   type?: "button" | "submit" | "reset" | undefined;
   fullWidth?: boolean;
+  fullRound?: boolean;
+  isBgColor?: boolean;
   children?: React.ReactNode;
   onClick?: () => void;
-  secondary?: boolean;
-  danger?: boolean;
   disabled?: boolean;
 };
 
 const Button = (props: ButtonProps) => {
-  const { type, fullWidth, children, onClick, secondary, danger, disabled } =
+  const { type, fullWidth, fullRound, isBgColor, children, onClick, disabled } =
     props;
   return (
-    <button
+    <StyledButton
       onClick={onClick}
       type={type}
+      fullRound={fullRound}
+      isBgColor={isBgColor}
+      fullWidth={fullWidth}
       disabled={disabled}
-      className={clsx(
-        `
-        flex
-        justify-center
-        items-center
-        rounded-md
-        h-12
-        px-3
-        py-2
-        text-sm
-        font-semibold
-        focus-visible:outline
-        focus-visible:outline-2
-        focus-visible:outline-offset-2
-        `,
-        disabled && "opacity-50 cursor-default",
-        fullWidth && "w-full",
-        secondary ? `text-gray-900` : `text-white`,
-        danger &&
-          "bg-rose-500 hover:bg-rose-600 focus-visible:outline-rose-600",
-        !secondary &&
-          !danger &&
-          "bg-sky-500 hover:bg-sky-600 focus-visible:outline-sky-600"
-      )}
     >
       {children}
-    </button>
+    </StyledButton>
   );
 };
+
+const StyledButton = styled.button<ButtonProps>`
+  display: flex;
+  justify-contents: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4f3d21;
+
+  border-radius: ${(props) => (props.fullRound ? "100px" : "15px")};
+  background-color: ${(props) => (props.isBgColor ? "#FBD26A" : "#ffffff")};
+  width: ${(props) => props.fullWidth && "100%"};
+  opacity: ${(props) => props.disabled && 50}
+  cursor: ${(props) => props.disabled && "default"}
+
+  &:focus-visible {
+    outline: 2px solid #a17c43;
+    outline-offset: 2px;
+  }
+`;
 
 export default Button;
