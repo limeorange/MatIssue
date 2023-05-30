@@ -7,6 +7,11 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    colors: {
+      mainYellow: "#FBD26A",
+      mainBrown: "#4F3D21",
+      subYellow: "#FBE2A1",
+    },
   },
   plugins: [
     require("@tailwindcss/forms")({
