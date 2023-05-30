@@ -4,6 +4,7 @@ import Header from "./components/header/Header";
 import ToasterContext from "./context/ToasterContext";
 
 import "./globals.css";
+import StyledComponentsRegistry from "./libs/registry";
 
 export const metadata = {
   title: "레시피 공유 플랫폼",
@@ -19,11 +20,13 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body>
-        <ToasterContext />
-        <Header currentUser={currentUser} />
-        <main className="pb-20 pt-[131px]">{children}</main>
-      </body>
+      <StyledComponentsRegistry>
+        <body>
+          <ToasterContext />
+          <Header currentUser={currentUser} />
+          <main className="pb-20 pt-[131px]">{children}</main>
+        </body>
+      </StyledComponentsRegistry>
     </html>
   );
 }
