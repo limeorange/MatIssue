@@ -105,6 +105,7 @@ const RecipeRankItem = styled.div`
   text-align: center;
   font-size: 12px;
   font-weight: 400;
+  margin-left: 10px;
 `;
 
 const RecipeRankImg = styled.div`
