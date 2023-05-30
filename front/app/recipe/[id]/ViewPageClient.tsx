@@ -67,13 +67,15 @@ const RecipeDetail = () => {
       </div>
 
       {/* 요리 동영상 */}
-      <div onClick={imageClickHandler} style={{ cursor: "pointer" }}>
+      <div>
         <SubtitleH2>요리 동영상</SubtitleH2>
         <Image
           src="/요리 동영상.png"
           alt="요리 동영상"
           width={380}
           height={210}
+          style={{ cursor: "pointer" }}
+          onClick={imageClickHandler}
         ></Image>
         <div className="pt-[5px] text-[#6F6F6F]">
           썸네일 클릭 시 동영상 링크로 연결됩니다.
