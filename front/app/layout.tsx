@@ -22,7 +22,7 @@ export default async function RootLayout({
       <body>
         <ToasterContext />
         <Header currentUser={currentUser} />
-        <main className="pb-20 pt-28">{children}</main>
+        <main className="pb-20 pt-[151px]">{children}</main>
       </body>
     </html>
   );
