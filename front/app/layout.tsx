@@ -1,21 +1,29 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
+import getCurrentUser from "./actions/getCurrentUser";
+import Header from "./components/header/Header";
 
-const inter = Inter({ subsets: ["latin"] });
+import ToasterContext from "./context/ToasterContext";
+
+import "./globals.css";
 
 export const metadata = {
   title: "레시피 공유 플랫폼",
   description: "자신만의 레시피를 올리고 공유하는 플랫폼 입니다.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const currentUser = await getCurrentUser();
+
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <ToasterContext />
+        <Header currentUser={currentUser} />
+        <main className="pb-20 pt-[131px]">{children}</main>
+      </body>
     </html>
   );
 }
