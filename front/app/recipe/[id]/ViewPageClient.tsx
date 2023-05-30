@@ -110,7 +110,7 @@ const ContainerDiv = styled.div`
 `;
 
 const ImageWrapperDiv = styled.div`
-  width: 700px;
+  width: 650px;
   height: 350px;
   position: relative;
   margin-top: 35px;
