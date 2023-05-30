@@ -32,6 +32,7 @@ const HeaderDiv = styled.div`
   position: fixed;
   width: 100%;
   background-color: #ffffff;
+  z-index: 60;
 `;
 
 const NavArea = styled.div`
