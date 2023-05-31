@@ -1,27 +1,33 @@
 import styled from "styled-components";
 
+// 인원, 시간, 난이도, 종류
+const peopleCount = 2;
+const cookingTime = 30;
+const cookingLevel = "초급";
+const category = "한식";
+
 // 요리 정보 (인원, 시간, 난이도, 종류) 컴포넌트
 const RecipeInfo = () => {
   return (
     <>
       <ContainerDiv>
         <RecipeInfoElementDiv>
-          <h2>2</h2>
+          <h2>{peopleCount}</h2>
           <span>인분</span>
         </RecipeInfoElementDiv>
         <Divider />
         <RecipeInfoElementDiv>
-          <h2>30</h2>
+          <h2>{cookingTime}</h2>
           <span>분</span>
         </RecipeInfoElementDiv>
         <Divider />
         <RecipeInfoElementDiv>
-          <h2>초급</h2>
+          <h2>{cookingLevel}</h2>
           <span>난이도</span>
         </RecipeInfoElementDiv>
         <Divider />
         <RecipeInfoElementDiv>
-          <h2>한식</h2>
+          <h2>{category}</h2>
           <span>종류</span>
         </RecipeInfoElementDiv>
       </ContainerDiv>
