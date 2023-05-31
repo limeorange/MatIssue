@@ -214,6 +214,7 @@ const ProgressBar = styled.div<{ progress: number }>`
   height: 100%;
   width: ${({ progress }) => `${progress}%`};
   background-color: #fbd26a;
+  border-radius: 0 10px 10px 0;
 `;
 
 export default RecipeDetail;
