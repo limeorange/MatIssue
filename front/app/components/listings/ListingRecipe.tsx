@@ -1,9 +1,21 @@
 "use client";
 
-import RecipeCard from "../components/recipe-card/RecipeCard";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import RecipeCard from "@/app/components/recipe-card/RecipeCard";
 import styled from "styled-components";
+import { useSearchParams } from "next/navigation";
 
-const DUMMY_DATA = [
+interface Recipe {
+  image: string;
+  title: string;
+  author: string;
+  like: string;
+  view: string;
+  id: string;
+}
+
+const DUMMY_DATA: Recipe[] = [
   {
     image: "/images/sushi1.png",
     title: "기가 막히는 초밥 만들기",
@@ -134,11 +146,45 @@ const DUMMY_DATA = [
   },
 ];
 
-const RecipeList = () => {
+const ListingRecipe = () => {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA);
+
+  // URL의 쿼리 파라미터를 기반으로 searchTerm 상태를 설정
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     console.log("router.query:", router.query);
+  //     if (router && router.query && typeof router.query.query === "string") {
+  //       setSearchTerm(router.query, router.query.query);
+  //     } else {
+  //       setSearchTerm("");
+  //     }
+  //   }
+  // }, [router?.query?.query]); // Optional chaining을 사용해 'router'와 'router.query'가 정의되어 있는지 확인
+
+  // searchTerm 상태가 바뀔 때마다, 레시피를 필터링
+  useEffect(() => {
+    if (searchTerm !== "") {
+      const filtered = DUMMY_DATA.filter((recipe) =>
+        recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredRecipes(filtered);
+    } else {
+      setFilteredRecipes(DUMMY_DATA);
+    }
+  }, [searchTerm]);
+
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("query");
+
+  console.log(search);
+
   return (
     <MainWrapper>
       <RecipeListWrapper>
-        {DUMMY_DATA.map((data, index) => (
+        {filteredRecipes.map((data, index) => (
           <RecipeCard key={index} data={data} />
         ))}
       </RecipeListWrapper>
@@ -146,7 +192,7 @@ const RecipeList = () => {
   );
 };
 
-export default RecipeList;
+export default ListingRecipe;
 
 // styled-components
 const MainWrapper = styled.div`

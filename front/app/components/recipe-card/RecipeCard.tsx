@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "styled-components";
+import Image from "next/image";
 
 type RecipeData = {
   image: string;
@@ -20,7 +21,12 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ data }) => {
     <>
       <RecipeCardWrapper>
         <RecipeImg>
-          <img src={data.image} alt="게시물 썸네일 이미지" />
+          <Image
+            src={data.image}
+            alt="게시물 썸네일 이미지"
+            width={270}
+            height={200}
+          />
         </RecipeImg>
         <RecipeTitle>
           <p>{data.title}</p>
@@ -32,13 +38,23 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ data }) => {
           <RecipeRank>
             <RecipeRankItem>
               <RecipeRankImg>
-                <img src="/images/like.png" alt="게시물 좋아요 이미지" />
+                <Image
+                  src="/images/like.png"
+                  alt="게시물 좋아요 이미지"
+                  width={13}
+                  height={11}
+                />
               </RecipeRankImg>
               <p>{data.like}</p>
             </RecipeRankItem>
             <RecipeRankItem>
               <RecipeRankImg>
-                <img src="/images/view.png" alt="게시물 조회수 이미지" />
+                <Image
+                  src="/images/view.png"
+                  alt="게시물 조회수 이미지"
+                  width={13}
+                  height={11}
+                />
               </RecipeRankImg>
               <p>{data.view}</p>
             </RecipeRankItem>

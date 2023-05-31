@@ -1,9 +1,9 @@
-import RecipeList from "./RecipeList";
+import ListingRecipe from "../components/listings/ListingRecipe";
 
 const RecipeListPage = () => {
   return (
     <>
-      <RecipeList />
+      <ListingRecipe />
     </>
   );
 };
