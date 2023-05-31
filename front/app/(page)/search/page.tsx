@@ -1,4 +1,4 @@
-import ListingRecipe from "../components/listings/ListingRecipe";
+import ListingRecipe from "@/app/components/listings/ListingRecipe";
 
 const RecipeListPage = () => {
   return (
