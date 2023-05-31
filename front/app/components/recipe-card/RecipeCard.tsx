@@ -73,15 +73,15 @@ const RecipeCardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 270px;
-  height: 260px;
+  width: 27rem;
+  height: 26rem;
   margin: auto;
 `;
 
 const RecipeImg = styled.div`
   width: 100%;
-  height: 200px;
-  border-radius: 8px;
+  height: 20rem;
+  border-radius: 0.8rem;
   flex-shrink: 0;
   overflow: hidden;
   img {
@@ -100,13 +100,13 @@ const RecipeInfo = styled.div`
 
 const RecipeTitle = styled.div`
   width: 100%;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 2rem;
 `;
 
 const RecipeAuthor = styled.div`
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 400;
   color: #6f6f6f;
 `;
@@ -119,12 +119,12 @@ const RecipeRankItem = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: 400;
-  margin-left: 10px;
+  margin-left: 1rem;
 `;
 
 const RecipeRankImg = styled.div`
-  width: 13px;
-  height: 11px;
+  width: 1.3rem;
+  height: 1.1rem;
 `;
