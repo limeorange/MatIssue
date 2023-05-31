@@ -8,27 +8,26 @@ type RecipeStepProps = {
   stepDescription: string;
 };
 
-// 레시피 한 단계 컴포넌트
+// 레시피 단일 단계 컴포넌트
 const RecipeStep = ({
   stepNumber,
   stepImage,
   lastStep,
   stepDescription,
 }: RecipeStepProps) => {
+  // 마지막 단계일 경우 점선 빼주기 위함
   const isLastStep = stepNumber === lastStep;
+
   return (
     <>
-      <div className="flex">
+      <Container>
         {/* 단계 숫자, 점선 */}
-        <div className="flex flex-col">
-          <div
-            className="flex bg-[#FBE2A1] h-[35px] w-[35px]
-          rounded-[100px] items-center justify-center"
-          >
-            <h3 className="text-[20px] text-[#A17C43]">{stepNumber}</h3>
-          </div>
+        <StepNavigationDiv>
+          <RoundedStepDiv>
+            <h3>{stepNumber}</h3>
+          </RoundedStepDiv>
           <StepDotDiv isLastStep={isLastStep}></StepDotDiv>
-        </div>
+        </StepNavigationDiv>
 
         {/* 요리 과정 사진 */}
         <ImageWrapperDiv>
@@ -41,11 +40,20 @@ const RecipeStep = ({
         </ImageWrapperDiv>
 
         {/* 요리 과정 설명 */}
-        <div className="pt-[45px] pl-[18px] w-[300px]">{stepDescription}</div>
-      </div>
+        <StepDescriptionDiv>{stepDescription}</StepDescriptionDiv>
+      </Container>
     </>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+`;
+
+const StepNavigationDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const ImageWrapperDiv = styled.div`
   width: 290px;
@@ -70,6 +78,27 @@ const StepDotDiv = styled.div<{ isLastStep: boolean }>`
     css`
       display: none;
     `}
+`;
+
+const StepDescriptionDiv = styled.div`
+  padding-top: 45px;
+  padding-left: 18px;
+  width: 300px;
+`;
+
+const RoundedStepDiv = styled.div`
+  display: flex;
+  background-color: #fbe2a1;
+  height: 35px;
+  width: 35px;
+  border-radius: 100px;
+  align-items: center;
+  justify-content: center;
+
+  h3 {
+    font-size = 20px;
+    color: #A17C43;
+  }
 `;
 
 export default RecipeStep;

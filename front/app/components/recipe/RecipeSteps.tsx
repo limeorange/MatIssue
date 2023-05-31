@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import RecipeStep from "./RecipeStep";
 
 type Step = { stepNumber: number; stepImage: string; stepDescription: string };
