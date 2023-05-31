@@ -56,21 +56,21 @@ const StepNavigationDiv = styled.div`
 `;
 
 const ImageWrapperDiv = styled.div`
-  width: 290px;
-  height: 290px;
+  width: 29rem;
+  height: 29rem;
   position: relative;
-  margin-top: 35px;
-  margin-left: 12px;
+  margin-top: 3.5rem;
+  margin-left: 1.2rem;
 `;
 
 const StepDotDiv = styled.div<{ isLastStep: boolean }>`
   /* 기본 스타일 */
-  border-right-width: 2.5px;
+  border-right-width: 0.25rem;
   border-right-color: #ababab;
   border-right-style: dotted;
-  height: 300px;
-  width: 19px;
-  margin-top: 3px;
+  height: 30rem;
+  width: 1.9rem;
+  margin-top: 0.3rem;
 
   /* isLastStep이 true인 경우 스타일 변경 */
   ${({ isLastStep }) =>
@@ -81,22 +81,22 @@ const StepDotDiv = styled.div<{ isLastStep: boolean }>`
 `;
 
 const StepDescriptionDiv = styled.div`
-  padding-top: 45px;
-  padding-left: 18px;
-  width: 300px;
+  padding-top: 4.5rem;
+  padding-left: 1.8rem;
+  width: 30rem;
 `;
 
 const RoundedStepDiv = styled.div`
   display: flex;
   background-color: #fbe2a1;
-  height: 35px;
-  width: 35px;
-  border-radius: 100px;
+  height: 3.5rem;
+  width: 3.5rem;
+  border-radius: 10rem;
   align-items: center;
   justify-content: center;
 
   h3 {
-    font-size = 20px;
+    font-size = 2rem;
     color: #A17C43;
   }
 `;
