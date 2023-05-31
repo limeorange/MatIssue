@@ -29,18 +29,17 @@ export default CategoryModal;
 const CategoryModalContainer = styled.div`
   position: absolute;
   z-index: 9;
-  top: 50px;
+  top: 5rem;
   left: 0;
-  width: 134px;
-  padding: 6px 0;
+  width: 13.4rem;
+  padding: 0.6rem 0;
   background-color: white;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  font-size: 16px;
-  color: #4f3d21;
-  font-size: 16px;
+  box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  font-size: 1.6rem;
   font-weight: 400;
+  color: #4f3d21;
 `;
 
 const CategoryModalUl = styled.ul`
@@ -52,7 +51,7 @@ const CategoryModalLi = styled.li`
   display: flex;
   width: 100%;
   text-align: center;
-  padding: 6px 12px;
+  padding: 0.6rem 1.2rem;
 
   &:hover {
     cursor: pointer;

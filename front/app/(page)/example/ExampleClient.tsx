@@ -1,7 +1,8 @@
 "use client";
 
-import ListingItem from "../components/listings/ListingItem";
-import { ExampleItems } from "../types";
+import { ClipLoader } from "react-spinners";
+import ListingItem from "../../components/listings/ListingItem";
+import { ExampleItems } from "../../types";
 
 // 상태관리, 인터랙션등 자바스크립트 동작시키려면 파일 상단에 적어줘야함.
 

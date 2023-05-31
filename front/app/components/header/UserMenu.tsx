@@ -48,15 +48,13 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
           >
             로그인
           </LoginButton>
-          <Button
-            fullRound={true}
-            isBgColor={true}
+          <LogoutButton
             onClick={() => {
               router.push("/auth/signup");
             }}
           >
             회원가입
-          </Button>
+          </LogoutButton>
         </>
       )}
     </UserMenuDiv>
@@ -65,7 +63,9 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
 
 const UserMenuDiv = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: 1.6rem;
+  font-weight: 500;
+  color: #4f3d21;
 `;
 
 const IconDiv = styled.div`
@@ -76,11 +76,19 @@ const IconDiv = styled.div`
 `;
 
 const LoginButton = styled.button`
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  border-radius: 100px;
+  padding: 0.8rem 1.6rem;
+  border-radius: 10rem;
   &:hover {
-    background-color: #fbe2a1;
+    background-color: rgb(230, 230, 230);
+  }
+`;
+
+const LogoutButton = styled.button`
+  padding: 0.8rem 1.6rem;
+  border-radius: 10rem;
+  background-color: #fbd26a;
+  &:hover {
+    background-color: #f8b551;
   }
 `;
 

@@ -52,13 +52,13 @@ const CategoryBarDiv = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 51px;
+  height: 5rem;
   color: #4f3d21;
 `;
 
 const CategoryUl = styled.ul`
   display: flex;
-  gap: 20px;
+  gap: 2rem;
 `;
 
 const CategoryLi = styled.li`
@@ -66,12 +66,12 @@ const CategoryLi = styled.li`
   position: relative;
   box-sizing: content-box;
   align-items: center;
-  gap: 8px;
-  border-bottom: 4px solid #ffffff;
-  padding: 13px 13px 9px 13px;
+  gap: 0.8rem;
+  border-bottom: 0.4rem solid #ffffff;
+  padding: 1.3rem 1.3rem 0.9rem 1.3rem;
   &:hover {
     cursor: pointer;
     font-weight: 600;
-    border-bottom: 4px solid #f8b551;
+    border-bottom: 0.4rem solid #f8b551;
   }
 `;
