@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import RecipeCard from "@/app/components/recipe-card/RecipeCard";
 import styled from "styled-components";
 import { useSearchParams } from "next/navigation";
@@ -147,21 +146,15 @@ const DUMMY_DATA: Recipe[] = [
 ];
 
 const ListingRecipe = () => {
-  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA);
+  const searchParams = useSearchParams();
+  const search = searchParams.get("query"); // url의 query값 추출
 
-  // URL의 쿼리 파라미터를 기반으로 searchTerm 상태를 설정
-  // useEffect(() => {
-  //   if (router.isReady) {
-  //     console.log("router.query:", router.query);
-  //     if (router && router.query && typeof router.query.query === "string") {
-  //       setSearchTerm(router.query, router.query.query);
-  //     } else {
-  //       setSearchTerm("");
-  //     }
-  //   }
-  // }, [router?.query?.query]); // Optional chaining을 사용해 'router'와 'router.query'가 정의되어 있는지 확인
+  // search 값 변경시 마다 searchTerm 업데이트해서 필터된 데이터 렌더링
+  useEffect(() => {
+    setSearchTerm(search || "");
+  }, [search]);
 
   // searchTerm 상태가 바뀔 때마다, 레시피를 필터링
   useEffect(() => {
@@ -174,12 +167,6 @@ const ListingRecipe = () => {
       setFilteredRecipes(DUMMY_DATA);
     }
   }, [searchTerm]);
-
-  const searchParams = useSearchParams();
-
-  const search = searchParams.get("query");
-
-  console.log(search);
 
   return (
     <MainWrapper>
