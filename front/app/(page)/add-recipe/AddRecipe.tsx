@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, ChangeEvent } from "react";
 import styled from "styled-components";
+import VideoSection from "../../components/add-recipe/VideoSection";
+import IngredientSection from "../../components/add-recipe/IngredientSection";
 
 const categories = ["한식", "중식", "일식", "양식"];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -82,48 +84,6 @@ const RecipeForm = () => {
     );
   };
 
-  // 유튜브 링크
-  const VideoSection = () => {
-    const [videoLink, setVideoLink] = useState("");
-
-    const handleVideoLinkChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-      setVideoLink(e.target.value);
-    };
-
-    return (
-      <VideoWrapper>
-        <Label>동영상</Label>
-        <VideoTextArea
-          value={videoLink}
-          onChange={handleVideoLinkChange}
-          placeholder="유튜브 동영상 링크를 입력해주세요."
-        />
-        <ThumbnailWrapper>
-          {videoLink ? (
-            <div
-              style={{
-                width: "17.4rem",
-                height: "11.6rem",
-                borderRadius: "1.5rem",
-                overflow: "hidden",
-              }}
-            >
-              <iframe
-                title="video thumbnail"
-                src={`https://www.youtube.com/embed/${
-                  videoLink.split("v=")[1]
-                }`}
-                style={{ width: "100%", height: "100%", border: "none" }}
-              />
-            </div>
-          ) : (
-            <EmptyThumbnailBox />
-          )}
-        </ThumbnailWrapper>
-      </VideoWrapper>
-    );
-  };
-
   const handleRecipeTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRecipeTitle(e.target.value);
   };
@@ -154,44 +114,6 @@ const RecipeForm = () => {
   // 재료와 양 추가 핸들러
   const handleAddIngredient = () => {
     setIngredients([...ingredients, { ingredient: "", quantity: "" }]);
-  };
-
-  // 재료 등록 컴포넌트
-  const IngredientSection = () => {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          marginTop: "7.2rem",
-        }}
-      >
-        <Label>재료 등록</Label>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          {ingredients.map((_, index) => (
-            <IngredientRow key={index}>
-              <IngredientInput
-                type="text"
-                value={ingredients[index].ingredient}
-                onChange={(e) => handleIngredientChange(e, index)}
-                placeholder="재료"
-              />
-              <QuantityInput
-                type="text"
-                value={ingredients[index].quantity}
-                onChange={(e) => handleQuantityChange(e, index)}
-                placeholder="재료의 양"
-              />
-            </IngredientRow>
-          ))}
-          <button type="button" onClick={handleAddIngredient}>
-            재료 추가
-          </button>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -282,7 +204,12 @@ const RecipeForm = () => {
         />
       </CookingIntro>
       <VideoSection />
-      <IngredientSection />
+      <IngredientSection
+        ingredients={ingredients}
+        handleIngredientChange={handleIngredientChange}
+        handleQuantityChange={handleQuantityChange}
+        handleAddIngredient={handleAddIngredient}
+      />
     </FormWrapper>
   );
 };
@@ -296,7 +223,7 @@ const Label = styled.label`
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 600;
-  font-size: 1.8rem;
+  font-size: 18px;
   line-height: 2.1rem;
   color: #4f3d21;
   margin-right: 3rem;
@@ -314,7 +241,7 @@ const Select = styled.select`
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
-  font-size: 1.6rem;
+  font-size: 16px;
   line-height: 1.9rem;
 `;
 
@@ -328,7 +255,7 @@ const Input = styled.input`
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
-  font-size: 1.6rem;
+  font-size: 16px;
   line-height: 1.9rem;
 `;
 
@@ -343,7 +270,7 @@ const TextArea = styled.textarea`
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
-  font-size: 1.6rem;
+  font-size: 16px;
   line-height: 1.9rem;
   ::placeholder {
     color: #a9a9a9;
@@ -366,7 +293,7 @@ const Title = styled.h2`
   font-family: "Inter";
   font-style: normal;
   font-weight: 600;
-  font-size: 2.2rem;
+  font-size: 22px;
   line-height: 2.7rem;
   color: #4f3d21;
   margin: 0;
@@ -445,60 +372,4 @@ const CookingIntro = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 2rem;
-`;
-
-const VideoWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 2rem;
-`;
-
-const VideoTextArea = styled.textarea`
-  box-sizing: border-box;
-  width: 37.2rem;
-  height: 11.6rem;
-  border: 0.1rem solid #d9d9d9;
-  border-radius: 1.5rem;
-  padding-left: 1rem;
-  padding-top: 1rem;
-  font-family: "Pretendard";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1.6rem;
-  line-height: 1.9rem;
-  margin-right: 2.5rem;
-  ::placeholder {
-    color: #a9a9a9;
-  }
-`;
-
-const ThumbnailWrapper = styled.div`
-  width: 17.4rem;
-  height: 11.6rem;
-`;
-
-const EmptyThumbnailBox = styled.div`
-  width: 17.4rem;
-  height: 11.6rem;
-  background: #f6f5f5;
-  border-radius: 1.5rem;
-`;
-
-const IngredientInput = styled(Input)`
-  width: 27.5rem;
-  height: 3.6rem;
-  margin-right: 1.2rem;
-  margin-bottom: 1.5rem;
-`;
-
-const QuantityInput = styled(Input)`
-  width: 12.5rem;
-  height: 3.6rem;
-`;
-
-const IngredientRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
 `;

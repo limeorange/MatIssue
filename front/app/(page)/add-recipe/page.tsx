@@ -1,7 +1,7 @@
 import AddRecipe from "./AddRecipe";
 
-const Hello = () => {
+const PostRecipe = () => {
   return <AddRecipe />;
 };
 
-export default Hello;
+export default PostRecipe;
