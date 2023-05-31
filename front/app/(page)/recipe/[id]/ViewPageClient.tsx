@@ -95,7 +95,7 @@ const RecipeDetail = () => {
           style={{ cursor: "pointer" }}
           onClick={imageClickHandler}
         ></Image>
-        <div className="pt-[5px] text-[#6F6F6F]">
+        <div className="pt-[0.5rem] text-[#6F6F6F]">
           썸네일 클릭 시 동영상 링크로 연결됩니다.
         </div>
       </div>
@@ -120,37 +120,37 @@ const RecipeDetail = () => {
 };
 
 const CommentIconDiv = styled.div`
-  margin-left: 7px;
-  margin-top: 4px;
-  margin-right: 4px;
+  margin-left: 0.7rem;
+  margin-top: 0.4rem;
+  margin-right: 0.4rem;
 `;
 
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 700px;
+  width: 70rem;
   margin: 0 auto;
-  gap: 25px;
+  gap: 2.5rem;
 `;
 
 const ImageWrapperDiv = styled.div`
-  width: 650px;
-  height: 350px;
+  width: 65rem;
+  height: 35rem;
   position: relative;
-  margin-top: 35px;
+  margin-top: 3.5rem;
 `;
 
 const TitleContainerDiv = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 1rem;
 `;
 
 const TitleH3 = styled.h3`
   font-weight: 600;
-  font-size: 22px;
-  margin-right: 10px;
+  font-size: 2.2rem;
+  margin-right: 1rem;
 `;
 
 const AuthorSpan = styled.span`
@@ -158,15 +158,15 @@ const AuthorSpan = styled.span`
 `;
 
 const DescriptionDiv = styled.div`
-  margin-top: 10px;
-  width: 600px;
+  margin-top: 1rem;
+  width: 60rem;
 `;
 
 const SubtitleH2 = styled.h2`
-  font-size: 20px;
+  font-size: 2rem;
   color: #b08038;
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 `;
 
 export default RecipeDetail;
