@@ -65,26 +65,26 @@ const IngredientList = () => {
 };
 
 const itemHeight = 37;
-const containerHeight = 50 + itemHeight * data.length;
+const containerHeight = (50 + itemHeight * data.length) / 10;
 const ContainerDiv = styled.div`
-  height: ${containerHeight}px;
-  width: 330px;
-  border: 10px solid #fff6df;
-  border-radius: 20px;
-  padding: 20px;
+  height: ${containerHeight}rem;
+  width: 33rem;
+  border: 1rem solid #fff6df;
+  border-radius: 2rem;
+  padding: 2rem;
 `;
 
 const IngredientItemLi = styled.li`
   display: flex;
-  margin-bottom: 12px;
-  height: 25px;
+  margin-bottom: 1.2rem;
+  height: 2.5rem;
   justify-items: center;
   align-items: center;
 `;
 
 const IngredientSpan = styled.span<{ isChecked: boolean }>`
-  font-size: 16px;
-  width: 150px;
+  font-size: 1.6rem;
+  width: 15rem;
   ${({ isChecked }) =>
     isChecked
       ? css`
@@ -95,9 +95,9 @@ const IngredientSpan = styled.span<{ isChecked: boolean }>`
 `;
 
 const IngredientCountSpan = styled.span<{ isChecked: boolean }>`
-  font-size: 16px;
-  width: 80px;
-  margin-right: 10px;
+  font-size: 1.6rem;
+  width: 8rem;
+  margin-right: 1rem;
   ${({ isChecked }) =>
     isChecked
       ? css`
@@ -109,6 +109,7 @@ const IngredientCountSpan = styled.span<{ isChecked: boolean }>`
 
 const CheckboxWrapperDiv = styled.div`
   position: relative;
+  margin-bottom: 0.7rem;
 `;
 
 const CheckboxInput = styled.input<CheckboxInputProps>`
@@ -127,30 +128,31 @@ const CheckboxInput = styled.input<CheckboxInputProps>`
 
 const CheckboxLabel = styled.label<CheckboxLabelProps>`
   background-color: #fff;
-  border: 1px solid #ccc;
+  border: 0.1rem solid #ccc;
   border-radius: 50%;
   cursor: pointer;
-  width: 25px;
-  height: 25px;
+  width: 2.5rem;
+  height: 2.5rem;
   position: absolute;
   left: 0;
   top: 0;
+
   ${function ({ isChecked }) {
     return isChecked
       ? css`
           background-color: #fbd26a;
           border-color: #fbd26a;
           &:after {
-            border: 2px solid #fff;
+            border: 0.2rem solid #fff;
             border-top: none;
             border-right: none;
             content: "";
-            height: 6px;
-            left: 6px;
+            height: 0.6rem;
+            left: 0.6rem;
             position: absolute;
-            top: 8px;
+            top: 0.8rem;
             transform: rotate(-45deg);
-            width: 12px;
+            width: 1.2rem;
           }
         `
       : css`
