@@ -53,6 +53,7 @@ const Container = styled.div`
 const StepNavigationDiv = styled.div`
   display: flex;
   flex-direction: column;
+  font-size: 2rem;
 `;
 
 const ImageWrapperDiv = styled.div`
@@ -84,6 +85,7 @@ const StepDescriptionDiv = styled.div`
   padding-top: 4.5rem;
   padding-left: 1.8rem;
   width: 30rem;
+  font-size: 1.6rem;
 `;
 
 const RoundedStepDiv = styled.div`

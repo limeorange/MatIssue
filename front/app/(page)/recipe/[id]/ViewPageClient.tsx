@@ -81,7 +81,7 @@ const RecipeDetail = () => {
       {/* 요리팁 */}
       <div>
         <SubtitleH2>요리팁</SubtitleH2>
-        {recipeTip}
+        <RecipeTipDiv>{recipeTip}</RecipeTipDiv>
       </div>
 
       {/* 요리 동영상 */}
@@ -95,9 +95,9 @@ const RecipeDetail = () => {
           style={{ cursor: "pointer" }}
           onClick={imageClickHandler}
         ></Image>
-        <div className="pt-[0.5rem] text-[#6F6F6F]">
+        <VideoDescriptionDiv>
           썸네일 클릭 시 동영상 링크로 연결됩니다.
-        </div>
+        </VideoDescriptionDiv>
       </div>
 
       {/* 댓글 */}
@@ -155,11 +155,13 @@ const TitleH3 = styled.h3`
 
 const AuthorSpan = styled.span`
   color: #6f6f6f;
+  font-size: 1.4rem;
 `;
 
 const DescriptionDiv = styled.div`
   margin-top: 1rem;
   width: 60rem;
+  font-size: 1.62rem;
 `;
 
 const SubtitleH2 = styled.h2`
@@ -167,6 +169,16 @@ const SubtitleH2 = styled.h2`
   color: #b08038;
   font-weight: 500;
   margin-bottom: 1rem;
+`;
+
+const RecipeTipDiv = styled.div`
+  font-size: 1.6rem;
+`;
+
+const VideoDescriptionDiv = styled.div`
+  padding-top: 0.5rem;
+  color: #6f6f6f;
+  font-size: 1.5rem;
 `;
 
 export default RecipeDetail;
