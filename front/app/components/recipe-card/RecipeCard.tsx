@@ -7,9 +7,10 @@ type RecipeData = {
   image: string;
   title: string;
   author: string;
-  like: string;
+  likes: number;
   view: string;
   id: string;
+  timestamp: number;
 };
 
 type RecipeCardProps = {
@@ -45,9 +46,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ data }) => {
                   height={11}
                 />
               </RecipeRankImg>
-              <p>{data.like}</p>
+              <p>{data.likes}</p>
             </RecipeRankItem>
-            <RecipeRankItem>
+            {/* <RecipeRankItem>
               <RecipeRankImg>
                 <Image
                   src="/images/view.png"
@@ -57,7 +58,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ data }) => {
                 />
               </RecipeRankImg>
               <p>{data.view}</p>
-            </RecipeRankItem>
+            </RecipeRankItem> */}
           </RecipeRank>
         </RecipeInfo>
       </RecipeCardWrapper>
