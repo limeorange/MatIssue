@@ -6,40 +6,58 @@ import RecipeSteps from "@/app/components/recipe/RecipeSteps";
 import Image from "next/image";
 import styled from "styled-components";
 
+// 요리 대표 이미지
+const recipeCover = "/요리 대표 사진.png";
+
+// 요리 제목
+const recipeTitle = "보들보들 순두부 달걀탕";
+
+// 작성자
+const author = "냠냠순두부러버";
+
+// 간단 소개글
+const description = `보들보들 부드러운 순두부 달걀탕.
+순두부와 달걀만 있으면 간단하게 만들 수 있는 순두부 달걀탕 레시피를 소개해 드릴게요. 
+달걀탕 더욱 더 맛있게 먹는 법! 더욱 더 시원하고 깔끔한 맛을 내려면 새우젓을 넣어보세요.
+부드럽고 소화가 잘되기 때문에 아침 식사로도 제격이랍니다. 
+쌀쌀한 아침은 따끈한 순두부 달걀탕으로 어떠세요?`;
+
+// 요리팁
 const recipeTip = "멸치액젓이 싫으시면 국간장 2T만으로 간 하셔도 좋습니다.";
+
+// 요리 동영상 이미지
+const recipeVideoImage = "/요리 동영상.png";
+
+// 요리 동영상 링크
+const recipeVideoUrl = "https://youtu.be/jk29M4knFBw";
+
+// 댓글 개수
 const commentCount = 3;
 
+// 레시피 조회 페이지 컴포넌트
 const RecipeDetail = () => {
   const imageClickHandler = () => {
-    window.open("https://youtu.be/jk29M4knFBw");
+    window.open(recipeVideoUrl);
   };
   return (
     <ContainerDiv>
       {/* 요리 대표 이미지 */}
       <ImageWrapperDiv>
         <Image
-          src="/요리 대표 사진.png"
+          src={recipeCover}
           alt="요리 대표 사진"
           fill
           style={{ objectFit: "cover", borderRadius: 20 }}
         />
       </ImageWrapperDiv>
 
-      {/* 요리 제목, 작성자, 간단 소개*/}
+      {/* 요리 제목, 작성자, 간단 소개글 */}
       <div>
         <TitleContainerDiv>
-          <TitleH3>보들보들 순두부 달걀탕</TitleH3>
-          <AuthorSpan>by 주부9단요리톡톡</AuthorSpan>
+          <TitleH3>{recipeTitle}</TitleH3>
+          <AuthorSpan>by {author}</AuthorSpan>
         </TitleContainerDiv>
-        <DescriptionDiv>
-          보들보들 부드러운 순두부 달걀탕. <br />
-          순두부와 달걀만 있으면 간단하게 만들 수 있는 순두부 달걀탕 레시피를
-          소개해 드릴게요. <br />
-          달걀탕 더욱 더 맛있게 먹는 법! 더욱 더 시원하고 깔끔한 맛을 내려면
-          새우젓을 넣어보세요. <br />
-          부드럽고 소화가 잘되기 때문에 아침 식사로도 제격이랍니다. <br />
-          쌀쌀한 아침은 따끈한 순두부 달걀탕으로 어떠세요?
-        </DescriptionDiv>
+        <DescriptionDiv>{description}</DescriptionDiv>
       </div>
 
       {/* 요리 정보 (인원, 시간, 난이도, 종류) */}
@@ -70,7 +88,7 @@ const RecipeDetail = () => {
       <div>
         <SubtitleH2>요리 동영상</SubtitleH2>
         <Image
-          src="/요리 동영상.png"
+          src={recipeVideoImage}
           alt="요리 동영상"
           width={380}
           height={210}
@@ -86,20 +104,26 @@ const RecipeDetail = () => {
       <div>
         <div className="flex">
           <SubtitleH2>댓글</SubtitleH2>
-          <div className="ml-[7px] mt-[4px] mr-[4px]">
+          <CommentIconDiv>
             <Image
               src="/comment.svg"
               alt="댓글 아이콘"
               width={22}
               height={22}
             ></Image>
-          </div>
+          </CommentIconDiv>
           <SubtitleH2>{commentCount}</SubtitleH2>
         </div>
       </div>
     </ContainerDiv>
   );
 };
+
+const CommentIconDiv = styled.div`
+  margin-left: 7px;
+  margin-top: 4px;
+  margin-right: 4px;
+`;
 
 const ContainerDiv = styled.div`
   display: flex;
@@ -135,6 +159,7 @@ const AuthorSpan = styled.span`
 
 const DescriptionDiv = styled.div`
   margin-top: 10px;
+  width: 600px;
 `;
 
 const SubtitleH2 = styled.h2`
