@@ -1,7 +1,7 @@
 import {
   getExampleData,
   getExampleListingData,
-} from "../actions/getExampleData";
+} from "../../actions/getExampleData";
 import ExampleList from "./ExampleClient";
 
 const ExamplePage = async () => {
