@@ -190,7 +190,7 @@ const MainWrapper = styled.div`
 
 const RecipeListWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 270px);
-  row-gap: 30px;
-  column-gap: 20px;
+  grid-template-columns: repeat(4, 27rem);
+  row-gap: 3rem;
+  column-gap: 2rem;
 `;
