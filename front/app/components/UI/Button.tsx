@@ -6,7 +6,6 @@ import styled from "styled-components";
 type ButtonProps = {
   type?: "button" | "submit" | "reset" | undefined;
   fullWidth?: boolean;
-  fullRound?: boolean;
   isBgColor?: boolean;
   children?: React.ReactNode;
   onClick?: () => void;
@@ -14,13 +13,11 @@ type ButtonProps = {
 };
 
 const Button = (props: ButtonProps) => {
-  const { type, fullWidth, fullRound, isBgColor, children, onClick, disabled } =
-    props;
+  const { type, fullWidth, isBgColor, children, onClick, disabled } = props;
   return (
     <StyledButton
       onClick={onClick}
       type={type}
-      fullRound={fullRound}
       isBgColor={isBgColor}
       fullWidth={fullWidth}
       disabled={disabled}
@@ -31,15 +28,16 @@ const Button = (props: ButtonProps) => {
 };
 
 const StyledButton = styled.button<ButtonProps>`
-  display: flex;
-  justify-contents: center;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
+  padding: 0.8rem 1.6rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: #4f3d21;
+  height : 4.8rem;
+  border-radius: 1.5rem;
+  &:hover {
+    background-color : #F8B551;
+  }
 
-  border-radius: ${(props) => (props.fullRound ? "100px" : "15px")};
   background-color: ${(props) => (props.isBgColor ? "#FBD26A" : "#ffffff")};
   width: ${(props) => props.fullWidth && "100%"};
   opacity: ${(props) => props.disabled && 50}
