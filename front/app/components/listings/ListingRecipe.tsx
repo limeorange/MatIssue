@@ -169,13 +169,18 @@ const ListingRecipe = () => {
   }, [searchTerm]);
 
   return (
-    <MainWrapper>
-      <RecipeListWrapper>
-        {filteredRecipes.map((data, index) => (
-          <RecipeCard key={index} data={data} />
-        ))}
-      </RecipeListWrapper>
-    </MainWrapper>
+    <>
+      <MainWrapper>
+        <RecipeCountTextBox>
+          <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
+        </RecipeCountTextBox>
+        <RecipeListWrapper>
+          {filteredRecipes.map((data, index) => (
+            <RecipeCard key={index} data={data} />
+          ))}
+        </RecipeListWrapper>
+      </MainWrapper>
+    </>
   );
 };
 
@@ -184,8 +189,13 @@ export default ListingRecipe;
 // styled-components
 const MainWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 2%;
 `;
 
 const RecipeListWrapper = styled.div`
@@ -193,4 +203,13 @@ const RecipeListWrapper = styled.div`
   grid-template-columns: repeat(4, 27rem);
   row-gap: 3rem;
   column-gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+`;
+
+const RecipeCountTextBox = styled.div`
+  display: flex;
+  & p {
+    font-size: 1.55rem;
+  }
 `;
