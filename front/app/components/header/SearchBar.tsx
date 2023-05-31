@@ -40,19 +40,19 @@ const SearchBar = () => {
 const SearchBarDiv = styled.div`
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
-  width: 360px;
-  height: 40px;
-  gap: 1rem;
+  padding: 0.8rem 1.6rem;
+  width: 36rem;
+  height: 4rem;
+  gap: 1.6rem;
 
-  border: 1px solid rgb(200, 200, 200);
-  border-radius: 100px;
+  border: 0.1rem solid rgb(200, 200, 200);
+  border-radius: 10rem;
 `;
 
 const SearchBarInput = styled.input`
   width: 100%;
   border: none;
-  font-size: 1rem;
+  font-size: 1.6rem;
   font-weight: 400;
   &:focus {
     outline: none;

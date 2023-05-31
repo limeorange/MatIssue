@@ -2,12 +2,13 @@
 
 import React, { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ClipLoader } from "react-spinners";
+import { PacmanLoader } from "react-spinners";
+import styled from "styled-components";
 
 const LoadingModal = () => {
   return (
     <Transition.Root show as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={() => {}}>
+      <Dialog as="div" className="relative z-80" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -28,35 +29,30 @@ const LoadingModal = () => {
           />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div
-            className="
-              flex 
-              min-h-full 
-              items-center 
-              justify-center 
-              p-4 
-              text-center 
-            "
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <Dialog.Panel>
-                <ClipLoader size={40} color="#0284c7" />
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
+        <LoadingContainer>
+          <LoadingPositionDiv>
+            <PacmanLoader color="#FBD26A" size={25} />
+          </LoadingPositionDiv>
+        </LoadingContainer>
       </Dialog>
     </Transition.Root>
   );
 };
+
+const LoadingContainer = styled.div`
+  position: fixed;
+  inset: 0px;
+  z-index: 10;
+  overflow-y: auto;
+`;
+
+const LoadingPositionDiv = styled.div`
+  display: flex;
+  min-height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+`;
 
 export default LoadingModal;
