@@ -36,10 +36,10 @@ const RecipeInfo = () => {
 };
 
 const ContainerDiv = styled.div`
-  height: 60px;
-  width: 330px;
+  height: 6rem;
+  width: 33rem;
   background-color: #fff6df;
-  border-radius: 20px;
+  border-radius: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,24 +50,24 @@ const RecipeInfoElementDiv = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-right: 24px;
-  margin-left: 24px;
+  margin-right: 2.4rem;
+  margin-left: 2.4rem;
   text-align: center;
   
   h2 {
-    font-size: 15px;
+    font-size: 1.5rem;
     font-weight: 500;
 ]  }
 
   span {
-    font-size: 14px;
+    font-size: 1.4rem;
   }
 `;
 
 const Divider = styled.div`
-  height: 45px;
+  height: 4.5rem;
   border-color: #dbd8d0;
-  border-width: 0.8px;
+  border-width: 0.08rem;
 `;
 
 export default RecipeInfo;
