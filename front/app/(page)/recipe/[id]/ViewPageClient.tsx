@@ -2,9 +2,12 @@
 
 import IngredientList from "@/app/components/recipe/IngredientList";
 import ProgressBar from "@/app/components/recipe/ProgressBar";
+import RecipeComment from "@/app/components/recipe/RecipeComment";
+import RecipeCommentInput from "@/app/components/recipe/RecipeCommentInput";
 import RecipeInfo from "@/app/components/recipe/RecipeInfo";
 import RecipeSteps from "@/app/components/recipe/RecipeSteps";
 import Image from "next/image";
+import { useState } from "react";
 import styled from "styled-components";
 
 // 대표 이미지, 제목, 작성자, 소개글,
@@ -28,6 +31,22 @@ const RecipeDetail = () => {
   // 동영상 썸네일 클릭 핸들러
   const imageClickHandler = () => {
     window.open(recipeVideoUrl);
+  };
+
+  // 좋아요 버튼 상태 관리
+  const [isLiked, setIsLiked] = useState(false);
+
+  // 좋아요 카운트 상태 관리
+  const [count, setCount] = useState(510);
+
+  // 좋아요 버튼 클릭 핸들러
+  const handleHeartClick = () => {
+    setIsLiked(!isLiked);
+    if (isLiked) {
+      setCount(count - 1);
+    } else {
+      setCount(count + 1);
+    }
   };
 
   return (
@@ -64,7 +83,7 @@ const RecipeDetail = () => {
         {/* 재료 준비 목록 */}
         <div>
           <SubtitleH2>재료 준비</SubtitleH2>
-          <IngredientList></IngredientList>
+          <IngredientList />
         </div>
 
         {/* 요리 과정 */}
@@ -95,18 +114,50 @@ const RecipeDetail = () => {
           </VideoDescriptionDiv>
         </div>
 
+        {/* 좋아요 */}
+        <div className="flex justify-center">
+          <div
+            className="flex w-[120px] h-[55px] border-[1.7px] 
+            border-[#C8C8C8] rounded-[15px] justify-center items-center"
+          >
+            <div className="w-[32px] h-[28px] mr-[6px]">
+              <Image
+                src={
+                  isLiked
+                    ? "/images/recipe-view/heart_full.svg"
+                    : "/images/recipe-view/heart.svg"
+                }
+                alt="게시글 좋아요 하트"
+                width={30}
+                height={26}
+                onClick={handleHeartClick}
+                style={{ objectFit: "cover" }}
+              />
+            </div>
+            <div className="text-[18px]">{count}</div>
+          </div>
+        </div>
+
         {/* 댓글 */}
-        <div className="flex">
-          <SubtitleH2>댓글</SubtitleH2>
-          <CommentIconDiv>
-            <Image
-              src="/comment.svg"
-              alt="댓글 아이콘"
-              width={22}
-              height={22}
-            ></Image>
-          </CommentIconDiv>
-          <SubtitleH2>{commentCount}</SubtitleH2>
+        <div>
+          <div className="flex">
+            <SubtitleH2>댓글</SubtitleH2>
+            <CommentIconDiv>
+              <Image
+                src="/images/recipe-view/comment.svg"
+                alt="댓글 아이콘"
+                width={22}
+                height={22}
+              ></Image>
+            </CommentIconDiv>
+            <SubtitleH2>{commentCount}</SubtitleH2>
+          </div>
+          <div className="mb-[30px]">
+            <RecipeComment />
+            <RecipeComment />
+            <RecipeComment />
+          </div>
+          <RecipeCommentInput />
         </div>
       </ContainerDiv>
     </>
