@@ -39,7 +39,7 @@ const IngredientList = () => {
     <ContainerDiv>
       <ul>
         {data.map((item, index) => (
-          <IngredientItemLi>
+          <IngredientItemLi key={index}>
             <IngredientSpan isChecked={isCheckedList[index]}>
               {item.name}
             </IngredientSpan>
@@ -64,10 +64,7 @@ const IngredientList = () => {
   );
 };
 
-const itemHeight = 37;
-const containerHeight = (50 + itemHeight * data.length) / 10;
 const ContainerDiv = styled.div`
-  height: ${containerHeight}rem;
   width: 33rem;
   border: 1rem solid #fff6df;
   border-radius: 2rem;
