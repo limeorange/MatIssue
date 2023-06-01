@@ -1,4 +1,7 @@
-import getCurrentUser from "../actions/getCurrentUser";
+"use client";
+
+import styled from "styled-components";
+import getCurrentUser from "../api/user";
 import Header from "../components/header/Header";
 
 export default async function Layout({
@@ -7,11 +10,17 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   const currentUser = await getCurrentUser();
+  console.log(currentUser);
 
   return (
     <>
       <Header currentUser={currentUser} />
-      <main className="pb-20 pt-[131px]">{children}</main>
+      <Main>{children}</Main>
     </>
   );
 }
+
+const Main = styled.main`
+  padding-bottom: 8rem;
+  padding-top: 13.1rem;
+`;
