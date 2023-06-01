@@ -6,6 +6,7 @@ import VideoSection from "../../components/add-recipe/VideoSection";
 import IngredientSection from "../../components/add-recipe/IngredientSection";
 import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
 import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
+import CookingStepSection from "../../components/add-recipe/CookingStepSection";
 
 const categories = ["한식", "중식", "일식", "양식"];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -94,6 +95,7 @@ const RecipeForm = () => {
     setIngredients(newIngredients);
   };
 
+  // 요리방법 작성 핸들러
   const handleStepDetailChange = (
     e: ChangeEvent<HTMLTextAreaElement>,
     index: number
@@ -103,10 +105,12 @@ const RecipeForm = () => {
     setSteps(newSteps);
   };
 
+  // 스텝 추가 핸들러
   const handleAddStep = () => {
     setSteps([...steps, { stepDetail: "", stepImage: "" }]);
   };
 
+  // 스텝 삭제 핸들러
   const handleRemoveStep = (index: number) => {
     if (steps.length > 1) {
       const newSteps = [...steps];
@@ -167,33 +171,12 @@ const RecipeForm = () => {
         handleAddIngredient={handleAddIngredient}
         handleRemoveIngredient={handleRemoveIngredient}
       />
-      <CookingStep>
-        <Label>요리 순서</Label>
-        {steps.map((step, index) => (
-          <div key={index}>
-            <StepWrapper>
-              <StepLabel>Step {index + 1}</StepLabel>
-              <StepTextArea
-                value={step.stepDetail}
-                onChange={(e) => handleStepDetailChange(e, index)}
-                placeholder="단계별 요리 방법을 입력해주세요."
-              />
-              <ImageUploadBox>
-                {/* Add the image upload component here and handle onChange using handleStepImageChange */}
-              </ImageUploadBox>
-              {steps.length !== 1 && (
-                <RemoveStepButton
-                  type="button"
-                  onClick={() => handleRemoveStep(index)}
-                ></RemoveStepButton>
-              )}
-            </StepWrapper>
-          </div>
-        ))}
-        <AddStepButton type="button" onClick={handleAddStep}>
-          + 순서 추가하기
-        </AddStepButton>
-      </CookingStep>
+      <CookingStepSection
+        steps={steps}
+        handleStepDetailChange={handleStepDetailChange}
+        handleAddStep={handleAddStep}
+        handleRemoveStep={handleRemoveStep}
+      />
     </FormWrapper>
   );
 };
