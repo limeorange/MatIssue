@@ -12,6 +12,7 @@ interface IngredientSectionProps {
     index: number
   ) => void;
   handleAddIngredient: () => void;
+  handleRemoveIngredient: (index: number) => void;
 }
 
 const IngredientSection = ({
@@ -19,6 +20,7 @@ const IngredientSection = ({
   handleIngredientChange,
   handleQuantityChange,
   handleAddIngredient,
+  handleRemoveIngredient,
 }: IngredientSectionProps) => {
   return (
     <div
@@ -46,6 +48,12 @@ const IngredientSection = ({
               onChange={(e) => handleQuantityChange(e, index)}
               placeholder="재료의 양"
             />
+            <RemoveIngredientButton
+              type="button"
+              onClick={() => handleRemoveIngredient(index)}
+            >
+              삭제
+            </RemoveIngredientButton>
           </IngredientRow>
         ))}
         <AddIngredientButton
@@ -84,7 +92,7 @@ const IngredientInput = styled.input`
   border: 1px solid #c4c4c4;
   box-sizing: border-box;
   border-radius: 1.5rem;
-  padding: 10px;
+  padding: 1rem;
   font-size: 16px;
 `;
 
@@ -94,7 +102,7 @@ const QuantityInput = styled.input`
   border: 1px solid #c4c4c4;
   box-sizing: border-box;
   border-radius: 1.5rem;
-  padding: 10px;
+  padding: 1rem;
   font-size: 16px;
 `;
 
@@ -113,6 +121,19 @@ const AddIngredientButton = styled.button`
   line-height: 2.8rem;
   color: #4f3d21;
   border: none;
+  cursor: pointer;
+  background: transparent;
+`;
+
+const RemoveIngredientButton = styled.button`
+  font-family: "Pretendard", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 2.8rem;
+  color: #4f3d21;
+  border: none;
+  margin-left: 1.4rem;
   cursor: pointer;
   background: transparent;
 `;

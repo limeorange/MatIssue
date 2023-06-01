@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useRef, ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import VideoSection from "../../components/add-recipe/VideoSection";
 import IngredientSection from "../../components/add-recipe/IngredientSection";
+import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
+import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
 
 const categories = ["한식", "중식", "일식", "양식"];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -44,46 +46,6 @@ const RecipeForm = () => {
     setSelectedImage(imageUrl);
   };
 
-  const ThumbnailUpload = () => {
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleImageClick = () => {
-      if (fileInputRef.current) {
-        fileInputRef.current.click();
-      }
-    };
-
-    // 섬네일 등록
-    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files.length > 0) {
-        const file = e.target.files[0];
-        const imageUrl = URL.createObjectURL(file);
-        setSelectedImage(imageUrl);
-      }
-    };
-
-    return (
-      <ImageSection>
-        <Label>썸네일 등록</Label>
-        {selectedImage ? (
-          <Image
-            src={selectedImage}
-            alt="thumbnail"
-            onClick={handleImageClick}
-          />
-        ) : (
-          <EmptyBox onClick={handleImageClick} />
-        )}
-        <FileInput
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-        />
-      </ImageSection>
-    );
-  };
-
   const handleRecipeTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRecipeTitle(e.target.value);
   };
@@ -92,7 +54,7 @@ const RecipeForm = () => {
     setCookingIntro(e.target.value);
   };
 
-  // 재료와 양 변경 핸들러
+  // 재료 변경 핸들러
   const handleIngredientChange = (
     e: ChangeEvent<HTMLInputElement>,
     index: number
@@ -102,6 +64,7 @@ const RecipeForm = () => {
     setIngredients(newIngredients);
   };
 
+  // 재료의 양 변경 핸들러
   const handleQuantityChange = (
     e: ChangeEvent<HTMLInputElement>,
     index: number
@@ -116,74 +79,38 @@ const RecipeForm = () => {
     setIngredients([...ingredients, { ingredient: "", quantity: "" }]);
   };
 
+  // 재료 삭제 핸들러
+  const handleRemoveIngredient = (index: number) => {
+    const newIngredients = [...ingredients];
+    newIngredients.splice(index, 1);
+    setIngredients(newIngredients);
+  };
+
   return (
     <FormWrapper>
       <Title>레시피 등록하기</Title>
       <MainSection>
         <ImageContainer>
-          <ThumbnailUpload />
+          <ThumbnailUpload
+            selectedImage={selectedImage}
+            handleThumbnailChange={handleThumbnailChange}
+          />
         </ImageContainer>
         <div>
-          <InfoSection>
-            <LabelWithInfo>
-              <Label>카테고리</Label>
-              <Info>
-                <Select
-                  value={selectedCategory}
-                  onChange={handleCategoryChange}
-                >
-                  <option value="" disabled hidden>
-                    종류
-                  </option>
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </Select>
-              </Info>
-            </LabelWithInfo>
-          </InfoSection>
-          <InfoSection>
-            <LabelWithInfo>
-              <Label>요리정보</Label>
-              <Info>
-                <Select value={selectedPeople} onChange={handlePeopleChange}>
-                  <option value="" disabled hidden>
-                    인원
-                  </option>
-                  {peopleCount.map((count) => (
-                    <option key={count} value={count}>
-                      {count}
-                    </option>
-                  ))}
-                </Select>
-                <Select value={selectedTime} onChange={handleTimeChange}>
-                  <option value="" disabled hidden>
-                    시간
-                  </option>
-                  {times.map((time) => (
-                    <option key={time} value={time}>
-                      {time}
-                    </option>
-                  ))}
-                </Select>
-                <Select
-                  value={selectedDifficulty}
-                  onChange={handleDifficultyChange}
-                >
-                  <option value="" disabled hidden>
-                    난이도
-                  </option>
-                  {difficulties.map((difficulty) => (
-                    <option key={difficulty} value={difficulty}>
-                      {difficulty}
-                    </option>
-                  ))}
-                </Select>
-              </Info>
-            </LabelWithInfo>
-          </InfoSection>
+          <CategoryAndInfo
+            selectedCategory={selectedCategory}
+            handleCategoryChange={handleCategoryChange}
+            selectedPeople={selectedPeople}
+            handlePeopleChange={handlePeopleChange}
+            selectedTime={selectedTime}
+            handleTimeChange={handleTimeChange}
+            selectedDifficulty={selectedDifficulty}
+            handleDifficultyChange={handleDifficultyChange}
+            categories={categories}
+            peopleCount={peopleCount}
+            times={times}
+            difficulties={difficulties}
+          />
         </div>
       </MainSection>
       <RecipeTitle>
@@ -209,6 +136,7 @@ const RecipeForm = () => {
         handleIngredientChange={handleIngredientChange}
         handleQuantityChange={handleQuantityChange}
         handleAddIngredient={handleAddIngredient}
+        handleRemoveIngredient={handleRemoveIngredient}
       />
     </FormWrapper>
   );
@@ -228,21 +156,6 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
-`;
-
-const Select = styled.select`
-  box-sizing: border-box;
-  width: 13.5rem;
-  height: 3.6rem;
-  border: 0.1rem solid #d9d9d9;
-  border-radius: 5rem;
-  padding-left: 1rem;
-  margin: 0.5rem 0;
-  font-family: "Pretendard";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.9rem;
 `;
 
 const Input = styled.input`
@@ -311,51 +224,6 @@ const ImageContainer = styled.div`
   justify-content: center;
   margin-top: 2rem;
   margin-right: 4.9rem;
-`;
-
-const ImageSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-`;
-
-const Image = styled.img`
-  cursor: pointer;
-  object-fit: cover;
-  width: 28rem;
-  height: 21rem;
-  border-radius: 1.5rem;
-`;
-
-const EmptyBox = styled.div`
-  width: 28rem;
-  height: 21rem;
-  background: #f6f5f5;
-  border-radius: 1.5rem;
-  cursor: pointer;
-`;
-
-const FileInput = styled.input`
-  display: none;
-`;
-
-const InfoSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 2rem;
-`;
-
-const LabelWithInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-`;
-
-const Info = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 const RecipeTitle = styled.div`
