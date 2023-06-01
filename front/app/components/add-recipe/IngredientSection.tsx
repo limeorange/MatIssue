@@ -22,6 +22,8 @@ const IngredientSection = ({
   handleAddIngredient,
   handleRemoveIngredient,
 }: IngredientSectionProps) => {
+  const showRemoveButton = ingredients.length > 1;
+
   return (
     <div
       style={{
@@ -48,10 +50,12 @@ const IngredientSection = ({
               onChange={(e) => handleQuantityChange(e, index)}
               placeholder="재료의 양"
             />
-            <RemoveIngredientButton
-              type="button"
-              onClick={() => handleRemoveIngredient(index)}
-            />
+            {showRemoveButton && (
+              <RemoveIngredientButton
+                type="button"
+                onClick={() => handleRemoveIngredient(index)}
+              />
+            )}
           </IngredientRow>
         ))}
         <AddIngredientButton
