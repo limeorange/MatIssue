@@ -11,6 +11,9 @@ type RecipeData = {
   view: string;
   id: string;
   timestamp: number;
+  servings: number;
+  duration: number;
+  difficulty: 1 | 2 | 3;
 };
 
 type RecipeCardProps = {
