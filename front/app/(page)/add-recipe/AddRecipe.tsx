@@ -26,30 +26,37 @@ const RecipeForm = () => {
     { ingredient: "", quantity: "" },
   ]);
 
+  // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setCategory(e.target.value);
   };
 
+  // 몇인분인지
   const handlePeopleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setPeople(e.target.value);
   };
 
+  // 시간
   const handleTimeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setTime(e.target.value);
   };
 
+  // 난이도
   const handleDifficultyChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setDifficulty(e.target.value);
   };
 
+  // 섬네일 이미지
   const handleThumbnailChange = (imageUrl: string) => {
     setSelectedImage(imageUrl);
   };
 
+  // 레시피 제목
   const handleRecipeTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRecipeTitle(e.target.value);
   };
 
+  // 요리 소개
   const handleCookingIntroChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCookingIntro(e.target.value);
   };
