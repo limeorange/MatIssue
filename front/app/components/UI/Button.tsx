@@ -29,7 +29,7 @@ const Button = (props: ButtonProps) => {
 
 const StyledButton = styled.button<ButtonProps>`
   padding: 0.8rem 1.6rem;
-  font-size: 1.6rem;
+  font-size: 16px;
   font-weight: 600;
   color: #4f3d21;
   height : 4.8rem;
