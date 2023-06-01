@@ -76,7 +76,8 @@ const Image = styled.img`
 const EmptyBox = styled.div`
   width: 28rem;
   height: 21rem;
-  background: #f6f5f5;
+  background: #f6f5f5 url("/images/cameraIcon.png") no-repeat center;
+  background-size: auto;
   border-radius: 1.5rem;
   cursor: pointer;
 `;

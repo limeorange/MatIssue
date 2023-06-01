@@ -88,9 +88,11 @@ const RecipeForm = () => {
 
   // 재료 삭제 핸들러
   const handleRemoveIngredient = (index: number) => {
-    const newIngredients = [...ingredients];
-    newIngredients.splice(index, 1);
-    setIngredients(newIngredients);
+    if (ingredients.length > 1) {
+      const newIngredients = [...ingredients];
+      newIngredients.splice(index, 1);
+      setIngredients(newIngredients);
+    }
   };
 
   return (

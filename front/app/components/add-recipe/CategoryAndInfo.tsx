@@ -122,6 +122,11 @@ const Select = styled.select`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
+  appearance: none;
+  background: #ffffff url("/images/listIcon.png") no-repeat;
+  background-position: right 1rem center;
+  -webkit-appearance: none; /* for chrome /
+  -moz-appearance:none; /for firefox*/
 `;
 
 const InfoSection = styled.div`

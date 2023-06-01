@@ -51,9 +51,7 @@ const IngredientSection = ({
             <RemoveIngredientButton
               type="button"
               onClick={() => handleRemoveIngredient(index)}
-            >
-              삭제
-            </RemoveIngredientButton>
+            />
           </IngredientRow>
         ))}
         <AddIngredientButton
@@ -126,14 +124,12 @@ const AddIngredientButton = styled.button`
 `;
 
 const RemoveIngredientButton = styled.button`
-  font-family: "Pretendard", sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 2.8rem;
-  color: #4f3d21;
+  width: 2.5rem;
+  height: 2.5rem;
   border: none;
   margin-left: 1.4rem;
+  margin-top: 0.6rem;
   cursor: pointer;
-  background: transparent;
+  background: url("/images/deleteIcon.png") no-repeat center;
+  background-size: contain;
 `;
