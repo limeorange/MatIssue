@@ -98,6 +98,7 @@ const RecipeForm = () => {
     }
   };
 
+  // 스텝에 이미지 넣기 핸들러
   const handleStepImageChange = (
     e: ChangeEvent<HTMLInputElement>,
     index: number
@@ -116,6 +117,7 @@ const RecipeForm = () => {
     }
   };
 
+  // 스텝 내용 변경 핸들러
   const handleStepDetailChange = (
     e: ChangeEvent<HTMLTextAreaElement>,
     index: number
@@ -125,10 +127,12 @@ const RecipeForm = () => {
     setSteps(newSteps);
   };
 
+  // 스텝 추가 핸들러
   const handleAddStep = () => {
     setSteps([...steps, { stepDetail: "", stepImage: "" }]);
   };
 
+  // 스텝 제거 핸들러
   const handleRemoveStep = (index: number) => {
     if (steps.length > 1) {
       const newSteps = [...steps];
@@ -303,77 +307,4 @@ const CookingIntro = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 2rem;
-`;
-
-const CookingStep = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 2rem;
-`;
-
-const StepLabel = styled(Label)`
-  margin-bottom: 1rem;
-  align-self: flex-start;
-  margin-right: -2rem;
-`;
-
-const ImageUploadBox = styled.div`
-  width: 19.9rem;
-  height: 16rem;
-  background: #f7f5f5;
-  border-radius: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 2rem;
-  position: relative;
-`;
-
-const StepWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  align-items: center;
-  margin-top: 2rem;
-`;
-
-const StepTextArea = styled(TextArea)`
-  width: 35.6rem;
-  height: 16rem;
-`;
-
-const AddStepButton = styled.button`
-  font-family: "Pretendard", sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 2.8rem;
-  color: #4f3d21;
-  border: none;
-  cursor: pointer;
-  background: transparent;
-  align-self: center;
-  padding-left: 3.5rem;
-  margin-top: 1.4rem;
-`;
-
-const RemoveStepButton = styled.button`
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  margin-left: 1.4rem;
-  margin-top: 0.6rem;
-  cursor: pointer;
-  background: url("/images/deleteIcon.png") no-repeat center;
-  background-size: contain;
-`;
-
-const FileInput = styled.input`
-  position: absolute; // 추가: input 필드를 absolute로 지정합니다.
-  width: 100%;
-  height: 100%;
-  opacity: 0; // 추가: input 필드를 숨깁니다.
-  cursor: pointer; // 추가: 마우스 커서를 pointer로 변경합니다.
 `;
