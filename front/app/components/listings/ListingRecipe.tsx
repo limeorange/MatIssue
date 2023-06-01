@@ -250,41 +250,33 @@ const ListingRecipe = () => {
     setFilteredRecipes(filtered);
   }, [search]);
 
-  // 정렬 버튼 클릭 시 최신순, 인기순으로 게시물 렌더링
   useEffect(() => {
-    let sortedRecipes = [...filteredRecipes];
+    let result = [...DUMMY_DATA];
 
-    if (sortMethod === "date") {
-      sortedRecipes.sort((a, b) => a.timestamp - b.timestamp);
-    } else if (sortMethod === "likes") {
-      sortedRecipes.sort((a, b) => b.likes - a.likes);
-    }
-    setFilteredRecipes(sortedRecipes);
-  }, [sortMethod, filteredRecipes]);
-
-  // filter 상태가 바뀔 때마다, 레시피를 필터링
-  useEffect(() => {
-    let filtered = DUMMY_DATA;
-
+    // 필터바로 레시피 필터링
     if (filter.servings > 0) {
-      filtered = filtered.filter(
-        (recipe) => recipe.servings === filter.servings
-      );
+      result = result.filter((recipe) => recipe.servings === filter.servings);
     }
 
     if (filter.duration > 0) {
-      filtered = filtered.filter(
-        (recipe) => recipe.duration === filter.duration
-      );
+      result = result.filter((recipe) => recipe.duration === filter.duration);
     }
 
-    if (filter.difficulty > 0) {
-      filtered = filtered.filter(
+    if (filter.difficulty > -1) {
+      result = result.filter(
         (recipe) => recipe.difficulty === filter.difficulty
       );
     }
-    setFilteredRecipes(filtered);
-  }, [filter]);
+
+    // 버튼으로 레시피 정렬
+    if (sortMethod === "date") {
+      result.sort((a, b) => a.timestamp - b.timestamp);
+    } else if (sortMethod === "likes") {
+      result.sort((a, b) => b.likes - a.likes);
+    }
+
+    setFilteredRecipes(result);
+  }, [filter, sortMethod]);
 
   return (
     <>
