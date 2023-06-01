@@ -87,8 +87,25 @@ const ThumbnailWrapper = styled.div`
 `;
 
 const EmptyThumbnailBox = styled.div`
+  position: relative;
   width: 17.4rem;
   height: 11.6rem;
-  background: #f6f5f5;
+  background: #f6f5f5 url("/images/videoIcon.png") no-repeat center top 3.5rem;
+  background-size: auto;
   border-radius: 1.5rem;
+
+  ::before {
+    content: "동영상 섬네일";
+    position: absolute;
+    bottom: 1.9rem;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-family: "Pretendard";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.9rem;
+    color: #ababab;
+  }
 `;
