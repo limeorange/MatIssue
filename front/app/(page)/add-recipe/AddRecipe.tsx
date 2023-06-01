@@ -6,7 +6,7 @@ import VideoSection from "../../components/add-recipe/VideoSection";
 import IngredientSection from "../../components/add-recipe/IngredientSection";
 import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
 import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
-import CookingStepSection from "../../components/add-recipe/CookingStepSection";
+import CookingStepsSection from "../../components/add-recipe/CookingStepsSection";
 
 const categories = ["한식", "중식", "일식", "양식"];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -27,6 +27,7 @@ const RecipeForm = () => {
     { ingredient: "", quantity: "" },
   ]);
   const [steps, setSteps] = useState([{ stepDetail: "", stepImage: "" }]);
+  const [stepImages, setStepImages] = useState<string[]>([]);
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -90,12 +91,31 @@ const RecipeForm = () => {
 
   // 재료 삭제 핸들러
   const handleRemoveIngredient = (index: number) => {
-    const newIngredients = [...ingredients];
-    newIngredients.splice(index, 1);
-    setIngredients(newIngredients);
+    if (ingredients.length > 1) {
+      const newIngredients = [...ingredients];
+      newIngredients.splice(index, 1);
+      setIngredients(newIngredients);
+    }
   };
 
-  // 요리방법 작성 핸들러
+  const handleStepImageChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const file = e.target.files![0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const newStepImages = [...stepImages];
+      newStepImages[index] = reader.result as string;
+      setStepImages(newStepImages);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleStepDetailChange = (
     e: ChangeEvent<HTMLTextAreaElement>,
     index: number
@@ -105,17 +125,19 @@ const RecipeForm = () => {
     setSteps(newSteps);
   };
 
-  // 스텝 추가 핸들러
   const handleAddStep = () => {
     setSteps([...steps, { stepDetail: "", stepImage: "" }]);
   };
 
-  // 스텝 삭제 핸들러
   const handleRemoveStep = (index: number) => {
     if (steps.length > 1) {
       const newSteps = [...steps];
       newSteps.splice(index, 1);
       setSteps(newSteps);
+
+      const newStepImages = [...stepImages];
+      newStepImages.splice(index, 1);
+      setStepImages(newStepImages);
     }
   };
 
@@ -171,9 +193,11 @@ const RecipeForm = () => {
         handleAddIngredient={handleAddIngredient}
         handleRemoveIngredient={handleRemoveIngredient}
       />
-      <CookingStepSection
+      <CookingStepsSection
         steps={steps}
+        stepImages={stepImages}
         handleStepDetailChange={handleStepDetailChange}
+        handleStepImageChange={handleStepImageChange}
         handleAddStep={handleAddStep}
         handleRemoveStep={handleRemoveStep}
       />
@@ -279,4 +303,77 @@ const CookingIntro = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 2rem;
+`;
+
+const CookingStep = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 2rem;
+`;
+
+const StepLabel = styled(Label)`
+  margin-bottom: 1rem;
+  align-self: flex-start;
+  margin-right: -2rem;
+`;
+
+const ImageUploadBox = styled.div`
+  width: 19.9rem;
+  height: 16rem;
+  background: #f7f5f5;
+  border-radius: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 2rem;
+  position: relative;
+`;
+
+const StepWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  align-items: center;
+  margin-top: 2rem;
+`;
+
+const StepTextArea = styled(TextArea)`
+  width: 35.6rem;
+  height: 16rem;
+`;
+
+const AddStepButton = styled.button`
+  font-family: "Pretendard", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 2.8rem;
+  color: #4f3d21;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  align-self: center;
+  padding-left: 3.5rem;
+  margin-top: 1.4rem;
+`;
+
+const RemoveStepButton = styled.button`
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  margin-left: 1.4rem;
+  margin-top: 0.6rem;
+  cursor: pointer;
+  background: url("/images/deleteIcon.png") no-repeat center;
+  background-size: contain;
+`;
+
+const FileInput = styled.input`
+  position: absolute; // 추가: input 필드를 absolute로 지정합니다.
+  width: 100%;
+  height: 100%;
+  opacity: 0; // 추가: input 필드를 숨깁니다.
+  cursor: pointer; // 추가: 마우스 커서를 pointer로 변경합니다.
 `;

@@ -1,26 +1,34 @@
 import React, { ChangeEvent } from "react";
 import styled from "styled-components";
+import Image from "next/image";
 
 interface Step {
   stepDetail: string;
 }
 
-interface CookingStepSectionProps {
+interface CookingStepsSectionProps {
   steps: Step[];
+  stepImages: string[];
   handleStepDetailChange: (
     e: ChangeEvent<HTMLTextAreaElement>,
+    index: number
+  ) => void;
+  handleStepImageChange: (
+    e: ChangeEvent<HTMLInputElement>,
     index: number
   ) => void;
   handleAddStep: () => void;
   handleRemoveStep: (index: number) => void;
 }
 
-const CookingStepSection = ({
+const CookingStepsSection = ({
   steps,
+  stepImages,
   handleStepDetailChange,
+  handleStepImageChange,
   handleAddStep,
   handleRemoveStep,
-}: CookingStepSectionProps) => {
+}: CookingStepsSectionProps) => {
   return (
     <CookingStep>
       <Label>요리 순서</Label>
@@ -31,10 +39,27 @@ const CookingStepSection = ({
             <StepTextArea
               value={step.stepDetail}
               onChange={(e) => handleStepDetailChange(e, index)}
-              placeholder="요리 과정을 알려주세요."
+              placeholder="단계별 요리 방법을 입력해주세요."
             />
-            <ImageUploadBox>
-              {/* Add the image upload component here and handle onChange using handleStepImageChange */}
+            <ImageUploadBox imgExists={Boolean(stepImages[index])}>
+              <FileInput
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleStepImageChange(e, index)}
+              />
+              {stepImages[index] && (
+                <ImageWrapper>
+                  <ImageContainer>
+                    <Image
+                      src={stepImages[index]}
+                      alt="step"
+                      layout="fill"
+                      objectFit="cover"
+                      style={{ borderRadius: "1.5rem" }}
+                    />
+                  </ImageContainer>
+                </ImageWrapper>
+              )}
             </ImageUploadBox>
             {steps.length !== 1 && (
               <RemoveStepButton
@@ -52,7 +77,7 @@ const CookingStepSection = ({
   );
 };
 
-export default CookingStepSection;
+export default CookingStepsSection;
 
 const Label = styled.label`
   width: 8.8rem;
@@ -64,9 +89,9 @@ const Label = styled.label`
   line-height: 2.1rem;
   color: #4f3d21;
   margin-right: 3rem;
+  margin-bottom: 2rem;
   padding-top: 0.5rem;
 `;
-
 const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 57.2rem;
@@ -84,13 +109,12 @@ const TextArea = styled.textarea`
     color: #a9a9a9;
   }
 `;
-
 const CookingStep = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  margin-top: 2rem;
+  margin-top: 4.3rem;
 `;
 
 const StepLabel = styled(Label)`
@@ -99,15 +123,20 @@ const StepLabel = styled(Label)`
   margin-right: -2rem;
 `;
 
-const ImageUploadBox = styled.div`
+const ImageUploadBox = styled.div<{ imgExists: boolean }>`
   width: 19.9rem;
   height: 16rem;
-  background: #f7f5f5;
+  background: ${(props) =>
+    props.imgExists
+      ? "#f7f5f5"
+      : '#f6f5f5 url("/images/cameraIcon.png") no-repeat center'};
+  background-size: ${(props) => (props.imgExists ? "auto" : "6rem 6rem")};
   border-radius: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-left: 2rem;
+  position: relative;
 `;
 
 const StepWrapper = styled.div`
@@ -134,7 +163,6 @@ const AddStepButton = styled.button`
   cursor: pointer;
   background: transparent;
   align-self: center;
-  padding-left: 3.5rem;
   margin-top: 1.4rem;
 `;
 
@@ -147,4 +175,24 @@ const RemoveStepButton = styled.button`
   cursor: pointer;
   background: url("/images/deleteIcon.png") no-repeat center;
   background-size: contain;
+`;
+
+const FileInput = styled.input`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+`;
+
+const ImageWrapper = styled.div`
+  width: 19.9rem;
+  height: 16rem;
+  overflow: hidden;
+  border-radius: 1.5rem;
+`;
+
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 100%;
 `;
