@@ -32,6 +32,7 @@ const LoadingModal = () => {
         <LoadingContainer>
           <LoadingPositionDiv>
             <PacmanLoader color="#FBD26A" size={25} />
+            <div>오늘도 맛이슈와 함께</div>
           </LoadingPositionDiv>
         </LoadingContainer>
       </Dialog>
@@ -48,6 +49,11 @@ const LoadingContainer = styled.div`
 
 const LoadingPositionDiv = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #fbd26a;
   min-height: 100%;
   align-items: center;
   justify-content: center;
