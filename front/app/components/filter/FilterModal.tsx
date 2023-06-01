@@ -1,17 +1,36 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import styled from "styled-components";
 
 type FilterModalProps = {
   options: { value: number; name: string }[];
-  setState: any;
+  setState: any; // 타입 수정 필요
+  onClose: () => void;
 };
 
 const FilterModal = (props: FilterModalProps) => {
-  const { options, setState } = props;
+  const { options, setState, onClose } = props;
+
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
 
   return (
-    <FilterModalContainer>
+    <FilterModalContainer ref={modalRef}>
       <FilterModalUl>
         {options.map((option) => (
           <FilterModalLi
@@ -58,5 +77,7 @@ const FilterModalLi = styled.li`
     cursor: pointer;
   }
 `;
+
+const Backdrop = styled.div``;
 
 export default FilterModal;

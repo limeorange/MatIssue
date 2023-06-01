@@ -61,7 +61,11 @@ const FilterBar = (props: FilterBarProps) => {
     <FilterContainer>
       <FilterBarLi onClick={() => setIsServingsModal(!isServingsModal)}>
         {isServingsModal && (
-          <FilterModal options={servings} setState={setNewServings} />
+          <FilterModal
+            options={servings}
+            setState={setNewServings}
+            onClose={() => setIsServingsModal(false)}
+          />
         )}
         <div>
           <Image
@@ -76,7 +80,11 @@ const FilterBar = (props: FilterBarProps) => {
       <FilterBarLine></FilterBarLine>
       <FilterBarLi onClick={() => setIsDurationModal(!isDurationModal)}>
         {isDurationModal && (
-          <FilterModal options={duration} setState={setNewDuration} />
+          <FilterModal
+            options={duration}
+            setState={setNewDuration}
+            onClose={() => setIsDurationModal(false)}
+          />
         )}
         <div>
           <Image
@@ -91,7 +99,11 @@ const FilterBar = (props: FilterBarProps) => {
       <FilterBarLine></FilterBarLine>
       <FilterBarLi onClick={() => setIsDifficultyModal(!isDifficultyModal)}>
         {isDifficultyModal && (
-          <FilterModal options={difficulty} setState={setNewDifficulty} />
+          <FilterModal
+            options={difficulty}
+            setState={setNewDifficulty}
+            onClose={() => setIsDifficultyModal(false)}
+          />
         )}
         <div>
           <Image
