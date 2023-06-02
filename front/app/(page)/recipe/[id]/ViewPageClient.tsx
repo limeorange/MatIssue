@@ -147,7 +147,7 @@ const RecipeDetail = () => {
                 width={30}
                 height={26}
                 onClick={handleHeartClick}
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "cover", cursor: "pointer" }}
               />
             </div>
             <div className="text-[18px]">{count}</div>
