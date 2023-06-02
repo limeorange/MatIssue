@@ -38,6 +38,10 @@ const SearchBar = () => {
 };
 
 const SearchBarDiv = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   padding: 0.8rem 1.6rem;
@@ -52,7 +56,7 @@ const SearchBarDiv = styled.div`
 const SearchBarInput = styled.input`
   width: 100%;
   border: none;
-  font-size: 1.6rem;
+  font-size: 16px;
   font-weight: 400;
   &:focus {
     outline: none;
