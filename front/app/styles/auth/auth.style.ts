@@ -2,8 +2,12 @@ import { FieldErrors } from "react-hook-form";
 import styled from "styled-components";
 
 type StyledInputProps = {
-  errors: FieldErrors;
   disabled?: boolean;
+};
+
+type BirthdayInputProps = {
+  disabled?: boolean;
+  isYear?: boolean;
 };
 
 export const AuthContainer = styled.div`
@@ -40,7 +44,7 @@ export const AuthFormWrapper = styled.div`
 
 export const StyledLabel = styled.label`
   display: inline-block;
-  font-size: 1.6rem;
+  font-size: 16px;
   font-weight: 500;
   margin-bottom: 1rem;
   padding-left: 0.5rem;
@@ -52,7 +56,7 @@ export const StyledInput = styled.input<StyledInputProps>`
   border-color: #ddd;
   border-width: 1px;
   padding: 0.6rem 1.2rem;
-  font-size: 1.6rem;
+  font-size: 16px;
   line-height: 2.4rem;
   display: block;
   width: 100%;
@@ -70,6 +74,11 @@ export const StyledInput = styled.input<StyledInputProps>`
   }
 `;
 
+export const BirthdayInput = styled(StyledInput)<BirthdayInputProps>`
+  width: ${(props) => (props.isYear ? "16rem" : "8rem")};
+  }
+`;
+
 export const ErrorMessageText = styled.span`
   display: inline-block;
   padding: 0.3rem 1.3rem 0 1.3rem;
@@ -77,10 +86,12 @@ export const ErrorMessageText = styled.span`
   color: #ff2f2f;
 `;
 
-export const AuthChangeBox = styled.div`
+export const AuthNavBox = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 0.6rem;
-  font-size: 1.4rem;
+  font-size: 14px;
   color: rgb(150, 150, 150);
 `;
 
