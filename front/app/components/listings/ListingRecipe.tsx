@@ -234,24 +234,16 @@ const ListingRecipe = () => {
   const searchParams = useSearchParams();
   const search = searchParams.get("query"); // url의 query값 추출
 
-  // 검색바에 검색된 값을 받아서 레시피 필터링
   useEffect(() => {
+    let result = [...DUMMY_DATA];
+
+    // 검색바로 레시피 필터링
     const term = search || "";
-
-    let filtered = DUMMY_DATA;
-
     if (term !== "") {
-      filtered = DUMMY_DATA.filter((recipe) =>
+      result = result.filter((recipe) =>
         recipe.title.toLowerCase().includes(term.toLowerCase())
       );
     }
-
-    setSearchTerm(term);
-    setFilteredRecipes(filtered);
-  }, [search]);
-
-  useEffect(() => {
-    let result = [...DUMMY_DATA];
 
     // 필터바로 레시피 필터링
     if (filter.servings > 0) {
@@ -276,7 +268,7 @@ const ListingRecipe = () => {
     }
 
     setFilteredRecipes(result);
-  }, [filter, sortMethod]);
+  }, [search, filter, sortMethod]);
 
   return (
     <>
