@@ -7,6 +7,7 @@ import IngredientSection from "../../components/add-recipe/IngredientSection";
 import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
 import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "../../components/add-recipe/CookingStepsSection";
+import Button from "../../components/UI/Button";
 
 const categories = ["한식", "중식", "일식", "양식"];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -149,6 +150,14 @@ const RecipeForm = () => {
     setCookingTips(e.target.value);
   };
 
+  const handleSave = () => {
+    // Logic for saving the recipe
+  };
+
+  const handleCancel = () => {
+    // Logic for cancelling the form
+  };
+
   return (
     <FormWrapper>
       <Title>레시피 등록하기</Title>
@@ -217,6 +226,18 @@ const RecipeForm = () => {
           placeholder="나만의 요리팁을 입력해주세요."
         />
       </CookingTips>
+      <ButtonContainer>
+        <SaveButton>
+          <Button onClick={handleSave} type="submit" isBgColor fullWidth>
+            저장
+          </Button>
+        </SaveButton>
+        <CancleButton>
+          <Button onClick={handleCancel} type="button" isBorderColor fullWidth>
+            취소
+          </Button>
+        </CancleButton>
+      </ButtonContainer>
     </FormWrapper>
   );
 };
@@ -336,4 +357,20 @@ const TipsLabel = styled(Label)`
 
 const TipsTextArea = styled(TextArea)`
   width: 62rem;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3.4rem;
+  gap: 1.8rem;
+  width: 100%;
+`;
+
+const SaveButton = styled.div`
+  width: 18rem;
+`;
+const CancleButton = styled.div`
+  width: 18rem;
 `;
