@@ -26,6 +26,7 @@ const RecipeForm = () => {
   ]);
   const [steps, setSteps] = useState([{ stepDetail: "", stepImage: "" }]);
   const [stepImages, setStepImages] = useState<string[]>([]);
+  const [cookingTips, setCookingTips] = useState("");
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -143,6 +144,11 @@ const RecipeForm = () => {
     }
   };
 
+  // 요리팁 변경 핸들러
+  const handleCookingTipsChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setCookingTips(e.target.value);
+  };
+
   return (
     <FormWrapper>
       <Title>레시피 등록하기</Title>
@@ -203,6 +209,14 @@ const RecipeForm = () => {
         handleAddStep={handleAddStep}
         handleRemoveStep={handleRemoveStep}
       />
+      <CookingTips>
+        <TipsLabel>요리팁</TipsLabel>
+        <TipsTextArea
+          value={cookingTips}
+          onChange={handleCookingTipsChange}
+          placeholder="요리팁을 입력해주세요."
+        />
+      </CookingTips>
     </FormWrapper>
   );
 };
@@ -306,4 +320,20 @@ const CookingIntro = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 2rem;
+`;
+
+const CookingTips = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 2rem;
+`;
+
+const TipsLabel = styled(Label)`
+  margin-right: -2rem;
+`;
+
+const TipsTextArea = styled(TextArea)`
+  width: 63rem;
 `;
