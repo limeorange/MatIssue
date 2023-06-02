@@ -76,6 +76,7 @@ const VideoTextArea = styled.textarea`
   font-size: 16px;
   line-height: 1.9rem;
   margin-right: 2.5rem;
+  resize: none;
   ::placeholder {
     color: #a9a9a9;
   }

@@ -7,6 +7,7 @@ import IngredientSection from "../../components/add-recipe/IngredientSection";
 import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
 import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "../../components/add-recipe/CookingStepsSection";
+import Button from "../../components/UI/Button";
 
 const categories = ["한식", "중식", "일식", "양식"];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -21,13 +22,12 @@ const RecipeForm = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [recipeTitle, setRecipeTitle] = useState("");
   const [cookingIntro, setCookingIntro] = useState("");
-  const [ingredient, setIngredient] = useState("");
-  const [quantity, setQuantity] = useState("");
   const [ingredients, setIngredients] = useState([
     { ingredient: "", quantity: "" },
   ]);
   const [steps, setSteps] = useState([{ stepDetail: "", stepImage: "" }]);
   const [stepImages, setStepImages] = useState<string[]>([]);
+  const [cookingTips, setCookingTips] = useState("");
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -145,6 +145,21 @@ const RecipeForm = () => {
     }
   };
 
+  // 요리팁 변경 핸들러
+  const handleCookingTipsChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setCookingTips(e.target.value);
+  };
+
+  // 저장 핸들러
+  const handleSave = () => {
+    // 저장
+  };
+
+  // 취소 핸들러
+  const handleCancel = () => {
+    // 취소
+  };
+
   return (
     <FormWrapper>
       <Title>레시피 등록하기</Title>
@@ -205,6 +220,26 @@ const RecipeForm = () => {
         handleAddStep={handleAddStep}
         handleRemoveStep={handleRemoveStep}
       />
+      <CookingTips>
+        <TipsLabel>요리팁</TipsLabel>
+        <TipsTextArea
+          value={cookingTips}
+          onChange={handleCookingTipsChange}
+          placeholder="나만의 요리팁을 입력해주세요."
+        />
+      </CookingTips>
+      <ButtonContainer>
+        <SaveButton>
+          <Button onClick={handleSave} type="submit" isBgColor fullWidth>
+            저장
+          </Button>
+        </SaveButton>
+        <CancleButton>
+          <Button onClick={handleCancel} type="button" isBorderColor fullWidth>
+            취소
+          </Button>
+        </CancleButton>
+      </ButtonContainer>
     </FormWrapper>
   );
 };
@@ -252,6 +287,7 @@ const TextArea = styled.textarea`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
+  resize: none;
   ::placeholder {
     color: #a9a9a9;
   }
@@ -307,4 +343,36 @@ const CookingIntro = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 2rem;
+`;
+
+const CookingTips = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 4rem;
+`;
+
+const TipsLabel = styled(Label)`
+  margin-right: -2rem;
+`;
+
+const TipsTextArea = styled(TextArea)`
+  width: 62rem;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3.4rem;
+  gap: 1.8rem;
+  width: 100%;
+`;
+
+const SaveButton = styled.div`
+  width: 18rem;
+`;
+const CancleButton = styled.div`
+  width: 18rem;
 `;
