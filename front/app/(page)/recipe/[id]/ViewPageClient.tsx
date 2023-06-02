@@ -6,6 +6,8 @@ import RecipeComment from "@/app/components/recipe/RecipeComment";
 import RecipeCommentInput from "@/app/components/recipe/RecipeCommentInput";
 import RecipeInfo from "@/app/components/recipe/RecipeInfo";
 import RecipeSteps from "@/app/components/recipe/RecipeSteps";
+import RecipeUserLikes from "@/app/components/recipe/RecipeUserLikes";
+import RecipeVideo from "@/app/components/recipe/RecipeVideo";
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
@@ -22,25 +24,22 @@ const description = `보들보들 부드러운 순두부 달걀탕.
 
 // 요리팁, 동영상 이미지, 동영상 링크, 댓글 개수
 const recipeTip = "멸치액젓이 싫으시면 국간장 2T만으로 간 하셔도 좋습니다.";
-const recipeVideoImage = "/images/recipe-view/요리 동영상.png";
-const recipeVideoUrl = "https://youtu.be/jk29M4knFBw";
+const recipeVideoUrl = `https://www.youtube.com/embed/jk29M4knFBw`;
 const commentCount = 3;
+
+// 레시피 작성자 아이디, 로그인된 아이디
+const recipeUserId = "happyuser";
+const loggedInUserId = "happyuser";
+const createdAt = "2023-06-02";
 
 // 레시피 조회 페이지 컴포넌트
 const RecipeDetail = () => {
-  // 동영상 썸네일 클릭 핸들러
-  const imageClickHandler = () => {
-    window.open(recipeVideoUrl);
-  };
-
-  // 좋아요 버튼 상태 관리
+  // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
-
-  // 좋아요 카운트 상태 관리
   const [count, setCount] = useState(510);
 
   // 좋아요 버튼 클릭 핸들러
-  const handleHeartClick = () => {
+  const heartClickHandler = () => {
     setIsLiked(!isLiked);
     if (isLiked) {
       setCount(count - 1);
@@ -48,11 +47,6 @@ const RecipeDetail = () => {
       setCount(count + 1);
     }
   };
-
-  // 레시피 작성자 아이디, 로그인된 아이디
-  const recipeUserId = "happyuser";
-  const loggedInUserId = "happyuser";
-  const createdAt = "2023-06-02";
 
   return (
     <>
@@ -117,42 +111,15 @@ const RecipeDetail = () => {
         {/* 요리 동영상 */}
         <div>
           <SubtitleH2>요리 동영상</SubtitleH2>
-          <Image
-            src={recipeVideoImage}
-            alt="요리 동영상"
-            width={380}
-            height={210}
-            style={{ cursor: "pointer" }}
-            onClick={imageClickHandler}
-          ></Image>
-          <VideoDescriptionDiv>
-            썸네일 클릭 시 동영상 링크로 연결됩니다.
-          </VideoDescriptionDiv>
+          <RecipeVideo recipeVideoUrl={recipeVideoUrl}></RecipeVideo>
         </div>
 
         {/* 좋아요 */}
-        <div className="flex justify-center">
-          <div
-            className="flex w-[120px] h-[55px] border-[1.7px] 
-            border-[#C8C8C8] rounded-[15px] justify-center items-center"
-          >
-            <div className="w-[32px] h-[28px] mr-[6px]">
-              <Image
-                src={
-                  isLiked
-                    ? "/images/recipe-view/heart_full.svg"
-                    : "/images/recipe-view/heart.svg"
-                }
-                alt="게시글 좋아요 하트"
-                width={30}
-                height={26}
-                onClick={handleHeartClick}
-                style={{ objectFit: "cover" }}
-              />
-            </div>
-            <div className="text-[18px]">{count}</div>
-          </div>
-        </div>
+        <RecipeUserLikes
+          isLiked={isLiked}
+          count={count}
+          heartClickHandler={heartClickHandler}
+        />
 
         {/* 댓글 */}
         <div>
@@ -254,12 +221,6 @@ const SubtitleH2 = styled.h2`
 
 const RecipeTipDiv = styled.div`
   font-size: 1.6rem;
-`;
-
-const VideoDescriptionDiv = styled.div`
-  padding-top: 0.5rem;
-  color: #6f6f6f;
-  font-size: 1.5rem;
 `;
 
 const CommentIconDiv = styled.div`
