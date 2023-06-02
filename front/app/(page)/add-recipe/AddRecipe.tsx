@@ -214,7 +214,7 @@ const RecipeForm = () => {
         <TipsTextArea
           value={cookingTips}
           onChange={handleCookingTipsChange}
-          placeholder="요리팁을 입력해주세요."
+          placeholder="나만의 요리팁을 입력해주세요."
         />
       </CookingTips>
     </FormWrapper>
@@ -327,7 +327,7 @@ const CookingTips = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  margin-top: 2rem;
+  margin-top: 4rem;
 `;
 
 const TipsLabel = styled(Label)`
@@ -335,5 +335,5 @@ const TipsLabel = styled(Label)`
 `;
 
 const TipsTextArea = styled(TextArea)`
-  width: 63rem;
+  width: 62rem;
 `;
