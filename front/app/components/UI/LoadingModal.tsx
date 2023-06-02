@@ -51,7 +51,7 @@ const LoadingPositionDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  font-size: 1.6rem;
+  font-size: 16px;
   font-weight: 400;
   color: #fbd26a;
   min-height: 100%;
