@@ -11,7 +11,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 // 대표 이미지, 제목, 작성자, 소개글,
-const recipeCover = "/요리 대표 사진.png";
+const recipeCover = "/images/recipe-view/요리 대표 사진.png";
 const recipeTitle = "보들보들 순두부 달걀탕";
 const author = "냠냠순두부러버";
 const description = `보들보들 부드러운 순두부 달걀탕.
@@ -22,7 +22,7 @@ const description = `보들보들 부드러운 순두부 달걀탕.
 
 // 요리팁, 동영상 이미지, 동영상 링크, 댓글 개수
 const recipeTip = "멸치액젓이 싫으시면 국간장 2T만으로 간 하셔도 좋습니다.";
-const recipeVideoImage = "/요리 동영상.png";
+const recipeVideoImage = "/images/recipe-view/요리 동영상.png";
 const recipeVideoUrl = "https://youtu.be/jk29M4knFBw";
 const commentCount = 3;
 
