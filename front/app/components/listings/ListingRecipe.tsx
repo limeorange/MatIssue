@@ -314,6 +314,7 @@ const ListingRecipe = () => {
     setFilteredRecipes(result);
   }, [search, searchQuery, filter, sortMethod]);
 
+  // 태그 삭제 로직
   const removeTag = (tagType: string) => {
     {
       const resetValue = -1;
