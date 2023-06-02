@@ -264,7 +264,7 @@ const FormWrapper = styled.form`
   width: 70rem;
   align-items: flex-start;
   margin: 5rem auto 0;
-  background-color: rgba(1, 1, 1, 0.2);
+  // background-color: rgba(1, 1, 1, 0.2);
 `;
 
 const Title = styled.h2`
