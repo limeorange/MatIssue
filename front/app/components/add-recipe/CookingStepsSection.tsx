@@ -105,6 +105,7 @@ const TextArea = styled.textarea`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
+  resize: none;
   ::placeholder {
     color: #a9a9a9;
   }

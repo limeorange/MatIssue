@@ -21,8 +21,6 @@ const RecipeForm = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const [recipeTitle, setRecipeTitle] = useState("");
   const [cookingIntro, setCookingIntro] = useState("");
-  const [ingredient, setIngredient] = useState("");
-  const [quantity, setQuantity] = useState("");
   const [ingredients, setIngredients] = useState([
     { ingredient: "", quantity: "" },
   ]);
@@ -252,6 +250,7 @@ const TextArea = styled.textarea`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
+  resize: none;
   ::placeholder {
     color: #a9a9a9;
   }
@@ -264,7 +263,7 @@ const FormWrapper = styled.form`
   width: 70rem;
   align-items: flex-start;
   margin: 5rem auto 0;
-  // background-color: rgba(1, 1, 1, 0.2);
+  background-color: rgba(1, 1, 1, 0.2);
 `;
 
 const Title = styled.h2`
