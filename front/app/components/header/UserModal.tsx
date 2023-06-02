@@ -2,43 +2,63 @@ import styled from "styled-components";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { axiosBase } from "@/app/api/axios";
 
 const UserModal = () => {
-  const route = useRouter();
+  const router = useRouter();
+
+  const logoutHandler = async () => {
+    const id = Cookies.get("auth");
+
+    axiosBase
+      .post(
+        `users/logout`,
+        { session_id: id },
+        {
+          params: {
+            id,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        toast.error("무언가 잘못되었습니다!");
+      })
+      .finally(() => {
+        Cookies.remove("auth");
+        toast.success("로그아웃 되었습니다.");
+        router.refresh();
+      });
+  };
 
   return (
     <UserModalContainer>
       <UserModalList>
         <UserModalItem
           onClick={() => {
-            route.push("/myPage");
+            router.push("/myPage");
           }}
         >
           마이페이지
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            route.push("/myPage/modifyUserInfo");
+            router.push("/myPage/modifyUserInfo");
           }}
         >
           회원정보 수정
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            route.push("/myPage/notification");
+            router.push("/myPage/notification");
           }}
         >
           알림
         </UserModalItem>
         <UnderLine />
-        <UserModalItem
-          onClick={() => {
-            Cookies.remove("sessionID");
-            toast.success("로그아웃 되었습니다.");
-          }}
-        >
-          로그아웃
-        </UserModalItem>
+        <UserModalItem onClick={logoutHandler}>로그아웃</UserModalItem>
       </UserModalList>
     </UserModalContainer>
   );

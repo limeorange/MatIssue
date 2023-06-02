@@ -16,6 +16,11 @@ input {
   font-size: 62.5%;
 }
 
+main {
+  padding-bottom: 8rem;
+  padding-top: 13.1rem;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

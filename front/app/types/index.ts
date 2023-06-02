@@ -4,15 +4,12 @@ export type ExampleItems = {
 };
 
 export type User = {
-  id: string;
-  name: string | null;
-  email: string | null;
-  emailVerified: Date | null;
-  image: string | null;
-  hashedPassword: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  followingIDs: string[];
-  followerIDs: string[];
-  likedRecipes: string[];
+  currentUser: {
+    user_id: string;
+    username: string;
+    email: string;
+    birth_date: string;
+    img: string;
+    created_at: string;
+  };
 };
