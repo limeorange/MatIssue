@@ -150,12 +150,14 @@ const RecipeForm = () => {
     setCookingTips(e.target.value);
   };
 
+  // 저장 핸들러
   const handleSave = () => {
-    // Logic for saving the recipe
+    // 저장
   };
 
+  // 취소 핸들러
   const handleCancel = () => {
-    // Logic for cancelling the form
+    // 취소
   };
 
   return (
