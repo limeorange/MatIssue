@@ -134,6 +134,6 @@ const RemoveIngredientButton = styled.button`
   margin-left: 1.4rem;
   margin-top: 0.6rem;
   cursor: pointer;
-  background: url("/images/deleteIcon.png") no-repeat center;
+  background: url("/images/stepDeleteIcon.png") no-repeat center;
   background-size: contain;
 `;
