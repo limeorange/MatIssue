@@ -8,13 +8,13 @@ const NavBar = () => {
     <>
       <NavUl>
         <NavItem>
-          <Link href="/myPage">프로필</Link>
+          <Link href="/my-page">프로필</Link>
         </NavItem>
         <NavItem>
-          <Link href="/myPage/modifyUserInfo">회원정보수정</Link>
+          <Link href="/my-page/modify-user-info">회원정보수정</Link>
         </NavItem>
         <NavItem>
-          <Link href="/myPage/notification">알림</Link>
+          <Link href="/my-page/notification">알림</Link>
         </NavItem>
       </NavUl>
     </>
