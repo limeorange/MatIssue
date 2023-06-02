@@ -33,7 +33,7 @@ const HeaderDiv = styled.div`
   width: 100%;
   background-color: #ffffff;
   z-index: 60;
-  font-size: 1.6rem;
+  font-size: 16px;
 `;
 
 const NavArea = styled.div`
@@ -47,6 +47,7 @@ const NavArea = styled.div`
 `;
 
 const TopNav = styled.div`
+  position: relative;
   display: flex;
   height: 8rem;
   width: 100%;

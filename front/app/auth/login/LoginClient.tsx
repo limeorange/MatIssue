@@ -11,9 +11,9 @@ import Logo from "@/app/components/header/Logo";
 import Button from "@/app/components/UI/Button";
 
 import {
-  AuthChangeBox,
   AuthContainer,
   AuthFormWrapper,
+  AuthNavBox,
   StyledInput,
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
@@ -46,7 +46,10 @@ const LoginClient = () => {
         router.back();
       })
       .catch((err) => toast.error("잘못된 요청입니다."))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        toast.success("로그인 되었습니다.");
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {}, []);
@@ -60,7 +63,6 @@ const LoginClient = () => {
             id="user_id"
             type="text"
             disabled={isLoading}
-            errors={errors}
             {...register("user_id", {
               required: true,
             })}
@@ -70,7 +72,6 @@ const LoginClient = () => {
             id="password"
             type="password"
             disabled={isLoading}
-            errors={errors}
             {...register("password", {
               required: true,
             })}
@@ -81,13 +82,22 @@ const LoginClient = () => {
               로그인
             </Button>
           </div>
+          <AuthNavBox>
+            <button
+              onClick={() => {
+                router.push("/auth/find-id-password");
+              }}
+            >
+              아이디•비밀번호 찾기
+            </button>
+          </AuthNavBox>
         </form>
-        <AuthChangeBox>
+        <AuthNavBox>
           <div>처음이신가요?</div>
           <UnderLineLinkDiv onClick={() => router.push("/auth/signup")}>
             회원가입하기
           </UnderLineLinkDiv>
-        </AuthChangeBox>
+        </AuthNavBox>
       </AuthFormWrapper>
     </AuthContainer>
   );
