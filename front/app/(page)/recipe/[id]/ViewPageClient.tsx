@@ -49,6 +49,11 @@ const RecipeDetail = () => {
     }
   };
 
+  // 레시피 작성자 아이디, 로그인된 아이디
+  const recipeUserId = "happyuser";
+  const loggedInUserId = "happyuser";
+  const createdAt = "2023-06-02";
+
   return (
     <>
       <ContainerDiv>
@@ -65,11 +70,22 @@ const RecipeDetail = () => {
           />
         </ImageWrapperDiv>
 
-        {/* 요리 제목, 작성자, 간단 소개글 */}
+        {/* 요리 제목, 작성자, 작성 시간, 간단 소개글 */}
         <div>
           <TitleContainerDiv>
-            <TitleH3>{recipeTitle}</TitleH3>
-            <AuthorSpan>by {author}</AuthorSpan>
+            <div className="flex items-center">
+              <TitleH3>{recipeTitle}</TitleH3>
+
+              <AuthorSpan>by {author}</AuthorSpan>
+              <AuthorSpan>&nbsp;• {createdAt}</AuthorSpan>
+            </div>
+
+            {recipeUserId === loggedInUserId && (
+              <div className="flex gap-[8px]">
+                <EditButton>수정</EditButton>
+                <DeleteButton>삭제</DeleteButton>
+              </div>
+            )}
           </TitleContainerDiv>
           <DescriptionDiv>{description}</DescriptionDiv>
         </div>
@@ -164,12 +180,6 @@ const RecipeDetail = () => {
   );
 };
 
-const CommentIconDiv = styled.div`
-  margin-left: 0.7rem;
-  margin-top: 0.4rem;
-  margin-right: 0.4rem;
-`;
-
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -178,18 +188,43 @@ const ContainerDiv = styled.div`
   gap: 2.5rem;
 `;
 
+// 수정 Button
+const EditButton = styled.button`
+  width: 6.7rem;
+  height: 3.7rem;
+  border-radius: 1rem;
+  background: #fbe2a1;
+  font-weight: 500;
+  font-size: 16.5px;
+  color: #4f3d21;
+`;
+
+// 삭제 Button
+const DeleteButton = styled.button`
+  width: 6.7rem;
+  height: 3.7rem;
+  border-radius: 1rem;
+  border: 2px solid #fbe2a1;
+  font-weight: 500;
+  font-size: 16.5px;
+  color: #4f3d21;
+`;
+
 const ImageWrapperDiv = styled.div`
-  width: 65rem;
+  width: 100%;
+  max-width: 65rem;
   height: 35rem;
   position: relative;
   margin-top: 3.5rem;
 `;
 
 const TitleContainerDiv = styled.div`
+  width: 100%;
+  max-width: 65rem;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
 `;
 
 const TitleH3 = styled.h3`
@@ -204,8 +239,9 @@ const AuthorSpan = styled.span`
 `;
 
 const DescriptionDiv = styled.div`
-  margin-top: 1rem;
-  width: 60rem;
+  margin-top: 1.5rem;
+  max-width: 65rem;
+  width: 100%;
   font-size: 1.62rem;
 `;
 
@@ -224,6 +260,12 @@ const VideoDescriptionDiv = styled.div`
   padding-top: 0.5rem;
   color: #6f6f6f;
   font-size: 1.5rem;
+`;
+
+const CommentIconDiv = styled.div`
+  margin-left: 0.7rem;
+  margin-top: 0.4rem;
+  margin-right: 0.4rem;
 `;
 
 export default RecipeDetail;
