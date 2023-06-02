@@ -297,7 +297,7 @@ const NickName = styled.h1`
   color: #4f3d21;
 `;
 
-const ModifyUserButton = styled.button`
+const ModifyUserButton = styled.div`
   width: 10rem;
 `;
 
