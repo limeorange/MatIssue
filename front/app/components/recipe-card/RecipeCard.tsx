@@ -13,7 +13,7 @@ type RecipeData = {
   timestamp: number;
   servings: number;
   duration: number;
-  difficulty: 1 | 2 | 3;
+  difficulty: 0 | 1 | 2;
 };
 
 type RecipeCardProps = {
