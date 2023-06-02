@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from "react";
 import RecipeCard from "@/app/components/recipe-card/RecipeCard";
 import FilterBar from "../filter/FilterBar";
+import FilterTag from "../filter/FilterTag";
 import styled from "styled-components";
 import { useSearchParams } from "next/navigation";
 
+// 레시피 데이터 타입
 type Recipe = {
   image: string;
   title: string;
@@ -16,17 +18,26 @@ type Recipe = {
   timestamp: number;
   servings: number;
   duration: number;
-  difficulty: 1 | 2 | 3;
+  difficulty: 0 | 1 | 2;
 };
 
-type Filter = {
+// 필터링 요소 타입
+export type Filter = {
   servings: number;
   duration: number;
   difficulty: number;
 };
 
+// setFilter 함수 타입
 export type SetFilter = React.Dispatch<React.SetStateAction<Filter>>;
 
+// 필터링 옵션 타입
+export type OptionsType = {
+  value: number;
+  name: string;
+};
+
+// 레시피 더미 데이터
 const DUMMY_DATA: Recipe[] = [
   {
     image: "/images/sushi1.png",
@@ -222,23 +233,56 @@ const DUMMY_DATA: Recipe[] = [
   },
 ];
 
+// 필터링 요소 옵션
+const servings = [
+  { value: -1, name: "인원" },
+  { value: 1, name: "1인" },
+  { value: 2, name: "2인" },
+  { value: 3, name: "3인" },
+  { value: 4, name: "4인" },
+  { value: 5, name: "5인" },
+];
+
+const duration = [
+  { value: -1, name: "시간" },
+  { value: 10, name: "10분" },
+  { value: 20, name: "20분" },
+  { value: 30, name: "30분" },
+  { value: 60, name: "1시간" },
+  { value: 100, name: "1시간 이상" },
+];
+
+const difficulty = [
+  { value: -1, name: "난이도" },
+  { value: 0, name: "쉬움" },
+  { value: 1, name: "중간" },
+  { value: 2, name: "어려움" },
+];
+
+// 레시피 리스트 출력 컴포넌트
 const ListingRecipe = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA);
-  const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(null);
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA); // 레시피 데이터 필터링 상태
+  const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(null); // 정렬 버튼에 따른 정렬 상태
   const [filter, setFilter] = useState<Filter>({
-    servings: 0,
-    duration: 0,
-    difficulty: 0,
+    // 필터바의 필터 값에 따른 필터링 상태
+    servings: -1,
+    duration: -1,
+    difficulty: -1,
   });
+  const [search, setSearch] = useState<string>("");
+  const [newServings, setNewServings] = useState<OptionsType>(servings[0]);
+  const [newDuration, setNewDuration] = useState<OptionsType>(duration[0]);
+  const [newDifficulty, setNewDifficulty] = useState<OptionsType>(
+    difficulty[0]
+  );
   const searchParams = useSearchParams();
-  const search = searchParams.get("query"); // url의 query값 추출
+  const searchQuery = searchParams.get("query"); // url의 query값 추출
 
   useEffect(() => {
     let result = [...DUMMY_DATA];
 
     // 검색바로 레시피 필터링
-    const term = search || "";
+    const term = searchQuery || "";
     if (term !== "") {
       result = result.filter((recipe) =>
         recipe.title.toLowerCase().includes(term.toLowerCase())
@@ -268,14 +312,47 @@ const ListingRecipe = () => {
     }
 
     setFilteredRecipes(result);
-  }, [search, filter, sortMethod]);
+  }, [search, searchQuery, filter, sortMethod]);
+
+  const removeTag = (tagType: string) => {
+    {
+      const resetValue = -1;
+      if (tagType === "difficulty") {
+        setNewDifficulty(difficulty[0]);
+      }
+      if (tagType === "servings") {
+        setNewServings(servings[0]);
+      }
+      if (tagType === "duration") {
+        setNewDuration(duration[0]);
+      }
+
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        [tagType]: resetValue,
+      }));
+    }
+  };
 
   return (
     <>
       <MainWrapper>
         <FilterBarBox>
-          <FilterBar setFilter={setFilter} />
+          <FilterBar
+            setFilter={setFilter}
+            removeTag={removeTag}
+            newServings={newServings}
+            setNewServings={setNewServings}
+            newDuration={newDuration}
+            setNewDuration={setNewDuration}
+            newDifficulty={newDifficulty}
+            setNewDifficulty={setNewDifficulty}
+            servings={servings}
+            duration={duration}
+            difficulty={difficulty}
+          />
         </FilterBarBox>
+        <FilterTag search={searchQuery} filter={filter} onRemove={removeTag} />
         <PageHeaderContainer>
           <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
           <SortButtonContainer>
