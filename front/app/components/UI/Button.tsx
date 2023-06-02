@@ -50,7 +50,7 @@ const StyledButton = styled.button<ButtonProps>`
 
   padding: 0.6rem 1.3rem;
   font-weight: 600;
-  font-size: 1.6rem;
+  
   color: #4f3d21;
   height : 4.8rem;
   border-radius: 1.5rem;
@@ -58,8 +58,6 @@ const StyledButton = styled.button<ButtonProps>`
     transition: all 0.2s ease-in-out;
     background-color: ${(props) =>
       props.isHoverColor ? "#FBD26A" : "#F8B551"}; 
-    
-    
   }
 
 font-size: ${(props) => (props.isSmallFont ? "12px" : "16px")};

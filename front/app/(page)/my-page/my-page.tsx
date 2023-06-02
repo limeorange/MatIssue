@@ -169,7 +169,7 @@ const MyPage = () => {
       <Container>
         <Wrapper>
           <ProfileContainer>
-            <Link href="/myPage/notification">
+            <Link href="/my-page/notification">
               <NotificationIcon
                 src="/images/notification.png"
                 alt="알림 아이콘"
@@ -181,10 +181,9 @@ const MyPage = () => {
               <ProfileImage src="/images/dongs-logo.png" alt="profile" />
             </RoundImage>
             <NickName>닉네임</NickName>
-            <Link href="/myPage/modifiyUserInfo">
+            <Link href="/my-page/modifiy-user-info">
               <ModifyUserButton>
                 <Button
-                  type="button"
                   isBorderColor={true}
                   fullWidth={true}
                   fullHeight={true}
@@ -196,12 +195,11 @@ const MyPage = () => {
               </ModifyUserButton>
             </Link>
             <Divider />
-            <StyledLink href="/myPage">
+            <StyledLink href="/my-page">
               <MyRecipeIcon src="/images/recipe-icon.png" alt="레시피 아이콘" />
               <MyRecipeTitle>나의 레시피</MyRecipeTitle>
               <MyRecipeCount>5</MyRecipeCount>
             </StyledLink>
-
             <UploadRecipeButton>
               <Button
                 type="button"
@@ -217,7 +215,6 @@ const MyPage = () => {
           <RecipeListContainer>
             <RecipeHeading>나의 레시피</RecipeHeading>
             <RecipeHeadingCount>5</RecipeHeadingCount>
-
             <RecipeList>
               {filteredRecipes.map((data, index) => (
                 <RecipeCards key={index} data={data} />
@@ -300,7 +297,7 @@ const NickName = styled.h1`
   color: #4f3d21;
 `;
 
-const ModifyUserButton = styled.button`
+const ModifyUserButton = styled.div`
   width: 10rem;
 `;
 
