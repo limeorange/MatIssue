@@ -8,7 +8,6 @@ import CategoryModal from "./CategoryModal";
 
 const CategoryBar = () => {
   const router = useRouter();
-
   const [isModal, setIsModal] = useState<boolean>(false);
 
   return (

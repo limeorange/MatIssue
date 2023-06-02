@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
+import CommentModal from "./CommentModal";
 
 const RecipeComment = () => {
   const recipe_nickname = "허니자몽";
@@ -10,7 +11,14 @@ const RecipeComment = () => {
      볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!
      볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!
      볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!`;
-  const [isEditing, setIsEditing] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
+
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const onCloseModal = () => {
+    // isModal 상태 값을 false로 업데이트하여 모달을 닫기
+    setIsModal(false);
+  };
+
   return (
     <>
       <div
@@ -36,12 +44,19 @@ const RecipeComment = () => {
               {recipe_nickname}
             </div>
             {/* 댓글 수정, 삭제바 */}
-            <div className="mt-[0.5rem]">
+            <div
+              className="mt-[0.5rem] cursor-pointer"
+              onClick={() => setIsModal(true)}
+            >
+              {isModal && (
+                <CommentModal isModal={isModal} onCloseModal={onCloseModal} />
+              )}
               <Image
                 src={"/images/recipe-view/threedots.svg"}
                 alt="댓글 수정, 삭제바"
                 width={15}
                 height={15}
+                onClick={() => setIsModal(true)}
               />
             </div>
           </div>
