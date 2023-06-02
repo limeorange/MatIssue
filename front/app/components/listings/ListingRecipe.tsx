@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import RecipeCard from "@/app/components/recipe-card/RecipeCard";
+import FilterBar from "../filter/FilterBar";
 import styled from "styled-components";
 import { useSearchParams } from "next/navigation";
 
-interface Recipe {
+type Recipe = {
   image: string;
   title: string;
   author: string;
@@ -13,7 +14,18 @@ interface Recipe {
   view: string;
   id: string;
   timestamp: number;
-}
+  servings: number;
+  duration: number;
+  difficulty: 1 | 2 | 3;
+};
+
+type Filter = {
+  servings: number;
+  duration: number;
+  difficulty: number;
+};
+
+export type SetFilter = React.Dispatch<React.SetStateAction<Filter>>;
 
 const DUMMY_DATA: Recipe[] = [
   {
@@ -24,6 +36,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex1",
     timestamp: 1,
+    servings: 1,
+    duration: 10,
+    difficulty: 1,
   },
   {
     image: "/images/sushi2.png",
@@ -33,6 +48,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex2",
     timestamp: 2,
+    servings: 2,
+    duration: 20,
+    difficulty: 2,
   },
   {
     image: "/images/sushi3.png",
@@ -42,6 +60,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex3",
     timestamp: 3,
+    servings: 3,
+    duration: 30,
+    difficulty: 3,
   },
   {
     image: "/images/sushi4.png",
@@ -51,6 +72,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex4",
     timestamp: 4,
+    servings: 4,
+    duration: 60,
+    difficulty: 1,
   },
   {
     image: "/images/sushi1.png",
@@ -60,6 +84,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex1",
     timestamp: 5,
+    servings: 5,
+    duration: 60,
+    difficulty: 2,
   },
   {
     image: "/images/sushi2.png",
@@ -69,6 +96,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex2",
     timestamp: 6,
+    servings: 4,
+    duration: 20,
+    difficulty: 1,
   },
   {
     image: "/images/sushi3.png",
@@ -78,6 +108,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex3",
     timestamp: 8,
+    servings: 3,
+    duration: 30,
+    difficulty: 2,
   },
   {
     image: "/images/sushi4.png",
@@ -87,6 +120,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex4",
     timestamp: 11,
+    servings: 2,
+    duration: 10,
+    difficulty: 3,
   },
   {
     image: "/images/sushi1.png",
@@ -96,6 +132,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex1",
     timestamp: 9,
+    servings: 1,
+    duration: 60,
+    difficulty: 2,
   },
   {
     image: "/images/sushi2.png",
@@ -105,6 +144,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex2",
     timestamp: 10,
+    servings: 3,
+    duration: 30,
+    difficulty: 1,
   },
   {
     image: "/images/sushi3.png",
@@ -114,6 +156,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex3",
     timestamp: 14,
+    servings: 2,
+    duration: 20,
+    difficulty: 2,
   },
   {
     image: "/images/sushi4.png",
@@ -123,6 +168,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex4",
     timestamp: 12,
+    servings: 5,
+    duration: 60,
+    difficulty: 3,
   },
   {
     image: "/images/sushi1.png",
@@ -132,6 +180,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex1",
     timestamp: 13,
+    servings: 4,
+    duration: 10,
+    difficulty: 1,
   },
   {
     image: "/images/sushi2.png",
@@ -141,66 +192,90 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex2",
     timestamp: 16,
+    servings: 1,
+    duration: 30,
+    difficulty: 2,
   },
   {
     image: "/images/sushi3.png",
     title: "전여자친구가 해주던 그 맛의 유부초밥",
     author: "영앤리치톨엔인텔리",
-    likes: 1324,
+    likes: 2343,
     view: "15,324",
     id: "ex3",
     timestamp: 15,
+    servings: 2,
+    duration: 20,
+    difficulty: 3,
   },
   {
     image: "/images/sushi4.png",
     title: "자취생을 위한 초간단 계란 초밥",
     author: "브라우니물어",
-    likes: 1551,
+    likes: 500,
     view: "15,324",
     id: "ex4",
-    timestamp: 20,
+    timestamp: 17,
+    servings: 3,
+    duration: 60,
+    difficulty: 1,
   },
 ];
 
 const ListingRecipe = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA);
+  const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(null);
+  const [filter, setFilter] = useState<Filter>({
+    servings: 0,
+    duration: 0,
+    difficulty: 0,
+  });
   const searchParams = useSearchParams();
   const search = searchParams.get("query"); // url의 query값 추출
-  const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(null);
 
-  // search 값 변경시 마다 searchTerm 업데이트해서 필터된 데이터 렌더링
   useEffect(() => {
-    setSearchTerm(search || "");
-  }, [search]);
+    let result = [...DUMMY_DATA];
 
-  // searchTerm 상태가 바뀔 때마다, 레시피를 필터링
-  useEffect(() => {
-    if (searchTerm !== "") {
-      const filtered = DUMMY_DATA.filter((recipe) =>
-        recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+    // 검색바로 레시피 필터링
+    const term = search || "";
+    if (term !== "") {
+      result = result.filter((recipe) =>
+        recipe.title.toLowerCase().includes(term.toLowerCase())
       );
-      setFilteredRecipes(filtered);
-    } else {
-      setFilteredRecipes(DUMMY_DATA);
     }
-  }, [searchTerm]);
 
-  // 정렬 버튼 클릭 시 최신순, 인기순으로 게시물 렌더링
-  useEffect(() => {
-    let sortedRecipes = [...DUMMY_DATA];
+    // 필터바로 레시피 필터링
+    if (filter.servings > 0) {
+      result = result.filter((recipe) => recipe.servings === filter.servings);
+    }
 
+    if (filter.duration > 0) {
+      result = result.filter((recipe) => recipe.duration === filter.duration);
+    }
+
+    if (filter.difficulty > -1) {
+      result = result.filter(
+        (recipe) => recipe.difficulty === filter.difficulty
+      );
+    }
+
+    // 버튼으로 레시피 정렬
     if (sortMethod === "date") {
-      sortedRecipes.sort((a, b) => a.timestamp - b.timestamp);
+      result.sort((a, b) => a.timestamp - b.timestamp);
     } else if (sortMethod === "likes") {
-      sortedRecipes.sort((a, b) => b.likes - a.likes);
+      result.sort((a, b) => b.likes - a.likes);
     }
-    setFilteredRecipes(sortedRecipes);
-  }, [sortMethod]);
+
+    setFilteredRecipes(result);
+  }, [search, filter, sortMethod]);
 
   return (
     <>
       <MainWrapper>
+        <FilterBarBox>
+          <FilterBar setFilter={setFilter} />
+        </FilterBarBox>
         <PageHeaderContainer>
           <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
           <SortButtonContainer>
@@ -276,4 +351,8 @@ const SortButton = styled.button<{ selected: boolean }>`
   &:hover {
     background-color: #fbd26a;
   }
+`;
+
+const FilterBarBox = styled.div`
+  margin: 0 auto;
 `;
