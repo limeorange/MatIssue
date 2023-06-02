@@ -14,18 +14,10 @@ type Comment = {
 const RecipeCommentInput = (props: Comment[]) => {
   const [isCommenting, setIsCommenting] = useState(false);
 
-  //  props로 넘어온 댓글 내용이 있으면 그 내용을 넣어주고, 없으면 빈 배열로!
+  //  props로 넘어온 댓글 내용이 있으면 그 내용을 넣어주고, 없으면 빈 배열로! (for 수정 구현)
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
   const [activatedButton, setActivatedButton] = useState(false);
-
-  //   useEffect(() => {
-  //     // 글자가 박스의 가로 크기를 초과할 경우 박스의 높이 조절
-  //     const commentBox = commentBoxRef.current;
-  //     if (commentBox.scrollHeight > commentBox.clientHeight) {
-  //       commentBox.style.height = `${commentBox.scrollHeight}px`;
-  //     }
-  //   }, [commentText]);
 
   /** 댓글창 클릭시 상태 업데이트 핸들러 */
   const boxClickHandler = () => {
@@ -88,8 +80,8 @@ const RecipeCommentInput = (props: Comment[]) => {
         />
       </form>
       {/* 제출 버튼 아이콘 */}
-      {/* 제출하는 함수에 props로 넘어온 댓글 정보가 있으면 API에 수정 요청
-      없으면 등록 요청 */}
+      {/* 제출하는 함수에 props로 넘어온 댓글 정보가 있으면 API에 수정 요청,
+      없으면 등록 요청 예정 */}
       <button className="pr-[10px]" disabled={!activatedButton}>
         <Image
           src={"/images/recipe-view/commentsubmitblack.svg"}
