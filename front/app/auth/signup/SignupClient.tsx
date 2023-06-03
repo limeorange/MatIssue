@@ -406,7 +406,6 @@ const SignupClient = () => {
             onClick={() => {
               router.push("/auth/login");
             }}
-            className="underline cursor-pointer"
           >
             로그인하기
           </UnderLineLinkDiv>
