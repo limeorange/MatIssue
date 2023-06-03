@@ -78,13 +78,17 @@ const UserMenu = ({ currentUser }: { currentUser: User | undefined }) => {
 };
 
 const UserMenuDiv = styled.div`
-  display: flex;
+  display: none;
   position: relative;
   gap: 1.6rem;
   font-size: 16px;
   font-weight: 500;
   color: #4f3d21;
   align-items: center;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
 `;
 
 const ProfileButton = styled.div`

@@ -58,7 +58,11 @@ const NavArea = styled.div`
   max-width: 120rem;
   margin: 0 auto;
 
-  @media (min-width: 76.8rem) and (max-width: 102.4rem) {
+  @media (max-width: 768px) {
+    padding: 0 2rem;
+  }
+
+  @media (min-width: 768px) {
     padding: 0 2rem;
   }
 `;
@@ -71,6 +75,10 @@ const TopNav = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 1.2rem;
+
+  @media (max-width: 768px) {
+    height: 7rem;
+  }
 `;
 
 const UnderLine = styled.div`

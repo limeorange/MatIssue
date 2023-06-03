@@ -18,7 +18,14 @@ input {
 
 main {
   padding-bottom: 8rem;
-  padding-top: 13.1rem;
+  padding-top: 10.1rem;
+}
+
+@media (min-width: 768px) {
+  main {
+    padding-bottom: 8rem;
+    padding-top: 13.1rem;
+  }
 }
 
 input::-webkit-outer-spin-button,

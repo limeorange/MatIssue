@@ -29,7 +29,7 @@ export default CategoryModal;
 const CategoryModalContainer = styled.div<{ visible: boolean }>`
   position: absolute;
   z-index: 9;
-  top: 5rem;
+  top: 4rem;
   left: 0;
   width: 13.4rem;
   padding: 0.6rem 0;
@@ -45,6 +45,10 @@ const CategoryModalContainer = styled.div<{ visible: boolean }>`
   visibility: ${(props) => (props.visible ? "visible" : "hidden")};
 
   transition: opacity 0.3s;
+
+  @media (min-width: 768px) {
+    top: 5rem;
+  }
 `;
 
 const CategoryModalUl = styled.ul`
