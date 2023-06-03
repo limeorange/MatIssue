@@ -1,28 +1,34 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import { User } from "@/app/types";
+import { loginState } from "@/app/store/authAtom";
 
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import UserMenu from "./UserMenu";
 import CategoryBar from "./CategoryBar";
-import { useEffect, useState } from "react";
+
 import getCurrentUser from "@/app/api/user";
 
-const Header = () => {
-  const [currentUser, setCurrentUser] = useState<User>();
-  const [isLoading, setIsLoading] = useState(true);
+import { User } from "@/app/types";
 
+const Header = () => {
+  const setLoggedIn = useSetRecoilState<boolean>(loginState);
+
+  // react-query로 데이터 fetch
+  const { data: currentUser, isLoading } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
+
+  // 인증된 유저정보를 받으면 로그인 상태 true로 전환
   useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await getCurrentUser();
-      setCurrentUser(currentUser);
-    };
-    fetchUser().then(() => {
-      setIsLoading(false);
-    });
-  }, [currentUser]);
+    if (currentUser) {
+      setLoggedIn(true);
+    }
+  }, [currentUser, setLoggedIn]);
 
   return (
     <HeaderDiv>

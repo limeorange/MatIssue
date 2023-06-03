@@ -4,11 +4,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { axiosBase } from "@/app/api/axios";
+import { useSetRecoilState } from "recoil";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import { loginState } from "@/app/store/authAtom";
 
 import Logo from "@/app/components/header/Logo";
 import Button from "@/app/components/UI/Button";
+import LoadingModal from "@/app/components/UI/LoadingModal";
 
 import {
   AuthChangeBox,
@@ -18,21 +21,17 @@ import {
   StyledInput,
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
-import LoadingModal from "@/app/components/UI/LoadingModal";
 
 const LoginClient = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
+  const [isLoading, setIsLoading] = useState(false);
+  const setLoggedIn = useSetRecoilState(loginState);
+
+  const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
       user_id: "",
       password: "",
     },
   });
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -43,8 +42,9 @@ const LoginClient = () => {
     axiosBase
       .post("users/login", data)
       .then((res) => {
-        console.log(res.data);
         Cookies.set("auth", res.data.session_id, { expires: 7 });
+        setLoggedIn(true);
+        toast.success("로그인 되었습니다.");
         router.back();
       })
       .catch((err) => toast.error("잘못된 요청입니다."))
