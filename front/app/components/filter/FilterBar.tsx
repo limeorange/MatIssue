@@ -1,54 +1,42 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import FilterModal from "./FilterModal";
 import styled from "styled-components";
 import Image from "next/image";
-import { SetFilter } from "../listings/ListingRecipe";
-
-type OptionsType = {
-  value: number;
-  name: string;
-};
+import { SetFilter, OptionsType } from "../listings/ListingRecipe";
 
 type FilterBarProps = {
   setFilter: SetFilter;
+  removeTag: (tagType: string) => void;
+  newServings: OptionsType;
+  setNewServings: React.Dispatch<React.SetStateAction<OptionsType>>;
+  newDuration: OptionsType;
+  setNewDuration: React.Dispatch<React.SetStateAction<OptionsType>>;
+  newDifficulty: OptionsType;
+  setNewDifficulty: React.Dispatch<React.SetStateAction<OptionsType>>;
+  servings: OptionsType[];
+  duration: OptionsType[];
+  difficulty: OptionsType[];
 };
 
-const servings = [
-  { value: 0, name: "인원" },
-  { value: 1, name: "1인" },
-  { value: 2, name: "2인" },
-  { value: 3, name: "3인" },
-  { value: 4, name: "4인" },
-  { value: 5, name: "5인" },
-];
-
-const duration = [
-  { value: 0, name: "시간" },
-  { value: 10, name: "10분" },
-  { value: 20, name: "20분" },
-  { value: 30, name: "30분" },
-  { value: 60, name: "1시간" },
-  { value: 100, name: "1시간 이상" },
-];
-
-const difficulty = [
-  { value: -1, name: "난이도" },
-  { value: 0, name: "쉬움" },
-  { value: 1, name: "중간" },
-  { value: 2, name: "어려움" },
-];
-
 const FilterBar = (props: FilterBarProps) => {
-  const { setFilter } = props;
-  const [newServings, setNewServings] = useState<OptionsType>(servings[0]);
-  const [newDuration, setNewDuration] = useState<OptionsType>(duration[0]);
-  const [newDifficulty, setNewDifficulty] = useState<OptionsType>(
-    difficulty[0]
-  );
-  const [isServingsModal, setIsServingsModal] = useState<boolean>(false);
-  const [isDurationModal, setIsDurationModal] = useState<boolean>(false);
-  const [isDifficultyModal, setIsDifficultyModal] = useState<boolean>(false);
+  const {
+    setFilter,
+    removeTag,
+    newServings,
+    setNewServings,
+    newDuration,
+    setNewDuration,
+    newDifficulty,
+    setNewDifficulty,
+    servings,
+    duration,
+    difficulty,
+  } = props;
+  const [isServingsModal, setIsServingsModal] = useState<boolean>(false); // 인원수 필터링 모달창
+  const [isDurationModal, setIsDurationModal] = useState<boolean>(false); // 조리 시간 필터링 모달창
+  const [isDifficultyModal, setIsDifficultyModal] = useState<boolean>(false); // 난이도 필터링 모달창
 
+  // 필터바 값에 따른 필터링
   useEffect(() => {
     setFilter({
       servings: newServings.value,

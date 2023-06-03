@@ -7,19 +7,30 @@ import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import UserMenu from "./UserMenu";
 import CategoryBar from "./CategoryBar";
+import { useEffect, useState } from "react";
+import getCurrentUser from "@/app/api/user";
 
-type HeaderProps = {
-  currentUser?: User | null;
-};
+const Header = () => {
+  const [currentUser, setCurrentUser] = useState<User>();
+  const [isLoading, setIsLoading] = useState(true);
 
-const Header = ({ currentUser }: HeaderProps) => {
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await getCurrentUser();
+      setCurrentUser(currentUser);
+    };
+    fetchUser().then(() => {
+      setIsLoading(false);
+    });
+  }, [currentUser]);
+
   return (
     <HeaderDiv>
       <NavArea>
         <TopNav>
           <Logo />
           <SearchBar />
-          <UserMenu currentUser={currentUser} />
+          {isLoading ? null : <UserMenu currentUser={currentUser} />}
         </TopNav>
         <CategoryBar />
       </NavArea>

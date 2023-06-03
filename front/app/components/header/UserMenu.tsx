@@ -1,5 +1,6 @@
 "use client";
 
+import { User } from "@/app/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -7,7 +8,7 @@ import styled from "styled-components";
 import UserModal from "./UserModal";
 
 type UserMenuProps = {
-  currentUser?: any | null;
+  currentUser?: User | null;
 };
 
 const UserMenu = ({ currentUser }: UserMenuProps) => {
@@ -26,8 +27,8 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
           >
             <Image
               src="/images/writeIcon.png"
-              width={20}
-              height={20}
+              width={18}
+              height={18}
               alt="write_icon"
             />
             글쓰기
@@ -91,7 +92,7 @@ const ProfileButton = styled.div`
 
   &:hover {
     img {
-      box-shadow: 0px 0px 1px 5px #fbd26a;
+      box-shadow: 0px 0px 1px 4px #fbd26a;
     }
   }
 `;
@@ -114,7 +115,7 @@ const LogoutButton = styled.button`
 `;
 
 const WriteButton = styled(LoginButton)`
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   gap: 0.8rem;
