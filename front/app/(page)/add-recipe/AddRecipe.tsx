@@ -8,6 +8,7 @@ import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
 import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "../../components/add-recipe/CookingStepsSection";
 import Button from "../../components/UI/Button";
+import axios from "axios";
 
 const categories = ["한식", "중식", "일식", "양식"];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -28,6 +29,7 @@ const RecipeForm = () => {
   const [steps, setSteps] = useState([{ stepDetail: "", stepImage: "" }]);
   const [stepImages, setStepImages] = useState<string[]>([]);
   const [cookingTips, setCookingTips] = useState("");
+  const [videoLink, setVideoLink] = useState("");
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -62,6 +64,11 @@ const RecipeForm = () => {
   // 요리 소개
   const handleCookingIntroChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCookingIntro(e.target.value);
+  };
+
+  // 유튜브 동영상 핸들러
+  const handleVideoLinkChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setVideoLink(e.target.value);
   };
 
   // 재료 변경 핸들러
@@ -152,9 +159,37 @@ const RecipeForm = () => {
 
   // 저장 핸들러
   const handleSave = () => {
-    // 저장
+    axios
+      .post("https://matissue.onrender.com/api/recipes/", {
+        recipe_title: recipeTitle,
+        recipe_thumbnail: selectedImage,
+        recipe_video: "", // 수정 필요: 해당하는 state나 props를 넣어주세요.
+        recipe_description: cookingIntro,
+        recipe_category: selectedCategory,
+        recipe_info: {
+          serving: parseInt(selectedPeople, 10),
+          time: parseInt(selectedTime, 10), // '15분 이내', '30분 이내' 등의 시간 형식을 숫자로 변환하는 로직 필요
+          level: difficulties.indexOf(selectedDifficulty) + 1, // 난이도를 숫자로 변환. '하', '중', '상'을 1, 2, 3으로 가정
+        },
+        recipe_ingredients: ingredients.map(({ ingredient, quantity }) => ({
+          name: ingredient,
+          amount: quantity,
+        })),
+        recipe_sequence: steps.map(({ stepDetail, stepImage }, index) => ({
+          step: index + 1,
+          picture: stepImages[index],
+          description: stepDetail,
+        })),
+        recipe_tip: cookingTips,
+        user_id: "admin", // 수정 필요: 해당하는 state나 props를 넣어주세요.
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
-
   // 취소 핸들러
   const handleCancel = () => {
     // 취소
@@ -204,7 +239,11 @@ const RecipeForm = () => {
           placeholder="요리 소개를 입력해주세요."
         />
       </CookingIntro>
-      <VideoSection />
+      <VideoSection
+        videoLink={videoLink}
+        handleVideoLinkChange={handleVideoLinkChange}
+      />
+
       <IngredientSection
         ingredients={ingredients}
         handleIngredientChange={handleIngredientChange}

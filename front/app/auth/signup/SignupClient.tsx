@@ -177,7 +177,6 @@ const SignupClient = () => {
             <StyledLabel htmlFor="user_id">아이디</StyledLabel>
             <StyledInput
               id="user_id"
-              errors={errors}
               disabled={isLoading}
               {...register("user_id", {
                 required: "아이디는 필수 입력입니다.",
@@ -207,7 +206,6 @@ const SignupClient = () => {
             <StyledInput
               id="email"
               type="email"
-              errors={errors}
               disabled={isLoading}
               {...register("email", {
                 required: "아이디를 입력해주세요.",
@@ -229,7 +227,6 @@ const SignupClient = () => {
             <StyledInput
               id="username"
               type="text"
-              errors={errors}
               disabled={isLoading}
               {...register("username", {
                 required: "닉네임을 입력해주세요.",
@@ -268,7 +265,6 @@ const SignupClient = () => {
               <StyledInput
                 id="password"
                 type={showPassword ? "text" : "password"}
-                errors={errors}
                 disabled={isLoading}
                 {...register("password", {
                   required: "비밀번호를 입력해주세요.",
@@ -304,7 +300,6 @@ const SignupClient = () => {
               <StyledInput
                 id="password_confirm"
                 type={showPasswordConfirm ? "text" : "password"}
-                errors={errors}
                 disabled={isLoading}
                 {...register("password_confirm", {
                   required: "비밀번호를 한번더 입력해주세요.",
