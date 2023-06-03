@@ -47,21 +47,21 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
       <UserModalList>
         <UserModalItem
           onClick={() => {
-            router.push("/myPage");
+            router.push("/my-page");
           }}
         >
           마이페이지
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/myPage/modifyUserInfo");
+            router.push("/my-page/modify-user-info");
           }}
         >
           회원정보 수정
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/myPage/notification");
+            router.push("/my-page/notification");
           }}
         >
           알림
