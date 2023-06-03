@@ -762,9 +762,15 @@ const ListingRecipe = () => {
           </SortButtonContainer>
         </PageHeaderContainer>
         <RecipeListWrapper>
-          {currentRecipes.map((data, index) => (
-            <RecipeCard key={index} data={data} />
-          ))}
+          {currentRecipes.length > 0 ? (
+            currentRecipes.map((data, index) => (
+              <RecipeCard key={index} data={data} />
+            ))
+          ) : (
+            <NoRecipeMessageBox>
+              <NoRecipeMessage>아직 작성된 레시피가 없습니다.</NoRecipeMessage>
+            </NoRecipeMessageBox>
+          )}
         </RecipeListWrapper>
         <Pagination
           recipesPerPage={recipesPerPage}
@@ -825,4 +831,17 @@ const SortButton = styled.button<{ selected: boolean }>`
 
 const FilterBarBox = styled.div`
   margin: 0 auto;
+`;
+
+const NoRecipeMessageBox = styled.div`
+  display: grid;
+  place-items: center;
+  background-color: pink;
+`;
+
+const NoRecipeMessage = styled.h2`
+  text-align: center;
+  font-size: 16px;
+  color: #9f783a;
+  width: 100%;
 `;

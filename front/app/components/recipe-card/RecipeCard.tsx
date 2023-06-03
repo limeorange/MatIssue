@@ -20,7 +20,8 @@ type RecipeCardProps = {
   data: RecipeData;
 };
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ data }) => {
+const RecipeCard = (props: RecipeCardProps) => {
+  const { data } = props;
   return (
     <>
       <RecipeCardWrapper>
