@@ -1,24 +1,25 @@
 "use client";
 
-import { User } from "@/app/types";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { loginState } from "@/app/store/authAtom";
 import styled from "styled-components";
+import Image from "next/image";
+
 import UserModal from "./UserModal";
 
-type UserMenuProps = {
-  currentUser?: User | null;
-};
+import { User } from "@/app/types";
 
-const UserMenu = ({ currentUser }: UserMenuProps) => {
+const UserMenu = ({ currentUser }: { currentUser: User | undefined }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
+  const isLoggedIn = useRecoilValue<boolean>(loginState);
 
   const router = useRouter();
 
   return (
     <UserMenuDiv>
-      {currentUser ? (
+      {isLoggedIn ? (
         <>
           <WriteButton
             onClick={() => {
@@ -44,9 +45,9 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
               setIsUserModal(true);
             }}
           >
-            {isUserModal && <UserModal />}
+            <UserModal isUserModal={isUserModal} />
             <Image
-              src="/images/profileIcon.png"
+              src={"/images/profileIcon.png"}
               width={32}
               height={32}
               alt="profile_icon"
@@ -77,13 +78,17 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
 };
 
 const UserMenuDiv = styled.div`
-  display: flex;
+  display: none;
   position: relative;
   gap: 1.6rem;
   font-size: 16px;
   font-weight: 500;
   color: #4f3d21;
   align-items: center;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
 `;
 
 const ProfileButton = styled.div`
