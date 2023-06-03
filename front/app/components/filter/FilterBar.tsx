@@ -21,7 +21,6 @@ type FilterBarProps = {
 const FilterBar = (props: FilterBarProps) => {
   const {
     setFilter,
-    removeTag,
     newServings,
     setNewServings,
     newDuration,
