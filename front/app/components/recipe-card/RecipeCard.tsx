@@ -81,6 +81,10 @@ const RecipeCardWrapper = styled.div`
   width: 27rem;
   height: 26rem;
   margin: auto;
+
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 const RecipeImg = styled.div`
