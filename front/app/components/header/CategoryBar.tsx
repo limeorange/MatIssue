@@ -73,4 +73,6 @@ const CategoryLi = styled.li`
     font-weight: 600;
     border-bottom: 0.4rem solid #f8b551;
   }
+
+  transition: all 0.3s;
 `;
