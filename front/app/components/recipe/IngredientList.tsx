@@ -11,24 +11,26 @@ type CheckboxLabelProps = {
   onClick: () => void;
 };
 
-// 요리 재료 데이터 (백엔드분들과 소통 예정)
-const data = [
-  { name: "순두부", count: "1개" },
-  { name: "달걀", count: "3개" },
-  { name: "대파", count: "1/2대" },
-  { name: "청양고추", count: "1개" },
-  { name: "멸치 다시마 물", count: "400mL" },
-  { name: "새우젓", count: "1작은술" },
-  { name: "다진 마늘", count: "1작은술" },
-  { name: "후춧가루", count: "약간" },
-];
+/** 요리 재료 Props */
+type Ingredient = {
+  name: string;
+  amount: string;
+};
 
-// 재료 준비 목록 컴포넌트
-const IngredientList = () => {
+/** 요리 재료 리스트 Props */
+type IngredientListProps = {
+  recipeIngredients: Ingredient[];
+};
+
+/** 재료 준비 목록 컴포넌트 */
+const IngredientList: React.FC<IngredientListProps> = ({
+  recipeIngredients,
+}) => {
   const [isCheckedList, setIsCheckedList] = useState<boolean[]>(
-    Array(data.length).fill(false)
+    Array(recipeIngredients.length).fill(false)
   );
 
+  // 체크박스 클릭 핸들러
   const CheckClickHandler = (index: number) => {
     const updatedList = [...isCheckedList];
     updatedList[index] = !updatedList[index];
@@ -37,14 +39,14 @@ const IngredientList = () => {
 
   return (
     <ContainerDiv>
-      <ul>
-        {data.map((item, index) => (
+      <IngredientUl>
+        {recipeIngredients.map((item, index) => (
           <IngredientItemLi key={index}>
             <IngredientSpan isChecked={isCheckedList[index]}>
               {item.name}
             </IngredientSpan>
             <IngredientCountSpan isChecked={isCheckedList[index]}>
-              {item.count}
+              {item.amount}
             </IngredientCountSpan>
             <CheckboxWrapperDiv>
               <CheckboxInput
@@ -59,11 +61,12 @@ const IngredientList = () => {
             </CheckboxWrapperDiv>
           </IngredientItemLi>
         ))}
-      </ul>
+      </IngredientUl>
     </ContainerDiv>
   );
 };
 
+/** 재료 목록 전체 감싸는 Div */
 const ContainerDiv = styled.div`
   width: 33rem;
   border: 1rem solid #fff6df;
@@ -71,14 +74,22 @@ const ContainerDiv = styled.div`
   padding: 2rem;
 `;
 
+/** 재료 목록 리스트 Ul */
+const IngredientUl = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+`;
+
+/** 재료 목록 Li */
 const IngredientItemLi = styled.li`
   display: flex;
-  margin-bottom: 1.2rem;
   height: 2.5rem;
   justify-items: center;
   align-items: center;
 `;
 
+/** 재료명 Span */
 const IngredientSpan = styled.span<{ isChecked: boolean }>`
   font-size: 16px;
   width: 15rem;
@@ -91,6 +102,7 @@ const IngredientSpan = styled.span<{ isChecked: boolean }>`
       : null}
 `;
 
+/** 재료 양 Span */
 const IngredientCountSpan = styled.span<{ isChecked: boolean }>`
   font-size: 16px;
   width: 8rem;
@@ -104,11 +116,13 @@ const IngredientCountSpan = styled.span<{ isChecked: boolean }>`
       : null}
 `;
 
+/** 체크박스 감싸는 Div */
 const CheckboxWrapperDiv = styled.div`
   position: relative;
   margin-bottom: 0.7rem;
 `;
 
+/** 체크박스 Input */
 const CheckboxInput = styled.input<CheckboxInputProps>`
   visibility: hidden;
   ${({ isChecked }) =>
@@ -123,6 +137,7 @@ const CheckboxInput = styled.input<CheckboxInputProps>`
       : null}
 `;
 
+/** 체크박스 Label */
 const CheckboxLabel = styled.label<CheckboxLabelProps>`
   background-color: #fff;
   border: 0.1rem solid #ccc;
