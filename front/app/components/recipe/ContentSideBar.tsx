@@ -66,7 +66,7 @@ const Container = styled.div`
 `;
 
 const ProgressBarContainer = styled.div`
-  width: 10px;
+  width: 1rem;
   height: 100%;
   background-color: #f2f2f2;
 `;
@@ -78,7 +78,7 @@ const ProgressBar = styled.div<{ progress: number }>`
 `;
 
 const Sidebar = styled.div`
-  width: 200px;
+  width: 20rem;
   height: 50vh;
   position: fixed;
   top: 0;
@@ -93,7 +93,7 @@ const TableOfContents = styled.ul`
 `;
 
 const TableOfContentsItem = styled.li`
-  padding: 8px;
+  padding: 0.8rem;
   cursor: pointer;
 
   &:hover {

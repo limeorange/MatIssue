@@ -21,11 +21,8 @@ const RecipeComment = () => {
 
   return (
     <>
-      <div
-        className="flex w-full pb-[1.2rem] mb-[1.2rem] 
-      border-b-[0.1rem] border-[#DBD8D0] "
-      >
-        <ImageWrapperDiv>
+      <CommentContainer>
+        <ProfileImageDiv>
           <Image
             src={"/images/recipe-view/기본 프로필.png"}
             alt="기본 프로필 사진"
@@ -35,19 +32,15 @@ const RecipeComment = () => {
               borderRadius: 20,
             }}
           />
-        </ImageWrapperDiv>
+        </ProfileImageDiv>
 
-        {/* 작성자, 댓글 내용 */}
-        <div className="flex flex-col ml-[12px] w-full">
-          <div className="flex justify-between">
-            <div className="text-[16px] text-[#6F6F6F] font-[500] mb-[3px]">
-              {recipe_nickname}
-            </div>
-            {/* 댓글 수정, 삭제바 */}
-            <div
-              className="mt-[0.5rem] cursor-pointer"
-              onClick={() => setIsModal(true)}
-            >
+        {/* 작성자, 댓글 수정/삭제바, 댓글 내용 */}
+        <CommentContentsDiv>
+          <AuthorDotsDiv>
+            {/* 작성자 */}
+            <AuthorName>{recipe_nickname}</AuthorName>
+            {/* 댓글 수정/삭제바 */}
+            <ThreeDotsImageDiv onClick={() => setIsModal(true)}>
               {isModal && (
                 <CommentModal isModal={isModal} onCloseModal={onCloseModal} />
               )}
@@ -58,18 +51,44 @@ const RecipeComment = () => {
                 height={15}
                 onClick={() => setIsModal(true)}
               />
-            </div>
-          </div>
+            </ThreeDotsImageDiv>
+          </AuthorDotsDiv>
+          {/* 댓글 내용 */}
           {/* 조건에 따라 textarea로 변경 (삼항연산자) */}
-          <div className="text-[15.5px] text-[#6F6F6F] w-full">{comment}</div>
-        </div>
-      </div>
+          <CommentText>{comment}</CommentText>
+        </CommentContentsDiv>
+      </CommentContainer>
     </>
   );
 };
 
-/** 이미지 감싸는 Div */
-const ImageWrapperDiv = styled.div`
+/** 댓글 전체 감싸는 Div */
+const CommentContainer = styled.div`
+  display: flex;
+  width: 100%;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 0.1rem solid #dbd8d0;
+`;
+
+/** 작성자, 댓글 수정/삭제바, 댓글 내용 감싸는 Div */
+const CommentContentsDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 1.2rem;
+  width: 100%;
+`;
+
+/** 작성자 닉네임 Div */
+const AuthorName = styled.div`
+  font-size: 16px;
+  color: #6f6f6f;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+`;
+
+/** 프로필 이미지 감싸는 Div */
+const ProfileImageDiv = styled.div`
   min-width: 5rem;
   min-height: 5rem;
   width: 5rem;
@@ -79,6 +98,25 @@ const ImageWrapperDiv = styled.div`
   border-color: #fbd26a;
   border-radius: 50%;
   overflow: hidden;
+`;
+
+/** 작성자와 아이콘 감싸는 Div */
+const AuthorDotsDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+/** 댓글 수정, 삭제 아이콘 감싸는 Div */
+const ThreeDotsImageDiv = styled.div`
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+`;
+
+/** 댓글 내용 Div */
+const CommentText = styled.div`
+  font-size: 15.5px;
+  color: #6f6f6f;
+  width: 100%;
 `;
 
 export default RecipeComment;
