@@ -10,6 +10,21 @@ import CookingStepsSection from "../../components/add-recipe/CookingStepsSection
 import Button from "../../components/UI/Button";
 import { axiosBase } from "../../api/axios";
 
+interface RecipeFormState {
+  selectedCategory: string;
+  selectedPeople: string;
+  selectedTime: string;
+  selectedDifficulty: string;
+  selectedImage: string;
+  recipeTitle: string;
+  cookingIntro: string;
+  ingredients: { ingredient: string; quantity: string }[];
+  steps: { stepDetail: string; stepImage: string }[];
+  stepImages: string[];
+  cookingTips: string;
+  videoLink: string;
+}
+
 const categories = ["한식", "중식", "일식", "양식", "비건", "기타"];
 const peopleCount = [1, 2, 3, 4, 5];
 const times = [
@@ -22,59 +37,59 @@ const times = [
 const difficulties = ["상", "중", "하"];
 
 const RecipeForm = () => {
-  const [selectedCategory, setCategory] = useState("");
-  const [selectedPeople, setPeople] = useState("");
-  const [selectedTime, setTime] = useState("");
-  const [selectedDifficulty, setDifficulty] = useState("");
-  const [selectedImage, setSelectedImage] = useState("");
-  const [recipeTitle, setRecipeTitle] = useState("");
-  const [cookingIntro, setCookingIntro] = useState("");
-  const [ingredients, setIngredients] = useState([
-    { ingredient: "", quantity: "" },
-  ]);
-  const [steps, setSteps] = useState([{ stepDetail: "", stepImage: "" }]);
-  const [stepImages, setStepImages] = useState<string[]>([]);
-  const [cookingTips, setCookingTips] = useState("");
-  const [videoLink, setVideoLink] = useState("");
+  const [state, setState] = useState<RecipeFormState>({
+    selectedCategory: "",
+    selectedPeople: "",
+    selectedTime: "",
+    selectedDifficulty: "",
+    selectedImage: "",
+    recipeTitle: "",
+    cookingIntro: "",
+    ingredients: [{ ingredient: "", quantity: "" }],
+    steps: [{ stepDetail: "", stepImage: "" }],
+    stepImages: [],
+    cookingTips: "",
+    videoLink: "",
+  });
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
+    setState({ ...state, selectedCategory: e.target.value });
   };
 
   // 몇인분인지
   const handlePeopleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setPeople(e.target.value);
+    setState({ ...state, selectedPeople: e.target.value });
   };
 
   // 시간
   const handleTimeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setTime(e.target.value);
+    setState({ ...state, selectedTime: e.target.value });
   };
 
   // 난이도
   const handleDifficultyChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setDifficulty(e.target.value);
+    setState({ ...state, selectedDifficulty: e.target.value });
   };
 
   // 섬네일 이미지
   const handleThumbnailChange = (imageUrl: string) => {
-    setSelectedImage(imageUrl);
+    setState({ ...state, selectedImage: imageUrl });
   };
 
   // 레시피 제목
   const handleRecipeTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setRecipeTitle(e.target.value);
+    setState({ ...state, recipeTitle: e.target.value });
   };
 
   // 요리 소개
   const handleCookingIntroChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setCookingIntro(e.target.value);
+    setState({ ...state, cookingIntro: e.target.value });
   };
 
   // 유튜브 동영상 핸들러
   const handleVideoLinkChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setVideoLink(e.target.value);
+    setState({ ...state, videoLink: e.target.value });
   };
 
   // 재료 변경 핸들러
@@ -82,9 +97,9 @@ const RecipeForm = () => {
     e: ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
-    const newIngredients = [...ingredients];
+    const newIngredients = [...state.ingredients];
     newIngredients[index].ingredient = e.target.value;
-    setIngredients(newIngredients);
+    setState({ ...state, ingredients: newIngredients });
   };
 
   // 재료의 양 변경 핸들러
@@ -92,22 +107,25 @@ const RecipeForm = () => {
     e: ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
-    const newIngredients = [...ingredients];
+    const newIngredients = [...state.ingredients];
     newIngredients[index].quantity = e.target.value;
-    setIngredients(newIngredients);
+    setState({ ...state, ingredients: newIngredients });
   };
 
   // 재료와 양 추가 핸들러
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, { ingredient: "", quantity: "" }]);
+    setState({
+      ...state,
+      ingredients: [...state.ingredients, { ingredient: "", quantity: "" }],
+    });
   };
 
   // 재료 삭제 핸들러
   const handleRemoveIngredient = (index: number) => {
-    if (ingredients.length > 1) {
-      const newIngredients = [...ingredients];
+    if (state.ingredients.length > 1) {
+      const newIngredients = [...state.ingredients];
       newIngredients.splice(index, 1);
-      setIngredients(newIngredients);
+      setState({ ...state, ingredients: newIngredients });
     }
   };
 
@@ -120,9 +138,9 @@ const RecipeForm = () => {
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      const newStepImages = [...stepImages];
+      const newStepImages = [...state.stepImages];
       newStepImages[index] = reader.result as string;
-      setStepImages(newStepImages);
+      setState({ ...state, stepImages: newStepImages });
     };
 
     if (file) {
@@ -135,58 +153,65 @@ const RecipeForm = () => {
     e: ChangeEvent<HTMLTextAreaElement>,
     index: number
   ) => {
-    const newSteps = [...steps];
+    const newSteps = [...state.steps];
     newSteps[index].stepDetail = e.target.value;
-    setSteps(newSteps);
+    setState({ ...state, steps: newSteps });
   };
 
   // 스텝 추가 핸들러
   const handleAddStep = () => {
-    setSteps([...steps, { stepDetail: "", stepImage: "" }]);
+    setState({
+      ...state,
+      steps: [...state.steps, { stepDetail: "", stepImage: "" }],
+    });
   };
 
   // 스텝 제거 핸들러
   const handleRemoveStep = (index: number) => {
-    if (steps.length > 1) {
-      const newSteps = [...steps];
+    if (state.steps.length > 1) {
+      const newSteps = [...state.steps];
       newSteps.splice(index, 1);
-      setSteps(newSteps);
 
-      const newStepImages = [...stepImages];
+      const newStepImages = [...state.stepImages];
       newStepImages.splice(index, 1);
-      setStepImages(newStepImages);
+
+      setState({ ...state, steps: newSteps, stepImages: newStepImages });
     }
   };
 
   // 요리팁 변경 핸들러
   const handleCookingTipsChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setCookingTips(e.target.value);
+    setState({ ...state, cookingTips: e.target.value });
   };
 
   // 저장 핸들러
   const handleSave = async () => {
     try {
       const response = await axiosBase.post("api/recipes/", {
-        recipe_title: recipeTitle,
-        recipe_thumbnail: selectedImage,
-        recipe_video: videoLink,
-        recipe_description: cookingIntro,
-        recipe_category: selectedCategory,
+        recipe_title: state.recipeTitle,
+        recipe_thumbnail: state.selectedImage,
+        recipe_video: state.videoLink,
+        recipe_description: state.cookingIntro,
+        recipe_category: state.selectedCategory,
         recipe_info: {
-          serving: parseInt(selectedPeople, 10),
-          time: parseInt(selectedTime, 10),
-          level: difficulties.indexOf(selectedDifficulty),
+          serving: parseInt(state.selectedPeople, 10),
+          time: parseInt(state.selectedTime, 10),
+          level: difficulties.indexOf(state.selectedDifficulty),
         },
-        recipe_ingredients: ingredients.map(({ ingredient, quantity }) => ({
-          name: ingredient,
-          amount: quantity,
-        })),
-        recipe_sequence: steps.map(({ stepDetail, stepImage }, index) => ({
-          step: index + 1,
-          picture: "url",
-          description: stepDetail,
-        })),
-        recipe_tip: cookingTips,
+        recipe_ingredients: state.ingredients.map(
+          ({ ingredient, quantity }) => ({
+            name: ingredient,
+            amount: quantity,
+          })
+        ),
+        recipe_sequence: state.steps.map(
+          ({ stepDetail, stepImage }, index) => ({
+            step: index + 1,
+            picture: "url",
+            description: stepDetail,
+          })
+        ),
+        recipe_tip: state.cookingTips,
         user_id: "admin",
       });
 
@@ -207,19 +232,19 @@ const RecipeForm = () => {
       <MainSection>
         <ImageContainer>
           <ThumbnailUpload
-            selectedImage={selectedImage}
+            selectedImage={state.selectedImage}
             handleThumbnailChange={handleThumbnailChange}
           />
         </ImageContainer>
         <div>
           <CategoryAndInfo
-            selectedCategory={selectedCategory}
+            selectedCategory={state.selectedCategory}
             handleCategoryChange={handleCategoryChange}
-            selectedPeople={selectedPeople}
+            selectedPeople={state.selectedPeople}
             handlePeopleChange={handlePeopleChange}
-            selectedTime={selectedTime}
+            selectedTime={state.selectedTime}
             handleTimeChange={handleTimeChange}
-            selectedDifficulty={selectedDifficulty}
+            selectedDifficulty={state.selectedDifficulty}
             handleDifficultyChange={handleDifficultyChange}
             categories={categories}
             peopleCount={peopleCount}
@@ -232,7 +257,7 @@ const RecipeForm = () => {
         <Label>레시피 제목</Label>
         <Input
           type="text"
-          value={recipeTitle}
+          value={state.recipeTitle}
           onChange={handleRecipeTitleChange}
           placeholder="ex) 소고기 미역국 끓이기"
         />
@@ -240,26 +265,26 @@ const RecipeForm = () => {
       <CookingIntro>
         <Label>요리 소개</Label>
         <TextArea
-          value={cookingIntro}
+          value={state.cookingIntro}
           onChange={handleCookingIntroChange}
           placeholder="요리 소개를 입력해주세요."
         />
       </CookingIntro>
       <VideoSection
-        videoLink={videoLink}
+        videoLink={state.videoLink}
         handleVideoLinkChange={handleVideoLinkChange}
       />
 
       <IngredientSection
-        ingredients={ingredients}
+        ingredients={state.ingredients}
         handleIngredientChange={handleIngredientChange}
         handleQuantityChange={handleQuantityChange}
         handleAddIngredient={handleAddIngredient}
         handleRemoveIngredient={handleRemoveIngredient}
       />
       <CookingStepsSection
-        steps={steps}
-        stepImages={stepImages}
+        steps={state.steps}
+        stepImages={state.stepImages}
         handleStepDetailChange={handleStepDetailChange}
         handleStepImageChange={handleStepImageChange}
         handleAddStep={handleAddStep}
@@ -268,7 +293,7 @@ const RecipeForm = () => {
       <CookingTips>
         <TipsLabel>요리팁</TipsLabel>
         <TipsTextArea
-          value={cookingTips}
+          value={state.cookingTips}
           onChange={handleCookingTipsChange}
           placeholder="나만의 요리팁을 입력해주세요."
         />
