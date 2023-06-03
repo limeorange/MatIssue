@@ -28,8 +28,8 @@ const UserModal = () => {
       })
       .finally(() => {
         Cookies.remove("auth");
+        console.log(Cookies.get("auth"));
         toast.success("로그아웃 되었습니다.");
-        router.refresh();
       });
   };
 

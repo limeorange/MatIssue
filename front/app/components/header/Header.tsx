@@ -22,7 +22,7 @@ const Header = () => {
     fetchUser().then(() => {
       setIsLoading(false);
     });
-  }, []);
+  }, [currentUser]);
 
   return (
     <HeaderDiv>
