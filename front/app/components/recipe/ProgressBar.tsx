@@ -38,7 +38,7 @@ const ProgressBarContainerDiv = styled.div`
   position: fixed;
   left: 0;
   width: 100%;
-  height: 10px;
+  height: 1rem;
   background-color: #f2f2f2;
   z-index: 40;
 `;
@@ -48,7 +48,7 @@ const ProgressBarDiv = styled.div<{ progress: number }>`
   height: 100%;
   width: ${({ progress }) => `${progress}%`};
   background-color: #fbd26a;
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 1rem 1rem 0;
 `;
 
 export default ProgressBar;
