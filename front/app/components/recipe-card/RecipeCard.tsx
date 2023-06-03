@@ -5,22 +5,23 @@ import Image from "next/image";
 
 type RecipeData = {
   image: string;
-  title: string;
-  author: string;
-  likes: number;
-  view: string;
-  id: string;
-  timestamp: number;
-  servings: number;
-  duration: number;
-  difficulty: 0 | 1 | 2;
+  title?: string;
+  author?: string;
+  likes?: number;
+  view?: string;
+  id?: string;
+  timestamp?: number;
+  servings?: number;
+  duration?: number;
+  difficulty?: 0 | 1 | 2;
 };
 
 type RecipeCardProps = {
   data: RecipeData;
 };
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ data }) => {
+const RecipeCard = (props: RecipeCardProps) => {
+  const { data } = props;
   return (
     <>
       <RecipeCardWrapper>
@@ -80,6 +81,10 @@ const RecipeCardWrapper = styled.div`
   width: 27rem;
   height: 26rem;
   margin: auto;
+
+  &: hover {
+    cursor: pointer;
+  }
 `;
 
 const RecipeImg = styled.div`

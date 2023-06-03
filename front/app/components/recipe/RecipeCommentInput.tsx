@@ -23,7 +23,6 @@ const RecipeCommentInput = () => {
   const boxClickHandler = () => {
     setIsCommenting(true);
   };
-
   /** 댓글 입력시 상태 업데이트 핸들러 */
   const commentInputHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCommentText(e.target.value);
@@ -53,7 +52,6 @@ const RecipeCommentInput = () => {
 
     // 댓글 작성 완료 후 초기화
     setCommentText("");
-    setIsCommenting(false);
   };
 
   return (
@@ -85,7 +83,9 @@ const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
   border-radius: 1rem;
   padding-top: 1.2rem;
   padding-bottom: 1.2rem;
+
   align-items: center;
+
   color: #9ca3af;
   font-size: 15.5px;
   padding-left: 1.2rem;
@@ -121,6 +121,7 @@ const InputTextArea = styled.textarea`
   ::-webkit-scrollbar-track {
     background-color: #ededed;
     border-radius: 1rem;
+  }
 `;
 
 /** 제출 버튼 */
