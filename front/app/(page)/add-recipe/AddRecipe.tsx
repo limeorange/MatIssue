@@ -342,6 +342,10 @@ const Input = styled.input`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
+  &:focus {
+    border: 0.2rem solid #fbd26a;
+    outline: none;
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -360,6 +364,10 @@ const TextArea = styled.textarea`
   resize: none;
   ::placeholder {
     color: #a9a9a9;
+  }
+  &:focus {
+    border: 0.2rem solid #fbd26a;
+    outline: none;
   }
 `;
 

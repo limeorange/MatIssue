@@ -55,6 +55,10 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
+  &:focus {
+    border: 0.2rem solid #fbd26a;
+    outline: none;
+  }
 `;
 
 const VideoWrapper = styled.div`
@@ -81,6 +85,10 @@ const VideoTextArea = styled.textarea`
   resize: none;
   ::placeholder {
     color: #a9a9a9;
+  }
+  &:focus {
+    border: 0.2rem solid #fbd26a;
+    outline: none;
   }
 `;
 
