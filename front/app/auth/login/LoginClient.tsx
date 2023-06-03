@@ -11,12 +11,14 @@ import Logo from "@/app/components/header/Logo";
 import Button from "@/app/components/UI/Button";
 
 import {
+  AuthChangeBox,
   AuthContainer,
   AuthFormWrapper,
   AuthNavBox,
   StyledInput,
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
+import LoadingModal from "@/app/components/UI/LoadingModal";
 
 const LoginClient = () => {
   const {
@@ -47,7 +49,6 @@ const LoginClient = () => {
       })
       .catch((err) => toast.error("잘못된 요청입니다."))
       .finally(() => {
-        toast.success("로그인 되었습니다.");
         setIsLoading(false);
       });
   };
@@ -56,6 +57,7 @@ const LoginClient = () => {
 
   return (
     <AuthContainer>
+      {isLoading && <LoadingModal />}
       <AuthFormWrapper>
         <Logo />
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -83,6 +85,7 @@ const LoginClient = () => {
             </Button>
           </div>
           <AuthNavBox>
+            <div>로그인 유지</div>
             <button
               onClick={() => {
                 router.push("/auth/find-id-password");
@@ -92,12 +95,12 @@ const LoginClient = () => {
             </button>
           </AuthNavBox>
         </form>
-        <AuthNavBox>
+        <AuthChangeBox>
           <div>처음이신가요?</div>
           <UnderLineLinkDiv onClick={() => router.push("/auth/signup")}>
             회원가입하기
           </UnderLineLinkDiv>
-        </AuthNavBox>
+        </AuthChangeBox>
       </AuthFormWrapper>
     </AuthContainer>
   );

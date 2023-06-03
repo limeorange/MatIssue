@@ -89,10 +89,14 @@ export const ErrorMessageText = styled.span`
 export const AuthNavBox = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 0.6rem;
   font-size: 14px;
   color: rgb(150, 150, 150);
+`;
+
+export const AuthChangeBox = styled(AuthNavBox)`
+  justify-content: center;
 `;
 
 export const UnderLineLinkDiv = styled.div`
