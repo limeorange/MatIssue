@@ -29,6 +29,7 @@ const RecipeForm = () => {
   const [steps, setSteps] = useState([{ stepDetail: "", stepImage: "" }]);
   const [stepImages, setStepImages] = useState<string[]>([]);
   const [cookingTips, setCookingTips] = useState("");
+  const [videoLink, setVideoLink] = useState("");
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -63,6 +64,11 @@ const RecipeForm = () => {
   // 요리 소개
   const handleCookingIntroChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCookingIntro(e.target.value);
+  };
+
+  // 유튜브 동영상 핸들러
+  const handleVideoLinkChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setVideoLink(e.target.value);
   };
 
   // 재료 변경 핸들러
@@ -233,7 +239,11 @@ const RecipeForm = () => {
           placeholder="요리 소개를 입력해주세요."
         />
       </CookingIntro>
-      <VideoSection />
+      <VideoSection
+        videoLink={videoLink}
+        handleVideoLinkChange={handleVideoLinkChange}
+      />
+
       <IngredientSection
         ingredients={ingredients}
         handleIngredientChange={handleIngredientChange}
