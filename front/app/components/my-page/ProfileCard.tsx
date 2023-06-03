@@ -17,7 +17,7 @@ const ProfileCard = () => {
         <ProfileImage src="/images/dongs-logo.png" alt="profile" />
       </RoundImage>
       <NickName>닉네임</NickName>
-      <Link href="/my-page/modifiy-user-info">
+      <Link href="/my-page/modify-user-info">
         <ModifyUserButton>
           <Button
             isBorderColor={true}
@@ -36,17 +36,19 @@ const ProfileCard = () => {
         <MyRecipeTitle>나의 레시피</MyRecipeTitle>
         <MyRecipeCount>5</MyRecipeCount>
       </StyledLink>
-      <UploadRecipeButton>
-        <Button
-          type="button"
-          isBgColor={true}
-          fullWidth={true}
-          isBorderColor={false}
-          isHoverColor={false}
-        >
-          레시피 올리기
-        </Button>
-      </UploadRecipeButton>
+      <Link href="/add-recipe">
+        <UploadRecipeButton>
+          <Button
+            type="button"
+            isBgColor={true}
+            fullWidth={true}
+            isBorderColor={false}
+            isHoverColor={false}
+          >
+            레시피 올리기
+          </Button>
+        </UploadRecipeButton>
+      </Link>
     </ProfileContainer>
   );
 };
