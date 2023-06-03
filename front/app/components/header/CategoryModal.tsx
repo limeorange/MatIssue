@@ -8,9 +8,9 @@ const DUMMY_DATA = [
   { id: 4, name: "한식" },
 ];
 
-const CategoryModal = () => {
+const CategoryModal = ({ isModal }: { isModal: boolean }) => {
   return (
-    <CategoryModalContainer>
+    <CategoryModalContainer visible={isModal}>
       <CategoryModalUl>
         {DUMMY_DATA.map((category) => (
           <CategoryModalLi key={category.id}>
@@ -26,7 +26,7 @@ const CategoryModal = () => {
 
 export default CategoryModal;
 
-const CategoryModalContainer = styled.div`
+const CategoryModalContainer = styled.div<{ visible: boolean }>`
   position: absolute;
   z-index: 9;
   top: 5rem;
@@ -40,6 +40,11 @@ const CategoryModalContainer = styled.div`
   font-size: 16px;
   font-weight: 400;
   color: #4f3d21;
+
+  opacity: ${(props) => (props.visible ? "1" : "0")};
+  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+
+  transition: opacity 0.3s;
 `;
 
 const CategoryModalUl = styled.ul`

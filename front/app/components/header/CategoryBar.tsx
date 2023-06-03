@@ -17,7 +17,7 @@ const CategoryBar = () => {
           onMouseOver={() => setIsModal(true)}
           onMouseOut={() => setIsModal(false)}
         >
-          {isModal && <CategoryModal />}
+          <CategoryModal isModal={isModal} />
           <div>
             <Image
               src="/images/listIcon.png"
