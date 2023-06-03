@@ -20,7 +20,14 @@ const ModifyUserInfo = () => {
         <Header>회원정보수정</Header>
         <Divider />
 
+        <Link href="/my-page/modify-user-info/change-password">
+          <ChangePassword>비밀번호 변경</ChangePassword>
+        </Link>
+
         <Wrapper>
+          {/* <Link href="/my-page/modify-user-info/account-deletion"> */}
+          <AccountDeletion>회원 탈퇴</AccountDeletion>
+          {/* </Link> */}
           <Title>이메일 *</Title>
           <InputBox type="email" name="email" required />
         </Wrapper>
@@ -76,6 +83,7 @@ const ModifyUserInfo = () => {
 export default ModifyUserInfo;
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
@@ -97,6 +105,24 @@ const Divider = styled.div`
   margin: 2rem 0;
 `;
 
+const ChangePassword = styled.div`
+  position: absolute;
+  right: 22.4rem;
+  top: 13.5rem;
+  font-size: 13px;
+  text-decoration: underline;
+  color: #201ce0;
+`;
+
+const AccountDeletion = styled.div`
+  position: absolute;
+  right: 15.1rem;
+  top: 13.5rem;
+  font-size: 13px;
+  text-decoration: underline;
+  color: #e11717;
+`;
+
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -108,6 +134,7 @@ const Title = styled.h4`
   font-size: 17px;
   margin: 0.5rem 5.9rem 0 0.2rem;
   cursor: pointer;
+  color: #4f3d21;
 `;
 
 const InputBox = styled.input`
@@ -157,6 +184,7 @@ const InputDateBox = styled.input`
   background: url(/images/calendar.png) no-repeat right 1.6rem center / 2rem
     auto;
   font-size: 15px;
+  color: #4f3d21;
   cursor: pointer;
   &:hover {
     outline: 0.3rem solid #fbd26a;
