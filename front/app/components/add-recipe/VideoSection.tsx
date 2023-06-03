@@ -1,13 +1,15 @@
 import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 
-const VideoSection = () => {
-  const [videoLink, setVideoLink] = useState("");
+type VideoSectionProps = {
+  videoLink: string;
+  handleVideoLinkChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+};
 
-  const handleVideoLinkChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setVideoLink(e.target.value);
-  };
-
+const VideoSection = ({
+  videoLink,
+  handleVideoLinkChange,
+}: VideoSectionProps) => {
   return (
     <VideoWrapper>
       <Label>동영상</Label>
