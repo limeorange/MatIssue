@@ -38,7 +38,6 @@ const LoginClient = () => {
   /** auth 폼 제출 핸들러 */
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
-    console.log(data);
     axiosBase
       .post("users/login", data)
       .then((res) => {
