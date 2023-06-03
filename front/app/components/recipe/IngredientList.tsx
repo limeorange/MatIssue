@@ -80,7 +80,7 @@ const IngredientItemLi = styled.li`
 `;
 
 const IngredientSpan = styled.span<{ isChecked: boolean }>`
-  font-size: 1.6rem;
+  font-size: 16px;
   width: 15rem;
   ${({ isChecked }) =>
     isChecked
@@ -92,7 +92,7 @@ const IngredientSpan = styled.span<{ isChecked: boolean }>`
 `;
 
 const IngredientCountSpan = styled.span<{ isChecked: boolean }>`
-  font-size: 1.6rem;
+  font-size: 16px;
   width: 8rem;
   margin-right: 1rem;
   ${({ isChecked }) =>
