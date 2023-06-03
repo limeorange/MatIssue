@@ -8,11 +8,17 @@ import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
 import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "../../components/add-recipe/CookingStepsSection";
 import Button from "../../components/UI/Button";
-import axios from "axios";
+import { axiosBase } from "../../api/axios";
 
-const categories = ["한식", "중식", "일식", "양식"];
+const categories = ["한식", "중식", "일식", "양식", "비건", "기타"];
 const peopleCount = [1, 2, 3, 4, 5];
-const times = ["15분 이내", "30분 이내", "1시간 이내", "1시간 이상"];
+const times = [
+  "10분 이내",
+  "20분 이내",
+  "30분 이내",
+  "1시간 이내",
+  "1시간 이상",
+];
 const difficulties = ["상", "중", "하"];
 
 const RecipeForm = () => {
@@ -158,18 +164,18 @@ const RecipeForm = () => {
   };
 
   // 저장 핸들러
-  const handleSave = () => {
-    axios
-      .post("https://matissue.onrender.com/api/recipes/", {
+  const handleSave = async () => {
+    try {
+      const response = await axiosBase.post("api/recipes/", {
         recipe_title: recipeTitle,
         recipe_thumbnail: selectedImage,
-        recipe_video: "", // 수정 필요: 해당하는 state나 props를 넣어주세요.
+        recipe_video: videoLink,
         recipe_description: cookingIntro,
         recipe_category: selectedCategory,
         recipe_info: {
           serving: parseInt(selectedPeople, 10),
-          time: parseInt(selectedTime, 10), // '15분 이내', '30분 이내' 등의 시간 형식을 숫자로 변환하는 로직 필요
-          level: difficulties.indexOf(selectedDifficulty) + 1, // 난이도를 숫자로 변환. '하', '중', '상'을 1, 2, 3으로 가정
+          time: parseInt(selectedTime, 10),
+          level: difficulties.indexOf(selectedDifficulty),
         },
         recipe_ingredients: ingredients.map(({ ingredient, quantity }) => ({
           name: ingredient,
@@ -177,19 +183,19 @@ const RecipeForm = () => {
         })),
         recipe_sequence: steps.map(({ stepDetail, stepImage }, index) => ({
           step: index + 1,
-          picture: stepImages[index],
+          picture: "url",
           description: stepDetail,
         })),
         recipe_tip: cookingTips,
-        user_id: "admin", // 수정 필요: 해당하는 state나 props를 넣어주세요.
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
+        user_id: "admin",
       });
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   // 취소 핸들러
   const handleCancel = () => {
     // 취소
@@ -412,6 +418,7 @@ const ButtonContainer = styled.div`
 const SaveButton = styled.div`
   width: 18rem;
 `;
+
 const CancleButton = styled.div`
   width: 18rem;
 `;
