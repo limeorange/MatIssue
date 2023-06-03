@@ -6,7 +6,7 @@ const cookingTime = 30;
 const cookingLevel = "초급";
 const category = "한식";
 
-// 요리 정보 (인원, 시간, 난이도, 종류) 컴포넌트
+/** 요리 정보 (인원, 시간, 난이도, 종류) 컴포넌트 */
 const RecipeInfo = () => {
   return (
     <>
@@ -35,6 +35,7 @@ const RecipeInfo = () => {
   );
 };
 
+/** 요리 정보 전체 감싸는 Div */
 const ContainerDiv = styled.div`
   height: 6rem;
   width: 33rem;
@@ -45,6 +46,7 @@ const ContainerDiv = styled.div`
   align-items: center;
 `;
 
+/** 요리 정보 요소 감싸는 Div */
 const RecipeInfoElementDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -55,15 +57,16 @@ const RecipeInfoElementDiv = styled.div`
   text-align: center;
   
   h2 {
-    font-size: 1.5rem;
+    font-size: 15px;
     font-weight: 500;
 ]  }
 
   span {
-    font-size: 1.4rem;
+    font-size: 14px;
   }
 `;
 
+/** 요리 정보 요소 구분선 */
 const Divider = styled.div`
   height: 4.5rem;
   border-color: #dbd8d0;
