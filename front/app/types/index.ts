@@ -1,8 +1,3 @@
-export type ExampleItems = {
-  title: string;
-  description: string;
-};
-
 export type User = {
   currentUser: {
     user_id: string;

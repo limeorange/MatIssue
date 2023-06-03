@@ -91,12 +91,7 @@ const Label = styled.label`
   margin-right: 3rem;
   margin-bottom: 2rem;
   padding-top: 0.5rem;
-  &:focus {
-    border: 0.2rem solid #fbd26a;
-    outline: none;
-  }
 `;
-
 const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 57.2rem;
@@ -114,12 +109,7 @@ const TextArea = styled.textarea`
   ::placeholder {
     color: #a9a9a9;
   }
-  &:focus {
-    border: 0.2rem solid #fbd26a;
-    outline: none;
-  }
 `;
-
 const CookingStep = styled.div`
   display: flex;
   flex-direction: column;

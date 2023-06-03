@@ -1,11 +1,13 @@
 "use client";
 
-import Loading from "../loading";
+import Banner from "../components/main-page/Banner/Banner";
+import MainBest from "../components/main-page/best/MainBest";
 
 const Home = () => {
   return (
-    <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
-      <Loading />
+    <div>
+      <Banner />
+      <MainBest />
     </div>
   );
 };
