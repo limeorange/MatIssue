@@ -29,7 +29,7 @@ const ImageUploadForm = () => {
         const imgUrl = response.imageUrl;
         const formData = new FormData();
         formData.append("image", imgUrl);
-        console.log(formData);
+        console.log(imgUrl);
         // 이후 필요한 로직을 진행합니다.
       } catch (error) {
         console.error("Image upload failed:", error);
