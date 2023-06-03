@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 export default async function getCurrentUser() {
   try {
     const id = Cookies.get("auth");
+    console.log(id);
 
     if (!id) {
       return null;
@@ -17,6 +18,7 @@ export default async function getCurrentUser() {
 
     return response.data;
   } catch (err: any) {
+    Cookies.remove("auth");
     return null;
   }
   // if (id) {
