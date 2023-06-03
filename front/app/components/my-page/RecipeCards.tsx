@@ -1,9 +1,10 @@
 "use client";
-
-import React from "react";
-import styled from "styled-components";
 import Link from "next/link";
+import styled from "styled-components";
 import Button from "../../components/UI/Button";
+import { useState } from "react";
+import React from "react";
+import RecipeCard from "../recipe-card/RecipeCard";
 
 interface Recipe {
   image: string;
@@ -171,7 +172,7 @@ const RecipeCards = () => {
       <RecipeHeadingCount>5</RecipeHeadingCount>
       <RecipeList>
         {filteredRecipes.map((data, index) => (
-          <RecipeCards key={index} data={data} />
+          <RecipeCard key={index} data={data} />
         ))}
       </RecipeList>
     </RecipeListContainer>

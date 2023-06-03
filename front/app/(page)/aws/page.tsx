@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import uploadImage from "@/app/api/aws";
+import Image from "next/image";
 
 const ImageUploadForm = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -42,7 +43,7 @@ const ImageUploadForm = () => {
       <StyledForm onSubmit={handleFormSubmit}>
         <StyledPreviewContainer>
           {previewImage ? (
-            <img src={previewImage} alt="Preview" />
+            <Image src={previewImage} alt="Preview" />
           ) : (
             "미리보기이미지"
           )}
