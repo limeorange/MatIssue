@@ -11,22 +11,23 @@ type CheckboxLabelProps = {
   onClick: () => void;
 };
 
-// 요리 재료 데이터 (백엔드분들과 소통 예정)
-const data = [
-  { name: "순두부", amount: "1개" },
-  { name: "달걀", amount: "3개" },
-  { name: "대파", amount: "1/2대" },
-  { name: "청양고추", amount: "1개" },
-  { name: "멸치 다시마 물", amount: "400mL" },
-  { name: "새우젓", amount: "1작은술" },
-  { name: "다진 마늘", amount: "1작은술" },
-  { name: "후춧가루", amount: "약간" },
-];
+/** 요리 재료 Props */
+type Ingredient = {
+  name: string;
+  amount: string;
+};
 
-// 재료 준비 목록 컴포넌트
-const IngredientList = () => {
+/** 요리 재료 리스트 Props */
+type IngredientListProps = {
+  recipeIngredients: Ingredient[];
+};
+
+/** 재료 준비 목록 컴포넌트 */
+const IngredientList: React.FC<IngredientListProps> = ({
+  recipeIngredients,
+}) => {
   const [isCheckedList, setIsCheckedList] = useState<boolean[]>(
-    Array(data.length).fill(false)
+    Array(recipeIngredients.length).fill(false)
   );
 
   // 체크박스 클릭 핸들러
@@ -39,7 +40,7 @@ const IngredientList = () => {
   return (
     <ContainerDiv>
       <IngredientUl>
-        {data.map((item, index) => (
+        {recipeIngredients.map((item, index) => (
           <IngredientItemLi key={index}>
             <IngredientSpan isChecked={isCheckedList[index]}>
               {item.name}
