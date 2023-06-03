@@ -47,7 +47,7 @@ const CommentModalContainer = styled.div`
   z-index: 9;
   padding: 0.6rem 0;
   background-color: white;
-  box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0rem 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   font-size: 16px;
