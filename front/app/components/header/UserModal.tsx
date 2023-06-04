@@ -7,12 +7,14 @@ import toast from "react-hot-toast";
 import { loginState } from "@/app/store/authAtom";
 import { useState } from "react";
 import LoadingModal from "../UI/LoadingModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
   const setLoggedIn = useSetRecoilState<boolean>(loginState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const logoutHandler = async () => {
     setIsLoading(true);
@@ -21,10 +23,11 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
       .post(`users/logout`)
       .then((res) => {
         setLoggedIn(false);
+        queryClient.removeQueries(["currentUser"]);
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error("무언가 잘못되었습니다!");
+        toast.error(err.message);
       })
       .finally(() => {
         setIsLoading(false);
