@@ -127,6 +127,10 @@ const Select = styled.select`
   background-position: right 1rem center;
   -webkit-appearance: none; /* for chrome /
   -moz-appearance:none; /for firefox*/
+  &:focus {
+    border: 0.2rem solid #fbd26a;
+    outline: none;
+  }
 `;
 
 const InfoSection = styled.div`

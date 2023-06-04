@@ -82,6 +82,10 @@ const VideoTextArea = styled.textarea`
   ::placeholder {
     color: #a9a9a9;
   }
+  &:focus {
+    border: 0.2rem solid #fbd26a;
+    outline: none;
+  }
 `;
 
 const ThumbnailWrapper = styled.div`
