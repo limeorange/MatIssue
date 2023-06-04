@@ -1,34 +1,25 @@
 "use client";
 
-import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import { loginState } from "@/app/store/authAtom";
 
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import UserMenu from "./UserMenu";
 import CategoryBar from "./CategoryBar";
 
+import { User } from "@/app/types";
 import getCurrentUser from "@/app/api/user";
 
-import { User } from "@/app/types";
-
 const Header = () => {
-  const setLoggedIn = useSetRecoilState<boolean>(loginState);
-
-  // react-query로 데이터 fetch
-  const { data: currentUser, isLoading } = useQuery<User>(["currentUser"], () =>
-    getCurrentUser()
-  );
-
-  // 인증된 유저정보를 받으면 로그인 상태 true로 전환
-  useEffect(() => {
-    if (currentUser) {
-      setLoggedIn(true);
+  const { data: currentUser, isLoading } = useQuery<User>(
+    ["currentUser"],
+    () => getCurrentUser(),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
     }
-  }, [currentUser, setLoggedIn]);
+  );
 
   return (
     <HeaderDiv>
@@ -54,17 +45,10 @@ const HeaderDiv = styled.div`
 `;
 
 const NavArea = styled.div`
+  padding: 0 2rem;
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 0 2rem;
-  }
-
-  @media (min-width: 768px) {
-    padding: 0 2rem;
-  }
 `;
 
 const TopNav = styled.div`

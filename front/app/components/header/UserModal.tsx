@@ -2,39 +2,29 @@ import { useRouter } from "next/navigation";
 import { axiosBase } from "@/app/api/axios";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { loginState } from "@/app/store/authAtom";
 import { useState } from "react";
 import LoadingModal from "../UI/LoadingModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
-  const setLoggedIn = useSetRecoilState<boolean>(loginState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const logoutHandler = async () => {
     setIsLoading(true);
-    const id = Cookies.get("auth");
 
     axiosBase
-      .post(
-        `users/logout`,
-        { session_id: id },
-        {
-          params: {
-            id,
-          },
-        }
-      )
+      .post(`users/logout`)
       .then((res) => {
-        Cookies.remove("auth");
-        setLoggedIn(false);
+        queryClient.invalidateQueries(["currentUser"]);
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error("무언가 잘못되었습니다!");
+        toast.error(err.message);
       })
       .finally(() => {
         setIsLoading(false);
@@ -85,7 +75,7 @@ const UserModalContainer = styled.div<{ visible: boolean }>`
   background-color: white;
   box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
   border-radius: 0.5rem;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
   color: #4f3d21;
 

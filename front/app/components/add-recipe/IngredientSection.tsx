@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 
-interface IngredientSectionProps {
+type IngredientSectionProps = {
   ingredients: { ingredient: string; quantity: string }[];
   handleIngredientChange: (
     e: ChangeEvent<HTMLInputElement>,
@@ -13,7 +13,7 @@ interface IngredientSectionProps {
   ) => void;
   handleAddIngredient: () => void;
   handleRemoveIngredient: (index: number) => void;
-}
+};
 
 const IngredientSection = ({
   ingredients,
@@ -96,6 +96,11 @@ const IngredientInput = styled.input`
   border-radius: 1.5rem;
   padding: 1rem;
   font-size: 16px;
+  &:focus {
+    border: 0.1rem solid #d9d9d9;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
+  }
 `;
 
 const QuantityInput = styled.input`
@@ -106,6 +111,11 @@ const QuantityInput = styled.input`
   border-radius: 1.5rem;
   padding: 1rem;
   font-size: 16px;
+  &:focus {
+    border: 0.1rem solid #d9d9d9;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
+  }
 `;
 
 const IngredientRow = styled.div`

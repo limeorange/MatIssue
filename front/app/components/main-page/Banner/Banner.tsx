@@ -37,10 +37,10 @@ export default Banner;
 const BannerContainer = styled.div`
   display: none;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: block;
     width: 100%;
-    min-width: 120rem;
+    min-width: 102.4rem;
     height: 46rem;
     background-color: #ffea85;
   }
@@ -50,9 +50,11 @@ const BannerWrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
-  width: 120rem;
+  width: 100%;
+  max-width: 120rem;
   height: 100%;
   margin: 0 auto;
+  padding: 0 2rem;
 `;
 
 const SearchArea = styled.div`
@@ -75,14 +77,14 @@ const SearchTextWrapper = styled.div`
 const ImageArea = styled.div`
   display: flex;
   align-items: center;
-  padding: 2rem;
+  padding: 6rem 2rem;
   wdith: 50%;
 `;
 
 const ImageWrapper = styled.div`
   display: flex;
+  obejct-fit: contain;
   position: relative;
-  width: 59rem;
-  height: 36rem;
+  width: 100%;
   right: 0;
 `;

@@ -11,15 +11,17 @@ import UserModal from "./UserModal";
 
 import { User } from "@/app/types";
 
-const UserMenu = ({ currentUser }: { currentUser: User | undefined }) => {
-  const [isUserModal, setIsUserModal] = useState<boolean>(false);
-  const isLoggedIn = useRecoilValue<boolean>(loginState);
+type UserMenuProps = {
+  currentUser?: User | null;
+};
 
+const UserMenu = ({ currentUser }: { currentUser: User | null }) => {
+  const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const router = useRouter();
 
   return (
     <UserMenuDiv>
-      {isLoggedIn ? (
+      {currentUser ? (
         <>
           <WriteButton
             onClick={() => {
@@ -97,8 +99,11 @@ const ProfileButton = styled.div`
 
   &:hover {
     img {
-      box-shadow: 0px 0px 1px 4px #fbd26a;
+      box-shadow: 0px 0px 1px 4px rgb(230, 230, 230);
     }
+    transform: scale(1.1);
+
+    transition: all 0.3s;
   }
 `;
 
@@ -117,6 +122,8 @@ const LogoutButton = styled.button`
   &:hover {
     background-color: #f8b551;
   }
+
+  transition: background-color 0.3s;
 `;
 
 const WriteButton = styled(LoginButton)`
@@ -124,6 +131,12 @@ const WriteButton = styled(LoginButton)`
   display: flex;
   align-items: center;
   gap: 0.8rem;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  transition: transform 0.3s;
 `;
 
 export default UserMenu;
