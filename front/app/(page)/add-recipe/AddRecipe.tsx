@@ -10,7 +10,7 @@ import CookingStepsSection from "../../components/add-recipe/CookingStepsSection
 import Button from "../../components/UI/Button";
 import { axiosBase } from "../../api/axios";
 
-interface RecipeFormState {
+type RecipeFormState = {
   selectedCategory: string;
   selectedPeople: string;
   selectedTime: string;
@@ -23,18 +23,26 @@ interface RecipeFormState {
   stepImages: string[];
   cookingTips: string;
   videoLink: string;
-}
+};
 
-const categories = ["한식", "중식", "일식", "양식", "비건", "기타"];
+const categories = [
+  { label: "한식", value: "korean" },
+  { label: "중식", value: "chinese" },
+  { label: "일식", value: "japanese" },
+  { label: "양식", value: "western" },
+  { label: "비건", value: "vegetarian" },
+  { label: "기타", value: "other" },
+];
 const peopleCount = [1, 2, 3, 4, 5];
 const times = [
-  "10분 이내",
-  "20분 이내",
-  "30분 이내",
-  "1시간 이내",
-  "1시간 이상",
+  { label: "10분 이내", value: 10 },
+  { label: "20분 이내", value: 20 },
+  { label: "30분 이내", value: 30 },
+  { label: "1시간 이내", value: 60 },
+  { label: "1시간 이상", value: 61 },
 ];
-const difficulties = ["상", "중", "하"];
+
+const difficulties = ["쉬움", "중간", "어려움"];
 
 const RecipeForm = () => {
   const [state, setState] = useState<RecipeFormState>({
@@ -186,35 +194,38 @@ const RecipeForm = () => {
 
   // 저장 핸들러
   const handleSave = async () => {
-    try {
-      const response = await axiosBase.post("/recipes/", {
-        recipe_title: state.recipeTitle,
-        recipe_thumbnail: state.selectedImage,
-        recipe_video: state.videoLink,
-        recipe_description: state.cookingIntro,
-        recipe_category: state.selectedCategory,
-        recipe_info: {
-          serving: parseInt(state.selectedPeople, 10),
-          time: parseInt(state.selectedTime, 10),
-          level: difficulties.indexOf(state.selectedDifficulty),
-        },
-        recipe_ingredients: state.ingredients.map(
-          ({ ingredient, quantity }) => ({
-            name: ingredient,
-            amount: quantity,
-          })
-        ),
-        recipe_sequence: state.steps.map(
-          ({ stepDetail, stepImage }, index) => ({
-            step: index + 1,
-            picture: "url",
-            description: stepDetail,
-          })
-        ),
-        recipe_tip: state.cookingTips,
-        user_id: "admin",
-      });
+    const recipeData = {
+      recipe_title: state.recipeTitle,
+      // recipe_thumbnail: state.selectedImage,
+      recipe_thumbnail:
+        "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
+      recipe_video: state.videoLink,
+      recipe_description: state.cookingIntro,
+      recipe_category: state.selectedCategory,
+      recipe_info: {
+        serving: parseInt(state.selectedPeople, 10),
+        time: parseInt(state.selectedTime, 10),
+        level: difficulties.indexOf(state.selectedDifficulty),
+      },
+      recipe_ingredients: state.ingredients.map(({ ingredient, quantity }) => ({
+        name: ingredient,
+        amount: quantity,
+      })),
+      recipe_sequence: state.steps.map(({ stepDetail, stepImage }, index) => ({
+        step: index + 1,
+        // picture: state.stepImages[index],
+        picture:
+          "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
+        description: stepDetail,
+      })),
+      recipe_tip: state.cookingTips,
+      user_id: "admin",
+    };
 
+    // console.log(recipeData);
+
+    try {
+      const response = await axiosBase.post("recipes/", recipeData);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -300,7 +311,7 @@ const RecipeForm = () => {
       </CookingTips>
       <ButtonContainer>
         <SaveButton>
-          <Button onClick={handleSave} type="submit" isBgColor fullWidth>
+          <Button onClick={handleSave} type="button" isBgColor fullWidth>
             저장
           </Button>
         </SaveButton>
@@ -343,8 +354,9 @@ const Input = styled.input`
   font-size: 16px;
   line-height: 1.9rem;
   &:focus {
-    border: 0.2rem solid #fbd26a;
+    border: 0.1rem solid #d9d9d9;
     outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 `;
 
@@ -366,8 +378,9 @@ const TextArea = styled.textarea`
     color: #a9a9a9;
   }
   &:focus {
-    border: 0.2rem solid #fbd26a;
+    border: 0.1rem solid #d9d9d9;
     outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 `;
 

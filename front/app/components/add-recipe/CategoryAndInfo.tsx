@@ -11,9 +11,9 @@ type Props = {
   handleTimeChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   selectedDifficulty: string;
   handleDifficultyChange: (e: ChangeEvent<HTMLSelectElement>) => void;
-  categories: string[];
+  categories: { label: string; value: string }[];
   peopleCount: number[];
-  times: string[];
+  times: { label: string; value: number }[];
   difficulties: string[];
 };
 
@@ -42,8 +42,8 @@ const CategoryAndInfo = ({
                 종류
               </option>
               {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.value} value={category.value}>
+                  {category.label}
                 </option>
               ))}
             </Select>
@@ -69,8 +69,8 @@ const CategoryAndInfo = ({
                 시간
               </option>
               {times.map((time) => (
-                <option key={time} value={time}>
-                  {time}
+                <option key={time.value} value={time.value}>
+                  {time.label}
                 </option>
               ))}
             </Select>
@@ -128,8 +128,9 @@ const Select = styled.select`
   -webkit-appearance: none; /* for chrome /
   -moz-appearance:none; /for firefox*/
   &:focus {
-    border: 0.2rem solid #fbd26a;
+    border: 0.1rem solid #d9d9d9;
     outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 `;
 
