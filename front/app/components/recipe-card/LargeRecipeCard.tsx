@@ -4,7 +4,6 @@ import Image from "next/image";
 import styled from "styled-components";
 
 const LargeRecipeCard = ({ recipe }: any) => {
-  console.log(recipe);
   return (
     <CardContainer>
       <ImageWrapper>

@@ -11,8 +11,9 @@ import {
   StyledTitle,
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
+import { RecipeData } from "@/app/types";
 
-const DUMMY_DATA: Recipe[] = [
+const DUMMY_DATA: RecipeData[] = [
   {
     image: "/images/sushi1.png",
     title: "기가 막히는 초밥 만들기",
@@ -47,7 +48,7 @@ const DUMMY_DATA: Recipe[] = [
     timestamp: 3,
     servings: 3,
     duration: 30,
-    difficulty: 3,
+    difficulty: 2,
   },
   {
     image: "/images/sushi4.png",
@@ -107,7 +108,7 @@ const DUMMY_DATA: Recipe[] = [
     timestamp: 11,
     servings: 2,
     duration: 10,
-    difficulty: 3,
+    difficulty: 2,
   },
   {
     image: "/images/sushi1.png",
@@ -155,7 +156,7 @@ const DUMMY_DATA: Recipe[] = [
     timestamp: 12,
     servings: 5,
     duration: 60,
-    difficulty: 3,
+    difficulty: 2,
   },
   {
     image: "/images/sushi1.png",
@@ -191,7 +192,7 @@ const DUMMY_DATA: Recipe[] = [
     timestamp: 15,
     servings: 2,
     duration: 20,
-    difficulty: 3,
+    difficulty: 2,
   },
   {
     image: "/images/sushi4.png",
