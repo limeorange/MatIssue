@@ -2,6 +2,8 @@ import ToasterContext from "./context/ToasterContext";
 import StyledComponentsRegistry from "./libs/registry";
 
 import "./globals.css";
+import Recoil from "./context/RecoilContext";
+import ReactQuery from "./context/ReactQueryContext";
 
 export const metadata = {
   title: "맛이슈",
@@ -18,7 +20,9 @@ export default async function RootLayout({
       <StyledComponentsRegistry>
         <body>
           <ToasterContext />
-          {children}
+          <Recoil>
+            <ReactQuery>{children}</ReactQuery>
+          </Recoil>
         </body>
       </StyledComponentsRegistry>
     </html>
