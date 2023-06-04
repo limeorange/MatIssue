@@ -25,7 +25,14 @@ type RecipeFormState = {
   videoLink: string;
 };
 
-const categories = ["한식", "중식", "일식", "양식", "비건", "기타"];
+const categories = [
+  { label: "한식", value: "korean" },
+  { label: "중식", value: "chinese" },
+  { label: "일식", value: "japanese" },
+  { label: "양식", value: "western" },
+  { label: "비건", value: "vegetarian" },
+  { label: "기타", value: "other" },
+];
 const peopleCount = [1, 2, 3, 4, 5];
 const times = [
   { label: "10분 이내", value: 10 },
@@ -56,7 +63,6 @@ const RecipeForm = () => {
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setState({ ...state, selectedCategory: e.target.value });
-    console.log(state, state.selectedCategory);
   };
 
   // 몇인분인지
@@ -190,7 +196,9 @@ const RecipeForm = () => {
   const handleSave = async () => {
     const recipeData = {
       recipe_title: state.recipeTitle,
-      recipe_thumbnail: state.selectedImage,
+      // recipe_thumbnail: state.selectedImage,
+      recipe_thumbnail:
+        "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
       recipe_video: state.videoLink,
       recipe_description: state.cookingIntro,
       recipe_category: state.selectedCategory,
@@ -205,12 +213,16 @@ const RecipeForm = () => {
       })),
       recipe_sequence: state.steps.map(({ stepDetail, stepImage }, index) => ({
         step: index + 1,
-        picture: state.stepImages[index] || "url",
+        // picture: state.stepImages[index],
+        picture:
+          "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
         description: stepDetail,
       })),
       recipe_tip: state.cookingTips,
       user_id: "admin",
     };
+
+    // console.log(recipeData);
 
     try {
       const response = await axiosBase.post("recipes/", recipeData);
@@ -299,7 +311,7 @@ const RecipeForm = () => {
       </CookingTips>
       <ButtonContainer>
         <SaveButton>
-          <Button onClick={handleSave} type="submit" isBgColor fullWidth>
+          <Button onClick={handleSave} type="button" isBgColor fullWidth>
             저장
           </Button>
         </SaveButton>

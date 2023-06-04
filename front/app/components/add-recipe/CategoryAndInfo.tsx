@@ -11,7 +11,7 @@ type Props = {
   handleTimeChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   selectedDifficulty: string;
   handleDifficultyChange: (e: ChangeEvent<HTMLSelectElement>) => void;
-  categories: string[];
+  categories: { label: string; value: string }[];
   peopleCount: number[];
   times: { label: string; value: number }[];
   difficulties: string[];
@@ -42,8 +42,8 @@ const CategoryAndInfo = ({
                 종류
               </option>
               {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+                <option key={category.value} value={category.value}>
+                  {category.label}
                 </option>
               ))}
             </Select>
