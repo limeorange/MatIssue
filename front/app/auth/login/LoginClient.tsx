@@ -4,9 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { axiosBase } from "@/app/api/axios";
-import { useSetRecoilState } from "recoil";
 import toast from "react-hot-toast";
-import { loginState } from "@/app/store/authAtom";
 
 import Logo from "@/app/components/header/Logo";
 import Button from "@/app/components/UI/Button";
