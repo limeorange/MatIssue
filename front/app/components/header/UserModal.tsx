@@ -2,7 +2,6 @@ import { useRouter } from "next/navigation";
 import { axiosBase } from "@/app/api/axios";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { loginState } from "@/app/store/authAtom";
 import { useState } from "react";
@@ -10,7 +9,6 @@ import LoadingModal from "../UI/LoadingModal";
 import { useQueryClient } from "@tanstack/react-query";
 
 const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
-  const setLoggedIn = useSetRecoilState<boolean>(loginState);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
@@ -22,8 +20,7 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
     axiosBase
       .post(`users/logout`)
       .then((res) => {
-        setLoggedIn(false);
-        queryClient.removeQueries(["currentUser"]);
+        queryClient.invalidateQueries(["currentUser"]);
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
@@ -78,7 +75,7 @@ const UserModalContainer = styled.div<{ visible: boolean }>`
   background-color: white;
   box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
   border-radius: 0.5rem;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
   color: #4f3d21;
 

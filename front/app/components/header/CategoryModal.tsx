@@ -32,7 +32,7 @@ const CategoryModalContainer = styled.div<{ visible: boolean }>`
   top: 4rem;
   left: 0;
   width: 13.4rem;
-  padding: 0.6rem 0;
+  padding: 0.3rem 0;
   background-color: white;
   box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
   border-bottom-left-radius: 0.5rem;
@@ -66,4 +66,6 @@ const CategoryModalLi = styled.li`
     cursor: pointer;
     background-color: #fbe2a1;
   }
+
+  transition: background-color 0.2s;
 `;
