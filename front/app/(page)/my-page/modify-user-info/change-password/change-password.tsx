@@ -2,8 +2,26 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Button from "../../../../components/UI/Button";
+import ConfirmModal from "../../../../components/my-page/ConfirmModal";
+import React, { useState } from "react";
 
 const ChangePassword = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleChangePassword = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    setIsModalOpen(false);
+    // 비밀번호 변경 로직 처리
+    console.log("비밀번호가 성공적으로 변경되었습니다.");
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <Container>
@@ -23,12 +41,22 @@ const ChangePassword = () => {
               fullWidth={true}
               isBorderColor={false}
               isHoverColor={false}
+              onClick={handleChangePassword}
             >
               비밀번호 변경
             </Button>
           </ChangePasswordButton>
         </Wrapper>
       </Container>
+      {isModalOpen && (
+        <ConfirmModal
+          icon={null}
+          message="비밀번호가 성공적으로 변경되었습니다."
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+          showCancelButton={false}
+        />
+      )}
     </>
   );
 };

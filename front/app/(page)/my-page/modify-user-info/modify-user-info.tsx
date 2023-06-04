@@ -3,15 +3,36 @@ import Link from "next/link";
 import styled from "styled-components";
 import Button from "../../../components/UI/Button";
 import React, { useState } from "react";
+import ConfirmModal from "../../../components/my-page/ConfirmModal";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
-const ModifyUserInfo = () => {
+const ModifyUserInfo: React.FC = () => {
+  const pathname = usePathname();
+  const router = useRouter();
   const [date, setDate] = useState("");
   const [selectedImage, setSelectedImage] = useState("/images/dongs-logo.png");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setSelectedImage(URL.createObjectURL(event.target.files[0]));
     }
+  };
+
+  const handleDeleteAccount = () => {
+    router.push("/");
+    // 회원 탈퇴 로직을 처리하는 함수
+    console.log("계정이 삭제되었습니다.");
+    closeModal();
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -25,9 +46,15 @@ const ModifyUserInfo = () => {
         </Link>
 
         <Wrapper>
-          {/* <Link href="/my-page/modify-user-info/account-deletion"> */}
-          <AccountDeletion>회원 탈퇴</AccountDeletion>
-          {/* </Link> */}
+          <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
+          {isModalOpen && (
+            <ConfirmModal
+              icon={<AlertImage src="/images/alert.png" alt="alert" />}
+              message="정말 탈퇴 하시겠습니까?"
+              onCancel={closeModal}
+              onConfirm={handleDeleteAccount}
+            />
+          )}
           <Title>이메일 *</Title>
           <InputBox type="email" name="email" required />
         </Wrapper>
@@ -121,6 +148,12 @@ const AccountDeletion = styled.div`
   font-size: 13px;
   text-decoration: underline;
   color: #e11717;
+  cursor: pointer;
+`;
+
+const AlertImage = styled.img`
+  width: 3rem;
+  height: 3rem;
 `;
 
 const Wrapper = styled.div`
@@ -197,7 +230,6 @@ const InputDateBox = styled.input`
     width: 100%;
     height: 100%;
     background: transparent;
-    color: transparent;
     cursor: pointer;
   }
 `;
