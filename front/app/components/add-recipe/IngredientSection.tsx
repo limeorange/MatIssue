@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 
-interface IngredientSectionProps {
+type IngredientSectionProps = {
   ingredients: { ingredient: string; quantity: string }[];
   handleIngredientChange: (
     e: ChangeEvent<HTMLInputElement>,
@@ -13,7 +13,7 @@ interface IngredientSectionProps {
   ) => void;
   handleAddIngredient: () => void;
   handleRemoveIngredient: (index: number) => void;
-}
+};
 
 const IngredientSection = ({
   ingredients,
