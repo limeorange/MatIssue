@@ -7,17 +7,16 @@ import styled from "styled-components";
 type FilterTagProps = {
   search: string | null;
   filter: Filter;
+  onRemove: (tagType: string) => void;
 };
 
-const FilterTag = (
-  props: FilterTagProps & { onRemove: (tagType: string) => void }
-) => {
+const FilterTag = (props: FilterTagProps) => {
   const [tagList, setTagList] = useState<{ tag: string; type: string }[]>([]);
   const { search, filter, onRemove } = props;
 
   // 검색바 입력값 및 필터바 필터 값에 따른 태그 추가
   useEffect(() => {
-    let newTagList: { tag: string; type: string }[] = [];
+    const newTagList: { tag: string; type: string }[] = [];
 
     if (search) {
       newTagList.push({ tag: `#${search}`, type: "search" });
