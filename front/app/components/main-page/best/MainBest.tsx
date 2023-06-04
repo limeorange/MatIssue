@@ -4,6 +4,13 @@ import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
 import RecipeCard from "../../recipe-card/RecipeCard";
+import {
+  ListingRecipeContainer,
+  MainContainer,
+  StyledList,
+  StyledTitle,
+  StyledTitleBox,
+} from "@/app/styles/main/main.style";
 
 const DUMMY_DATA: Recipe[] = [
   {
@@ -223,7 +230,7 @@ const MainBest = () => {
   };
 
   return (
-    <MainWrapper>
+    <MainBestContainer>
       <LeftSlideBtn onClick={leftBtnHandler}>
         <Image
           src="/images/main/leftSlideBtn.png"
@@ -233,16 +240,16 @@ const MainBest = () => {
         />
       </LeftSlideBtn>
       <MainContainer>
-        <BestTitleBox>
-          <BestTitle>베스트 레시피</BestTitle>
-          <PeriodList>
-            <li>일간</li>
+        <StyledTitleBox>
+          <StyledTitle>베스트 레시피</StyledTitle>
+          <StyledList>
+            <li onClick={() => {}}>일간</li>
             <li>|</li>
-            <li>월간</li>
+            <li onClick={() => {}}>월간</li>
             <li>|</li>
-            <li>주간</li>
-          </PeriodList>
-        </BestTitleBox>
+            <li onClick={() => {}}>주간</li>
+          </StyledList>
+        </StyledTitleBox>
         <ListingRecipeContainer contentsPerPage={contentsPerPage}>
           {bestRecipes
             .slice(
@@ -262,24 +269,19 @@ const MainBest = () => {
           height={122}
         />
       </RightSlideBtn>
-    </MainWrapper>
+    </MainBestContainer>
   );
 };
 
 export default MainBest;
 
-const MainWrapper = styled.div`
+const MainBestContainer = styled.div`
   display: flex;
-  position: relative;
   align-items: center;
+  position: relative;
   width: 100%;
   max-width: 120rem;
-  padding: 1rem 2rem;
-
-  @media (min-width: 768px) {
-    margin: 0 auto;
-    padding: 2rem;
-  }
+  padding: 2rem 2rem 2rem 4rem;
 `;
 
 const LeftSlideBtn = styled.button`
@@ -289,8 +291,8 @@ const LeftSlideBtn = styled.button`
     display: block;
     position: absolute;
     width: 3rem;
-    heght: 9rem;
-    left: -4rem;
+    height: 9rem;
+    left: -5rem;
     transition: transform 0.3s;
     &:hover {
       transform: scale(130%, 130%);
@@ -305,52 +307,11 @@ const RightSlideBtn = styled.button`
     display: block;
     position: absolute;
     width: 3rem;
-    heght: 9rem;
-    right: -4rem;
+    height: 9rem;
+    right: -5rem;
     transition: transform 0.3s;
     &:hover {
       transform: scale(130%, 130%);
     }
-  }
-`;
-
-const MainContainer = styled.div`
-  width: 100%;
-  margin: 0 auto;
-`;
-
-const BestTitleBox = styled.div`
-  display: flex;
-  gap: 1rem;
-  padding: 1.6rem 0;
-  align-items: end;
-`;
-
-const BestTitle = styled.div`
-  font-size: 22px;
-  font-weight: 500;
-`;
-
-const PeriodList = styled.ul`
-  display: flex;
-  gap: 0.5rem;
-  font-size: 16px;
-`;
-
-const ListingRecipeContainer = styled.div<{ contentsPerPage: number }>`
-  display: flex;
-  overflow-x: auto;
-  gap: 2rem;
-  white-space: nowrap;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  @media (min-width: 768px) {
-    display: grid;
-    grid-template-columns: ${(props) =>
-      `repeat(${props.contentsPerPage / 2}, auto)`};
-    row-gap: 3rem;
-    column-gap: 2rem;
   }
 `;

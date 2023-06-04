@@ -24,7 +24,7 @@ import {
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const setLoggedIn = useSetRecoilState(loginState);
+  const setIsLoggedIn = useSetRecoilState(loginState);
 
   const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
@@ -41,11 +41,11 @@ const LoginClient = () => {
     axiosBase
       .post("users/login", data)
       .then((res) => {
-        setLoggedIn(true);
+        setIsLoggedIn(true);
         toast.success("로그인 되었습니다.");
         router.back();
       })
-      .catch((err) => toast.error("잘못된 요청입니다."))
+      .catch((err) => toast.error(err.message))
       .finally(() => {
         setIsLoading(false);
       });
