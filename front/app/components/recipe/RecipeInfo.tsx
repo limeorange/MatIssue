@@ -1,33 +1,80 @@
 import styled from "styled-components";
 
-// 인원, 시간, 난이도, 종류
-const peopleCount = 2;
-const cookingTime = 30;
-const cookingLevel = "초급";
-const category = "한식";
+/** 요리 정보 Props */
+type RecipeInfoProps = {
+  recipe_info: {
+    serving: number;
+    time: number;
+    level: number;
+  };
+  category: string;
+};
 
 /** 요리 정보 (인원, 시간, 난이도, 종류) 컴포넌트 */
-const RecipeInfo = () => {
+const RecipeInfo: React.FC<RecipeInfoProps> = ({ recipe_info, category }) => {
+  const { serving, time, level } = recipe_info;
+
+  // level에 따른 라벨링 작업
+  let levelText = "";
+  switch (level) {
+    case 0:
+      levelText = "쉬움";
+      break;
+    case 1:
+      levelText = "중간";
+      break;
+    case 2:
+      levelText = "어려움";
+      break;
+    default:
+      break;
+  }
+
+  // category에 따른 라벨링 작업
+  let categoryText = "";
+  switch (category) {
+    case "korean":
+      categoryText = "한식";
+      break;
+    case "chinese":
+      categoryText = "중식";
+      break;
+    case "japanese":
+      categoryText = "일식";
+      break;
+    case "western":
+      categoryText = "양식";
+      break;
+    case "vegetarian":
+      categoryText = "채식";
+      break;
+    case "other":
+      categoryText = "기타";
+      break;
+    default:
+      break;
+  }
+
   return (
     <>
       <ContainerDiv>
         <RecipeInfoElementDiv>
-          <h2>{peopleCount}</h2>
+          <h2>{serving}</h2>
           <span>인분</span>
         </RecipeInfoElementDiv>
         <Divider />
         <RecipeInfoElementDiv>
-          <h2>{cookingTime}</h2>
+          <h2>{time}</h2>
           <span>분</span>
         </RecipeInfoElementDiv>
         <Divider />
         <RecipeInfoElementDiv>
-          <h2>{cookingLevel}</h2>
+          <h2>{levelText}</h2>
           <span>난이도</span>
         </RecipeInfoElementDiv>
         <Divider />
         <RecipeInfoElementDiv>
-          <h2>{category}</h2>
+          <h2>{categoryText}</h2>
           <span>종류</span>
         </RecipeInfoElementDiv>
       </ContainerDiv>

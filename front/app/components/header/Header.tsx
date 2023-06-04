@@ -1,28 +1,33 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import { User } from "@/app/types";
+import { loginState } from "@/app/store/authAtom";
 
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import UserMenu from "./UserMenu";
 import CategoryBar from "./CategoryBar";
-import { useEffect, useState } from "react";
+
+import { User } from "@/app/types";
 import getCurrentUser from "@/app/api/user";
 
 const Header = () => {
-  const [currentUser, setCurrentUser] = useState<User>();
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: currentUser, isLoading } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
+
+  const setIsLoggedIn = useSetRecoilState<boolean>(loginState);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await getCurrentUser();
-      setCurrentUser(currentUser);
-    };
-    fetchUser().then(() => {
-      setIsLoading(false);
-    });
-  }, [currentUser]);
+    if (currentUser) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [currentUser, setIsLoggedIn]);
 
   return (
     <HeaderDiv>
@@ -48,12 +53,13 @@ const HeaderDiv = styled.div`
 `;
 
 const NavArea = styled.div`
+  padding: 0 2rem;
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
 
-  @media (min-width: 76.8rem) and (max-width: 102.4rem) {
-    padding: 0 2rem;
+  @media (min-width: 1220px) {
+    padding: 0;
   }
 `;
 
@@ -65,6 +71,10 @@ const TopNav = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 1.2rem;
+
+  @media (max-width: 768px) {
+    height: 7rem;
+  }
 `;
 
 const UnderLine = styled.div`
