@@ -16,20 +16,10 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
 
   const logoutHandler = async () => {
     setIsLoading(true);
-    const id = Cookies.get("auth");
 
     axiosBase
-      .post(
-        `users/logout`,
-        { session_id: id },
-        {
-          params: {
-            id,
-          },
-        }
-      )
+      .post(`users/logout`)
       .then((res) => {
-        Cookies.remove("auth");
         setLoggedIn(false);
         toast.success("로그아웃 되었습니다.");
       })
