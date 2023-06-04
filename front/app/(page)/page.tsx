@@ -1,15 +1,9 @@
 "use client";
 
-import Banner from "../components/main-page/Banner/Banner";
-import MainBest from "../components/main-page/best/MainBest";
+import MainPageClient from "./MainClient";
 
-const Home = () => {
-  return (
-    <div>
-      <Banner />
-      <MainBest />
-    </div>
-  );
+const Home = async () => {
+  return <MainPageClient />;
 };
 
 export default Home;

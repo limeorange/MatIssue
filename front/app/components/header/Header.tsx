@@ -57,10 +57,6 @@ const NavArea = styled.div`
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
-
-  @media (min-width: 1220px) {
-    padding: 0;
-  }
 `;
 
 const TopNav = styled.div`
