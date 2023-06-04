@@ -96,6 +96,10 @@ const IngredientInput = styled.input`
   border-radius: 1.5rem;
   padding: 1rem;
   font-size: 16px;
+  &:focus {
+    border: 0.2rem solid #fbd26a;
+    outline: none;
+  }
 `;
 
 const QuantityInput = styled.input`
@@ -106,6 +110,10 @@ const QuantityInput = styled.input`
   border-radius: 1.5rem;
   padding: 1rem;
   font-size: 16px;
+  &:focus {
+    border: 0.2rem solid #fbd26a;
+    outline: none;
+  }
 `;
 
 const IngredientRow = styled.div`
