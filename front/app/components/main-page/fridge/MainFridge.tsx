@@ -5,8 +5,9 @@ import {
 } from "@/app/styles/main/main.style";
 import styled from "styled-components";
 import LargeRecipeCard from "../../recipe-card/LargeRecipeCard";
+import { RecipeData } from "@/app/types";
 
-const DUMMY_DATA: Recipe[] = [
+const DUMMY_DATA: RecipeData[] = [
   {
     image: "/images/sushi1.png",
     title: "기가 막히는 초밥 만들기",
@@ -14,7 +15,7 @@ const DUMMY_DATA: Recipe[] = [
     likes: 1234,
     view: "15,324",
 
-    id: 1,
+    id: "1",
   },
   {
     image: "/images/sushi1.png",
@@ -22,7 +23,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1234,
     view: "15,324",
-    id: 2,
+    id: "2",
   },
   {
     image: "/images/sushi1.png",
@@ -30,7 +31,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1234,
     view: "15,324",
-    id: 3,
+    id: "3",
   },
 ];
 
