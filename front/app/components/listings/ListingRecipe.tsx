@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import RecipeCard from "@/app/components/recipe-card/RecipeCard";
 import FilterBar from "../filter/FilterBar";
 import FilterTag from "../filter/FilterTag";
@@ -24,6 +25,7 @@ type Recipe = {
 
 // 필터링 요소 타입
 export type Filter = {
+  search: string;
   servings: number;
   duration: number;
   difficulty: number;
@@ -638,6 +640,7 @@ const ListingRecipe = () => {
   const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(null); // 정렬 버튼에 따른 정렬 상태
   const [filter, setFilter] = useState<Filter>({
     // 필터바의 필터 값에 따른 필터링 상태
+    search: "",
     servings: -1,
     duration: -1,
     difficulty: -1,
@@ -652,6 +655,7 @@ const ListingRecipe = () => {
   const recipesPerPage = 16;
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("query"); // url의 query값 추출
+  const router = useRouter();
 
   useEffect(() => {
     let result = [...DUMMY_DATA];
@@ -693,6 +697,9 @@ const ListingRecipe = () => {
   const removeTag = (tagType: string) => {
     {
       const resetValue = -1;
+      if (tagType === "search") {
+        router.push("/search");
+      }
       if (tagType === "difficulty") {
         setNewDifficulty(difficulty[0]);
       }
