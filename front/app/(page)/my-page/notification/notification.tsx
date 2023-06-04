@@ -29,6 +29,6 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   padding-top: 5rem;
 `;

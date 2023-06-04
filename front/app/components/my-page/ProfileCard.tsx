@@ -1,11 +1,24 @@
 "use client";
-
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Button from "../../components/UI/Button";
+import { useQuery } from "@tanstack/react-query";
+import { type } from "os";
+
+type User = {
+  user_id: string;
+  email: string;
+  username: string;
+  img: string;
+  birth_date: string;
+  created_at: string;
+};
 
 const ProfileCard = () => {
+  const { data: currentUser } = useQuery<User>(["currentUser"]);
+
+  // console.log("currentUser : ", currentUser.);
   return (
     <ProfileContainer>
       <ProfileWrapper>
@@ -15,9 +28,12 @@ const ProfileCard = () => {
         </Link>
 
         <RoundImage>
-          <ProfileImage src="/images/dongs-logo.png" alt="profile" />
+          <ProfileImage
+            src={currentUser?.img || "images/dongs-logo.png"}
+            alt="profile-image"
+          />
         </RoundImage>
-        <NickName>닉네임</NickName>
+        <NickName>{currentUser?.username}</NickName>
         <Link href="/my-page/modify-user-info">
           <ModifyUserButton>
             <Button

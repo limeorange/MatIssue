@@ -6,17 +6,83 @@ import React, { useState } from "react";
 import ConfirmModal from "../../../components/my-page/ConfirmModal";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import uploadImage from "@/app/api/aws";
+import { axiosBase } from "@/app/api/axios";
+
+type User = {
+  user_id: string;
+  email: string;
+  username: string;
+  img: string;
+  birth_date: string;
+  created_at: string;
+};
+
+type LabelForFileProps = {
+  backgroundImageUrl?: string;
+};
 
 const ModifyUserInfo: React.FC = () => {
+  const { data: currentUser } = useQuery<User>(["currentUser"]);
   const pathname = usePathname();
   const router = useRouter();
   const [date, setDate] = useState("");
-  const [selectedImage, setSelectedImage] = useState("/images/dongs-logo.png");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setSelectedImage(URL.createObjectURL(event.target.files[0]));
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      const reader = new FileReader(); // 파일을 읽어서 base64 형식의 data url을 만든다.
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setPreviewImage(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // 변경한 데이터를 객체에다 담아서 서버에 전송
+    // 객체를 만들고 그 안에 key와 value를 넣어줘야 한다.
+    // value는  e.currentTarget.name명.value로 접근 가능
+    const modifyUserInfo = {
+      user_id: currentUser?.user_id,
+      email: e.currentTarget.user_email.value,
+      username: e.currentTarget.nickname.value,
+      birth_date: e.currentTarget.birth.value,
+      img: "", // aws에 업로드한 이미지 url을 넣기 때문에 공백으로 처리
+    };
+
+    // aws 이미지 업로드 로직
+    if (selectedFile) {
+      try {
+        const response = await uploadImage(selectedFile); // aws에 이미지 업로드하기 위한 코드
+        const imgUrl = response.imageUrl; // aws 업로드 후 반환된 이미지 aws url
+        modifyUserInfo.img = imgUrl; // 객체에 이미지 aws url 추가
+      } catch (error) {
+        console.error("Image upload failed:", error);
+      }
+    }
+    console.log(modifyUserInfo);
+
+    // PUT /api/users/
+    // TODO: modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
+    // 변경에 성공하면 alert창 띄우고 my-page로 이동
+
+    try {
+      const response = await axiosBase.put("users", modifyUserInfo);
+      console.log(response);
+      alert("회원정보가 수정되었습니다.");
+      router.push("/my-page");
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -55,53 +121,75 @@ const ModifyUserInfo: React.FC = () => {
               onConfirm={handleDeleteAccount}
             />
           )}
-          <Title>이메일 *</Title>
-          <InputBox type="email" name="email" required />
         </Wrapper>
-        <Wrapper>
-          <Title>이름 *</Title>
-          <InputBox type="text" name="name" required />
-        </Wrapper>
-        <Wrapper>
-          <Title>별명 *</Title>
-          <InputBox type="text" name="nickname" required />
-        </Wrapper>
-        <Wrapper>
-          <Title>생년월일</Title>
-
-          <InputDateBox
-            type="date"
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
-            required
-          />
-        </Wrapper>
-        <ProfileImageWrapper>
-          <Title>프로필 이미지</Title>
+        {/* 어떤 양식을 서버로 전송하기 위해서는 폼 태그를 많이 사용, form 태그은 submit 버튼을 이용해서 서버로 데이터를 전송 */}
+        {/* 그래서 submit button까지 form 태그로 감싸줘야 한다. */}
+        {/* submit 버튼을 클릭하면 handleFormSubmit 해당 함수가 실행  */}
+        {/* form 태그에서 압력값에 접근하기 위해서는 name을 사용! */}
+        <form onSubmit={handleFormSubmit}>
+          <WrapperInfo>
+            <Wrapper>
+              <Title>이메일 *</Title>
+              <InputBox
+                type="email"
+                name="user_email"
+                value={currentUser?.email}
+                required
+                readOnly
+              />
+            </Wrapper>
+            <Wrapper>
+              <Title>별명 *</Title>
+              <InputBox
+                type="text"
+                name="nickname"
+                value={currentUser?.username}
+                required
+              />
+            </Wrapper>
+          </WrapperInfo>
           <Wrapper>
-            <LabelForFile
-              backgroundImageUrl={selectedImage}
-              htmlFor="upload-button"
-            />
-            <InputFile
-              type="file"
-              onChange={handleFileChange}
-              accept="image/*"
-              id="upload-button"
+            <Title>생년월일</Title>
+
+            <InputDateBox
+              type="date"
+              name="birth"
+              value={currentUser?.birth_date}
+              onChange={(event) => setDate(event.target.value)}
+              required
             />
           </Wrapper>
-        </ProfileImageWrapper>
-        <UserModifyButton>
-          <Button
-            type="button"
-            isBgColor={true}
-            fullWidth={true}
-            isBorderColor={false}
-            isHoverColor={false}
-          >
-            회원 정보 수정
-          </Button>
-        </UserModifyButton>
+          <ProfileImageWrapper>
+            <Title>프로필 이미지</Title>
+            <LabelForFile
+              htmlFor="upload-button"
+              // backgroundImageUrl="recipe-icon.png"
+            >
+              {previewImage ? (
+                <StyledImage src={previewImage} alt="Preview" />
+              ) : (
+                "클릭하여 사진을 선택해주세요."
+              )}
+            </LabelForFile>
+            <InputFile
+              type="file"
+              accept="image/*"
+              id="upload-button"
+              onChange={handleFileChange}
+            />
+          </ProfileImageWrapper>
+          <UserModifyButton>
+            <Button
+              type="submit"
+              isBgColor={true}
+              fullWidth={true}
+              isBorderColor={false}
+              isHoverColor={false}
+            >
+              회원 정보 수정
+            </Button>
+          </UserModifyButton>
+        </form>
       </Container>
     </>
   );
@@ -160,7 +248,15 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 55rem;
-  margin-top: 5.9rem;
+  margin-top: 7rem;
+`;
+
+const WrapperInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 55rem;
+  margin-top: 7rem;
 `;
 
 const Title = styled.h4`
@@ -192,14 +288,27 @@ const InputFile = styled.input`
   display: none;
 `;
 
-const LabelForFile = styled.label<{ backgroundImageUrl: string }>`
+const LabelForFile = styled.label<LabelForFileProps>`
   width: 19.8rem;
   height: 19.8rem;
-  background: ${(props) => `#fff9ea url(${props.backgroundImageUrl})`};
+  border-radius: 0.8rem;
+  background-color: #f7f7f7; /* Set desired background color */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-image: ${(props) =>
+    props.backgroundImageUrl
+      ? `url("/images/${props.backgroundImageUrl}")`
+      : "none"};
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  cursor: pointer;
+`;
+
+const StyledImage = styled.img`
+  width: 19.8rem;
+  height: 19.8rem;
 `;
 
 const UserModifyButton = styled.div`
