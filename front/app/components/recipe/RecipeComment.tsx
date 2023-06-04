@@ -5,14 +5,18 @@ import { useState } from "react";
 import styled from "styled-components";
 import CommentModal from "./CommentModal";
 
-const RecipeComment = () => {
-  const recipe_nickname = "허니자몽";
-  const comment = `볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!
-     볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!
-     볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!
-     볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!`;
-  // const [isEditing, setIsEditing] = useState(false);
+/** 요리 댓글 단일 Props */
+type RecipeCommentProps = {
+  comment_author: string;
+  comment_text: string;
+};
 
+/** 요리 댓글 단일 컴포넌트 */
+const RecipeComment: React.FC<RecipeCommentProps> = ({
+  comment_author,
+  comment_text,
+}) => {
+  // const [isEditing, setIsEditing] = useState(false);
   const [isModal, setIsModal] = useState<boolean>(false);
   const onCloseModal = () => {
     // isModal 상태 값을 false로 업데이트하여 모달을 닫기
@@ -38,7 +42,7 @@ const RecipeComment = () => {
         <CommentContentsDiv>
           <AuthorDotsDiv>
             {/* 작성자 */}
-            <AuthorName>{recipe_nickname}</AuthorName>
+            <AuthorName>{comment_author}</AuthorName>
             {/* 댓글 수정/삭제바 */}
             <ThreeDotsImageDiv onClick={() => setIsModal(true)}>
               {isModal && (
@@ -55,7 +59,7 @@ const RecipeComment = () => {
           </AuthorDotsDiv>
           {/* 댓글 내용 */}
           {/* 조건에 따라 textarea로 변경 (삼항연산자) */}
-          <CommentText>{comment}</CommentText>
+          <CommentText>{comment_text}</CommentText>
         </CommentContentsDiv>
       </CommentContainer>
     </>
