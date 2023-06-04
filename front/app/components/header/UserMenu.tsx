@@ -11,10 +11,13 @@ import UserModal from "./UserModal";
 
 import { User } from "@/app/types";
 
-const UserMenu = ({ currentUser }: { currentUser: User | undefined }) => {
+type UserMenuProps = {
+  currentUser?: User | null;
+};
+
+const UserMenu = (props: UserMenuProps) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const isLoggedIn = useRecoilValue<boolean>(loginState);
-
   const router = useRouter();
 
   return (

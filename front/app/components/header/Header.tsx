@@ -11,24 +11,23 @@ import SearchBar from "./SearchBar";
 import UserMenu from "./UserMenu";
 import CategoryBar from "./CategoryBar";
 
+import { User } from "@/app/types";
 import getCurrentUser from "@/app/api/user";
 
-import { User } from "@/app/types";
-
 const Header = () => {
-  const setLoggedIn = useSetRecoilState<boolean>(loginState);
-
-  // react-query로 데이터 fetch
   const { data: currentUser, isLoading } = useQuery<User>(["currentUser"], () =>
     getCurrentUser()
   );
 
-  // 인증된 유저정보를 받으면 로그인 상태 true로 전환
+  const setIsLoggedIn = useSetRecoilState<boolean>(loginState);
+
   useEffect(() => {
     if (currentUser) {
-      setLoggedIn(true);
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
-  }, [currentUser, setLoggedIn]);
+  }, [currentUser, setIsLoggedIn]);
 
   return (
     <HeaderDiv>
@@ -54,16 +53,13 @@ const HeaderDiv = styled.div`
 `;
 
 const NavArea = styled.div`
+  padding: 0 2rem;
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
-    padding: 0 2rem;
-  }
-
-  @media (min-width: 768px) {
-    padding: 0 2rem;
+  @media (min-width: 1220px) {
+    padding: 0;
   }
 `;
 

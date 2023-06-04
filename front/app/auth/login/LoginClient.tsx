@@ -41,7 +41,6 @@ const LoginClient = () => {
     axiosBase
       .post("users/login", data)
       .then((res) => {
-        Cookies.set("auth", res.data.session_id, { expires: 7 });
         setLoggedIn(true);
         toast.success("로그인 되었습니다.");
         router.back();
