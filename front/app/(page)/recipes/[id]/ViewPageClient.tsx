@@ -200,7 +200,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
                 height={22}
               ></Image>
             </CommentIconDiv>
-            <SubtitleH2>{commentCount}</SubtitleH2>
+            <SubtitleH2>{comments.length}</SubtitleH2>
           </div>
           <div className="mb-[30px]">
             <RecipeComments comments={comments} />
