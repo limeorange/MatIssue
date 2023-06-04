@@ -196,9 +196,9 @@ const RecipeForm = () => {
   const handleSave = async () => {
     const recipeData = {
       recipe_title: state.recipeTitle,
-      // recipe_thumbnail: state.selectedImage,
-      recipe_thumbnail:
-        "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
+      recipe_thumbnail: state.selectedImage,
+      // recipe_thumbnail:
+      //   "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
       recipe_video: state.videoLink,
       recipe_description: state.cookingIntro,
       recipe_category: state.selectedCategory,
