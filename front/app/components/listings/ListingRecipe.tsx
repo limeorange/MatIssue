@@ -46,7 +46,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1234,
     view: "15,324",
-    id: "ex1",
+    id: "1",
     timestamp: 1,
     servings: 1,
     duration: 10,
