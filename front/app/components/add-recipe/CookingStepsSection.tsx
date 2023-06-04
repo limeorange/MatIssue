@@ -43,12 +43,19 @@ const CookingStepsSection = ({
             />
             <ImageUploadBox imgExists={Boolean(stepImages[index])}>
               <FileInput
+                id={`step-image-input-${index}`}
                 type="file"
                 accept="image/*"
                 onChange={(e) => handleStepImageChange(e, index)}
               />
               {stepImages[index] && (
-                <ImageWrapper>
+                <ImageWrapper
+                  onClick={() =>
+                    document
+                      .getElementById(`step-image-input-${index}`)
+                      ?.click()
+                  }
+                >
                   <ImageContainer>
                     <Image
                       src={stepImages[index]}
@@ -150,6 +157,7 @@ const ImageUploadBox = styled.div<{ imgExists: boolean }>`
   align-items: center;
   margin-left: 2rem;
   position: relative;
+  cursor: pointer;
 `;
 
 const StepWrapper = styled.div`
