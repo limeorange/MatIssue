@@ -74,7 +74,7 @@ const IconWrapper = styled.div`
   display: block;
   position: relative;
   width: 1.4rem;
-  height: 1.2rem;
+  height: 0.9rem;
 `;
 
 const CategoryLi = styled.li`
