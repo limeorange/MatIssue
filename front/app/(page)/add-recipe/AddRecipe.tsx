@@ -28,13 +28,14 @@ type RecipeFormState = {
 const categories = ["한식", "중식", "일식", "양식", "비건", "기타"];
 const peopleCount = [1, 2, 3, 4, 5];
 const times = [
-  "10분 이내",
-  "20분 이내",
-  "30분 이내",
-  "1시간 이내",
-  "1시간 이상",
+  { label: "10분 이내", value: 10 },
+  { label: "20분 이내", value: 20 },
+  { label: "30분 이내", value: 30 },
+  { label: "1시간 이내", value: 60 },
+  { label: "1시간 이상", value: 61 },
 ];
-const difficulties = ["상", "중", "하"];
+
+const difficulties = ["쉬움", "중간", "어려움"];
 
 const RecipeForm = () => {
   const [state, setState] = useState<RecipeFormState>({
