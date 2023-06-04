@@ -1,10 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
-import { loginState } from "@/app/store/authAtom";
 
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
@@ -15,19 +12,14 @@ import { User } from "@/app/types";
 import getCurrentUser from "@/app/api/user";
 
 const Header = () => {
-  const { data: currentUser, isLoading } = useQuery<User>(["currentUser"], () =>
-    getCurrentUser()
-  );
-
-  const setIsLoggedIn = useSetRecoilState<boolean>(loginState);
-
-  useEffect(() => {
-    if (currentUser) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
+  const { data: currentUser, isLoading } = useQuery<User>(
+    ["currentUser"],
+    () => getCurrentUser(),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
     }
-  }, [currentUser, setIsLoggedIn]);
+  );
 
   return (
     <HeaderDiv>

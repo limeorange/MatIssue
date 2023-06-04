@@ -6,7 +6,6 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { axiosBase } from "@/app/api/axios";
 import { useSetRecoilState } from "recoil";
 import toast from "react-hot-toast";
-import Cookies from "js-cookie";
 import { loginState } from "@/app/store/authAtom";
 
 import Logo from "@/app/components/header/Logo";
@@ -24,7 +23,6 @@ import {
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const setIsLoggedIn = useSetRecoilState(loginState);
 
   const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
@@ -41,7 +39,6 @@ const LoginClient = () => {
     axiosBase
       .post("users/login", data)
       .then((res) => {
-        setIsLoggedIn(true);
         toast.success("로그인 되었습니다.");
         router.back();
       })
