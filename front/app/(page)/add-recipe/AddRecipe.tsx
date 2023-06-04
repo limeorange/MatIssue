@@ -10,7 +10,7 @@ import CookingStepsSection from "../../components/add-recipe/CookingStepsSection
 import Button from "../../components/UI/Button";
 import { axiosBase } from "../../api/axios";
 
-interface RecipeFormState {
+type RecipeFormState = {
   selectedCategory: string;
   selectedPeople: string;
   selectedTime: string;
@@ -23,7 +23,7 @@ interface RecipeFormState {
   stepImages: string[];
   cookingTips: string;
   videoLink: string;
-}
+};
 
 const categories = ["한식", "중식", "일식", "양식", "비건", "기타"];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -55,6 +55,7 @@ const RecipeForm = () => {
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setState({ ...state, selectedCategory: e.target.value });
+    console.log(state, state.selectedCategory);
   };
 
   // 몇인분인지
@@ -186,35 +187,32 @@ const RecipeForm = () => {
 
   // 저장 핸들러
   const handleSave = async () => {
-    try {
-      const response = await axiosBase.post("/recipes/", {
-        recipe_title: state.recipeTitle,
-        recipe_thumbnail: state.selectedImage,
-        recipe_video: state.videoLink,
-        recipe_description: state.cookingIntro,
-        recipe_category: state.selectedCategory,
-        recipe_info: {
-          serving: parseInt(state.selectedPeople, 10),
-          time: parseInt(state.selectedTime, 10),
-          level: difficulties.indexOf(state.selectedDifficulty),
-        },
-        recipe_ingredients: state.ingredients.map(
-          ({ ingredient, quantity }) => ({
-            name: ingredient,
-            amount: quantity,
-          })
-        ),
-        recipe_sequence: state.steps.map(
-          ({ stepDetail, stepImage }, index) => ({
-            step: index + 1,
-            picture: "url",
-            description: stepDetail,
-          })
-        ),
-        recipe_tip: state.cookingTips,
-        user_id: "admin",
-      });
+    const recipeData = {
+      recipe_title: state.recipeTitle,
+      recipe_thumbnail: state.selectedImage,
+      recipe_video: state.videoLink,
+      recipe_description: state.cookingIntro,
+      recipe_category: state.selectedCategory,
+      recipe_info: {
+        serving: parseInt(state.selectedPeople, 10),
+        time: parseInt(state.selectedTime, 10),
+        level: difficulties.indexOf(state.selectedDifficulty),
+      },
+      recipe_ingredients: state.ingredients.map(({ ingredient, quantity }) => ({
+        name: ingredient,
+        amount: quantity,
+      })),
+      recipe_sequence: state.steps.map(({ stepDetail, stepImage }, index) => ({
+        step: index + 1,
+        picture: state.stepImages[index] || "url",
+        description: stepDetail,
+      })),
+      recipe_tip: state.cookingTips,
+      user_id: "admin",
+    };
 
+    try {
+      const response = await axiosBase.post("recipes/", recipeData);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -343,8 +341,9 @@ const Input = styled.input`
   font-size: 16px;
   line-height: 1.9rem;
   &:focus {
-    border: 0.2rem solid #fbd26a;
+    border: 0.1rem solid #d9d9d9;
     outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 `;
 
@@ -366,8 +365,9 @@ const TextArea = styled.textarea`
     color: #a9a9a9;
   }
   &:focus {
-    border: 0.2rem solid #fbd26a;
+    border: 0.1rem solid #d9d9d9;
     outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 `;
 
