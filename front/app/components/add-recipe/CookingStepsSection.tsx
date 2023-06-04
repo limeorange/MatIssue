@@ -2,11 +2,11 @@ import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-interface Step {
+type Step = {
   stepDetail: string;
-}
+};
 
-interface CookingStepsSectionProps {
+type CookingStepsSectionProps = {
   steps: Step[];
   stepImages: string[];
   handleStepDetailChange: (
@@ -19,7 +19,7 @@ interface CookingStepsSectionProps {
   ) => void;
   handleAddStep: () => void;
   handleRemoveStep: (index: number) => void;
-}
+};
 
 const CookingStepsSection = ({
   steps,
