@@ -1,25 +1,23 @@
 import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import uploadImage from "@/app/api/aws";
 
-interface Step {
+type Step = {
   stepDetail: string;
-}
+};
 
-interface CookingStepsSectionProps {
+type CookingStepsSectionProps = {
   steps: Step[];
   stepImages: string[];
   handleStepDetailChange: (
     e: ChangeEvent<HTMLTextAreaElement>,
     index: number
   ) => void;
-  handleStepImageChange: (
-    e: ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => void;
+  handleStepImageChange: (imageUrl: string, index: number) => void;
   handleAddStep: () => void;
   handleRemoveStep: (index: number) => void;
-}
+};
 
 const CookingStepsSection = ({
   steps,
@@ -29,6 +27,23 @@ const CookingStepsSection = ({
   handleAddStep,
   handleRemoveStep,
 }: CookingStepsSectionProps) => {
+  const handleImageChange = async (
+    e: ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+
+      try {
+        const response = await uploadImage(file);
+        const imageUrl = response.imageUrl;
+
+        handleStepImageChange(imageUrl, index);
+      } catch (error) {
+        console.error("Image upload failed:", error);
+      }
+    }
+  };
   return (
     <CookingStep>
       <Label>요리 순서</Label>
@@ -43,12 +58,19 @@ const CookingStepsSection = ({
             />
             <ImageUploadBox imgExists={Boolean(stepImages[index])}>
               <FileInput
+                id={`step-image-input-${index}`}
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleStepImageChange(e, index)}
+                onChange={(e) => handleImageChange(e, index)}
               />
               {stepImages[index] && (
-                <ImageWrapper>
+                <ImageWrapper
+                  onClick={() =>
+                    document
+                      .getElementById(`step-image-input-${index}`)
+                      ?.click()
+                  }
+                >
                   <ImageContainer>
                     <Image
                       src={stepImages[index]}
@@ -91,7 +113,13 @@ const Label = styled.label`
   margin-right: 3rem;
   margin-bottom: 2rem;
   padding-top: 0.5rem;
+  &:focus {
+    border: 0.1rem solid #d9d9d9;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
+  }
 `;
+
 const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 57.2rem;
@@ -105,10 +133,17 @@ const TextArea = styled.textarea`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
+  resize: none;
   ::placeholder {
     color: #a9a9a9;
   }
+  &:focus {
+    border: 0.1rem solid #d9d9d9;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
+  }
 `;
+
 const CookingStep = styled.div`
   display: flex;
   flex-direction: column;
@@ -137,6 +172,7 @@ const ImageUploadBox = styled.div<{ imgExists: boolean }>`
   align-items: center;
   margin-left: 2rem;
   position: relative;
+  cursor: pointer;
 `;
 
 const StepWrapper = styled.div`

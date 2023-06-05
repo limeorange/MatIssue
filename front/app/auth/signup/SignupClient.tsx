@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   FieldError,
@@ -17,19 +17,15 @@ import Logo from "@/app/components/header/Logo";
 import Button from "@/app/components/UI/Button";
 
 import {
-  AuthChangeBox,
   AuthContainer,
   AuthFormWrapper,
+  AuthNavBox,
+  BirthdayInput,
   ErrorMessageText,
   StyledInput,
   StyledLabel,
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
-
-type BirthdayInputProps = {
-  isYear?: boolean;
-  disabled?: boolean;
-};
 
 const SignupClient = () => {
   const {
@@ -65,42 +61,84 @@ const SignupClient = () => {
   const monthValue = watch("month");
   const dayValue = watch("day");
 
+  const birthError = useCallback(() => {
+    return toast.error("올바른 생년월일을 입력하세요.");
+  }, []);
+
   /** 4자리 입력시 month인풋으로 포커스이동, 다시 입력해서 5자리이상이되면 year 인풋 리셋 */
   const yearChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const year = e.target.value;
+    if (year.length > 4) {
+      resetField("year");
+      birthError();
+      return;
+    }
+    if (+year < 0 || +year > 2023) {
+      resetField("year");
+      birthError();
+      yearInputRef.current?.focus();
+      return;
+    }
     if (year.length === 4) {
       monthInputRef.current?.focus();
     }
-    if (year.length > 4) {
-      resetField("year");
-      return;
-    }
+
     setValue("year", year);
   };
 
   /** 2자리 입력시 day인풋으로 포커스이동, 다시 입력해서 3자리이상이되면 month 인풋 리셋 */
   const monthChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const month = e.target.value;
+    if (month.length > 2) {
+      resetField("month");
+      birthError();
+      return;
+    }
+    if (0 > +month || +month > 12) {
+      resetField("month");
+      birthError();
+      monthInputRef.current?.focus();
+      return;
+    }
+
     if (month.length === 2) {
       dayInputRef.current?.focus();
     }
-    if (month.length > 2) {
-      resetField("month");
-      return;
-    }
+
     setValue("month", month);
   };
 
   /** 2자리 입력시 day인풋에서 포커스 제거, 다시 입력해서 3자리이상이되면 day 인풋 리셋 */
   const dayChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const day = e.target.value;
+    if (day.length > 2) {
+      resetField("day");
+      birthError();
+      return;
+    }
+    if (
+      (+monthValue === 1 || 3 || 5 || 7 || 8 || 10 || 12) &&
+      (0 > +day || +day > 31)
+    ) {
+      resetField("day");
+      birthError();
+      dayInputRef.current?.focus();
+      return;
+    } else if ((+monthValue === 4 || 6 || 9 || 11) && (0 > +day || +day > 30)) {
+      resetField("day");
+      birthError();
+      dayInputRef.current?.focus();
+      return;
+    } else if (+monthValue === 2 && (0 > +day || +day > 29)) {
+      resetField("day");
+      birthError();
+      dayInputRef.current?.focus();
+      return;
+    }
     if (day.length === 2) {
       dayInputRef.current?.blur();
     }
-    if (day.length > 2) {
-      resetField("day");
-      return;
-    }
+
     setValue("day", day);
   };
 
@@ -117,16 +155,14 @@ const SignupClient = () => {
       birth_date: birthDate,
     };
 
-    console.log(userData);
-
     axiosBase
       .post("users/", userData)
       .then((res) => {
         console.log(res.data);
-        alert("회원가입이 완료되었습니다!");
+        toast.success("회원가입이 완료되었습니다!");
         router.push("/");
       })
-      .catch((err) => toast.error("잘못된 요청입니다."))
+      .catch((err) => toast.error(err.response.data.detail))
       .finally(() => setIsLoading(false));
   };
 
@@ -139,7 +175,6 @@ const SignupClient = () => {
             <StyledLabel htmlFor="user_id">아이디</StyledLabel>
             <StyledInput
               id="user_id"
-              errors={errors}
               disabled={isLoading}
               {...register("user_id", {
                 required: "아이디는 필수 입력입니다.",
@@ -169,7 +204,6 @@ const SignupClient = () => {
             <StyledInput
               id="email"
               type="email"
-              errors={errors}
               disabled={isLoading}
               {...register("email", {
                 required: "아이디를 입력해주세요.",
@@ -191,7 +225,6 @@ const SignupClient = () => {
             <StyledInput
               id="username"
               type="text"
-              errors={errors}
               disabled={isLoading}
               {...register("username", {
                 required: "닉네임을 입력해주세요.",
@@ -230,7 +263,6 @@ const SignupClient = () => {
               <StyledInput
                 id="password"
                 type={showPassword ? "text" : "password"}
-                errors={errors}
                 disabled={isLoading}
                 {...register("password", {
                   required: "비밀번호를 입력해주세요.",
@@ -266,7 +298,6 @@ const SignupClient = () => {
               <StyledInput
                 id="password_confirm"
                 type={showPasswordConfirm ? "text" : "password"}
-                errors={errors}
                 disabled={isLoading}
                 {...register("password_confirm", {
                   required: "비밀번호를 한번더 입력해주세요.",
@@ -297,11 +328,12 @@ const SignupClient = () => {
                 {...register("year", {
                   required: "년, ",
                   pattern: {
-                    value: /^\d{4}$/,
+                    value: /^(19[0-9][0-9]|20[0-2][0-3])$/,
                     message: "년, ",
                   },
+                  minLength: 2,
                   min: 1900,
-                  max: 2020,
+                  max: 2023,
                 })}
                 maxLength={4}
                 ref={yearInputRef}
@@ -317,9 +349,10 @@ const SignupClient = () => {
                 {...register("month", {
                   required: "월, ",
                   pattern: {
-                    value: /^(0?[1-9]|1[0-2])$/,
+                    value: /^(0[1-9]|1[0-2])$/,
                     message: "월, ",
                   },
+                  minLength: 2,
                 })}
                 maxLength={2}
                 ref={monthInputRef}
@@ -348,9 +381,7 @@ const SignupClient = () => {
             </BirthdayWrapper>
             {errors.year || errors.month || errors.day ? (
               <ErrorMessageText>
-                올바른 {errors.year && errors.year.message?.toString()}
-                {errors.month && errors.month.message?.toString()}
-                {errors.day && errors.day.message?.toString()}을 입력해주세요.
+                생년월일 형식을 올바르게 입력해주세요.(ex 2000.01.01)
               </ErrorMessageText>
             ) : (
               ""
@@ -362,17 +393,16 @@ const SignupClient = () => {
             </Button>
           </div>
         </form>
-        <AuthChangeBox>
+        <AuthNavBox>
           <div>이미 아이디가 있으신가요?</div>
           <UnderLineLinkDiv
             onClick={() => {
               router.push("/auth/login");
             }}
-            className="underline cursor-pointer"
           >
             로그인하기
           </UnderLineLinkDiv>
-        </AuthChangeBox>
+        </AuthNavBox>
       </AuthFormWrapper>
     </AuthContainer>
   );
@@ -399,31 +429,4 @@ const ShowIconBox = styled.div`
 const BirthdayWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const BirthdayInput = styled.input<BirthdayInputProps>`
-  appearance: none;
-  background-color: #fff;
-  border-color: #ddd;
-  border-width: 1px;
-  padding: 0.6rem 1.2rem;
-  font-size: 1.6rem;
-  line-height: 2.4rem;
-  display: block;
-  height: 4.8rem;
-  border-radius: 1.5rem;
-  color: #333333;
-  outline: none;
-
-  &:focus {
-    box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
-  }
-
-  width: ${(props) => (props.isYear ? "16rem" : "8rem")};
-  opacity: ${(props) => props.disabled && "0.5"};
-  cursor: ${(props) => props.disabled && "default"};
-
-  &:placeholder {
-    color: #999999;
-  }
 `;

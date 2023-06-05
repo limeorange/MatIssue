@@ -1,18 +1,23 @@
-export type ExampleItems = {
-  title: string;
-  description: string;
-};
+export type User =
+  | {
+      user_id: string;
+      username: string;
+      email: string;
+      birth_date: string;
+      img: string;
+      created_at: string;
+    }
+  | undefined;
 
-export type User = {
-  id: string;
-  name: string | null;
-  email: string | null;
-  emailVerified: Date | null;
-  image: string | null;
-  hashedPassword: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  followingIDs: string[];
-  followerIDs: string[];
-  likedRecipes: string[];
+export type RecipeData = {
+  image: string;
+  title?: string;
+  author?: string;
+  likes?: number;
+  view?: string;
+  id?: string;
+  timestamp?: number;
+  servings?: number;
+  duration?: number;
+  difficulty?: 0 | 1 | 2;
 };

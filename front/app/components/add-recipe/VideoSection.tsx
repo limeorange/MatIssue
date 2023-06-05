@@ -1,13 +1,15 @@
 import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 
-const VideoSection = () => {
-  const [videoLink, setVideoLink] = useState("");
+type VideoSectionProps = {
+  videoLink: string;
+  handleVideoLinkChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+};
 
-  const handleVideoLinkChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setVideoLink(e.target.value);
-  };
-
+const VideoSection = ({
+  videoLink,
+  handleVideoLinkChange,
+}: VideoSectionProps) => {
   return (
     <VideoWrapper>
       <Label>동영상</Label>
@@ -76,8 +78,14 @@ const VideoTextArea = styled.textarea`
   font-size: 16px;
   line-height: 1.9rem;
   margin-right: 2.5rem;
+  resize: none;
   ::placeholder {
     color: #a9a9a9;
+  }
+  &:focus {
+    border: 0.1rem solid #d9d9d9;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 `;
 

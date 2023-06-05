@@ -18,17 +18,8 @@ const LoadingModal = () => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div
-            className="
-              fixed 
-              inset-0 
-              bg-gray-100 
-              bg-opacity-50 
-              transition-opacity
-            "
-          />
+          <BackdropWrapper />
         </Transition.Child>
-
         <LoadingContainer>
           <LoadingPositionDiv>
             <PacmanLoader color="#FBD26A" size={25} />
@@ -40,10 +31,22 @@ const LoadingModal = () => {
   );
 };
 
+const BackdropWrapper = styled.div`
+  position: fixed;
+  z-index: 90;
+  inset: 0px;
+  background: #000000;
+  opacity: 50%;
+
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+`;
+
 const LoadingContainer = styled.div`
   position: fixed;
   inset: 0px;
-  z-index: 10;
+  z-index: 95;
   overflow-y: auto;
 `;
 
@@ -51,7 +54,7 @@ const LoadingPositionDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  font-size: 1.6rem;
+  font-size: 16px;
   font-weight: 400;
   color: #fbd26a;
   min-height: 100%;
