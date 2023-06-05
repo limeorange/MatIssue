@@ -49,6 +49,10 @@ const SearchBarDiv = styled.div`
   border: 0.1rem solid rgb(200, 200, 200);
   border-radius: 0.8rem;
 
+  &:focus-within {
+    box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
+  }
+
   @media (min-width: 768px) {
     position: absolute;
     width: 36rem;

@@ -11,10 +11,6 @@ import UserModal from "./UserModal";
 
 import { User } from "@/app/types";
 
-type UserMenuProps = {
-  currentUser?: User | null;
-};
-
 const UserMenu = ({ currentUser }: { currentUser: User | null }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const router = useRouter();
@@ -23,19 +19,32 @@ const UserMenu = ({ currentUser }: { currentUser: User | null }) => {
     <UserMenuDiv>
       {currentUser ? (
         <>
-          <WriteButton
+          <IconButton
+            onClick={() => {
+              router.push("/my-page/scrap");
+            }}
+          >
+            <Image
+              src="/images/header/scrapIcon.png"
+              width={28}
+              height={28}
+              alt="write_icon"
+            />
+            스크랩
+          </IconButton>
+          <IconButton
             onClick={() => {
               router.push("/add-recipe");
             }}
           >
             <Image
-              src="/images/writeIcon.png"
-              width={18}
-              height={18}
+              src="/images/header/writeIcon.png"
+              width={28}
+              height={28}
               alt="write_icon"
             />
             글쓰기
-          </WriteButton>
+          </IconButton>
           <ProfileButton
             onMouseOver={() => {
               setIsUserModal(true);
@@ -126,8 +135,9 @@ const LogoutButton = styled.button`
   transition: background-color 0.3s;
 `;
 
-const WriteButton = styled(LoginButton)`
+const IconButton = styled(LoginButton)`
   font-size: 16px;
+  margin-left: -1rem;
   display: flex;
   align-items: center;
   gap: 0.8rem;

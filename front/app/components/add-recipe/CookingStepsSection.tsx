@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import uploadImage from "@/app/api/aws";
 
 type Step = {
   stepDetail: string;
@@ -13,10 +14,7 @@ type CookingStepsSectionProps = {
     e: ChangeEvent<HTMLTextAreaElement>,
     index: number
   ) => void;
-  handleStepImageChange: (
-    e: ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => void;
+  handleStepImageChange: (imageUrl: string, index: number) => void;
   handleAddStep: () => void;
   handleRemoveStep: (index: number) => void;
 };
@@ -29,6 +27,23 @@ const CookingStepsSection = ({
   handleAddStep,
   handleRemoveStep,
 }: CookingStepsSectionProps) => {
+  const handleImageChange = async (
+    e: ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+
+      try {
+        const response = await uploadImage(file);
+        const imageUrl = response.imageUrl;
+
+        handleStepImageChange(imageUrl, index);
+      } catch (error) {
+        console.error("Image upload failed:", error);
+      }
+    }
+  };
   return (
     <CookingStep>
       <Label>요리 순서</Label>
@@ -46,7 +61,7 @@ const CookingStepsSection = ({
                 id={`step-image-input-${index}`}
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleStepImageChange(e, index)}
+                onChange={(e) => handleImageChange(e, index)}
               />
               {stepImages[index] && (
                 <ImageWrapper

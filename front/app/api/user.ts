@@ -1,15 +1,20 @@
+import Cookies from "js-cookie";
 import { axiosBase } from "../api/axios";
 
 export default async function getCurrentUser() {
-  try {
-    const response = await axiosBase.get(`users/me`);
-    console.log(response.data);
-    if (response.data === undefined) {
+  const session_id = Cookies.get("session_id");
+
+  if (session_id) {
+    try {
+      const response = await axiosBase.get(`users/me`);
+      if (response.data === undefined) {
+        return null;
+      }
+      return response.data;
+    } catch (err: any) {
       return null;
     }
-    return response.data;
-  } catch (err: any) {
-    console.log(err);
-    return null;
   }
+
+  return null;
 }

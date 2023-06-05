@@ -1,23 +1,19 @@
 "use client";
-import Link from "next/link";
-import styled from "styled-components";
-import Button from "../../components/UI/Button";
-import { useState } from "react";
-import React from "react";
-import RecipeCard from "../recipe-card/RecipeCard";
+
 import Image from "next/image";
+import { useState } from "react";
+import styled from "styled-components";
+import RecipeCard from "../recipe-card/RecipeCard";
+import {
+  StyledContentsArea,
+  ListingRecipeContainer,
+  StyledContainer,
+  StyledTitle,
+  StyledTitleBox,
+} from "@/app/styles/main/main.style";
+import { RecipeData } from "@/app/types";
 
-interface Recipe {
-  image: string;
-  title: string;
-  author: string;
-  likes: number;
-  view: string;
-  id: string;
-  timestamp: number;
-}
-
-const DUMMY_DATA: Recipe[] = [
+const DUMMY_DATA: RecipeData[] = [
   {
     image: "/images/sushi1.png",
     title: "기가 막히는 초밥 만들기",
@@ -26,6 +22,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex1",
     timestamp: 1,
+    servings: 1,
+    duration: 10,
+    difficulty: 1,
   },
   {
     image: "/images/sushi2.png",
@@ -35,6 +34,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex2",
     timestamp: 2,
+    servings: 2,
+    duration: 20,
+    difficulty: 2,
   },
   {
     image: "/images/sushi3.png",
@@ -44,6 +46,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex3",
     timestamp: 3,
+    servings: 3,
+    duration: 30,
+    difficulty: 2,
   },
   {
     image: "/images/sushi4.png",
@@ -53,6 +58,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex4",
     timestamp: 4,
+    servings: 4,
+    duration: 60,
+    difficulty: 1,
   },
   {
     image: "/images/sushi1.png",
@@ -62,6 +70,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex1",
     timestamp: 5,
+    servings: 5,
+    duration: 60,
+    difficulty: 2,
   },
   {
     image: "/images/sushi2.png",
@@ -71,6 +82,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex2",
     timestamp: 6,
+    servings: 4,
+    duration: 20,
+    difficulty: 1,
   },
   {
     image: "/images/sushi3.png",
@@ -80,6 +94,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex3",
     timestamp: 8,
+    servings: 3,
+    duration: 30,
+    difficulty: 2,
   },
   {
     image: "/images/sushi4.png",
@@ -89,6 +106,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex4",
     timestamp: 11,
+    servings: 2,
+    duration: 10,
+    difficulty: 2,
   },
   {
     image: "/images/sushi1.png",
@@ -98,6 +118,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex1",
     timestamp: 9,
+    servings: 1,
+    duration: 60,
+    difficulty: 2,
   },
   {
     image: "/images/sushi2.png",
@@ -107,6 +130,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex2",
     timestamp: 10,
+    servings: 3,
+    duration: 30,
+    difficulty: 1,
   },
   {
     image: "/images/sushi3.png",
@@ -116,6 +142,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex3",
     timestamp: 14,
+    servings: 2,
+    duration: 20,
+    difficulty: 2,
   },
   {
     image: "/images/sushi4.png",
@@ -125,6 +154,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex4",
     timestamp: 12,
+    servings: 5,
+    duration: 60,
+    difficulty: 2,
   },
   {
     image: "/images/sushi1.png",
@@ -134,6 +166,9 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex1",
     timestamp: 13,
+    servings: 4,
+    duration: 10,
+    difficulty: 1,
   },
   {
     image: "/images/sushi2.png",
@@ -143,90 +178,68 @@ const DUMMY_DATA: Recipe[] = [
     view: "15,324",
     id: "ex2",
     timestamp: 16,
+    servings: 1,
+    duration: 30,
+    difficulty: 2,
   },
   {
     image: "/images/sushi3.png",
     title: "전여자친구가 해주던 그 맛의 유부초밥",
     author: "영앤리치톨엔인텔리",
-    likes: 1324,
+    likes: 2343,
     view: "15,324",
     id: "ex3",
     timestamp: 15,
+    servings: 2,
+    duration: 20,
+    difficulty: 2,
   },
   {
     image: "/images/sushi4.png",
     title: "자취생을 위한 초간단 계란 초밥",
     author: "브라우니물어",
-    likes: 1551,
+    likes: 500,
     view: "15,324",
     id: "ex4",
-    timestamp: 20,
+    timestamp: 17,
+    servings: 3,
+    duration: 60,
+    difficulty: 1,
   },
 ];
 
-const RecipeCards = () => {
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA);
+const MainNewest = () => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const newestRecipes = DUMMY_DATA;
+
+  const contentsPerPage = 8;
+  const totalPage = newestRecipes.length / contentsPerPage;
 
   return (
-    <RecipeListContainer>
-      <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{filteredRecipes.length}</RecipeHeadingCount>
-      <RecipeList>
-        {filteredRecipes.length === 0 && (
-          <div>레시피가 없습니다. 레시피를 추가해주세요!</div>
-        )}
-        {filteredRecipes.map((data, index) => (
-          <RecipeCardWrapper key={index}>
-            <StyledRecipeCard data={data} />
-            <button onClick={() => console.log("Image button clicked!")}>
-              <DeleteButtonImage src="/images/delete-button.png" alt="X-box" />
-            </button>
-          </RecipeCardWrapper>
-        ))}
-      </RecipeList>
-    </RecipeListContainer>
+    <StyledContainer>
+      <StyledContentsArea>
+        <StyledNewestTitleBox>
+          <StyledTitle>최신 레시피</StyledTitle>
+        </StyledNewestTitleBox>
+        <ListingRecipeContainer contentsPerPage={contentsPerPage}>
+          {newestRecipes
+            .slice(
+              contentsPerPage * (currentPage - 1),
+              contentsPerPage * currentPage
+            )
+            .map((data, index) => (
+              <RecipeCard key={index} data={data} />
+            ))}
+        </ListingRecipeContainer>
+      </StyledContentsArea>
+    </StyledContainer>
   );
 };
-export default RecipeCards;
 
-// 레시피 리스트
+export default MainNewest;
 
-const RecipeListContainer = styled.div`
-  width: 100%;
-`;
-
-const RecipeHeading = styled.span`
-  font-size: 18px;
-  letter-spacing: 0.01em;
-  margin: 0 0.5rem 0 0.7rem;
-  font-weight: 600;
-  color: #4f3d21;
-`;
-
-const RecipeHeadingCount = styled.span`
-  font-size: 17px;
-  font-weight: 700;
-  color: #545454;
-`;
-
-const RecipeList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 1.5rem;
-`;
-
-const RecipeCardWrapper = styled.div`
-  position: relative;
-`;
-
-const StyledRecipeCard = styled(RecipeCard)`
-  font-size: 13px !important;
-`;
-
-const DeleteButtonImage = styled.img`
-  position: absolute;
-  top: 21rem;
-  right: 1.4rem;
-  width: 1.8rem;
-  height: 1.8rem;
+const StyledNewestTitleBox = styled(StyledTitleBox)`
+  align-items: end;
+  flex-direction: row;
 `;

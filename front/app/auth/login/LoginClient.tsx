@@ -18,6 +18,7 @@ import {
   StyledInput,
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
+import Cookies from "js-cookie";
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,10 +38,14 @@ const LoginClient = () => {
     axiosBase
       .post("users/login", data)
       .then((res) => {
+        const sessionId = res.data.session_id;
+        Cookies.set("session_id", sessionId);
         toast.success("로그인 되었습니다.");
         router.back();
       })
-      .catch((err) => toast.error(err.message))
+      .catch((err) => {
+        toast.error(err.response.data.detail);
+      })
       .finally(() => {
         setIsLoading(false);
       });
