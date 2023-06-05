@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Button from "../../../components/UI/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ConfirmModal from "../../../components/my-page/ConfirmModal";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -17,6 +17,7 @@ type User = {
   username: string;
   img: string;
   birth_date: string;
+  password: string;
   created_at: string;
 };
 
@@ -25,8 +26,22 @@ type LabelForFileProps = {
 };
 
 const ModifyUserInfo: React.FC = () => {
-  const { data: currentUser } = useQuery<User>(["currentUser"]);
-  const pathname = usePathname();
+  const { data: currentUser } = useQuery<User>(["currentUser"]); //비동기적으로 실행, 서버에서 온 값
+  const [userData, setUserData] = useState<any>(); //얘가 먼저 실행되서 밸류 값 undefined, 우리가 갖고 있던 값
+
+  useEffect(() => {
+    // 받아온 data 객체로 상태 저장
+    const tempUserInfo = {
+      user_id: currentUser?.user_id,
+      email: currentUser?.email,
+      username: currentUser?.username,
+      birth_date: currentUser?.birth_date,
+      password: "",
+      img: currentUser?.img,
+    };
+    setUserData(tempUserInfo);
+  }, [currentUser]);
+
   const router = useRouter();
   const [date, setDate] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -49,35 +64,39 @@ const ModifyUserInfo: React.FC = () => {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // userData 데이터 확인
+
     // 변경한 데이터를 객체에다 담아서 서버에 전송
     // 객체를 만들고 그 안에 key와 value를 넣어줘야 한다.
     // value는  e.currentTarget.name명.value로 접근 가능
-    const modifyUserInfo = {
-      user_id: currentUser?.user_id,
-      email: e.currentTarget.user_email.value,
-      username: e.currentTarget.nickname.value,
-      birth_date: e.currentTarget.birth.value,
-      img: "", // aws에 업로드한 이미지 url을 넣기 때문에 공백으로 처리
-    };
+    // const modifyUserInfo = {
+    //   user_id: currentUser?.user_id,
+    //   email: e.currentTarget.user_email.value,
+    //   username: e.currentTarget.nickname.value,
+    //   birth_date: e.currentTarget.birth.value,
+    //   password: "", // 사용자가 입력해야 되니 때문에 공백
+    //   img: "", // aws에 업로드한 이미지 url을 넣기 때문에 공백으로 처리
+    // };
 
     // aws 이미지 업로드 로직
     if (selectedFile) {
       try {
         const response = await uploadImage(selectedFile); // aws에 이미지 업로드하기 위한 코드
         const imgUrl = response.imageUrl; // aws 업로드 후 반환된 이미지 aws url
-        modifyUserInfo.img = imgUrl; // 객체에 이미지 aws url 추가
+        // modifyUserInfo.img = imgUrl; // 객체에 이미지 aws url 추가
+        console.log("imgUrl : ", imgUrl);
+        setUserData({ ...userData, img: imgUrl });
       } catch (error) {
         console.error("Image upload failed:", error);
       }
     }
-    console.log(modifyUserInfo);
 
     // PUT /api/users/
     // TODO: modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
     // 변경에 성공하면 alert창 띄우고 my-page로 이동
-
+    console.log(userData);
     try {
-      const response = await axiosBase.put("users", modifyUserInfo);
+      const response = await axiosBase.put("users", userData);
       console.log(response);
       alert("회원정보가 수정되었습니다.");
       router.push("/my-page");
@@ -99,6 +118,13 @@ const ModifyUserInfo: React.FC = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleDeleteImage = () => {};
+
+  const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserData({ ...userData, [name]: value });
   };
 
   return (
@@ -129,22 +155,34 @@ const ModifyUserInfo: React.FC = () => {
         <form onSubmit={handleFormSubmit}>
           <WrapperInfo>
             <Wrapper>
+              <Title>비밀번호 *</Title>
+              <InputBox
+                type="password"
+                name="password"
+                value={userData?.password}
+                required
+                onChange={handleChageInput} // input에 입력한 값이 user 객체에 저장
+              />
+            </Wrapper>
+            <Wrapper>
               <Title>이메일 *</Title>
               <InputBox
                 type="email"
-                name="user_email"
-                value={currentUser?.email}
+                name="email"
+                value={userData?.email}
                 required
                 readOnly
+                onChange={handleChageInput}
               />
             </Wrapper>
             <Wrapper>
               <Title>별명 *</Title>
               <InputBox
                 type="text"
-                name="nickname"
-                value={currentUser?.username}
+                name="username"
+                value={userData?.username}
                 required
+                onChange={handleChageInput}
               />
             </Wrapper>
           </WrapperInfo>
@@ -153,10 +191,10 @@ const ModifyUserInfo: React.FC = () => {
 
             <InputDateBox
               type="date"
-              name="birth"
-              value={currentUser?.birth_date}
-              onChange={(event) => setDate(event.target.value)}
+              name="birth_date"
+              value={userData?.birth_date}
               required
+              onChange={handleChageInput}
             />
           </Wrapper>
           <ProfileImageWrapper>
@@ -165,11 +203,20 @@ const ModifyUserInfo: React.FC = () => {
               htmlFor="upload-button"
               // backgroundImageUrl="recipe-icon.png"
             >
-              {previewImage ? (
-                <StyledImage src={previewImage} alt="Preview" />
-              ) : (
-                "클릭하여 사진을 선택해주세요."
+              {previewImage && (
+                <>
+                  <StyledImage src={previewImage} alt="Preview" />
+                  {handleDeleteImage && (
+                    <button type="button" onClick={handleDeleteImage}>
+                      <DeleteImage
+                        src="/images/delete-button.png"
+                        alt="delete"
+                      />
+                    </button>
+                  )}
+                </>
               )}
+              {!previewImage && "클릭하여 사진 업로드"}
             </LabelForFile>
             <InputFile
               type="file"
@@ -282,6 +329,7 @@ const InputBox = styled.input`
 const ProfileImageWrapper = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 7rem;
 `;
 
 const InputFile = styled.input`
@@ -289,10 +337,11 @@ const InputFile = styled.input`
 `;
 
 const LabelForFile = styled.label<LabelForFileProps>`
+  position: relative;
   width: 19.8rem;
   height: 19.8rem;
   border-radius: 0.8rem;
-  background-color: #f7f7f7; /* Set desired background color */
+  background-color: #fff9ea;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -309,6 +358,14 @@ const LabelForFile = styled.label<LabelForFileProps>`
 const StyledImage = styled.img`
   width: 19.8rem;
   height: 19.8rem;
+`;
+
+const DeleteImage = styled.img`
+  position: absolute;
+  top: 0.7rem;
+  right: 0.6rem;
+  width: auto;
+  height: auto;
 `;
 
 const UserModifyButton = styled.div`
