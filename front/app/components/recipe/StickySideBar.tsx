@@ -1,14 +1,14 @@
 "use client";
 
 import useIntersectionObservation from "@/app/hooks/useIntersectionObservation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 /** 목차 사이드바 컴포넌트 */
 const StickySideBar = () => {
   /** 활성화된 ID 상태 관리 */
   const [activeId, setActiveId] = useState("content1");
-  useIntersectionObservation(setActiveId);
+  // useIntersectionObservation(setActiveId);
 
   return (
     <ContainerDiv>
@@ -40,8 +40,8 @@ const StickySideBar = () => {
 /** 목차 사이드바 감싸는 Div */
 const ContainerDiv = styled.div`
   position: fixed;
-  top: 22rem;
-  right: 20rem;
+  top: 20rem;
+  right: 16rem;
   z-index: 50;
 `;
 

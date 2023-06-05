@@ -37,8 +37,8 @@ const StickyProgressBar = () => {
 /** 스크롤 진행바 전체 박스 */
 const ProgressBarContainerDiv = styled.div`
   position: fixed;
-  top: 26rem;
-  right: 30rem;
+  top: 24rem;
+  right: 26rem;
   height: 29rem;
   width: 1rem;
   background-color: #f2f2f2;
