@@ -26,7 +26,7 @@ const RecipeCard = (props: RecipeCardProps) => {
   const router = useRouter();
 
   const handleRecipeClick = () => {
-    router.push(`/recipe/${data.id}`);
+    router.push(`/recipes/${data.id}`);
   };
 
   return (

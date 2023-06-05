@@ -33,7 +33,7 @@ const CategoryBar = () => {
           최신 레시피
         </CategoryLi>
         <CategoryLi
-          onClick={() => router.push("/category/honmuk?category=honmuk?")}
+          onClick={() => router.push("/category/honmuk?category=honmuk")}
         >
           혼먹 레시피
         </CategoryLi>
