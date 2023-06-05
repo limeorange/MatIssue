@@ -2,8 +2,11 @@
 
 import styled from "styled-components";
 import Banner from "../components/main-page/banner/Banner";
-import MainBest from "../components/main-page/best/MainBest";
-import MainFridge from "../components/main-page/fridge/MainFridge";
+import MainBest from "../components/main-page/MainBest";
+import MainFridge from "../components/main-page/MainFridge";
+import MainAlone from "../components/main-page/MainAlone";
+import MainVegan from "../components/main-page/MainVegan";
+import MainNewest from "../components/main-page/MainNewest";
 
 const MainPageClient = () => {
   return (
@@ -12,6 +15,9 @@ const MainPageClient = () => {
       <MainWrapper>
         <MainBest />
         <MainFridge />
+        <MainAlone />
+        <MainVegan />
+        <MainNewest />
       </MainWrapper>
     </>
   );

@@ -1,10 +1,12 @@
 import {
+  IngredientSelectBox,
+  RecipeContainer,
   StyledSubTitle,
   StyledTitle,
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import styled from "styled-components";
-import LargeRecipeCard from "../../recipe-card/LargeRecipeCard";
+import LargeRecipeCard from "../recipe-card/LargeRecipeCard";
 import { RecipeData } from "@/app/types";
 
 const DUMMY_DATA: RecipeData[] = [
@@ -18,7 +20,7 @@ const DUMMY_DATA: RecipeData[] = [
     id: "1",
   },
   {
-    image: "/images/sushi1.png",
+    image: "/images/sushi2.png",
     title: "기가 막히는 초밥 만들기",
     author: "목동최고미남정훈",
     likes: 1234,
@@ -26,7 +28,7 @@ const DUMMY_DATA: RecipeData[] = [
     id: "2",
   },
   {
-    image: "/images/sushi1.png",
+    image: "/images/sushi3.png",
     title: "기가 막히는 초밥 만들기",
     author: "목동최고미남정훈",
     likes: 1234,
@@ -35,49 +37,38 @@ const DUMMY_DATA: RecipeData[] = [
   },
 ];
 
-const MainFridge = () => {
+const MainVegan = () => {
   return (
-    <MainFridgeContainer>
-      <FridgedTitleBox>
+    <MainVegunContainer>
+      <VegunTitleBox>
         <StyledTitle>당신을 위한 냉장고털이 레시피</StyledTitle>
         <StyledSubTitle>
           냉장고 속 재료로 손쉽게 훌륭한 요리를 선보이세요
         </StyledSubTitle>
-      </FridgedTitleBox>
+      </VegunTitleBox>
       <RecipeContainer>
         {DUMMY_DATA.map((item) => (
           <LargeRecipeCard key={item.id} recipe={item} />
         ))}
       </RecipeContainer>
-    </MainFridgeContainer>
+    </MainVegunContainer>
   );
 };
 
-export default MainFridge;
+export default MainVegan;
 
-const MainFridgeContainer = styled.div`
+const MainVegunContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 6rem 0;
   text-align: center;
   width: 100%;
-  background-color: #fff9de;
+  background-color: #e8ffe8;
 `;
 
-const FridgedTitleBox = styled(StyledTitleBox)`
+const VegunTitleBox = styled(StyledTitleBox)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 0;
-  padding-bottom: 4rem;
-`;
-
-const RecipeContainer = styled.div`
-  width: 100%;
-  max-width: 105rem;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  gap: 5rem;
+  padding: 0;
 `;
