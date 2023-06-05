@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import uploadImage from "@/app/api/aws";
 import { axiosBase } from "@/app/api/axios";
+import Cookies from "js-cookie";
 
 type User = {
   user_id: string;
@@ -19,6 +20,7 @@ type User = {
   birth_date: string;
   password: string;
   created_at: string;
+  session_id: string;
 };
 
 type LabelForFileProps = {
@@ -105,10 +107,33 @@ const ModifyUserInfo: React.FC = () => {
     }
   };
 
-  const handleDeleteAccount = () => {
-    router.push("/");
-    // 회원 탈퇴 로직을 처리하는 함수
-    console.log("계정이 삭제되었습니다.");
+  const handleDeleteAccount = async () => {
+    // const confirmDeletion = window.confirm("정말 탈퇴 하시겠습니까?");
+    // if (confirmDeletion) {
+    try {
+      const response = await axiosBase.delete("users", {
+        data: {
+          user_id: userData?.user_id,
+          password: userData?.password,
+          session_id: "session_id",
+        },
+      });
+      console.log("delete 후 response : ", response);
+
+      if (response.status === 200) {
+        console.log("회원탈퇴 성공");
+        Cookies.remove("session_id");
+        console.log("계정이 삭제되었습니다.");
+        await axiosBase.post("users/logout");
+        router.push("/");
+      } else {
+        console.error("계정 삭제에 실패하였습니다.");
+      }
+    } catch (error) {
+      console.error("Error occurred while deleting account:", error);
+    }
+    // }
+
     closeModal();
   };
 
@@ -120,7 +145,16 @@ const ModifyUserInfo: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const handleDeleteImage = () => {};
+  const handleLabelClick = (e: React.MouseEvent<HTMLLabelElement>) => {
+    if (previewImage) {
+      e.preventDefault();
+    }
+  };
+
+  const handleDeleteImage = () => {
+    setPreviewImage(null);
+    setSelectedFile(null);
+  };
 
   const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -199,31 +233,26 @@ const ModifyUserInfo: React.FC = () => {
           </Wrapper>
           <ProfileImageWrapper>
             <Title>프로필 이미지</Title>
-            <LabelForFile
-              htmlFor="upload-button"
-              // backgroundImageUrl="recipe-icon.png"
-            >
-              {previewImage && (
+            <LabelForFile htmlFor="upload-button" onClick={handleLabelClick}>
+              {previewImage ? (
                 <>
                   <StyledImage src={previewImage} alt="Preview" />
-                  {handleDeleteImage && (
-                    <button type="button" onClick={handleDeleteImage}>
-                      <DeleteImage
-                        src="/images/delete-button.png"
-                        alt="delete"
-                      />
-                    </button>
-                  )}
+                  <button type="button" onClick={handleDeleteImage}>
+                    <DeleteImage src="/images/delete-button.png" alt="delete" />
+                  </button>
                 </>
+              ) : (
+                "클릭하여 사진 업로드"
               )}
-              {!previewImage && "클릭하여 사진 업로드"}
             </LabelForFile>
-            <InputFile
-              type="file"
-              accept="image/*"
-              id="upload-button"
-              onChange={handleFileChange}
-            />
+            {!previewImage && (
+              <InputFile
+                type="file"
+                accept="image/*"
+                id="upload-button"
+                onChange={handleFileChange}
+              />
+            )}
           </ProfileImageWrapper>
           <UserModifyButton>
             <Button
