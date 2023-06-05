@@ -139,7 +139,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
             </div>
 
             {recipeUserId === loggedInUserId && (
-              <div className="flex gap-[8px]">
+              <div className="flex gap-[0.8rem]">
                 <EditButton>수정</EditButton>
                 <DeleteButton>삭제</DeleteButton>
               </div>
