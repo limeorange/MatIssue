@@ -64,8 +64,10 @@ export const RecipeContainer = styled.div`
   width: 100%;
   max-width: 105rem;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 4rem 0;
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  gap: 5rem;
+  grid-template-columns: repeat(3, 31rem);
+  overflow-hidden;
+  gap: 6rem;
+  
 `;
