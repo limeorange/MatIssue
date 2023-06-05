@@ -6,6 +6,7 @@ import RecipeComment from "@/app/components/recipe/RecipeComment";
 import RecipeCommentInput from "@/app/components/recipe/RecipeCommentInput";
 import RecipeComments from "@/app/components/recipe/RecipeComments";
 import RecipeInfo from "@/app/components/recipe/RecipeInfo";
+import RecipeScrap from "@/app/components/recipe/RecipeScrap";
 import RecipeSteps from "@/app/components/recipe/RecipeSteps";
 import RecipeUserLikes from "@/app/components/recipe/RecipeUserLikes";
 import RecipeVideo from "@/app/components/recipe/RecipeVideo";
@@ -89,13 +90,13 @@ const RecipeDetail = (props: RecipeDataProps) => {
   } = recipe;
 
   const { comments } = recipeComment;
-
-  const commentCount = 3;
   const loggedInUserId = "happyuser";
 
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
-  const [count, setCount] = useState(510);
+  const [count, setCount] = useState(1230);
+  const countText = count.toLocaleString();
+  const [isBooked, setIsBooked] = useState(false);
 
   // 좋아요 버튼 클릭 핸들러
   const heartClickHandler = () => {
@@ -105,6 +106,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
     } else {
       setCount(count + 1);
     }
+  };
+
+  // 스크랩 버튼 클릭 핸들러
+  const scrapClickHandler = () => {
+    setIsBooked(!isBooked);
   };
 
   return (
@@ -139,7 +145,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
             </div>
 
             {recipeUserId === loggedInUserId && (
-              <div className="flex gap-[8px]">
+              <div className="flex gap-[0.8rem]">
                 <EditButton>수정</EditButton>
                 <DeleteButton>삭제</DeleteButton>
               </div>
@@ -181,13 +187,20 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <RecipeVideo recipeVideoUrl={recipeVideoUrl}></RecipeVideo>
         </div>
 
-        {/* 좋아요 */}
-        <RecipeUserLikes
-          isLiked={isLiked}
-          count={count}
-          heartClickHandler={heartClickHandler}
-        />
+        <div className="flex gap-[1rem] justify-center">
+          {/* 좋아요 */}
+          <RecipeUserLikes
+            isLiked={isLiked}
+            countText={countText}
+            heartClickHandler={heartClickHandler}
+          />
 
+          {/* 스크랩 */}
+          <RecipeScrap
+            isBooked={isBooked}
+            scrapClickHandler={scrapClickHandler}
+          />
+        </div>
         {/* 댓글 */}
         <div>
           <div className="flex">

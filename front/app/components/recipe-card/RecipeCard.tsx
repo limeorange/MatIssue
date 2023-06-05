@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import Image from "next/image";
 
@@ -22,9 +23,15 @@ type RecipeCardProps = {
 
 const RecipeCard = (props: RecipeCardProps) => {
   const { data } = props;
+  const router = useRouter();
+
+  const handleRecipeClick = () => {
+    router.push(`/recipes/${data.id}`);
+  };
+
   return (
     <>
-      <RecipeCardWrapper>
+      <RecipeCardWrapper onClick={handleRecipeClick}>
         <RecipeImg>
           <Image
             src={data.image}
@@ -50,7 +57,7 @@ const RecipeCard = (props: RecipeCardProps) => {
                   height={11}
                 />
               </RecipeRankImg>
-              <p>{data.likes}</p>
+              <p>{data.likes?.toLocaleString()}</p>
             </RecipeRankItem>
             {/* <RecipeRankItem>
               <RecipeRankImg>

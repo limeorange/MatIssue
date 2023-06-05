@@ -3,51 +3,43 @@ import styled from "styled-components";
 
 type UserLikesProps = {
   isLiked: boolean;
-  count: number;
+  countText: string;
   heartClickHandler: () => void;
 };
 
 /** 게시글 좋아요 컴포넌트 */
 const RecipeUserLikes: React.FC<UserLikesProps> = ({
   isLiked,
-  count,
+  countText,
   heartClickHandler,
 }) => {
   return (
     <>
-      <LikesContainerDiv>
-        <LikesWrapperDiv>
-          <IconDiv>
-            <Image
-              src={
-                isLiked
-                  ? "/images/recipe-view/heart_full.svg"
-                  : "/images/recipe-view/heart.svg"
-              }
-              alt="게시글 좋아요 하트"
-              width={30}
-              height={26}
-              onClick={heartClickHandler}
-              style={{ objectFit: "cover", cursor: "pointer" }}
-            />
-          </IconDiv>
-          <LikesCount>{count}</LikesCount>
-        </LikesWrapperDiv>
-      </LikesContainerDiv>
+      <LikesWrapperDiv>
+        <IconDiv>
+          <Image
+            src={
+              isLiked
+                ? "/images/recipe-view/heart_full.svg"
+                : "/images/recipe-view/heart.svg"
+            }
+            alt="게시글 좋아요 하트"
+            width={30}
+            height={26}
+            onClick={heartClickHandler}
+            style={{ objectFit: "cover", cursor: "pointer" }}
+          />
+        </IconDiv>
+        <LikesCount>{countText}</LikesCount>
+      </LikesWrapperDiv>
     </>
   );
 };
 
-/** 게시글 좋아요 컨테이너 Div (화면 중앙에 위치) */
-const LikesContainerDiv = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
 /** 좋아요 아이콘과 카운트 묶는 Div */
 const LikesWrapperDiv = styled.div`
   display: flex;
-  width: 12rem;
+  width: 11rem;
   height: 5.5rem;
   border: 0.17rem solid #c8c8c8;
   border-radius: 1.5rem;
@@ -63,8 +55,8 @@ const IconDiv = styled.div`
   margin-right: 0.6rem;
 `;
 
-/** 좋아요 개수 Div */
-const LikesCount = styled.div`
+/** 좋아요 개수 Span */
+const LikesCount = styled.span`
   font-size: 18px;
 `;
 

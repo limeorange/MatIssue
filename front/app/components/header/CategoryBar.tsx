@@ -24,16 +24,24 @@ const CategoryBar = () => {
           </IconWrapper>
           음식 카테고리
         </CategoryLi>
-        <CategoryLi onClick={() => router.push("/category/best")}>
+        <CategoryLi onClick={() => router.push("/category/best?category=best")}>
           베스트 레시피
         </CategoryLi>
-        <CategoryLi onClick={() => router.push("/category/newest")}>
+        <CategoryLi
+          onClick={() => router.push("/category/newest?category=newest")}
+        >
           최신 레시피
         </CategoryLi>
-        <CategoryLi onClick={() => router.push("/category/honmuk")}>
+        <CategoryLi
+          onClick={() => router.push("/category/honmuk?category=honmuk")}
+        >
           혼먹 레시피
         </CategoryLi>
-        <CategoryLi onClick={() => router.push("/category/vegan")}>
+        <CategoryLi
+          onClick={() =>
+            router.push("/category/vegetarian?category=vegetarian")
+          }
+        >
           비건 레시피
         </CategoryLi>
       </CategoryUl>

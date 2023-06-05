@@ -36,7 +36,7 @@ export default Banner;
 
 const BannerContainer = styled.div`
   display: none;
-
+  color: rgb(75, 75, 75);
   @media (min-width: 1024px) {
     display: block;
     width: 100%;
