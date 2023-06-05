@@ -2,21 +2,67 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import CommentModal from "./CommentModal";
 
-const RecipeComment = () => {
-  const recipe_nickname = "허니자몽";
-  const comment = `볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!
-     볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!
-     볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!
-     볶음밥이랑 같이 먹으면 더 맛있을 것 같아요 레시피 공유 감사합니다~!`;
-  // const [isEditing, setIsEditing] = useState(false);
+/** 요리 댓글 단일 Props */
+type RecipeCommentProps = {
+  comment_author: string;
+  comment_text: string;
+};
 
+/** 요리 댓글 단일 컴포넌트 */
+const RecipeComment: React.FC<RecipeCommentProps> = ({
+  comment_author,
+  comment_text,
+}) => {
+  // 수정 버튼 눌렀을 때 textarea로 변경하기 위한 상태 관리
+  const [isEditing, setIsEditing] = useState(false);
+  // 수정 완료 후 댓글 내용 상태 관리
+  const [editedCommentText, setEditedCommentText] = useState(comment_text);
+  // 모달창 상태 관리
   const [isModal, setIsModal] = useState<boolean>(false);
-  const onCloseModal = () => {
-    // isModal 상태 값을 false로 업데이트하여 모달을 닫기
+  // 작성 중일 경우 테두리 효과 주기 위한 상태 관리
+  const [isCommenting, setIsCommenting] = useState(false);
+
+  /** 댓글창 클릭시 상태 업데이트 핸들러 */
+  const boxClickHandler = () => {
+    setIsCommenting(true);
+  };
+
+  /** 모달창 닫는 핸들러 */
+  const modalCloseHandler = () => {
     setIsModal(false);
+  };
+
+  /** 수정 버튼 상태 관리 핸들러 */
+  const editClickHandler = () => {
+    setIsEditing(true);
+  };
+
+  /** 수정 버튼 내용 업데이트 핸들러 */
+  const commentChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedCommentText(e.target.value);
+  };
+
+  /** 수정 댓글 제출 핸들러 (API 연결 작업 예정) */
+  const saveClickHandler = () => {
+    // 수정된 댓글 데이터
+    const updatedComment = {
+      comment_author,
+      comment_text: editedCommentText,
+    };
+
+    // 서버로 수정된 댓글 전송 및 업데이트 로직 구현
+
+    // 수정 완료 후 상태 업데이트
+    setIsEditing(false);
+  };
+
+  /** 취소 버튼 핸들러 */
+  const commentCancelHandler = () => {
+    setIsEditing(false);
+    setEditedCommentText(comment_text);
   };
 
   return (
@@ -38,11 +84,15 @@ const RecipeComment = () => {
         <CommentContentsDiv>
           <AuthorDotsDiv>
             {/* 작성자 */}
-            <AuthorName>{recipe_nickname}</AuthorName>
+            <AuthorName>{comment_author}</AuthorName>
             {/* 댓글 수정/삭제바 */}
             <ThreeDotsImageDiv onClick={() => setIsModal(true)}>
               {isModal && (
-                <CommentModal isModal={isModal} onCloseModal={onCloseModal} />
+                <CommentModal
+                  isModal={isModal}
+                  modalCloseHandler={modalCloseHandler}
+                  editClickHandler={editClickHandler}
+                />
               )}
               <Image
                 src={"/images/recipe-view/threedots.svg"}
@@ -54,13 +104,107 @@ const RecipeComment = () => {
             </ThreeDotsImageDiv>
           </AuthorDotsDiv>
           {/* 댓글 내용 */}
-          {/* 조건에 따라 textarea로 변경 (삼항연산자) */}
-          <CommentText>{comment}</CommentText>
+          {/* 수정 버튼 눌렀을 때 textarea로 변경 */}
+          {isEditing ? (
+            <>
+              <CommentContainerDiv
+                isCommenting={isCommenting}
+                onClick={boxClickHandler}
+              >
+                <InputTextArea
+                  value={editedCommentText}
+                  onChange={commentChangeHandler}
+                />
+              </CommentContainerDiv>
+              <div className="flex gap-[0.8rem] justify-end">
+                <DeleteButton onClick={commentCancelHandler}>취소</DeleteButton>
+                <EditButton onClick={saveClickHandler}>수정</EditButton>
+              </div>
+            </>
+          ) : (
+            <CommentText>{editedCommentText}</CommentText>
+          )}
         </CommentContentsDiv>
       </CommentContainer>
     </>
   );
 };
+
+/** 수정, 삭제 버튼 감싸는 Div */
+const ButtonDiv = styled.div`
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+`;
+
+/** 수정 Button */
+const EditButton = styled.button`
+  width: 6rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  background: #fbe2a1;
+  font-weight: 500;
+  font-size: 15.5px;
+  color: #4f3d21;
+`;
+
+/** 삭제 Button */
+const DeleteButton = styled.button`
+  width: 6rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  border: 2px solid #fbe2a1;
+  font-weight: 500;
+  font-size: 15.5px;
+  color: #4f3d21;
+`;
+
+/** 댓글 입력칸 전체 감싸는 Div */
+const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
+  display: flex;
+  width: 100%;
+  border-radius: 1rem;
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  color: #9ca3af;
+  font-size: 15.5px;
+  padding-left: 1.2rem;
+  cursor: pointer;
+  border: 0.2rem solid #dbd8d0;
+
+  ${({ isCommenting }) =>
+    isCommenting &&
+    css`
+      border-color: #fbd26a;
+      color: #fbd26a;
+    `}
+`;
+
+/** 댓글 입력 텍스트 */
+const InputTextArea = styled.textarea`
+  outline: none;
+  width: 99%;
+  color: #9ca3af;
+  font-size: 15.5px;
+  resize: none;
+  padding-right: 0.5rem;
+
+  ::-webkit-scrollbar {
+    width: 1rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #fbd26a;
+    border-radius: 1rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #ededed;
+    border-radius: 1rem;
+  }
+`;
 
 /** 댓글 전체 감싸는 Div */
 const CommentContainer = styled.div`

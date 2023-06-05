@@ -1,13 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import styled from "styled-components";
-import Button from "../../components/UI/Button";
 import RecipeCards from "../../components/my-page/RecipeCards";
-import { useEffect, useState } from "react";
 import ProfileCard from "../../components/my-page/ProfileCard";
 
-const MyPage = () => {
+const Admin = () => {
   return (
     <>
       <Container>
@@ -20,7 +17,7 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default Admin;
 
 const Container = styled.div`
   width: 100%;

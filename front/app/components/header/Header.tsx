@@ -10,16 +10,21 @@ import CategoryBar from "./CategoryBar";
 
 import { User } from "@/app/types";
 import getCurrentUser from "@/app/api/user";
+import Cookies from "js-cookie";
 
 const Header = () => {
-  const { data: currentUser, isLoading } = useQuery<User>(
-    ["currentUser"],
-    () => getCurrentUser(),
-    {
-      refetchOnWindowFocus: false,
-      retry: 0,
-    }
-  );
+  const {
+    data: currentUser,
+    isLoading,
+    isError,
+  } = useQuery<User>(["currentUser"], () => getCurrentUser(), {
+    refetchOnWindowFocus: false,
+    retry: 0,
+  });
+
+  if (isError) {
+    Cookies.remove("session_id");
+  }
 
   return (
     <HeaderDiv>

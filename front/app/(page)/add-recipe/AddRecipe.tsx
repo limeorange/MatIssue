@@ -138,22 +138,10 @@ const RecipeForm = () => {
   };
 
   // 스텝에 이미지 넣기 핸들러
-  const handleStepImageChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const file = e.target.files![0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const newStepImages = [...state.stepImages];
-      newStepImages[index] = reader.result as string;
-      setState({ ...state, stepImages: newStepImages });
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
+  const handleStepImageChange = (imageUrl: string, index: number) => {
+    const newStepImages = [...state.stepImages];
+    newStepImages[index] = imageUrl;
+    setState({ ...state, stepImages: newStepImages });
   };
 
   // 스텝 내용 변경 핸들러
@@ -197,8 +185,6 @@ const RecipeForm = () => {
     const recipeData = {
       recipe_title: state.recipeTitle,
       recipe_thumbnail: state.selectedImage,
-      // recipe_thumbnail:
-      //   "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
       recipe_video: state.videoLink,
       recipe_description: state.cookingIntro,
       recipe_category: state.selectedCategory,
@@ -213,16 +199,14 @@ const RecipeForm = () => {
       })),
       recipe_sequence: state.steps.map(({ stepDetail, stepImage }, index) => ({
         step: index + 1,
-        // picture: state.stepImages[index],
-        picture:
-          "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
+        picture: state.stepImages[index],
         description: stepDetail,
       })),
       recipe_tip: state.cookingTips,
       user_id: "admin",
     };
 
-    // console.log(recipeData);
+    console.log(recipeData);
 
     try {
       const response = await axiosBase.post("recipes/", recipeData);

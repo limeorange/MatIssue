@@ -11,10 +11,9 @@ type Comment = {
   text: string;
 };
 
+/** 댓글 입력 컴포넌트 */
 const RecipeCommentInput = () => {
   const [isCommenting, setIsCommenting] = useState(false);
-
-  //  props로 넘어온 댓글 내용이 있으면 그 내용을 넣어주고, 없으면 빈 배열로! (for 수정 구현)
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
   const [activatedButton, setActivatedButton] = useState(false);
@@ -23,7 +22,8 @@ const RecipeCommentInput = () => {
   const boxClickHandler = () => {
     setIsCommenting(true);
   };
-  /** 댓글 입력시 상태 업데이트 핸들러 */
+
+  /** 작성하는 댓글 내용 업데이트 핸들러 */
   const commentInputHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setCommentText(e.target.value);
     if (e.target.value === "") {
@@ -126,8 +126,8 @@ const InputTextArea = styled.textarea`
 
 /** 제출 버튼 */
 const SubmitButton = styled.button`
-  padding-right: 10px;
-  padding-left: 15px;
+  padding-right: 1rem;
+  padding-left: 1.5rem;
 
   &:disabled {
     filter: invert(95%) sepia(16%) saturate(99%) hue-rotate(356deg)

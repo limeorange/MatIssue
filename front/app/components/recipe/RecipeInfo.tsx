@@ -15,45 +15,23 @@ const RecipeInfo: React.FC<RecipeInfoProps> = ({ recipe_info, category }) => {
   const { serving, time, level } = recipe_info;
 
   // level에 따른 라벨링 작업
-  let levelText = "";
-  switch (level) {
-    case 0:
-      levelText = "쉬움";
-      break;
-    case 1:
-      levelText = "중간";
-      break;
-    case 2:
-      levelText = "어려움";
-      break;
-    default:
-      break;
-  }
+  const levelLabel: { [key: number]: string } = {
+    0: "쉬움",
+    1: "중간",
+    2: "어려움",
+  };
+  const levelText = levelLabel[level];
 
   // category에 따른 라벨링 작업
-  let categoryText = "";
-  switch (category) {
-    case "korean":
-      categoryText = "한식";
-      break;
-    case "chinese":
-      categoryText = "중식";
-      break;
-    case "japanese":
-      categoryText = "일식";
-      break;
-    case "western":
-      categoryText = "양식";
-      break;
-    case "vegetarian":
-      categoryText = "채식";
-      break;
-    case "other":
-      categoryText = "기타";
-      break;
-    default:
-      break;
-  }
+  const categoryLabel: { [key: string]: string } = {
+    korean: "한식",
+    chinese: "중식",
+    japanese: "일식",
+    western: "양식",
+    vegetarian: "채식",
+    other: "기타",
+  };
+  const categoryText = categoryLabel[category];
 
   return (
     <>

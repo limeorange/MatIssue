@@ -4,10 +4,14 @@ import IngredientList from "@/app/components/recipe/IngredientList";
 import ProgressBar from "@/app/components/recipe/ProgressBar";
 import RecipeComment from "@/app/components/recipe/RecipeComment";
 import RecipeCommentInput from "@/app/components/recipe/RecipeCommentInput";
+import RecipeComments from "@/app/components/recipe/RecipeComments";
 import RecipeInfo from "@/app/components/recipe/RecipeInfo";
+import RecipeScrap from "@/app/components/recipe/RecipeScrap";
 import RecipeSteps from "@/app/components/recipe/RecipeSteps";
 import RecipeUserLikes from "@/app/components/recipe/RecipeUserLikes";
 import RecipeVideo from "@/app/components/recipe/RecipeVideo";
+import StickyProgressBar from "@/app/components/recipe/StickyProgressBar";
+import StickySideBar from "@/app/components/recipe/StickySideBar";
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
@@ -42,10 +46,18 @@ type RecipeDataProps = {
     user_nickname: string;
     created_at: string;
   };
+  // 댓글 관련 Data Type 정의 (임시 dummy data)
+  recipeComment: {
+    comments: {
+      comment_author: string;
+      comment_text: string;
+    }[];
+  };
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
 const RecipeDetail = (props: RecipeDataProps) => {
+  const { recipe, recipeComment } = props;
   const {
     // 대표 이미지, 제목, 작성자, 소개글 (props로 안 내려줌)
     recipe_title: recipeTitle,
@@ -75,14 +87,16 @@ const RecipeDetail = (props: RecipeDataProps) => {
     recipe_id,
     recipe_view,
     recipe_like,
-  } = props.recipe;
+  } = recipe;
 
-  const commentCount = 3;
+  const { comments } = recipeComment;
   const loggedInUserId = "happyuser";
 
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
-  const [count, setCount] = useState(510);
+  const [count, setCount] = useState(1230);
+  const countText = count.toLocaleString();
+  const [isBooked, setIsBooked] = useState(false);
 
   // 좋아요 버튼 클릭 핸들러
   const heartClickHandler = () => {
@@ -94,11 +108,22 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
+  // 스크랩 버튼 클릭 핸들러
+  const scrapClickHandler = () => {
+    setIsBooked(!isBooked);
+  };
+
   return (
     <>
       <ContainerDiv>
         {/* 스크롤 상태 진행바 */}
         <ProgressBar />
+
+        {/* 목차 사이드바 */}
+        <div className="flex">
+          <StickyProgressBar />
+          <StickySideBar />
+        </div>
 
         {/* 요리 대표 이미지 */}
         <ImageWrapperDiv>
@@ -115,13 +140,12 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <TitleContainerDiv>
             <div className="flex items-center">
               <TitleH3>{recipeTitle}</TitleH3>
-
               <AuthorSpan>by {author}</AuthorSpan>
               <AuthorSpan>&nbsp;• {createdAt.slice(0, 10)}</AuthorSpan>
             </div>
 
             {recipeUserId === loggedInUserId && (
-              <div className="flex gap-[8px]">
+              <div className="flex gap-[0.8rem]">
                 <EditButton>수정</EditButton>
                 <DeleteButton>삭제</DeleteButton>
               </div>
@@ -131,8 +155,8 @@ const RecipeDetail = (props: RecipeDataProps) => {
         </div>
 
         {/* 요리 정보 (인원, 시간, 난이도, 종류) */}
-        <div>
-          <SubtitleH2>요리 정보</SubtitleH2>
+        <div id="content1">
+          <SubtitleH2 id="heading1">요리 정보</SubtitleH2>
           <RecipeInfo
             category={category}
             recipe_info={recipe_info}
@@ -141,39 +165,46 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 재료 준비 목록 */}
         <div>
-          <SubtitleH2>재료 준비</SubtitleH2>
+          <SubtitleH2 id="heading2">재료 준비</SubtitleH2>
           <IngredientList recipeIngredients={recipeIngredients} />
         </div>
 
         {/* 요리 과정 */}
         <div>
-          <SubtitleH2>요리 과정</SubtitleH2>
+          <SubtitleH2 id="heading3">요리 과정</SubtitleH2>
           <RecipeSteps recipeSequence={recipeSequence}></RecipeSteps>
         </div>
 
         {/* 요리팁 */}
         <div>
-          <SubtitleH2>요리팁</SubtitleH2>
+          <SubtitleH2 id="heading4">요리팁</SubtitleH2>
           <RecipeTipDiv>{recipeTip}</RecipeTipDiv>
         </div>
 
         {/* 요리 동영상 */}
         <div>
-          <SubtitleH2>요리 동영상</SubtitleH2>
+          <SubtitleH2 id="heading5">요리 동영상</SubtitleH2>
           <RecipeVideo recipeVideoUrl={recipeVideoUrl}></RecipeVideo>
         </div>
 
-        {/* 좋아요 */}
-        <RecipeUserLikes
-          isLiked={isLiked}
-          count={count}
-          heartClickHandler={heartClickHandler}
-        />
+        <div className="flex gap-[1rem] justify-center">
+          {/* 좋아요 */}
+          <RecipeUserLikes
+            isLiked={isLiked}
+            countText={countText}
+            heartClickHandler={heartClickHandler}
+          />
 
+          {/* 스크랩 */}
+          <RecipeScrap
+            isBooked={isBooked}
+            scrapClickHandler={scrapClickHandler}
+          />
+        </div>
         {/* 댓글 */}
         <div>
           <div className="flex">
-            <SubtitleH2>댓글</SubtitleH2>
+            <SubtitleH2 id="heading6">댓글</SubtitleH2>
             <CommentIconDiv>
               <Image
                 src="/images/recipe-view/comment.svg"
@@ -182,12 +213,10 @@ const RecipeDetail = (props: RecipeDataProps) => {
                 height={22}
               ></Image>
             </CommentIconDiv>
-            <SubtitleH2>{commentCount}</SubtitleH2>
+            <SubtitleH2>{comments.length}</SubtitleH2>
           </div>
           <div className="mb-[30px]">
-            <RecipeComment />
-            <RecipeComment />
-            <RecipeComment />
+            <RecipeComments comments={comments} />
           </div>
           <RecipeCommentInput />
         </div>
@@ -196,6 +225,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
   );
 };
 
+/** 전체 감싸는 Div */
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -204,7 +234,7 @@ const ContainerDiv = styled.div`
   gap: 2.5rem;
 `;
 
-// 수정 Button
+/** 수정 Button */
 const EditButton = styled.button`
   width: 6.7rem;
   height: 3.7rem;
@@ -215,7 +245,7 @@ const EditButton = styled.button`
   color: #4f3d21;
 `;
 
-// 삭제 Button
+/** 삭제 Button */
 const DeleteButton = styled.button`
   width: 6.7rem;
   height: 3.7rem;
