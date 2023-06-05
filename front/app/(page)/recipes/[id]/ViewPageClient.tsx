@@ -4,36 +4,95 @@ import IngredientList from "@/app/components/recipe/IngredientList";
 import ProgressBar from "@/app/components/recipe/ProgressBar";
 import RecipeComment from "@/app/components/recipe/RecipeComment";
 import RecipeCommentInput from "@/app/components/recipe/RecipeCommentInput";
+import RecipeComments from "@/app/components/recipe/RecipeComments";
 import RecipeInfo from "@/app/components/recipe/RecipeInfo";
 import RecipeSteps from "@/app/components/recipe/RecipeSteps";
 import RecipeUserLikes from "@/app/components/recipe/RecipeUserLikes";
 import RecipeVideo from "@/app/components/recipe/RecipeVideo";
+import StickyProgressBar from "@/app/components/recipe/StickyProgressBar";
+import StickySideBar from "@/app/components/recipe/StickySideBar";
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
 
-// 대표 이미지, 제목, 작성자, 소개글,
-const recipeCover = "/images/recipe-view/요리 대표 사진.png";
-const recipeTitle = "보들보들 순두부 달걀탕";
-const author = "냠냠순두부러버";
-const description = `보들보들 부드러운 순두부 달걀탕.
-순두부와 달걀만 있으면 간단하게 만들 수 있는 순두부 달걀탕 레시피를 소개해 드릴게요. 
-달걀탕 더욱 더 맛있게 먹는 법! 더욱 더 시원하고 깔끔한 맛을 내려면 새우젓을 넣어보세요.
-부드럽고 소화가 잘되기 때문에 아침 식사로도 제격이랍니다. 
-쌀쌀한 아침은 따끈한 순두부 달걀탕으로 어떠세요?`;
+/** 레시피 데이터 Props */
+type RecipeDataProps = {
+  recipe: {
+    recipe_title: string;
+    recipe_thumbnail: string;
+    recipe_video: string;
+    recipe_description: string;
+    recipe_category: string;
+    recipe_info: {
+      serving: number;
+      time: number;
+      level: number;
+    };
+    recipe_ingredients: {
+      name: string;
+      amount: string;
+    }[];
+    recipe_sequence: {
+      step: number;
+      picture: string;
+      description: string;
+    }[];
+    recipe_tip: string;
+    recipe_id: string;
+    recipe_view?: number;
+    recipe_like?: number;
+    user_id: string;
+    user_nickname: string;
+    created_at: string;
+  };
+  // 댓글 관련 Data Type 정의 (임시 dummy data)
+  recipeComment: {
+    comments: {
+      comment_author: string;
+      comment_text: string;
+    }[];
+  };
+};
 
-// 요리팁, 동영상 이미지, 동영상 링크, 댓글 개수
-const recipeTip = "멸치액젓이 싫으시면 국간장 2T만으로 간 하셔도 좋습니다.";
-const recipeVideoUrl = `https://www.youtube.com/embed/jk29M4knFBw`;
-const commentCount = 3;
+/** 레시피 조회 페이지 컴포넌트 */
+const RecipeDetail = (props: RecipeDataProps) => {
+  const { recipe, recipeComment } = props;
+  const {
+    // 대표 이미지, 제목, 작성자, 소개글 (props로 안 내려줌)
+    recipe_title: recipeTitle,
+    recipe_thumbnail: recipeCover,
+    user_nickname: author,
+    recipe_description: description,
 
-// 레시피 작성자 아이디, 로그인된 아이디
-const recipeUserId = "happyuser";
-const loggedInUserId = "happyuser";
-const createdAt = "2023-06-02";
+    // 요리 정보 (인원, 시간, 난이도, 종류)
+    recipe_category: category,
+    recipe_info,
 
-// 레시피 조회 페이지 컴포넌트
-const RecipeDetail = () => {
+    // 요리팁, 동영상 링크
+    recipe_tip: recipeTip,
+    recipe_video: recipeVideoUrl,
+
+    // 레시피 작성자 아이디, 작성된 시각
+    user_id: recipeUserId,
+    created_at: createdAt,
+
+    // 요리 재료
+    recipe_ingredients: recipeIngredients,
+
+    // 요리 과정
+    recipe_sequence: recipeSequence,
+
+    // 요리 레시피 게시글 ID, 조회수, 좋아요수
+    recipe_id,
+    recipe_view,
+    recipe_like,
+  } = recipe;
+
+  const { comments } = recipeComment;
+
+  const commentCount = 3;
+  const loggedInUserId = "happyuser";
+
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
   const [count, setCount] = useState(510);
@@ -54,6 +113,12 @@ const RecipeDetail = () => {
         {/* 스크롤 상태 진행바 */}
         <ProgressBar />
 
+        {/* 목차 사이드바 */}
+        <div className="flex">
+          <StickyProgressBar />
+          <StickySideBar />
+        </div>
+
         {/* 요리 대표 이미지 */}
         <ImageWrapperDiv>
           <Image
@@ -69,9 +134,8 @@ const RecipeDetail = () => {
           <TitleContainerDiv>
             <div className="flex items-center">
               <TitleH3>{recipeTitle}</TitleH3>
-
               <AuthorSpan>by {author}</AuthorSpan>
-              <AuthorSpan>&nbsp;• {createdAt}</AuthorSpan>
+              <AuthorSpan>&nbsp;• {createdAt.slice(0, 10)}</AuthorSpan>
             </div>
 
             {recipeUserId === loggedInUserId && (
@@ -85,32 +149,35 @@ const RecipeDetail = () => {
         </div>
 
         {/* 요리 정보 (인원, 시간, 난이도, 종류) */}
-        <div>
-          <SubtitleH2>요리 정보</SubtitleH2>
-          <RecipeInfo></RecipeInfo>
+        <div id="content1">
+          <SubtitleH2 id="heading1">요리 정보</SubtitleH2>
+          <RecipeInfo
+            category={category}
+            recipe_info={recipe_info}
+          ></RecipeInfo>
         </div>
 
         {/* 재료 준비 목록 */}
         <div>
-          <SubtitleH2>재료 준비</SubtitleH2>
-          <IngredientList />
+          <SubtitleH2 id="heading2">재료 준비</SubtitleH2>
+          <IngredientList recipeIngredients={recipeIngredients} />
         </div>
 
         {/* 요리 과정 */}
         <div>
-          <SubtitleH2>요리 과정</SubtitleH2>
-          <RecipeSteps></RecipeSteps>
+          <SubtitleH2 id="heading3">요리 과정</SubtitleH2>
+          <RecipeSteps recipeSequence={recipeSequence}></RecipeSteps>
         </div>
 
         {/* 요리팁 */}
         <div>
-          <SubtitleH2>요리팁</SubtitleH2>
+          <SubtitleH2 id="heading4">요리팁</SubtitleH2>
           <RecipeTipDiv>{recipeTip}</RecipeTipDiv>
         </div>
 
         {/* 요리 동영상 */}
         <div>
-          <SubtitleH2>요리 동영상</SubtitleH2>
+          <SubtitleH2 id="heading5">요리 동영상</SubtitleH2>
           <RecipeVideo recipeVideoUrl={recipeVideoUrl}></RecipeVideo>
         </div>
 
@@ -124,7 +191,7 @@ const RecipeDetail = () => {
         {/* 댓글 */}
         <div>
           <div className="flex">
-            <SubtitleH2>댓글</SubtitleH2>
+            <SubtitleH2 id="heading6">댓글</SubtitleH2>
             <CommentIconDiv>
               <Image
                 src="/images/recipe-view/comment.svg"
@@ -133,12 +200,10 @@ const RecipeDetail = () => {
                 height={22}
               ></Image>
             </CommentIconDiv>
-            <SubtitleH2>{commentCount}</SubtitleH2>
+            <SubtitleH2>{comments.length}</SubtitleH2>
           </div>
           <div className="mb-[30px]">
-            <RecipeComment />
-            <RecipeComment />
-            <RecipeComment />
+            <RecipeComments comments={comments} />
           </div>
           <RecipeCommentInput />
         </div>
@@ -147,6 +212,7 @@ const RecipeDetail = () => {
   );
 };
 
+/** 전체 감싸는 Div */
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -155,7 +221,7 @@ const ContainerDiv = styled.div`
   gap: 2.5rem;
 `;
 
-// 수정 Button
+/** 수정 Button */
 const EditButton = styled.button`
   width: 6.7rem;
   height: 3.7rem;
@@ -166,7 +232,7 @@ const EditButton = styled.button`
   color: #4f3d21;
 `;
 
-// 삭제 Button
+/** 삭제 Button */
 const DeleteButton = styled.button`
   width: 6.7rem;
   height: 3.7rem;

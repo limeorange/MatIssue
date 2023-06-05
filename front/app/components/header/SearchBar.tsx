@@ -38,19 +38,25 @@ const SearchBar = () => {
 };
 
 const SearchBarDiv = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   padding: 0.8rem 1.6rem;
-  width: 36rem;
   height: 4rem;
+  flex-grow: 1;
   gap: 1.6rem;
+  max-width: 36rem;
 
   border: 0.1rem solid rgb(200, 200, 200);
-  border-radius: 10rem;
+  border-radius: 0.8rem;
+
+  @media (min-width: 768px) {
+    position: absolute;
+    width: 36rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10rem;
+  }
 `;
 
 const SearchBarInput = styled.input`

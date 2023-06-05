@@ -1,9 +1,11 @@
 "use client";
-
-import React from "react";
-import styled from "styled-components";
 import Link from "next/link";
+import styled from "styled-components";
 import Button from "../../components/UI/Button";
+import { useState } from "react";
+import React from "react";
+import RecipeCard from "../recipe-card/RecipeCard";
+import Image from "next/image";
 
 interface Recipe {
   image: string;
@@ -168,16 +170,23 @@ const RecipeCards = () => {
   return (
     <RecipeListContainer>
       <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>5</RecipeHeadingCount>
+      <RecipeHeadingCount>{filteredRecipes.length}</RecipeHeadingCount>
       <RecipeList>
+        {filteredRecipes.length === 0 && (
+          <div>레시피가 없습니다. 레시피를 추가해주세요!</div>
+        )}
         {filteredRecipes.map((data, index) => (
-          <RecipeCards key={index} data={data} />
+          <RecipeCardWrapper key={index}>
+            <StyledRecipeCard data={data} />
+            <button onClick={() => console.log("Image button clicked!")}>
+              <DeleteButtonImage src="/images/delete-button.png" alt="X-box" />
+            </button>
+          </RecipeCardWrapper>
         ))}
       </RecipeList>
     </RecipeListContainer>
   );
 };
-
 export default RecipeCards;
 
 // 레시피 리스트
@@ -203,6 +212,21 @@ const RecipeHeadingCount = styled.span`
 const RecipeList = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 1.6rem;
   margin-top: 1.5rem;
+`;
+
+const RecipeCardWrapper = styled.div`
+  position: relative;
+`;
+
+const StyledRecipeCard = styled(RecipeCard)`
+  font-size: 13px !important;
+`;
+
+const DeleteButtonImage = styled.img`
+  position: absolute;
+  top: 21rem;
+  right: 1.4rem;
+  width: 1.8rem;
+  height: 1.8rem;
 `;

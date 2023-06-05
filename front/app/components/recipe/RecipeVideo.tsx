@@ -11,7 +11,7 @@ const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipeVideoUrl }) => {
       <VideoContainerDiv>
         <VideoIframe
           title="요리 동영상 썸네일"
-          src={recipeVideoUrl}
+          src={`https://www.youtube.com/embed/${recipeVideoUrl.split("e/")[1]}`}
           allowFullScreen
         />
       </VideoContainerDiv>

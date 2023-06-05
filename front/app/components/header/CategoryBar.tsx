@@ -14,18 +14,14 @@ const CategoryBar = () => {
     <CategoryBarDiv>
       <CategoryUl>
         <CategoryLi
+          onClick={() => setIsModal(!isModal)}
           onMouseOver={() => setIsModal(true)}
           onMouseOut={() => setIsModal(false)}
         >
-          {isModal && <CategoryModal />}
-          <div>
-            <Image
-              src="/images/listIcon.png"
-              alt="list_icon"
-              width={14}
-              height={12}
-            />
-          </div>
+          {isModal && <CategoryModal isModal={isModal} />}
+          <IconWrapper>
+            <Image src="/images/listIcon.png" alt="list_icon" fill />
+          </IconWrapper>
           음식 카테고리
         </CategoryLi>
         <CategoryLi onClick={() => router.push("/category/best")}>
@@ -51,13 +47,34 @@ const CategoryBarDiv = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 5rem;
   color: #4f3d21;
+  height: 4rem;
+
+  @media (max-width: 768px) {
+    overflow-x: scroll;
+    white-space: nowrap;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    display: inline-block;
+    width: 100%;
+    height: 5rem;
+  }
 `;
 
 const CategoryUl = styled.ul`
   display: flex;
   gap: 2rem;
+`;
+
+const IconWrapper = styled.div`
+  display: block;
+  position: relative;
+  width: 1.4rem;
+  height: 0.9rem;
 `;
 
 const CategoryLi = styled.li`
@@ -67,10 +84,16 @@ const CategoryLi = styled.li`
   align-items: center;
   gap: 0.8rem;
   border-bottom: 0.4rem solid #ffffff;
-  padding: 1.3rem 1.3rem 0.9rem 1.3rem;
+  padding: 0.8rem 1rem 0.4rem 1rem;
   &:hover {
     cursor: pointer;
     font-weight: 600;
     border-bottom: 0.4rem solid #f8b551;
   }
+
+  @media (min-width: 768px) {
+    padding: 1.3rem 1.3rem 0.9rem 1.3rem;
+  }
+
+  transition: all 0.3s;
 `;
