@@ -2,13 +2,13 @@
 
 import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import VideoSection from "../../components/add-recipe/VideoSection";
-import IngredientSection from "../../components/add-recipe/IngredientSection";
-import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
-import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
-import CookingStepsSection from "../../components/add-recipe/CookingStepsSection";
-import Button from "../../components/UI/Button";
-import { axiosBase } from "../../api/axios";
+import VideoSection from "@/app/components/add-recipe/VideoSection";
+import IngredientSection from "@/app/components/add-recipe/IngredientSection";
+import CategoryAndInfo from "@/app/components/add-recipe/CategoryAndInfo";
+import ThumbnailUpload from "@/app/components/add-recipe/ThumbnailUpload";
+import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection";
+import Button from "@/app/components/UI/Button";
+import { axiosBase } from "@/app/api/axios";
 
 type RecipeFormState = {
   selectedCategory: string;
