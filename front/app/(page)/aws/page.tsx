@@ -43,7 +43,7 @@ const ImageUploadForm = () => {
       <StyledForm onSubmit={handleFormSubmit}>
         <StyledPreviewContainer>
           {previewImage ? (
-            <Image src={previewImage} alt="Preview" />
+            <StyledImage src={previewImage} alt="Preview" />
           ) : (
             "미리보기이미지"
           )}
@@ -101,4 +101,9 @@ const StyledButton = styled.button`
   background-color: rgba(1, 1, 1, 0.5);
   height: 100px;
   width: 200px;
+`;
+
+const StyledImage = styled.img`
+  width: 50px;
+  height: 50px;
 `;

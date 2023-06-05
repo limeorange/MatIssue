@@ -3,12 +3,17 @@ import Link from "next/link";
 import styled from "styled-components";
 import Button from "../../../components/UI/Button";
 import React, { useState } from "react";
+import ProfileCard from "@/app/components/my-page/ProfileCard";
+import NotificationComponent from "@/app/components/my-page/Notification";
 
 const Notification = () => {
   return (
     <>
       <Container>
-        <Header>알림</Header>
+        <Wrapper>
+          <ProfileCard />
+          <NotificationComponent />
+        </Wrapper>
       </Container>
     </>
   );
@@ -16,6 +21,14 @@ const Notification = () => {
 
 export default Notification;
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 100%;
+  max-width: 120rem;
+  margin: 0 auto;
+`;
 
-const Header = styled.h1``;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+`;
