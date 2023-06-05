@@ -45,7 +45,6 @@ const ModifyUserInfo: React.FC = () => {
   }, [currentUser]);
 
   const router = useRouter();
-  const [date, setDate] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,39 +63,33 @@ const ModifyUserInfo: React.FC = () => {
     }
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // userData 데이터 확인
-
-    // 변경한 데이터를 객체에다 담아서 서버에 전송
-    // 객체를 만들고 그 안에 key와 value를 넣어줘야 한다.
-    // value는  e.currentTarget.name명.value로 접근 가능
-    // const modifyUserInfo = {
-    //   user_id: currentUser?.user_id,
-    //   email: e.currentTarget.user_email.value,
-    //   username: e.currentTarget.nickname.value,
-    //   birth_date: e.currentTarget.birth.value,
-    //   password: "", // 사용자가 입력해야 되니 때문에 공백
-    //   img: "", // aws에 업로드한 이미지 url을 넣기 때문에 공백으로 처리
-    // };
-
+  const uploadProfileImage = async () => {
     // aws 이미지 업로드 로직
     if (selectedFile) {
       try {
-        const response = await uploadImage(selectedFile); // aws에 이미지 업로드하기 위한 코드
-        const imgUrl = response.imageUrl; // aws 업로드 후 반환된 이미지 aws url
-        // modifyUserInfo.img = imgUrl; // 객체에 이미지 aws url 추가
-        console.log("imgUrl : ", imgUrl);
-        setUserData({ ...userData, img: imgUrl });
+        const response = await uploadImage(selectedFile);
+        const imgUrl = response.imageUrl;
+        setUserData((prev: any) => {
+          return { ...prev, img: imgUrl };
+        });
       } catch (error) {
         console.error("Image upload failed:", error);
       }
     }
+  };
 
-    // PUT /api/users/
-    // TODO: modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
-    // 변경에 성공하면 alert창 띄우고 my-page로 이동
-    console.log(userData);
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
+    // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
+    // useEffect가 실행되면서 putUser 함수가 실행된다. => 회원정보 변경
+    await uploadProfileImage();
+  };
+
+  // TODO: modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
+  // 변경에 성공하면 alert창 띄우고 my-page로 이동
+  async function putUser() {
+    console.log("userData  2 : ", userData);
     try {
       const response = await axiosBase.put("users", userData);
       console.log(response);
@@ -105,7 +98,13 @@ const ModifyUserInfo: React.FC = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
+
+  useEffect(() => {
+    if (userData?.img) {
+      putUser();
+    }
+  }, [userData?.img]);
 
   const handleDeleteAccount = async () => {
     // const confirmDeletion = window.confirm("정말 탈퇴 하시겠습니까?");
@@ -158,7 +157,11 @@ const ModifyUserInfo: React.FC = () => {
 
   const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
+    // setUserData((prev: any) => { ...prev, [name]: value });
+    // fix error
+    setUserData((prev: any) => {
+      return { ...prev, [name]: value };
+    });
   };
 
   return (
