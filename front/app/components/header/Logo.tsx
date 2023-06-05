@@ -2,20 +2,36 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import styled from "styled-components";
 
 const Logo = () => {
   const router = useRouter();
 
   return (
-    <Image
-      onClick={() => router.push("/")}
-      style={{ cursor: "pointer" }}
-      src="/images/logo1.png"
-      height="40"
-      width="133"
-      alt="Logo"
-    />
+    <LogoWrapper>
+      <Image
+        onClick={() => router.push("/")}
+        style={{ cursor: "pointer" }}
+        src="/images/logo1.png"
+        fill
+        alt="Logo"
+      />
+    </LogoWrapper>
   );
 };
+
+const LogoWrapper = styled.div`
+  display: block;
+  position: relative;
+  width: 10.5rem;
+  height: 3.5rem;
+  min-width: 10.5rem;
+  height: 3.5rem;
+
+  @media (min-width: 768px) {
+    width: 12rem;
+    height: 4rem;
+  }
+`;
 
 export default Logo;

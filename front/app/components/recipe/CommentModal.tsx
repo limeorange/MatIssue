@@ -2,25 +2,23 @@ import { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 type CommentModalProps = {
-  // 모달의 열림/닫힘 상태
   isModal: boolean;
-
-  // 모달을 닫을 때 호출되는 콜백 함수
-  onCloseModal: () => void;
+  modalCloseHandler: () => void;
+  editClickHandler: () => void;
 };
 
 const CommentModal: React.FC<CommentModalProps> = ({
   isModal,
-  onCloseModal,
+  modalCloseHandler,
+  editClickHandler,
 }) => {
   // 모달 컨테이너의 ref 생성
   const modalRef = useRef<HTMLDivElement>(null);
 
-  //
   useEffect(() => {
     const outsideClickHandler = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        onCloseModal();
+        modalCloseHandler();
       }
     };
     if (isModal) {
@@ -30,12 +28,12 @@ const CommentModal: React.FC<CommentModalProps> = ({
     return () => {
       document.removeEventListener("mousedown", outsideClickHandler);
     };
-  }, [isModal, onCloseModal]);
+  }, [isModal, modalCloseHandler]);
 
   return (
     <CommentModalContainer ref={modalRef}>
       <CommentModalUl>
-        <CommentModalSpan>수정</CommentModalSpan>
+        <CommentModalSpan onClick={editClickHandler}>수정</CommentModalSpan>
         <CommentModalSpan>삭제</CommentModalSpan>
       </CommentModalUl>
     </CommentModalContainer>

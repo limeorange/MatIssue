@@ -1,58 +1,57 @@
-import styled from "styled-components";
-import Cookies from "js-cookie";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { axiosBase } from "@/app/api/axios";
+import { useSetRecoilState } from "recoil";
+import styled from "styled-components";
+import toast from "react-hot-toast";
+import { loginState } from "@/app/store/authAtom";
+import { useState } from "react";
+import LoadingModal from "../UI/LoadingModal";
+import { useQueryClient } from "@tanstack/react-query";
 
-const UserModal = () => {
+const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const logoutHandler = async () => {
-    const id = Cookies.get("auth");
+    setIsLoading(true);
 
     axiosBase
-      .post(
-        `users/logout`,
-        { session_id: id },
-        {
-          params: {
-            id,
-          },
-        }
-      )
+      .post(`users/logout`)
       .then((res) => {
-        console.log(res.data);
+        queryClient.invalidateQueries(["currentUser"]);
+        toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error("무언가 잘못되었습니다!");
+        toast.error(err.message);
       })
       .finally(() => {
-        Cookies.remove("auth");
-        console.log(Cookies.get("auth"));
-        toast.success("로그아웃 되었습니다.");
+        setIsLoading(false);
       });
   };
 
   return (
-    <UserModalContainer>
+    <UserModalContainer visible={isUserModal}>
+      {isLoading && <LoadingModal />}
       <UserModalList>
         <UserModalItem
           onClick={() => {
-            router.push("/myPage");
+            router.push("/my-page");
           }}
         >
           마이페이지
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/myPage/modifyUserInfo");
+            router.push("/my-page/modify-user-info");
           }}
         >
           회원정보 수정
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/myPage/notification");
+            router.push("/my-page/notification");
           }}
         >
           알림
@@ -66,7 +65,7 @@ const UserModal = () => {
 
 export default UserModal;
 
-const UserModalContainer = styled.div`
+const UserModalContainer = styled.div<{ visible: boolean }>`
   position: absolute;
   z-index: 9;
   top: 4.3rem;
@@ -76,9 +75,14 @@ const UserModalContainer = styled.div`
   background-color: white;
   box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
   border-radius: 0.5rem;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
   color: #4f3d21;
+
+  opacity: ${(props) => (props.visible ? "1" : "0")};
+  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+
+  transition: opacity 0.3s;
 `;
 
 const UserModalList = styled.ul`

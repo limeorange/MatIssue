@@ -33,6 +33,7 @@ const LoadingModal = () => {
 
 const BackdropWrapper = styled.div`
   position: fixed;
+  z-index: 90;
   inset: 0px;
   background: #000000;
   opacity: 50%;
@@ -45,7 +46,7 @@ const BackdropWrapper = styled.div`
 const LoadingContainer = styled.div`
   position: fixed;
   inset: 0px;
-  z-index: 10;
+  z-index: 95;
   overflow-y: auto;
 `;
 

@@ -1,5 +1,6 @@
 import React, { useRef, ChangeEvent, ReactElement } from "react";
 import styled from "styled-components";
+import uploadImage from "@/app/api/aws";
 
 type Props = {
   selectedImage: string;
@@ -18,11 +19,18 @@ const ThumbnailUpload = ({
     }
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      const imageUrl = URL.createObjectURL(file);
-      handleThumbnailChange(imageUrl);
+
+      try {
+        const response = await uploadImage(file);
+        const imageUrl = response.imageUrl;
+
+        handleThumbnailChange(imageUrl);
+      } catch (error) {
+        console.error("Image upload failed:", error);
+      }
     }
   };
 
