@@ -21,11 +21,11 @@ type Recipe = {
   servings: number;
   duration: number;
   difficulty: 0 | 1 | 2;
+  category: string;
 };
 
 // 필터링 요소 타입
 export type Filter = {
-  search: string;
   servings: number;
   duration: number;
   difficulty: number;
@@ -53,6 +53,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 10,
     difficulty: 0,
+    category: "western",
   },
   {
     image: "/images/sushi2.png",
@@ -65,6 +66,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 1,
+    category: "japan",
   },
   {
     image: "/images/sushi3.png",
@@ -77,6 +79,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 2,
+    category: "chinese",
   },
   {
     image: "/images/sushi4.png",
@@ -89,6 +92,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 60,
     difficulty: 0,
+    category: "korean",
   },
   {
     image: "/images/sushi1.png",
@@ -101,6 +105,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 5,
     duration: 60,
     difficulty: 1,
+    category: "japan",
   },
   {
     image: "/images/sushi2.png",
@@ -113,6 +118,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 20,
     difficulty: 0,
+    category: "japan",
   },
   {
     image: "/images/sushi3.png",
@@ -125,6 +131,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 1,
+    category: "japan",
   },
   {
     image: "/images/sushi4.png",
@@ -137,6 +144,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 10,
     difficulty: 2,
+    category: "korean",
   },
   {
     image: "/images/sushi1.png",
@@ -149,6 +157,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 60,
     difficulty: 1,
+    category: "korean",
   },
   {
     image: "/images/sushi2.png",
@@ -161,6 +170,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 0,
+    category: "chinese",
   },
   {
     image: "/images/sushi3.png",
@@ -173,6 +183,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 1,
+    category: "western",
   },
   {
     image: "/images/sushi4.png",
@@ -185,6 +196,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 5,
     duration: 60,
     difficulty: 2,
+    category: "western",
   },
   {
     image: "/images/sushi1.png",
@@ -197,6 +209,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 10,
     difficulty: 0,
+    category: "japan",
   },
   {
     image: "/images/sushi2.png",
@@ -209,6 +222,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 30,
     difficulty: 1,
+    category: "western",
   },
   {
     image: "/images/sushi3.png",
@@ -221,6 +235,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 2,
+    category: "chinese",
   },
   {
     image: "/images/sushi4.png",
@@ -233,6 +248,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 60,
     difficulty: 0,
+    category: "korean",
   },
   {
     image: "/images/sushi1.png",
@@ -245,6 +261,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 10,
     difficulty: 0,
+    category: "japan",
   },
   {
     image: "/images/sushi2.png",
@@ -257,6 +274,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 1,
+    category: "chinese",
   },
   {
     image: "/images/sushi3.png",
@@ -269,6 +287,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 2,
+    category: "korean",
   },
   {
     image: "/images/sushi4.png",
@@ -281,6 +300,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 60,
     difficulty: 0,
+    category: "western",
   },
   {
     image: "/images/sushi1.png",
@@ -293,6 +313,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 5,
     duration: 60,
     difficulty: 1,
+    category: "chinese",
   },
   {
     image: "/images/sushi2.png",
@@ -305,6 +326,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 20,
     difficulty: 0,
+    category: "chinese",
   },
   {
     image: "/images/sushi3.png",
@@ -317,6 +339,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 1,
+    category: "japan",
   },
   {
     image: "/images/sushi4.png",
@@ -329,6 +352,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 10,
     difficulty: 2,
+    category: "korean",
   },
   {
     image: "/images/sushi1.png",
@@ -341,6 +365,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 60,
     difficulty: 1,
+    category: "western",
   },
   {
     image: "/images/sushi2.png",
@@ -353,6 +378,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 0,
+    category: "western",
   },
   {
     image: "/images/sushi3.png",
@@ -365,6 +391,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 1,
+    category: "chinese",
   },
   {
     image: "/images/sushi4.png",
@@ -377,6 +404,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 5,
     duration: 60,
     difficulty: 2,
+    category: "japan",
   },
   {
     image: "/images/sushi1.png",
@@ -389,6 +417,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 10,
     difficulty: 0,
+    category: "korean",
   },
   {
     image: "/images/sushi2.png",
@@ -401,6 +430,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 30,
     difficulty: 1,
+    category: "chinese",
   },
   {
     image: "/images/sushi3.png",
@@ -413,6 +443,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 2,
+    category: "western",
   },
   {
     image: "/images/sushi4.png",
@@ -425,6 +456,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 60,
     difficulty: 0,
+    category: "japan",
   },
   {
     image: "/images/sushi1.png",
@@ -437,6 +469,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 10,
     difficulty: 0,
+    category: "korean",
   },
   {
     image: "/images/sushi2.png",
@@ -449,6 +482,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 1,
+    category: "chinese",
   },
   {
     image: "/images/sushi3.png",
@@ -461,6 +495,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 2,
+    category: "western",
   },
   {
     image: "/images/sushi4.png",
@@ -473,6 +508,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 60,
     difficulty: 0,
+    category: "japan",
   },
   {
     image: "/images/sushi1.png",
@@ -485,6 +521,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 5,
     duration: 60,
     difficulty: 1,
+    category: "western",
   },
   {
     image: "/images/sushi2.png",
@@ -497,6 +534,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 20,
     difficulty: 0,
+    category: "korean",
   },
   {
     image: "/images/sushi3.png",
@@ -509,6 +547,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 1,
+    category: "chinese",
   },
   {
     image: "/images/sushi4.png",
@@ -521,6 +560,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 10,
     difficulty: 2,
+    category: "japan",
   },
   {
     image: "/images/sushi1.png",
@@ -533,6 +573,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 60,
     difficulty: 1,
+    category: "western",
   },
   {
     image: "/images/sushi2.png",
@@ -545,6 +586,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 3,
     duration: 30,
     difficulty: 0,
+    category: "western",
   },
   {
     image: "/images/sushi3.png",
@@ -557,6 +599,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 1,
+    category: "korean",
   },
   {
     image: "/images/sushi4.png",
@@ -569,6 +612,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 5,
     duration: 60,
     difficulty: 2,
+    category: "chinese",
   },
   {
     image: "/images/sushi1.png",
@@ -581,6 +625,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 4,
     duration: 10,
     difficulty: 0,
+    category: "japan",
   },
   {
     image: "/images/sushi2.png",
@@ -593,6 +638,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 1,
     duration: 30,
     difficulty: 1,
+    category: "western",
   },
   {
     image: "/images/sushi3.png",
@@ -605,6 +651,7 @@ const DUMMY_DATA: Recipe[] = [
     servings: 2,
     duration: 20,
     difficulty: 2,
+    category: "chinese",
   },
 ];
 
@@ -640,7 +687,6 @@ const ListingRecipe = () => {
   const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(null); // 정렬 버튼에 따른 정렬 상태
   const [filter, setFilter] = useState<Filter>({
     // 필터바의 필터 값에 따른 필터링 상태
-    search: "",
     servings: -1,
     duration: -1,
     difficulty: -1,
@@ -655,6 +701,9 @@ const ListingRecipe = () => {
   const recipesPerPage = 16;
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("query"); // url의 query값 추출
+  const category = searchParams.get("category");
+  console.log(category);
+  console.log(searchQuery);
   const router = useRouter();
 
   useEffect(() => {
@@ -665,6 +714,13 @@ const ListingRecipe = () => {
     if (term !== "") {
       result = result.filter((recipe) =>
         recipe.title.toLowerCase().includes(term.toLowerCase())
+      );
+    }
+
+    // 카테고리바 레시피 필터링
+    if (category) {
+      result = result.filter((recipe) =>
+        recipe.category.toLowerCase().includes(category.toLowerCase())
       );
     }
 
@@ -691,13 +747,13 @@ const ListingRecipe = () => {
     }
 
     setFilteredRecipes(result);
-  }, [search, searchQuery, filter, sortMethod]);
+  }, [search, searchQuery, filter, category, sortMethod]);
 
   // 태그 삭제 로직
   const removeTag = (tagType: string) => {
     {
       const resetValue = -1;
-      if (tagType === "search") {
+      if (tagType === "search" || tagType === "category") {
         router.push("/search");
       }
       if (tagType === "difficulty") {
@@ -746,7 +802,12 @@ const ListingRecipe = () => {
             difficulty={difficulty}
           />
         </FilterBarBox>
-        <FilterTag search={searchQuery} filter={filter} onRemove={removeTag} />
+        <FilterTag
+          search={searchQuery}
+          filter={filter}
+          category={category}
+          onRemove={removeTag}
+        />
         <PageHeaderContainer>
           <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
           <SortButtonContainer>

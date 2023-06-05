@@ -7,12 +7,13 @@ import styled from "styled-components";
 type FilterTagProps = {
   search: string | null;
   filter: Filter;
+  category: string | null;
   onRemove: (tagType: string) => void;
 };
 
 const FilterTag = (props: FilterTagProps) => {
   const [tagList, setTagList] = useState<{ tag: string; type: string }[]>([]);
-  const { search, filter, onRemove } = props;
+  const { search, filter, category, onRemove } = props;
 
   // 검색바 입력값 및 필터바 필터 값에 따른 태그 추가
   useEffect(() => {
@@ -20,6 +21,16 @@ const FilterTag = (props: FilterTagProps) => {
 
     if (search) {
       newTagList.push({ tag: `#${search}`, type: "search" });
+    }
+
+    if (category === "western") {
+      newTagList.push({ tag: `#양식`, type: "category" });
+    } else if (category === "chinese") {
+      newTagList.push({ tag: `#중식`, type: "category" });
+    } else if (category === "japan") {
+      newTagList.push({ tag: `#일식`, type: "category" });
+    } else if (category === "korean") {
+      newTagList.push({ tag: `#한식`, type: "category" });
     }
 
     if (filter.servings > 0) {
@@ -41,7 +52,7 @@ const FilterTag = (props: FilterTagProps) => {
     }
 
     setTagList(newTagList);
-  }, [search, filter]);
+  }, [search, filter, category]);
 
   return (
     <>

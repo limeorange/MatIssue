@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -8,13 +10,34 @@ const DUMMY_DATA = [
   { id: 4, name: "한식" },
 ];
 
+type CategoryMappingType = {
+  양식: string;
+  중식: string;
+  일식: string;
+  한식: string;
+  [key: string]: string;
+};
+
+const categoryMapping: CategoryMappingType = {
+  양식: "western",
+  중식: "chinese",
+  일식: "japan",
+  한식: "korean",
+};
+
 const CategoryModal = () => {
   return (
     <CategoryModalContainer>
       <CategoryModalUl>
         {DUMMY_DATA.map((category) => (
           <CategoryModalLi key={category.id}>
-            <Link href={`/category/${category.name}`} style={{ width: "100%" }}>
+            <Link
+              href={{
+                pathname: `/category/${category.name}`,
+                query: { category: categoryMapping[category.name] || "" },
+              }}
+              style={{ width: "100%" }}
+            >
               {category.name}
             </Link>
           </CategoryModalLi>
