@@ -7,6 +7,7 @@ import { loginState } from "@/app/store/authAtom";
 import { useState } from "react";
 import LoadingModal from "../UI/LoadingModal";
 import { useQueryClient } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 
 const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -20,11 +21,12 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
     axiosBase
       .post(`users/logout`)
       .then((res) => {
+        Cookies.remove("session_id");
         queryClient.invalidateQueries(["currentUser"]);
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error(err.message);
+        toast.error(err.response.data.detail);
       })
       .finally(() => {
         setIsLoading(false);
