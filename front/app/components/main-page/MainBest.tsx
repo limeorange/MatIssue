@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
-import RecipeCard from "../../recipe-card/RecipeCard";
+import RecipeCard from "../recipe-card/RecipeCard";
 import {
+  StyledContentsArea,
   ListingRecipeContainer,
-  MainContainer,
+  StyledContainer,
   StyledList,
   StyledTitle,
   StyledTitleBox,
@@ -231,7 +232,7 @@ const MainBest = () => {
   };
 
   return (
-    <MainBestContainer>
+    <StyledContainer>
       <LeftSlideBtn onClick={leftBtnHandler}>
         <Image
           src="/images/main/leftSlideBtn.png"
@@ -240,8 +241,8 @@ const MainBest = () => {
           height={122}
         />
       </LeftSlideBtn>
-      <MainContainer>
-        <StyledTitleBox>
+      <StyledContentsArea>
+        <StyledBestTitleBox>
           <StyledTitle>베스트 레시피</StyledTitle>
           <StyledList>
             <li onClick={() => {}}>일간</li>
@@ -250,7 +251,7 @@ const MainBest = () => {
             <li>|</li>
             <li onClick={() => {}}>주간</li>
           </StyledList>
-        </StyledTitleBox>
+        </StyledBestTitleBox>
         <ListingRecipeContainer contentsPerPage={contentsPerPage}>
           {bestRecipes
             .slice(
@@ -261,7 +262,7 @@ const MainBest = () => {
               <RecipeCard key={index} data={data} />
             ))}
         </ListingRecipeContainer>
-      </MainContainer>
+      </StyledContentsArea>
       <RightSlideBtn onClick={rightBtnHandler}>
         <Image
           src="/images/main/rightSlideBtn.png"
@@ -270,19 +271,15 @@ const MainBest = () => {
           height={122}
         />
       </RightSlideBtn>
-    </MainBestContainer>
+    </StyledContainer>
   );
 };
 
 export default MainBest;
 
-const MainBestContainer = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  max-width: 120rem;
-  padding: 2rem 2rem 2rem 4rem;
+const StyledBestTitleBox = styled(StyledTitleBox)`
+  align-items: end;
+  flex-direction: row;
 `;
 
 const LeftSlideBtn = styled.button`
