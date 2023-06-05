@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -10,34 +8,13 @@ const DUMMY_DATA = [
   { id: 4, name: "한식" },
 ];
 
-type CategoryMappingType = {
-  양식: string;
-  중식: string;
-  일식: string;
-  한식: string;
-  [key: string]: string;
-};
-
-const categoryMapping: CategoryMappingType = {
-  양식: "western",
-  중식: "chinese",
-  일식: "japan",
-  한식: "korean",
-};
-
-const CategoryModal = () => {
+const CategoryModal = ({ isModal }: { isModal: boolean }) => {
   return (
-    <CategoryModalContainer>
+    <CategoryModalContainer visible={isModal}>
       <CategoryModalUl>
         {DUMMY_DATA.map((category) => (
           <CategoryModalLi key={category.id}>
-            <Link
-              href={{
-                pathname: `/category/${category.name}`,
-                query: { category: categoryMapping[category.name] || "" },
-              }}
-              style={{ width: "100%" }}
-            >
+            <Link href={`/category/${category.name}`} style={{ width: "100%" }}>
               {category.name}
             </Link>
           </CategoryModalLi>
@@ -49,13 +26,13 @@ const CategoryModal = () => {
 
 export default CategoryModal;
 
-const CategoryModalContainer = styled.div`
+const CategoryModalContainer = styled.div<{ visible: boolean }>`
   position: absolute;
   z-index: 9;
-  top: 5rem;
+  top: 4rem;
   left: 0;
   width: 13.4rem;
-  padding: 0.6rem 0;
+  padding: 0.3rem 0;
   background-color: white;
   box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
   border-bottom-left-radius: 0.5rem;
@@ -63,6 +40,15 @@ const CategoryModalContainer = styled.div`
   font-size: 16px;
   font-weight: 400;
   color: #4f3d21;
+
+  opacity: ${(props) => (props.visible ? "1" : "0")};
+  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+
+  transition: opacity 0.3s;
+
+  @media (min-width: 768px) {
+    top: 5rem;
+  }
 `;
 
 const CategoryModalUl = styled.ul`
@@ -80,4 +66,6 @@ const CategoryModalLi = styled.li`
     cursor: pointer;
     background-color: #fbe2a1;
   }
+
+  transition: background-color 0.2s;
 `;
