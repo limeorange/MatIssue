@@ -702,8 +702,6 @@ const ListingRecipe = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("query"); // url의 query값 추출
   const category = searchParams.get("category");
-  console.log(category);
-  console.log(searchQuery);
   const router = useRouter();
 
   useEffect(() => {
