@@ -155,8 +155,6 @@ const SignupClient = () => {
       birth_date: birthDate,
     };
 
-    console.log(userData);
-
     axiosBase
       .post("users/", userData)
       .then((res) => {
@@ -164,7 +162,7 @@ const SignupClient = () => {
         toast.success("회원가입이 완료되었습니다!");
         router.push("/");
       })
-      .catch((err) => toast.error("잘못된 요청입니다."))
+      .catch((err) => toast.error(err.response.data.detail))
       .finally(() => setIsLoading(false));
   };
 

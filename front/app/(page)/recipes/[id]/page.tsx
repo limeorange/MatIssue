@@ -1,4 +1,4 @@
-import RecipeDetail from "./ViewPageClient";
+import RecipeDetail from "./ViewPage";
 import { getRecipeById } from "@/app/api/recipe";
 import commentsData from "@/data/commentDummy.json";
 
