@@ -684,7 +684,10 @@ const difficulty = [
 // 레시피 리스트 출력 컴포넌트
 const ListingRecipe = () => {
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA); // 레시피 데이터 필터링 상태
-  const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(null); // 정렬 버튼에 따른 정렬 상태
+  const initialSortMethodState = null;
+  const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(
+    initialSortMethodState
+  ); // 정렬 버튼에 따른 정렬 상태
   const initialFilterState = {
     servings: -1,
     duration: -1,
@@ -704,36 +707,6 @@ const ListingRecipe = () => {
   const category = searchParams.get("category");
   const router = useRouter();
 
-  // const setFilterWithUrlUpdate = (newFilter: Filter) => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-
-  //   if (newFilter.servings > 0) {
-  //     urlParams.set("servings", newFilter.servings.toString());
-  //   } else {
-  //     urlParams.delete("servings");
-  //   }
-
-  //   if (newFilter.duration > 0) {
-  //     urlParams.set("duration", newFilter.duration.toString());
-  //   } else {
-  //     urlParams.delete("duration");
-  //   }
-
-  //   if (newFilter.difficulty > -1) {
-  //     urlParams.set("difficulty", newFilter.difficulty.toString());
-  //   } else {
-  //     urlParams.delete("difficulty");
-  //   }
-
-  //   window.history.replaceState(
-  //     {},
-  //     "",
-  //     window.location.pathname + "?" + urlParams.toString()
-  //   );
-
-  //   setFilter(newFilter);
-  // };
-
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const servingsFromURL = urlParams.get("servings");
@@ -745,6 +718,18 @@ const ListingRecipe = () => {
       duration: durationFromURL ? parseInt(durationFromURL) : -1,
       difficulty: difficultyFromURL ? parseInt(difficultyFromURL) : -1,
     });
+  }, []);
+
+  // 새로고침 했을 경우 버튼 정렬상태 유지
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sortMethodFromURL = urlParams.get("sortMethod");
+
+    setSortMethod(
+      sortMethodFromURL === "date" || sortMethodFromURL === "likes"
+        ? sortMethodFromURL
+        : initialSortMethodState
+    );
   }, []);
 
   useEffect(() => {
@@ -831,9 +816,19 @@ const ListingRecipe = () => {
     // 버튼으로 레시피 정렬
     if (sortMethod === "date") {
       result.sort((a, b) => a.timestamp - b.timestamp);
+      urlParams.set("sortMethod", "date");
     } else if (sortMethod === "likes") {
       result.sort((a, b) => b.likes - a.likes);
+      urlParams.set("sortMethod", "likes");
+    } else {
+      urlParams.delete("sortMethod");
     }
+
+    window.history.pushState(
+      {},
+      "",
+      window.location.pathname + "?" + urlParams.toString()
+    );
 
     setFilteredRecipes(result);
   }, [search, searchQuery, filter, category, sortMethod]);
