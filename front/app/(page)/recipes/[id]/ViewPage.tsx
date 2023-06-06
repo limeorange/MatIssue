@@ -10,6 +10,7 @@ import RecipeScrap from "@/app/components/recipe/RecipeScrap";
 import RecipeSteps from "@/app/components/recipe/RecipeSteps";
 import RecipeUserLikes from "@/app/components/recipe/RecipeUserLikes";
 import RecipeVideo from "@/app/components/recipe/RecipeVideo";
+import ScrapModal from "@/app/components/recipe/ScrapModal";
 import StickyProgressBar from "@/app/components/recipe/StickyProgressBar";
 import StickySideBar from "@/app/components/recipe/StickySideBar";
 import Image from "next/image";
@@ -96,7 +97,12 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [count, setCount] = useState(1230);
   const countText = count.toLocaleString();
+
+  // 스크랩 버튼 상태 관리
   const [isBooked, setIsBooked] = useState(false);
+
+  // 모달창 상태 관리
+  const [isModal, setIsModal] = useState<boolean>(false);
 
   // 좋아요 버튼 클릭 핸들러
   const heartClickHandler = () => {
@@ -111,6 +117,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 스크랩 버튼 클릭 핸들러
   const scrapClickHandler = () => {
     setIsBooked(!isBooked);
+  };
+
+  // 모달창 닫기 핸들러
+  const modalCloseHandler = () => {
+    setIsBooked(false);
   };
 
   return (
@@ -200,7 +211,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
             isBooked={isBooked}
             scrapClickHandler={scrapClickHandler}
           />
+          {isBooked && <ScrapModal modalCloseHandler={modalCloseHandler} />}
         </div>
+
         {/* 댓글 */}
         <div>
           <div className="flex">
