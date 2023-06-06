@@ -13,7 +13,7 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
 }) => {
   return (
     <>
-      <ScrapWrapperDiv>
+      <ScrapWrapperButton onClick={scrapClickHandler}>
         <IconDiv>
           <Image
             src={
@@ -24,18 +24,17 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
             alt="게시글 스크랩 아이콘"
             width={32}
             height={28}
-            onClick={scrapClickHandler}
             style={{ objectFit: "cover", cursor: "pointer" }}
           />
         </IconDiv>
         <ScrapTitle>스크랩</ScrapTitle>
-      </ScrapWrapperDiv>
+      </ScrapWrapperButton>
     </>
   );
 };
 
-/** 스크랩 아이콘과 글자 묶는 Div */
-const ScrapWrapperDiv = styled.div`
+/** 스크랩 아이콘과 글자 묶는 Button */
+const ScrapWrapperButton = styled.button`
   display: flex;
   width: 12rem;
   height: 5.5rem;
