@@ -176,9 +176,9 @@ const ModifyUserInfo: React.FC = () => {
         <Header>회원정보수정</Header>
         <Divider />
 
-        <Link href="/my-page/modify-user-info/change-password">
+        {/* <Link href="/my-page/modify-user-info/change-password">
           <ChangePassword>비밀번호 변경</ChangePassword>
-        </Link>
+        </Link> */}
 
         <Wrapper>
           <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
@@ -327,20 +327,20 @@ const Divider = styled.div`
   margin: 2rem 0;
 `;
 
-const ChangePassword = styled.div`
-  position: absolute;
-  right: 22.4rem;
-  top: 13.5rem;
-  font-size: 13px;
-  text-decoration: underline;
-  color: #201ce0;
-`;
+// const ChangePassword = styled.div`
+//   position: absolute;
+//   right: 22.4rem;
+//   top: 13.5rem;
+//   font-size: 13px;
+//   text-decoration: underline;
+//   color: #201ce0;
+// `;
 
 const AccountDeletion = styled.div`
   position: absolute;
-  right: 15.1rem;
+  right: 16.1rem;
   top: 13.5rem;
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: underline;
   color: #e11717;
   cursor: pointer;
@@ -351,18 +351,17 @@ const AlertImage = styled.img`
   height: 3rem;
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 57rem;
-  margin-top: 7rem;
-`;
-
 const WrapperInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: -4rem;
+`;
 
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 57rem;
   margin-top: 7rem;
 `;
 
@@ -378,7 +377,7 @@ const InputBox = styled.input`
   height: 4.8rem;
   border: 0.1rem solid #d2d2d2;
   border-radius: 0.8rem;
-  font-size: 15px;
+  font-size: 16px;
   padding: 0 1.6rem;
   &:focus {
     outline: 0.3rem solid #fbd26a;
@@ -415,6 +414,18 @@ const LabelForFile = styled.label<LabelForFileProps>`
   background-position: center;
 `;
 
+const IputAndDescription = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const PassWordDescription = styled.p`
+  padding: 0.5rem 0 0 0.5rem;
+  font-size: 13px;
+  font-weight: 400;
+  color: #black;
+`;
+
 const StyledImage = styled.img`
   width: 19.8rem;
   height: 19.8rem;
@@ -426,11 +437,6 @@ const DeleteImage = styled.img`
   right: 0.6rem;
   width: auto;
   height: auto;
-`;
-
-const UserModifyButton = styled.div`
-  margin: 6rem 0 0 15rem;
-  width: 23rem;
 `;
 
 const InputDateBox = styled.input`
@@ -460,13 +466,7 @@ const InputDateBox = styled.input`
   }
 `;
 
-const IputAndDescription = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const PassWordDescription = styled.p`
-  padding: 0.5rem 0 0 0.5rem;
-  font-size: 13px;
-  color: #4f3d21;
+const UserModifyButton = styled.div`
+  margin: 6rem 0 0 17rem;
+  width: 23rem;
 `;

@@ -23,6 +23,6 @@ const NoRecipeIconBox = styled.div`
 `;
 
 const NoRcipeIcon = styled.img`
-  width: 80%;
-  height: 80%;
+  width: 89%;
+  height: 89%;
 `;

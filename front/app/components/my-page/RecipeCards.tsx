@@ -5,20 +5,20 @@ import Button from "../../components/UI/Button";
 import { useState, useEffect } from "react";
 import React from "react";
 import RecipeCard from "../recipe-card/RecipeCard";
-import Image from "next/image";
 import { axiosBase } from "@/app/api/axios";
 import NonRecipe from "../UI/NonRecipe";
+import { Recipe } from "@/app/types";
 
-type Recipe = {
-  recipe_title: string;
-  recipe_thumbnail: string;
-  recipe_id: string;
-  recipe_view: number;
-  user_id: string;
-  user_nickname: string;
-  created_at: string;
-  recipe_like: number;
-};
+// type Recipe = {
+//   recipe_title: string;
+//   recipe_thumbnail: string;
+//   recipe_id: string;
+//   recipe_view: number;
+//   user_id: string;
+//   user_nickname: string;
+//   created_at: string;
+//   recipe_like: number;
+// };
 
 const RecipeCards = ({ userId }: { userId: string | undefined }) => {
   const [recipes, setFilteredRecipes] = useState<Recipe[]>([]);
