@@ -6,36 +6,10 @@ import {
 } from "@/app/styles/main/main.style";
 import styled from "styled-components";
 import LargeRecipeCard from "../recipe-card/LargeRecipeCard";
-import { RecipeData } from "@/app/types";
+import { Recipe, RecipeData } from "@/app/types";
 import Image from "next/image";
-
-const DUMMY_DATA: RecipeData[] = [
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-
-    id: "1",
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "2",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "3",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getAllRecipes } from "@/app/api/recipe";
 
 const Ingredient = [
   {
@@ -76,29 +50,39 @@ const Ingredient = [
 ];
 
 const MainFridge = () => {
+  const { data: recipes, isLoading } = useQuery(["recipes2"], () =>
+    getAllRecipes()
+  );
+
   return (
     <MainFridgeContainer>
-      <FridgedTitleBox>
-        <StyledTitle>당신을 위한 냉장고털이 레시피</StyledTitle>
-        <StyledSubTitle>
-          냉장고 속 재료로 손쉽게 훌륭한 요리를 선보이세요
-        </StyledSubTitle>
-      </FridgedTitleBox>
-      <IngredientSelectBox>
-        {Ingredient.map((item) => (
-          <IngredientItem key={item.id}>
-            <IngredientImageWrapper>
-              <Image src={item.img} alt="ingredient" fill />
-            </IngredientImageWrapper>
-            <h3>{item.title}</h3>
-          </IngredientItem>
-        ))}
-      </IngredientSelectBox>
-      <RecipeContainer>
-        {DUMMY_DATA.map((item) => (
-          <LargeRecipeCard key={item.id} recipe={item} />
-        ))}
-      </RecipeContainer>
+      {isLoading ? (
+        <></>
+      ) : (
+        <>
+          <FridgedTitleBox>
+            <StyledTitle>당신을 위한 냉장고털이 레시피</StyledTitle>
+            <StyledSubTitle>
+              냉장고 속 재료로 손쉽게 훌륭한 요리를 선보이세요
+            </StyledSubTitle>
+          </FridgedTitleBox>
+          <IngredientSelectBox>
+            {Ingredient.map((item) => (
+              <IngredientItem key={item.id}>
+                <IngredientImageWrapper>
+                  <Image src={item.img} alt="ingredient" fill />
+                </IngredientImageWrapper>
+                <h3>{item.title}</h3>
+              </IngredientItem>
+            ))}
+          </IngredientSelectBox>
+          <RecipeContainer>
+            {recipes.slice(0, 3).map((item: Recipe) => (
+              <LargeRecipeCard key={item._id} recipe={item} />
+            ))}
+          </RecipeContainer>
+        </>
+      )}
     </MainFridgeContainer>
   );
 };
