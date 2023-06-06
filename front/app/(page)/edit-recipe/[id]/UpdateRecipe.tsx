@@ -10,16 +10,30 @@ import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection
 import Button from "@/app/components/UI/Button";
 import { axiosBase } from "@/app/api/axios";
 
+type Recipe = {
+  recipe_category: string;
+  recipe_people: string;
+  recipe_info: { time: number; level: number; serving: number };
+  recipe_thumbnail: string;
+  recipe_title: string;
+  recipe_description: string;
+  recipe_ingredients: { name: string; amount: string }[];
+  recipe_sequence: { description: string; picture: string; step: number }[];
+  recipe_tip: string;
+  recipe_video: string;
+  recipe_id: string;
+};
+
 type RecipeFormState = {
   selectedCategory: string;
-  selectedPeople: string;
-  selectedTime: string;
-  selectedDifficulty: string;
+  selectedPeople: number;
+  selectedTime: number;
+  selectedDifficulty: number;
   selectedImage: string;
   recipeTitle: string;
   cookingIntro: string;
   ingredients: { ingredient: string; quantity: string }[];
-  steps: { stepDetail: string; stepImage: string }[];
+  steps: { step: number; stepDetail: string; stepImage: string }[];
   stepImages: string[];
   cookingTips: string;
   videoLink: string;
@@ -44,20 +58,39 @@ const times = [
 
 const difficulties = ["쉬움", "중간", "어려움"];
 
-const RecipeForm = () => {
+const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
+  const {
+    recipe_category,
+    recipe_info,
+    recipe_thumbnail,
+    recipe_title,
+    recipe_description,
+    recipe_ingredients,
+    recipe_sequence,
+    recipe_tip,
+    recipe_video,
+    recipe_id,
+  } = recipe;
   const [state, setState] = useState<RecipeFormState>({
-    selectedCategory: "",
-    selectedPeople: "",
-    selectedTime: "",
-    selectedDifficulty: "",
-    selectedImage: "",
-    recipeTitle: "",
-    cookingIntro: "",
-    ingredients: [{ ingredient: "", quantity: "" }],
-    steps: [{ stepDetail: "", stepImage: "" }],
-    stepImages: [],
-    cookingTips: "",
-    videoLink: "",
+    selectedCategory: recipe_category,
+    selectedPeople: recipe_info.serving,
+    selectedTime: recipe_info.time,
+    selectedDifficulty: recipe_info.level,
+    selectedImage: recipe_thumbnail,
+    recipeTitle: recipe_title,
+    cookingIntro: recipe_description,
+    ingredients: recipe_ingredients.map((x) => ({
+      ingredient: x.name,
+      quantity: x.amount,
+    })),
+    steps: recipe_sequence.map((x) => ({
+      step: x.step,
+      stepDetail: x.description,
+      stepImage: x.picture,
+    })),
+    stepImages: recipe_sequence.map((x) => x.picture),
+    cookingTips: recipe_tip,
+    videoLink: recipe_video,
   });
 
   // 종류
@@ -67,17 +100,17 @@ const RecipeForm = () => {
 
   // 몇인분인지
   const handlePeopleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState({ ...state, selectedPeople: e.target.value });
+    setState({ ...state, selectedPeople: +e.target.value });
   };
 
   // 시간
   const handleTimeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState({ ...state, selectedTime: e.target.value });
+    setState({ ...state, selectedTime: +e.target.value });
   };
 
   // 난이도
   const handleDifficultyChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState({ ...state, selectedDifficulty: e.target.value });
+    setState({ ...state, selectedDifficulty: +e.target.value });
   };
 
   // 섬네일 이미지
@@ -158,7 +191,7 @@ const RecipeForm = () => {
   const handleAddStep = () => {
     setState({
       ...state,
-      steps: [...state.steps, { stepDetail: "", stepImage: "" }],
+      steps: [...state.steps, { step: 0, stepDetail: "", stepImage: "" }],
     });
   };
 
@@ -181,7 +214,7 @@ const RecipeForm = () => {
   };
 
   // 저장 핸들러
-  const handleSave = async () => {
+  const handleUpdate = async () => {
     const recipeData = {
       recipe_title: state.recipeTitle,
       recipe_thumbnail: state.selectedImage,
@@ -189,9 +222,9 @@ const RecipeForm = () => {
       recipe_description: state.cookingIntro,
       recipe_category: state.selectedCategory,
       recipe_info: {
-        serving: parseInt(state.selectedPeople, 10),
-        time: parseInt(state.selectedTime, 10),
-        level: difficulties.indexOf(state.selectedDifficulty),
+        serving: state.selectedPeople,
+        time: state.selectedTime,
+        level: state.selectedDifficulty,
       },
       recipe_ingredients: state.ingredients.map(({ ingredient, quantity }) => ({
         name: ingredient,
@@ -203,16 +236,18 @@ const RecipeForm = () => {
         description: stepDetail,
       })),
       recipe_tip: state.cookingTips,
-      user_id: "admin",
     };
 
-    console.log(recipeData);
-
     try {
-      const response = await axiosBase.post("recipes/", recipeData);
+      const response = await axiosBase.patch(
+        `recipes/${recipe_id}`,
+        recipeData
+      );
+
       console.log(response);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log(error.response.data.detail);
+      console.log(recipeData);
     }
   };
 
@@ -220,10 +255,9 @@ const RecipeForm = () => {
   const handleCancel = () => {
     // 취소
   };
-
   return (
     <FormWrapper>
-      <Title>레시피 등록하기</Title>
+      <Title>레시피 수정하기</Title>
       <MainSection>
         <ImageContainer>
           <ThumbnailUpload
@@ -235,11 +269,11 @@ const RecipeForm = () => {
           <CategoryAndInfo
             selectedCategory={state.selectedCategory}
             handleCategoryChange={handleCategoryChange}
-            selectedPeople={state.selectedPeople}
+            selectedPeople={state.selectedPeople.toString()}
             handlePeopleChange={handlePeopleChange}
-            selectedTime={state.selectedTime}
+            selectedTime={state.selectedTime.toString()}
             handleTimeChange={handleTimeChange}
-            selectedDifficulty={state.selectedDifficulty}
+            selectedDifficulty={state.selectedDifficulty.toString()}
             handleDifficultyChange={handleDifficultyChange}
             categories={categories}
             peopleCount={peopleCount}
@@ -295,8 +329,8 @@ const RecipeForm = () => {
       </CookingTips>
       <ButtonContainer>
         <SaveButton>
-          <Button onClick={handleSave} type="button" isBgColor fullWidth>
-            저장
+          <Button onClick={handleUpdate} type="button" isBgColor fullWidth>
+            수정
           </Button>
         </SaveButton>
         <CancleButton>
@@ -309,7 +343,7 @@ const RecipeForm = () => {
   );
 };
 
-export default RecipeForm;
+export default UpdateRecipeForm;
 
 // 공통 스타일 적용
 const Label = styled.label`

@@ -3,30 +3,13 @@
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import Image from "next/image";
+import { Recipe } from "@/app/types";
 
-type RecipeData = {
-  image: string;
-  title?: string;
-  author?: string;
-  likes?: number;
-  view?: string;
-  recipe_id?: string;
-  timestamp?: number;
-  servings?: number;
-  duration?: number;
-  difficulty?: 0 | 1 | 2;
-};
-
-type RecipeCardProps = {
-  data: RecipeData;
-};
-
-const RecipeCard = (props: RecipeCardProps) => {
-  const { data } = props;
+const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
 
   const handleRecipeClick = () => {
-    router.push(`/recipes/${data.recipe_id}`);
+    router.push(`/recipes/${recipe.recipe_id}`);
   };
 
   return (
@@ -34,18 +17,18 @@ const RecipeCard = (props: RecipeCardProps) => {
       <RecipeCardWrapper onClick={handleRecipeClick}>
         <RecipeImg>
           <Image
-            src={data.image}
+            src={recipe.recipe_thumbnail}
             alt="게시물 썸네일 이미지"
             width={270}
             height={200}
           />
         </RecipeImg>
         <RecipeTitle>
-          <p>{data.title}</p>
+          <p>{recipe.recipe_title}</p>
         </RecipeTitle>
         <RecipeInfo>
           <RecipeAuthor>
-            <p>{data.author}</p>
+            <p>{recipe.user_nickname}</p>
           </RecipeAuthor>
           <RecipeRank>
             <RecipeRankItem>
@@ -57,7 +40,7 @@ const RecipeCard = (props: RecipeCardProps) => {
                   height={11}
                 />
               </RecipeRankImg>
-              <p>{data.likes?.toLocaleString()}</p>
+              <p>{recipe.recipe_like.toLocaleString()}</p>
             </RecipeRankItem>
             {/* <RecipeRankItem>
               <RecipeRankImg>

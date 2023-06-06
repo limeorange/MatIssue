@@ -8,87 +8,17 @@ import {
 } from "@/app/styles/main/main.style";
 import styled from "styled-components";
 import LargeRecipeCard from "../recipe-card/LargeRecipeCard";
-import { RecipeData } from "@/app/types";
+import { Recipe, RecipeData } from "@/app/types";
 import { useState } from "react";
 import Image from "next/image";
-
-const DUMMY_DATA: RecipeData[] = [
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-
-    id: "1",
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "2",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "3",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "4",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "5",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "6",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "7",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "8",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "9",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getAllRecipes } from "@/app/api/recipe";
 
 const MainVegan = () => {
+  const { data: recipes, isLoading } = useQuery(["recipes1"], () =>
+    getAllRecipes()
+  );
+
   const [slide, setSlide] = useState<number>(1);
 
   const leftBtnHandler = () => {
@@ -106,37 +36,43 @@ const MainVegan = () => {
   };
 
   return (
-    <MainVegunContainer>
-      <MainVegunArea>
-        <VegunTitleBox>
-          <StyledTitle>비건들을 위한 초록레시피</StyledTitle>
-          <StyledSubTitle>
-            건강과 환경을 생각하는 비건 레시피로 맛있는 변화를 경험하세요
-          </StyledSubTitle>
-        </VegunTitleBox>
-        <RecipeSliderContainer>
-          <VegunRecipeContainer slide={slide}>
-            {DUMMY_DATA.map((item) => (
-              <LargeRecipeCard key={item.id} recipe={item} />
-            ))}
-          </VegunRecipeContainer>
-        </RecipeSliderContainer>
-        <LeftSlideBtn onClick={leftBtnHandler}>
-          <Image
-            src="/images/main/GreenLeftSlideBtn.png"
-            alt="left_button"
-            fill
-          />
-        </LeftSlideBtn>
-        <RightSlideBtn onClick={rightBtnHandler}>
-          <Image
-            src="/images/main/GreenRightSlideBtn.png"
-            alt="left_button"
-            fill
-          />
-        </RightSlideBtn>
-      </MainVegunArea>
-    </MainVegunContainer>
+    <>
+      {isLoading ? (
+        <></>
+      ) : (
+        <MainVegunContainer>
+          <MainVegunArea>
+            <VegunTitleBox>
+              <StyledTitle>비건들을 위한 초록레시피</StyledTitle>
+              <StyledSubTitle>
+                건강과 환경을 생각하는 비건 레시피로 맛있는 변화를 경험하세요
+              </StyledSubTitle>
+            </VegunTitleBox>
+            <RecipeSliderContainer>
+              <VegunRecipeContainer slide={slide}>
+                {recipes.slice(0, 15).map((item: Recipe) => (
+                  <LargeRecipeCard key={item._id} recipe={item} />
+                ))}
+              </VegunRecipeContainer>
+            </RecipeSliderContainer>
+            <LeftSlideBtn onClick={leftBtnHandler}>
+              <Image
+                src="/images/main/GreenLeftSlideBtn.png"
+                alt="left_button"
+                fill
+              />
+            </LeftSlideBtn>
+            <RightSlideBtn onClick={rightBtnHandler}>
+              <Image
+                src="/images/main/GreenRightSlideBtn.png"
+                alt="left_button"
+                fill
+              />
+            </RightSlideBtn>
+          </MainVegunArea>
+        </MainVegunContainer>
+      )}
+    </>
   );
 };
 

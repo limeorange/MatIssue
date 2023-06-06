@@ -18,6 +18,7 @@ export const StyledContentsArea = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
+  max-width: 110rem;
   margin: 0 auto;
 `;
 
@@ -46,15 +47,6 @@ export const StyledList = styled.ul`
 `;
 
 export const ListingRecipeContainer = styled.div`
-  padding-top: 2rem;
-  display: flex;
-  overflow-x: auto;
-  gap: 2rem;
-  white-space: nowrap;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
   @media (min-width: 768px) {
     display: grid;
     grid-template-columns: repeat(3, auto);

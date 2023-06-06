@@ -26,7 +26,7 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error(err.response.data.detail);
+        toast.error("로그아웃에 실패하였습니다.");
       })
       .finally(() => {
         setIsLoading(false);
