@@ -1,8 +1,6 @@
-"use client";
-
 import MainPageClient from "./MainClient";
 
-const Home = async () => {
+const Home = () => {
   return <MainPageClient />;
 };
 

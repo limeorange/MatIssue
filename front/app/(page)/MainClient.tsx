@@ -6,7 +6,7 @@ import MainVegan from "../components/main-page/MainVegan";
 import MainNewest from "../components/main-page/MainNewest";
 import MainWrapper from "../components/main-page/MainWrapper";
 
-const MainPageClient = async () => {
+const MainPageClient = () => {
   return (
     <>
       <Banner />
