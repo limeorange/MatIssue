@@ -85,9 +85,9 @@ const RecipeCardWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 27rem;
-  height: 26rem;
   margin: auto;
+  width: 100%;
+  max-width: 27rem;
 
   &: hover {
     cursor: pointer;
@@ -112,6 +112,7 @@ const RecipeInfo = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-top: 0.5rem;
 `;
 
 const RecipeTitle = styled.div`
@@ -119,6 +120,14 @@ const RecipeTitle = styled.div`
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 2rem;
+  margin-top: 1rem;
+
+  & p {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const RecipeAuthor = styled.div`
