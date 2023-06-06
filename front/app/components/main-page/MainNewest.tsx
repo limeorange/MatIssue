@@ -11,41 +11,29 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
-import { useQuery } from "@tanstack/react-query";
-import { getAllRecipes } from "@/app/api/recipe";
 
-const MainNewest = () => {
-  const { data: newestRecipes, isLoading } = useQuery(["newestRecipe"], () =>
-    getAllRecipes()
-  );
-
+const MainNewest = ({ newestRecipes }: { newestRecipes: Recipe[] }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const contentsPerPage = 8;
 
   return (
     <StyledContainer>
-      {isLoading ? (
-        <></>
-      ) : (
-        <>
-          <StyledContentsArea>
-            <StyledNewestTitleBox>
-              <StyledTitle>최신 레시피</StyledTitle>
-            </StyledNewestTitleBox>
-            <ListingRecipeContainer>
-              {newestRecipes
-                .slice(
-                  contentsPerPage * (currentPage - 1),
-                  contentsPerPage * currentPage
-                )
-                .map((item, index: number) => (
-                  <RecipeCard key={index} recipe={item} />
-                ))}
-            </ListingRecipeContainer>
-          </StyledContentsArea>
-        </>
-      )}
+      <StyledContentsArea>
+        <StyledNewestTitleBox>
+          <StyledTitle>최신 레시피</StyledTitle>
+        </StyledNewestTitleBox>
+        <ListingRecipeContainer>
+          {newestRecipes
+            .slice(
+              contentsPerPage * (currentPage - 1),
+              contentsPerPage * currentPage
+            )
+            .map((item, index: number) => (
+              <RecipeCard key={index} recipe={item} />
+            ))}
+        </ListingRecipeContainer>
+      </StyledContentsArea>
     </StyledContainer>
   );
 };
