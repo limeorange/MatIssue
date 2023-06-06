@@ -42,11 +42,14 @@ const Header = () => {
 };
 
 const HeaderDiv = styled.div`
-  position: fixed;
-  width: 100%;
-  background-color: #ffffff;
-  z-index: 60;
-  font-size: 16px;
+  position: relative;
+  @media (min-width: 1024px) {
+    position: fixed;
+    width: 100%;
+    background-color: #ffffff;
+    z-index: 60;
+    font-size: 16px;
+  }
 `;
 
 const NavArea = styled.div`
@@ -59,19 +62,23 @@ const NavArea = styled.div`
 const TopNav = styled.div`
   position: relative;
   display: flex;
-  height: 8rem;
+  height: 7rem;
   width: 100%;
   align-items: center;
   justify-content: space-between;
   gap: 1.2rem;
 
-  @media (max-width: 768px) {
-    height: 7rem;
+  @media (min-width: 1024px) {
+    height: 8rem;
   }
 `;
 
 const UnderLine = styled.div`
-  border-bottom: 0.1rem solid rgb(200, 200, 200);
+  display: none;
+  @media (min-width: 1024px) {
+    display: block;
+    border-bottom: 0.1rem solid rgb(200, 200, 200);
+  }
 `;
 
 export default Header;

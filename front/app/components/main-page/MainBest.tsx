@@ -252,7 +252,7 @@ const MainBest = () => {
             <li onClick={() => {}}>주간</li>
           </StyledList>
         </StyledBestTitleBox>
-        <ListingRecipeContainer contentsPerPage={contentsPerPage}>
+        <ListingRecipeContainer>
           {bestRecipes
             .slice(
               contentsPerPage * (currentPage - 1),
@@ -290,7 +290,7 @@ const LeftSlideBtn = styled.button`
     position: absolute;
     width: 3rem;
     height: 9rem;
-    left: -5rem;
+    left: -3rem;
     transition: transform 0.3s;
     &:hover {
       transform: scale(130%, 130%);
@@ -306,7 +306,7 @@ const RightSlideBtn = styled.button`
     position: absolute;
     width: 3rem;
     height: 9rem;
-    right: -5rem;
+    right: -3rem;
     transition: transform 0.3s;
     &:hover {
       transform: scale(130%, 130%);

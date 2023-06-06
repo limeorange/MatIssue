@@ -109,14 +109,13 @@ const MainAlone = () => {
 export default MainAlone;
 
 const RecipeContainer = styled.div`
-  width: 100%;
   max-width: 120rem;
   margin: 0 auto;
   padding: 4rem 2rem;
   display: grid;
-  grid-template-columns: repeat(4, 25rem);
-  grid-template-rows: repeat(2, 25rem);
-  gap: 2.5rem;
+  grid-template-columns: repeat(4, 21rem);
+  grid-template-rows: repeat(2, 21rem);
+  gap: 2rem;
 `;
 
 const RecipeImageWrapperBase = styled.div`

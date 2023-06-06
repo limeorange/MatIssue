@@ -143,10 +143,15 @@ const MainVegan = () => {
 export default MainVegan;
 
 const MainVegunContainer = styled.div`
-  padding: 6rem 0;
-  text-align: center;
-  width: 100%;
-  background-color: #e8ffe8;
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+    padding: 6rem 0;
+    text-align: center;
+    width: 100%;
+    background-color: #e8ffe8;
+  }
 `;
 
 const MainVegunArea = styled.div`
@@ -166,42 +171,46 @@ const VegunTitleBox = styled(StyledTitleBox)`
 
 const RecipeSliderContainer = styled.div`
   width: 100%;
-  max-width: 110rem;
+  max-width: 96rem;
   margin: 0 auto;
   overflow: hidden;
-  gap: 6rem;
 `;
 
-const VegunRecipeContainer = styled(RecipeContainer)<{ slide: number }>`
-  grid-template-columns: repeat(15, 31rem);
+const VegunRecipeContainer = styled.div<{ slide: number }>`
+  width: 480rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  display: grid;
+  overflow-hidden;
+  grid-template-columns: repeat(15, 1fr);
   transition: transform 0.5s ease-in-out;
-  transform: translateX(${(props) => -111 * (props.slide - 1)}rem);
+  transform: translateX(${(props) => -96 * (props.slide - 1)}rem);
+  grid-column-gap: 4rem;
 `;
 
 const LeftSlideBtn = styled.div`
   position: absolute;
   top: 24rem;
-  left: -5rem;
   cursor: pointer;
-  height: 11.2rem;
-  width: 3.2rem;
+  height: 9.2rem;
+  width: 2.8rem;
 
   transition: transform 0.3s;
   &:hover {
-    transform: scale(130%, 130%);
+    transform: scale(120%);
   }
 `;
 
 const RightSlideBtn = styled.div`
   position: absolute;
   top: 24rem;
-  right: -5rem;
+  right: 0;
   cursor: pointer;
-  height: 11.2rem;
-  width: 3.2rem;
+  height: 9.2rem;
+  width: 2.8rem;
 
   transition: transform 0.3s;
   &:hover {
-    transform: scale(130%, 130%);
+    transform: scale(120%);
   }
 `;
