@@ -6,7 +6,7 @@ const EditRecipe = async ({ params }: { params: { id: string } }) => {
 
   /** 레시피 조회 데이터 */
   const recipe = await getRecipeById(recipe_id);
-  console.log(recipe);
+  console.log("🚀 ~ file: page.tsx:9 ~ EditRecipe ~ recipe:", recipe);
 
   return <UpdateRecipeForm recipe={recipe} />;
 };
