@@ -219,7 +219,9 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     const recipeData = {
       recipe_title: state.recipeTitle,
       recipe_thumbnail: state.selectedImage,
-      recipe_video: state.videoLink,
+      recipe_video: state.videoLink
+        ? state.videoLink
+        : "https://www.youtube.com/watch?v=JVQaQBsCbrE",
       recipe_description: state.cookingIntro,
       recipe_category: state.selectedCategory,
       recipe_info: {

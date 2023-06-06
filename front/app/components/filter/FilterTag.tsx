@@ -68,7 +68,7 @@ const FilterTag = (props: FilterTagProps) => {
         <p>검색결과</p>
         {tagList.map((item, index) => (
           <>
-            <span key={`${item.tag}-${index}`}>
+            <span key={`${item.tag}-${item.type}-${index}`}>
               {item.tag}
               <RemoveButton onClick={() => onRemove(item.type)}>X</RemoveButton>
             </span>

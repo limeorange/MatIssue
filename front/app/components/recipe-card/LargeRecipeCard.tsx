@@ -3,51 +3,78 @@
 import { Recipe } from "@/app/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
+import styled, { css, keyframes } from "styled-components";
 
 const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
+  const [showImage, setShowImage] = useState(false);
+
+  useEffect(() => {
+    setShowImage(true);
+  }, [recipe]);
+
   const router = useRouter();
 
   return (
-    <CardContainer onClick={() => router.push(`/recipes/${recipe.recipe_id}`)}>
-      <ImageWrapper>
-        <Image
-          src={recipe.recipe_thumbnail}
-          alt={recipe.recipe_title}
-          fill
-          style={{ objectFit: "cover" }}
-        />
-      </ImageWrapper>
-      <TextContainer>
-        <RecipeTitleBox>
-          <h3>{recipe.recipe_title}</h3>
-        </RecipeTitleBox>
-        <RecipeInfoBox>
-          <AuthorBox>
-            <Image
-              src="/images/profileIcon.png"
-              height={20}
-              width={20}
-              alt="profile_image"
-            />
-            <p>{recipe.user_nickname}</p>
-          </AuthorBox>
-          <LikeIconWrapper>
-            <Image
-              src="/images/like.png"
-              alt="게시물 좋아요 이미지"
-              height={16}
-              width={20}
-            />
-            <div>{recipe.recipe_like}</div>
-          </LikeIconWrapper>
-        </RecipeInfoBox>
-      </TextContainer>
-    </CardContainer>
+    <SlideContainer>
+      <CardContainer
+        className={showImage ? "show" : ""}
+        onClick={() => router.push(`/recipes/${recipe.recipe_id}`)}
+      >
+        <ImageWrapper>
+          <Image
+            src={recipe.recipe_thumbnail}
+            alt={recipe.recipe_title}
+            fill
+            style={{ objectFit: "cover" }}
+          />
+        </ImageWrapper>
+        <TextContainer>
+          <RecipeTitleBox>
+            <h3>{recipe.recipe_title}</h3>
+          </RecipeTitleBox>
+          <RecipeInfoBox>
+            <AuthorBox>
+              <Image
+                src="/images/profileIcon.png"
+                height={20}
+                width={20}
+                alt="profile_image"
+              />
+              <p>{recipe.user_nickname}</p>
+            </AuthorBox>
+            <LikeIconWrapper>
+              <Image
+                src="/images/like.png"
+                alt="게시물 좋아요 이미지"
+                height={16}
+                width={20}
+              />
+              <div>{recipe.recipe_like}</div>
+            </LikeIconWrapper>
+          </RecipeInfoBox>
+        </TextContainer>
+      </CardContainer>
+    </SlideContainer>
   );
 };
 
 export default LargeRecipeCard;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const SlideContainer = styled.div`
+  overflow: hidden;
+`;
 
 const CardContainer = styled.div`
   display: flex;
@@ -55,7 +82,6 @@ const CardContainer = styled.div`
   overflow: hidden;
   background: white;
   border-radius: 1.6rem;
-  filter: drop-shadow(0 0.1rem 1rem rgba(0, 0, 0, 0.1));
   color: #4f3d21;
   cursor: pointer;
 
@@ -64,6 +90,10 @@ const CardContainer = styled.div`
   }
 
   transition: all 0.5s;
+
+  opacity: 0;
+  transform: translateX(100%);
+  animation: ${fadeIn} 0.5s ease-in-out forwards;
 `;
 
 const ImageWrapper = styled.div`

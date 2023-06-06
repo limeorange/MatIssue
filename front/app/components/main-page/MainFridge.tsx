@@ -6,82 +6,104 @@ import {
 } from "@/app/styles/main/main.style";
 import styled from "styled-components";
 import LargeRecipeCard from "../recipe-card/LargeRecipeCard";
-import { Recipe, RecipeData } from "@/app/types";
+import { Recipe } from "@/app/types";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
-import { getAllRecipes } from "@/app/api/recipe";
+import { useEffect, useState } from "react";
 
 const Ingredient = [
   {
-    title: "식은밥",
+    title: "소금",
     img: "/images/main/bob.png",
     id: 1,
   },
   {
-    title: "식은밥",
+    title: "참치",
     img: "/images/main/bob.png",
     id: 2,
   },
   {
-    title: "식은밥",
+    title: "스팸",
     img: "/images/main/bob.png",
     id: 3,
   },
   {
-    title: "식은밥",
+    title: "양파",
     img: "/images/main/bob.png",
     id: 4,
   },
   {
-    title: "식은밥",
+    title: "파",
     img: "/images/main/bob.png",
     id: 5,
   },
   {
-    title: "식은밥",
+    title: "김치",
     img: "/images/main/bob.png",
     id: 6,
   },
   {
-    title: "식은밥",
+    title: "삼겹살",
     img: "/images/main/bob.png",
     id: 7,
   },
 ];
 
-const MainFridge = () => {
-  const { data: recipes, isLoading } = useQuery(["recipes2"], () =>
-    getAllRecipes()
-  );
+const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
+  const [selectedIngredient, setSelectedIngredient] = useState<string>("소금");
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
+
+  // 레시피 재료에 선택한 재료가 들어간 레시피들 필터링 후 랜덤정렬
+  useEffect(() => {
+    const filteredRecipes = recipes?.filter((recipe: Recipe) =>
+      recipe.recipe_ingredients.some(
+        (ingredient) => ingredient.name === selectedIngredient
+      )
+    );
+    const randomSelection = filteredRecipes.sort(() => 0.5 - Math.random());
+
+    setFilteredRecipes(randomSelection);
+  }, [selectedIngredient, recipes]);
+
+  // 선택한
+  const ingredientSelectHandler: React.MouseEventHandler<HTMLButtonElement> = (
+    e
+  ) => {
+    e.preventDefault();
+    setSelectedIngredient(e.currentTarget.id);
+  };
 
   return (
     <MainFridgeContainer>
-      {isLoading ? (
-        <></>
+      <FridgedTitleBox>
+        <StyledTitle>당신을 위한 냉장고털이 레시피</StyledTitle>
+        <StyledSubTitle>
+          냉장고 속 재료로 손쉽게 훌륭한 요리를 선보이세요
+        </StyledSubTitle>
+      </FridgedTitleBox>
+      <IngredientSelectBox>
+        {Ingredient.map((item) => (
+          <IngredientButton
+            type="button"
+            key={item.id}
+            id={item.title}
+            checked={selectedIngredient === item.title}
+            onClick={ingredientSelectHandler}
+          >
+            <IngredientImageWrapper>
+              <Image src={item.img} alt="ingredient" fill />
+            </IngredientImageWrapper>
+            <h3>{item.title}</h3>
+          </IngredientButton>
+        ))}
+      </IngredientSelectBox>
+      {filteredRecipes?.length === 0 ? (
+        <div>레시피가 없어요 ㅠㅠ</div>
       ) : (
-        <>
-          <FridgedTitleBox>
-            <StyledTitle>당신을 위한 냉장고털이 레시피</StyledTitle>
-            <StyledSubTitle>
-              냉장고 속 재료로 손쉽게 훌륭한 요리를 선보이세요
-            </StyledSubTitle>
-          </FridgedTitleBox>
-          <IngredientSelectBox>
-            {Ingredient.map((item) => (
-              <IngredientItem key={item.id}>
-                <IngredientImageWrapper>
-                  <Image src={item.img} alt="ingredient" fill />
-                </IngredientImageWrapper>
-                <h3>{item.title}</h3>
-              </IngredientItem>
-            ))}
-          </IngredientSelectBox>
-          <RecipeContainer>
-            {recipes.slice(0, 3).map((item: Recipe) => (
-              <LargeRecipeCard key={item._id} recipe={item} />
-            ))}
-          </RecipeContainer>
-        </>
+        <RecipeContainer>
+          {filteredRecipes.slice(0, 3).map((item: Recipe) => (
+            <LargeRecipeCard key={item._id} recipe={item} />
+          ))}
+        </RecipeContainer>
       )}
     </MainFridgeContainer>
   );
@@ -110,14 +132,18 @@ const FridgedTitleBox = styled(StyledTitleBox)`
 `;
 
 const IngredientSelectBox = styled.div`
+  padding-top: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 3.5rem;
 `;
 
-const IngredientItem = styled.div`
+const IngredientButton = styled.button<{ checked: boolean }>`
   font-size: 16px;
+  opacity: ${(props) => (props.checked ? 1 : 0.4)};
+
+  transition: opacity 0.3s;
 `;
 
 const IngredientImageWrapper = styled.div`
