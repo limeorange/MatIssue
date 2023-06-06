@@ -296,20 +296,22 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
           </SortButtonContainer>
         </PageHeaderContainer>
         {currentRecipes.length > 0 ? (
-          <RecipeListWrapper>
-            {currentRecipes.map((data, index) => (
-              <RecipeCard key={index} recipe={data} />
-            ))}
-          </RecipeListWrapper>
+          <>
+            <RecipeListWrapper>
+              {currentRecipes.map((data, index) => (
+                <RecipeCard key={index} recipe={data} />
+              ))}
+            </RecipeListWrapper>
+            <Pagination
+              recipesPerPage={recipesPerPage}
+              totalRecipes={filteredRecipes.length}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
+          </>
         ) : (
           <NonRecipePage />
         )}
-        <Pagination
-          recipesPerPage={recipesPerPage}
-          totalRecipes={filteredRecipes.length}
-          paginate={paginate}
-          currentPage={currentPage}
-        />
       </MainWrapper>
     </>
   );
