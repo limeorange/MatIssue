@@ -56,7 +56,6 @@ const difficulty = [
 // 레시피 리스트 출력 컴포넌트
 const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes); // 레시피 데이터 필터링 상태
-  console.log(recipes);
   const initialSortMethodState = null;
   const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(
     initialSortMethodState
@@ -108,8 +107,6 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     let result = [...recipes];
-    console.log(result);
-
     let honmukResult: Recipe[] = [];
     let newestResult: Recipe[] = [];
     let bestResult: Recipe[] = [];
@@ -298,21 +295,23 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
             )}
           </SortButtonContainer>
         </PageHeaderContainer>
-        <RecipeListWrapper>
-          {currentRecipes.length > 0 ? (
-            currentRecipes.map((data, index) => (
-              <RecipeCard key={index} recipe={data} />
-            ))
-          ) : (
-            <NonRecipePage />
-          )}
-        </RecipeListWrapper>
-        <Pagination
-          recipesPerPage={recipesPerPage}
-          totalRecipes={filteredRecipes.length}
-          paginate={paginate}
-          currentPage={currentPage}
-        />
+        {currentRecipes.length > 0 ? (
+          <>
+            <RecipeListWrapper>
+              {currentRecipes.map((data, index) => (
+                <RecipeCard key={index} recipe={data} />
+              ))}
+            </RecipeListWrapper>
+            <Pagination
+              recipesPerPage={recipesPerPage}
+              totalRecipes={filteredRecipes.length}
+              paginate={paginate}
+              currentPage={currentPage}
+            />
+          </>
+        ) : (
+          <NonRecipePage />
+        )}
       </MainWrapper>
     </>
   );

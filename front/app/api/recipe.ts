@@ -3,7 +3,7 @@ import { axiosBase } from "./axios";
 export const getRecipeById = async (recipe_id: string) => {
   try {
     const response = await axiosBase.get(`recipes/${recipe_id}`);
-    const recipeData = JSON.parse(response.data[0].body);
+    const recipeData = response.data.recipe;
     return recipeData;
   } catch (error) {
     console.error("Error fetching recipe data:", error);
@@ -16,5 +16,23 @@ export const getAllRecipes = async () => {
     return response.data;
   } catch (err: any) {
     console.log(err.response.data.detail);
+  }
+};
+
+export const postRecipe = async (recipeData: any) => {
+  try {
+    const response = await axiosBase.post("/recipes/", recipeData);
+    return response;
+  } catch (error) {
+    console.log("Error creating recipe:", error);
+  }
+};
+
+export const updateRecipe = async (recipe_id: string, recipeData: any) => {
+  try {
+    const response = await axiosBase.patch(`recipes/${recipe_id}`, recipeData);
+    return response;
+  } catch (error) {
+    console.log("Error updating recipe:", error);
   }
 };
