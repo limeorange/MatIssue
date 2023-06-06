@@ -1,4 +1,4 @@
-import RecipeStep from "./RecipeStep";
+import RecipeStep from "./RecipeStepItem";
 
 /** 단계 Props */
 type Step = { step: number; picture: string; description: string };
