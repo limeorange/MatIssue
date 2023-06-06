@@ -9,6 +9,7 @@ import ThumbnailUpload from "@/app/components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection";
 import Button from "@/app/components/UI/Button";
 import { axiosBase } from "@/app/api/axios";
+import { updateRecipe } from "@/app/api/recipe";
 
 type Recipe = {
   recipe_category: string;
@@ -239,15 +240,10 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     };
 
     try {
-      const response = await axiosBase.patch(
-        `recipes/${recipe_id}`,
-        recipeData
-      );
-
+      const response = await updateRecipe(recipe_id, recipeData);
       console.log(response);
-    } catch (error: any) {
-      console.log(error.response.data.detail);
-      console.log(recipeData);
+    } catch (error) {
+      console.log(error);
     }
   };
 
