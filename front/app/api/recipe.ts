@@ -27,3 +27,12 @@ export const postRecipe = async (recipeData: any) => {
     console.log("Error creating recipe:", error);
   }
 };
+
+export const updateRecipe = async (recipe_id: string, recipeData: any) => {
+  try {
+    const response = await axiosBase.patch(`recipes/${recipe_id}`, recipeData);
+    return response;
+  } catch (error) {
+    console.log("Error updating recipe:", error);
+  }
+};
