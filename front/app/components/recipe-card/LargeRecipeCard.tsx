@@ -1,22 +1,26 @@
 "use client";
 
+import { Recipe } from "@/app/types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 
-const LargeRecipeCard = ({ recipe }: any) => {
+const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
+  const router = useRouter();
+
   return (
-    <CardContainer>
+    <CardContainer onClick={() => router.push(`/recipes/${recipe.recipe_id}`)}>
       <ImageWrapper>
         <Image
-          src={recipe.image}
-          alt={recipe.title}
+          src={recipe.recipe_thumbnail}
+          alt={recipe.recipe_title}
           fill
           style={{ objectFit: "cover" }}
         />
       </ImageWrapper>
       <TextContainer>
         <RecipeTitleBox>
-          <h3>{recipe.title}</h3>
+          <h3>{recipe.recipe_title}</h3>
         </RecipeTitleBox>
         <RecipeInfoBox>
           <AuthorBox>
@@ -26,7 +30,7 @@ const LargeRecipeCard = ({ recipe }: any) => {
               width={20}
               alt="profile_image"
             />
-            <p>{recipe.author}</p>
+            <p>{recipe.user_nickname}</p>
           </AuthorBox>
           <LikeIconWrapper>
             <Image
@@ -35,7 +39,7 @@ const LargeRecipeCard = ({ recipe }: any) => {
               height={16}
               width={20}
             />
-            <div>{recipe.likes}</div>
+            <div>{recipe.recipe_like}</div>
           </LikeIconWrapper>
         </RecipeInfoBox>
       </TextContainer>
