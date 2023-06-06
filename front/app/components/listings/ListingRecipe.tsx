@@ -44,7 +44,7 @@ export type OptionsType = {
 const DUMMY_DATA: Recipe[] = [
   {
     image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
+    title: "기가 막히는 초밥 만들기111111111111111111111111111111",
     author: "목동최고미남정훈",
     likes: 1234,
     view: "15,324",
