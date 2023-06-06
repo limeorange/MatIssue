@@ -16,7 +16,7 @@ type Recipe = {
   author: string;
   likes: number;
   view: string;
-  id: string;
+  recipe_id: string;
   timestamp: number;
   servings: number;
   duration: number;
@@ -44,16 +44,16 @@ export type OptionsType = {
 const DUMMY_DATA: Recipe[] = [
   {
     image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
+    title: "기가 막히는 초밥 만들기111111111111111111111111111111",
     author: "목동최고미남정훈",
     likes: 1234,
     view: "15,324",
-    id: "1",
+    recipe_id: "UIrwXy7YxP_2v1d8jtcDd",
     timestamp: 1,
     servings: 1,
     duration: 10,
     difficulty: 0,
-    category: "western",
+    category: "vegetarian",
   },
   {
     image: "/images/sushi2.png",
@@ -61,7 +61,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1112,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 2,
     servings: 2,
     duration: 20,
@@ -74,7 +74,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 1134,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 3,
     servings: 3,
     duration: 30,
@@ -87,7 +87,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 1435,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 4,
     servings: 4,
     duration: 60,
@@ -100,7 +100,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1144,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 5,
     servings: 5,
     duration: 60,
@@ -113,7 +113,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1518,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 6,
     servings: 4,
     duration: 20,
@@ -126,7 +126,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 2324,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 8,
     servings: 3,
     duration: 30,
@@ -139,7 +139,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 3324,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 11,
     servings: 2,
     duration: 10,
@@ -152,7 +152,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1888,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 9,
     servings: 1,
     duration: 60,
@@ -165,7 +165,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1999,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 10,
     servings: 3,
     duration: 30,
@@ -178,7 +178,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 4324,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 14,
     servings: 2,
     duration: 20,
@@ -191,7 +191,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 1098,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 12,
     servings: 5,
     duration: 60,
@@ -204,7 +204,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1987,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 13,
     servings: 4,
     duration: 10,
@@ -217,7 +217,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1324,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 16,
     servings: 1,
     duration: 30,
@@ -230,7 +230,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 2343,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 15,
     servings: 2,
     duration: 20,
@@ -243,7 +243,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 500,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 17,
     servings: 3,
     duration: 60,
@@ -256,7 +256,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1234,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 1,
     servings: 1,
     duration: 10,
@@ -269,7 +269,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1112,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 2,
     servings: 2,
     duration: 20,
@@ -282,7 +282,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 1134,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 3,
     servings: 3,
     duration: 30,
@@ -295,7 +295,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 1435,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 4,
     servings: 4,
     duration: 60,
@@ -308,7 +308,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1144,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 5,
     servings: 5,
     duration: 60,
@@ -321,7 +321,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1518,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 6,
     servings: 4,
     duration: 20,
@@ -334,7 +334,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 2324,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 8,
     servings: 3,
     duration: 30,
@@ -347,7 +347,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 3324,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 11,
     servings: 2,
     duration: 10,
@@ -360,7 +360,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1888,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 9,
     servings: 1,
     duration: 60,
@@ -373,7 +373,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1999,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 10,
     servings: 3,
     duration: 30,
@@ -386,7 +386,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 4324,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 14,
     servings: 2,
     duration: 20,
@@ -399,7 +399,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 1098,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 12,
     servings: 5,
     duration: 60,
@@ -412,7 +412,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1987,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 13,
     servings: 4,
     duration: 10,
@@ -425,7 +425,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1324,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 16,
     servings: 1,
     duration: 30,
@@ -438,7 +438,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 2343,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 15,
     servings: 2,
     duration: 20,
@@ -451,7 +451,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 500,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 17,
     servings: 3,
     duration: 60,
@@ -464,7 +464,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1234,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 1,
     servings: 1,
     duration: 10,
@@ -477,7 +477,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1112,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 2,
     servings: 2,
     duration: 20,
@@ -490,7 +490,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 1134,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 3,
     servings: 3,
     duration: 30,
@@ -503,7 +503,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 1435,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 4,
     servings: 4,
     duration: 60,
@@ -516,7 +516,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1144,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 5,
     servings: 5,
     duration: 60,
@@ -529,7 +529,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1518,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 6,
     servings: 4,
     duration: 20,
@@ -542,7 +542,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 2324,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 8,
     servings: 3,
     duration: 30,
@@ -555,7 +555,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 3324,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 11,
     servings: 2,
     duration: 10,
@@ -568,7 +568,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1888,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 9,
     servings: 1,
     duration: 60,
@@ -581,7 +581,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1999,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 10,
     servings: 3,
     duration: 30,
@@ -594,7 +594,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 4324,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 14,
     servings: 2,
     duration: 20,
@@ -607,7 +607,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "브라우니물어",
     likes: 1098,
     view: "15,324",
-    id: "ex4",
+    recipe_id: "ex4",
     timestamp: 12,
     servings: 5,
     duration: 60,
@@ -620,7 +620,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "목동최고미남정훈",
     likes: 1987,
     view: "15,324",
-    id: "ex1",
+    recipe_id: "ex1",
     timestamp: 13,
     servings: 4,
     duration: 10,
@@ -633,7 +633,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "킹갓제너럴팀장윤수",
     likes: 1324,
     view: "15,324",
-    id: "ex2",
+    recipe_id: "ex2",
     timestamp: 16,
     servings: 1,
     duration: 30,
@@ -646,7 +646,7 @@ const DUMMY_DATA: Recipe[] = [
     author: "영앤리치톨엔인텔리",
     likes: 2343,
     view: "15,324",
-    id: "ex3",
+    recipe_id: "ex3",
     timestamp: 15,
     servings: 2,
     duration: 20,
@@ -684,13 +684,16 @@ const difficulty = [
 // 레시피 리스트 출력 컴포넌트
 const ListingRecipe = () => {
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA); // 레시피 데이터 필터링 상태
-  const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(null); // 정렬 버튼에 따른 정렬 상태
-  const [filter, setFilter] = useState<Filter>({
-    // 필터바의 필터 값에 따른 필터링 상태
+  const initialSortMethodState = null;
+  const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(
+    initialSortMethodState
+  ); // 정렬 버튼에 따른 정렬 상태
+  const initialFilterState = {
     servings: -1,
     duration: -1,
     difficulty: -1,
-  });
+  };
+  const [filter, setFilter] = useState(initialFilterState);
   const [search, setSearch] = useState<string>("");
   const [newServings, setNewServings] = useState<OptionsType>(servings[0]);
   const [newDuration, setNewDuration] = useState<OptionsType>(duration[0]);
@@ -702,12 +705,39 @@ const ListingRecipe = () => {
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("query"); // url의 query값 추출
   const category = searchParams.get("category");
-  console.log(category);
-  console.log(searchQuery);
   const router = useRouter();
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const servingsFromURL = urlParams.get("servings");
+    const durationFromURL = urlParams.get("duration");
+    const difficultyFromURL = urlParams.get("difficulty");
+
+    setFilter({
+      servings: servingsFromURL ? parseInt(servingsFromURL) : -1,
+      duration: durationFromURL ? parseInt(durationFromURL) : -1,
+      difficulty: difficultyFromURL ? parseInt(difficultyFromURL) : -1,
+    });
+  }, []);
+
+  // 새로고침 했을 경우 버튼 정렬상태 유지
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sortMethodFromURL = urlParams.get("sortMethod");
+
+    setSortMethod(
+      sortMethodFromURL === "date" || sortMethodFromURL === "likes"
+        ? sortMethodFromURL
+        : initialSortMethodState
+    );
+  }, []);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
     let result = [...DUMMY_DATA];
+    let honmukResult: Recipe[] = [];
+    let newestResult: Recipe[] = [];
+    let bestResult: Recipe[] = [];
 
     // 검색바로 레시피 필터링
     const term = searchQuery || "";
@@ -715,6 +745,23 @@ const ListingRecipe = () => {
       result = result.filter((recipe) =>
         recipe.title.toLowerCase().includes(term.toLowerCase())
       );
+    }
+
+    // 혼먹 카테고리 필터링
+    if (category === "honmuk") {
+      honmukResult = result.filter((recipe) => recipe.servings === 1);
+    }
+
+    // 최신 카테고리 필터링
+    if (category === "newest") {
+      newestResult = [...result].sort((a, b) => b.timestamp - a.timestamp);
+    }
+
+    // 베스트 카테고리 필터링
+    if (category === "best") {
+      bestResult = result
+        .filter((recipe) => recipe.likes >= 1500)
+        .sort((a, b) => b.timestamp - a.timestamp);
     }
 
     // 카테고리바 레시피 필터링
@@ -727,24 +774,61 @@ const ListingRecipe = () => {
     // 필터바로 레시피 필터링
     if (filter.servings > 0) {
       result = result.filter((recipe) => recipe.servings === filter.servings);
+      urlParams.set("servings", filter.servings.toString());
+    } else {
+      urlParams.delete("servings");
     }
 
     if (filter.duration > 0) {
       result = result.filter((recipe) => recipe.duration === filter.duration);
+      urlParams.set("duration", filter.duration.toString());
+    } else {
+      urlParams.delete("duration");
     }
 
     if (filter.difficulty > -1) {
       result = result.filter(
         (recipe) => recipe.difficulty === filter.difficulty
       );
+      urlParams.set("difficulty", filter.difficulty.toString());
+    } else {
+      urlParams.delete("difficulty");
+    }
+
+    // URL을 변경하되 페이지는 새로고침하지 않음
+    window.history.pushState(
+      {},
+      "",
+      window.location.pathname + "?" + urlParams.toString()
+    );
+
+    // 각 카테고리 별 result 할당
+    if (category === "honmuk") {
+      result = honmukResult;
+    } else if (category === "newest") {
+      result = newestResult;
+    } else if (category === "best") {
+      result = bestResult;
+    } else {
+      result = result;
     }
 
     // 버튼으로 레시피 정렬
     if (sortMethod === "date") {
       result.sort((a, b) => a.timestamp - b.timestamp);
+      urlParams.set("sortMethod", "date");
     } else if (sortMethod === "likes") {
       result.sort((a, b) => b.likes - a.likes);
+      urlParams.set("sortMethod", "likes");
+    } else {
+      urlParams.delete("sortMethod");
     }
+
+    window.history.pushState(
+      {},
+      "",
+      window.location.pathname + "?" + urlParams.toString()
+    );
 
     setFilteredRecipes(result);
   }, [search, searchQuery, filter, category, sortMethod]);
@@ -766,7 +850,7 @@ const ListingRecipe = () => {
         setNewDuration(duration[0]);
       }
 
-      setFilter((prevFilter) => ({
+      setFilter((prevFilter: any) => ({
         ...prevFilter,
         [tagType]: resetValue,
       }));
@@ -811,22 +895,26 @@ const ListingRecipe = () => {
         <PageHeaderContainer>
           <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
           <SortButtonContainer>
-            <SortButton
-              selected={sortMethod === "date"}
-              onClick={() =>
-                setSortMethod((prev) => (prev === "date" ? null : "date"))
-              }
-            >
-              최신순
-            </SortButton>
-            <SortButton
-              selected={sortMethod === "likes"}
-              onClick={() =>
-                setSortMethod((prev) => (prev === "likes" ? null : "likes"))
-              }
-            >
-              인기순
-            </SortButton>
+            {category !== "best" && category !== "newest" && (
+              <>
+                <SortButton
+                  selected={sortMethod === "date"}
+                  onClick={() =>
+                    setSortMethod((prev) => (prev === "date" ? null : "date"))
+                  }
+                >
+                  최신순
+                </SortButton>
+                <SortButton
+                  selected={sortMethod === "likes"}
+                  onClick={() =>
+                    setSortMethod((prev) => (prev === "likes" ? null : "likes"))
+                  }
+                >
+                  인기순
+                </SortButton>
+              </>
+            )}
           </SortButtonContainer>
         </PageHeaderContainer>
         <RecipeListWrapper>

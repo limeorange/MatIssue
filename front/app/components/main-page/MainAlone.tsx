@@ -109,14 +109,13 @@ const MainAlone = () => {
 export default MainAlone;
 
 const RecipeContainer = styled.div`
-  width: 100%;
   max-width: 120rem;
   margin: 0 auto;
   padding: 4rem 2rem;
   display: grid;
-  grid-template-columns: repeat(4, 25rem);
-  grid-template-rows: repeat(2, 25rem);
-  gap: 2.5rem;
+  grid-template-columns: repeat(4, 21rem);
+  grid-template-rows: repeat(2, 21rem);
+  gap: 2rem;
 `;
 
 const RecipeImageWrapperBase = styled.div`
@@ -167,6 +166,7 @@ const TitleOnImage = styled.div`
   bottom: 2rem;
   font-size: 20px;
   font-weight: 500;
+  cursor: pointer;
   color: white;
   text-shadow: 0px 0.2rem 0.2rem rgba(0, 0, 0, 0.25);
 `;

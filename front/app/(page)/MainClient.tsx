@@ -34,6 +34,7 @@ const MainWrapper = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 1rem 0;
+  color: rgb(75, 75, 75);
 
   @media (min-width: 768px) {
     margin: 0 auto;

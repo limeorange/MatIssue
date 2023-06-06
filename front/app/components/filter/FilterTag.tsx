@@ -31,6 +31,14 @@ const FilterTag = (props: FilterTagProps) => {
       newTagList.push({ tag: `#일식`, type: "category" });
     } else if (category === "korean") {
       newTagList.push({ tag: `#한식`, type: "category" });
+    } else if (category === "best") {
+      newTagList.push({ tag: `#베스트 레시피`, type: "category" });
+    } else if (category === "newest") {
+      newTagList.push({ tag: `#최신 레시피`, type: "category" });
+    } else if (category === "honmuk") {
+      newTagList.push({ tag: `#혼먹 레시피`, type: "category" });
+    } else if (category === "vegetarian") {
+      newTagList.push({ tag: `#비건 레시피`, type: "category" });
     }
 
     if (filter.servings > 0) {
@@ -60,7 +68,7 @@ const FilterTag = (props: FilterTagProps) => {
         <p>검색결과</p>
         {tagList.map((item, index) => (
           <>
-            <span key={index}>
+            <span key={`${item.tag}-${index}`}>
               {item.tag}
               <RemoveButton onClick={() => onRemove(item.type)}>X</RemoveButton>
             </span>

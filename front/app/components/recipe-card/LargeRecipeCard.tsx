@@ -19,7 +19,24 @@ const LargeRecipeCard = ({ recipe }: any) => {
           <h3>{recipe.title}</h3>
         </RecipeTitleBox>
         <RecipeInfoBox>
-          <p>{recipe.author}</p>
+          <AuthorBox>
+            <Image
+              src="/images/profileIcon.png"
+              height={20}
+              width={20}
+              alt="profile_image"
+            />
+            <p>{recipe.author}</p>
+          </AuthorBox>
+          <LikeIconWrapper>
+            <Image
+              src="/images/like.png"
+              alt="게시물 좋아요 이미지"
+              height={16}
+              width={20}
+            />
+            <div>{recipe.likes}</div>
+          </LikeIconWrapper>
         </RecipeInfoBox>
       </TextContainer>
     </CardContainer>
@@ -34,7 +51,7 @@ const CardContainer = styled.div`
   overflow: hidden;
   background: white;
   border-radius: 1.6rem;
-  filter: drop-shadow(0px 2px 16px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 0.1rem 1rem rgba(0, 0, 0, 0.1));
   color: #4f3d21;
   cursor: pointer;
 
@@ -53,21 +70,35 @@ const ImageWrapper = styled.div`
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1.6rem 1.6rem 2.4rem 1.6rem;
+  gap: 1.2rem;
+  padding: 1.6rem 1.6rem 2rem 1.6rem;
   line-height: 1.6rem;
 `;
 
 const RecipeTitleBox = styled.div`
   display: flex;
   width: 100%;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
 `;
 
 const RecipeInfoBox = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
+`;
+
+const AuthorBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+`;
+
+const LikeIconWrapper = styled.div`
+  position: relative;
+  display: flex;
+  gap: 0.4rem;
 `;

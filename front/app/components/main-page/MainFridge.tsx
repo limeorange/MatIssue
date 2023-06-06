@@ -106,12 +106,16 @@ const MainFridge = () => {
 export default MainFridge;
 
 const MainFridgeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 6rem 0;
-  text-align: center;
-  width: 100%;
-  background-color: #fff9de;
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    padding: 6rem 0;
+    text-align: center;
+    width: 100%;
+    background-color: #fff9de;
+  }
 `;
 
 const FridgedTitleBox = styled(StyledTitleBox)`
@@ -134,7 +138,7 @@ const IngredientItem = styled.div`
 
 const IngredientImageWrapper = styled.div`
   position: relative;
-  width: 9rem;
-  height: 9rem;
+  width: 5rem;
+  height: 5rem;
   margin-bottom: 1rem;
 `;
