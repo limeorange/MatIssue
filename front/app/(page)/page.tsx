@@ -1,3 +1,5 @@
+"use client";
+
 import MainPageClient from "./MainClient";
 
 const Home = () => {
