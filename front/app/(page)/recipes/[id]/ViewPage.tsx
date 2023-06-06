@@ -275,6 +275,7 @@ const DeleteButton = styled.button`
   color: #4f3d21;
 `;
 
+/** 이미지 감싸는 Div */
 const ImageWrapperDiv = styled.div`
   width: 100%;
   max-width: 65rem;
@@ -283,6 +284,7 @@ const ImageWrapperDiv = styled.div`
   margin-top: 3.5rem;
 `;
 
+/** 요리 주제 소개 담은 Div */
 const TitleContainerDiv = styled.div`
   width: 100%;
   max-width: 65rem;
@@ -292,17 +294,20 @@ const TitleContainerDiv = styled.div`
   gap: 0.5rem;
 `;
 
+/** 레시피 전체 제목 H3 */
 const TitleH3 = styled.h3`
   font-weight: 600;
   font-size: 2.2rem;
   margin-right: 1rem;
 `;
 
+/** 작성자 Span */
 const AuthorSpan = styled.span`
   color: #6f6f6f;
   font-size: 1.4rem;
 `;
 
+/** 요리 간단 소개 Div */
 const DescriptionDiv = styled.div`
   margin-top: 1.5rem;
   max-width: 65rem;
@@ -310,6 +315,7 @@ const DescriptionDiv = styled.div`
   font-size: 1.62rem;
 `;
 
+/** 레시피 소제목 H2 */
 const SubtitleH2 = styled.h2`
   font-size: 2rem;
   color: #b08038;
@@ -317,10 +323,12 @@ const SubtitleH2 = styled.h2`
   margin-bottom: 1rem;
 `;
 
+/** 요리팁 Div */
 const RecipeTipDiv = styled.div`
   font-size: 1.6rem;
 `;
 
+/** 댓글 아이콘 Div */
 const CommentIconDiv = styled.div`
   margin-left: 0.7rem;
   margin-top: 0.4rem;

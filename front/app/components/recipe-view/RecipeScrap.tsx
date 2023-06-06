@@ -18,16 +18,11 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
   isSaved,
   setIsSaved,
 }) => {
-  // const hasLocalStorage = typeof window !== "undefined" && window.localStorage;
-  // const savedMemo = hasLocalStorage ? localStorage.getItem("scrapMemo") : null;
-  // const hasMemo = savedMemo && savedMemo.trim().length > 0;
-
+  // 처음 렌더링 시 클라이언트 사이드에서 로컬스토리지 받아오기 위한 의존성 관리
   useEffect(() => {
     const savedMemo = localStorage.getItem("scrapMemo") || "";
     const hasMemo = savedMemo.trim().length > 0;
     setIsSaved(hasMemo);
-    console.log(hasMemo);
-    console.log(savedMemo);
   }, []);
 
   return (
