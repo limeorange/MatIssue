@@ -22,7 +22,6 @@ type Recipe = {
   recipe_tip: string;
   recipe_video: string;
   recipe_id: string;
-  created_at: string;
 };
 
 type RecipeFormState = {
@@ -71,7 +70,6 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     recipe_tip,
     recipe_video,
     recipe_id,
-    created_at,
   } = recipe;
   const [state, setState] = useState<RecipeFormState>({
     selectedCategory: recipe_category,
@@ -238,8 +236,6 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
         description: stepDetail,
       })),
       recipe_tip: state.cookingTips,
-      user_id: "admin",
-      created_at: created_at,
     };
 
     try {
@@ -251,7 +247,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       console.log(response);
     } catch (error: any) {
       console.log(error.response.data.detail);
-      // console.log(recipeData);
+      console.log(recipeData);
     }
   };
 
