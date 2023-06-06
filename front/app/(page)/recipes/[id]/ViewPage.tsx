@@ -2,7 +2,6 @@
 
 import IngredientList from "@/app/components/recipe-view/IngredientList";
 import ProgressBar from "@/app/components/recipe-view/sticky-sidebar/ProgressBar";
-import RecipeComment from "@/app/components/recipe-view/comment/RecipeCommentItem";
 import RecipeCommentInput from "@/app/components/recipe-view/comment/RecipeCommentInput";
 import RecipeComments from "@/app/components/recipe-view/comment/RecipeCommentList";
 import RecipeInfo from "@/app/components/recipe-view/RecipeInfo";
