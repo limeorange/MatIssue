@@ -6,31 +6,22 @@ import Image from "next/image";
 const NonRecipePage = () => {
   return (
     <>
-      <NoRecipeMessageBox>
+      <NoRecipeMessageWrapper>
         <Image
-          src={"/images/dongs-logo.png"}
-          width={200}
-          height={200}
-          alt="요리사 로고"
+          src={"/images/NoRecipeMessage.png"}
+          width={1000}
+          height={500}
+          alt="레시피가 없습니다 이미지"
         />
-        <NoRecipeMessage>작성된 레시피가 없습니다.</NoRecipeMessage>
-      </NoRecipeMessageBox>
+      </NoRecipeMessageWrapper>
     </>
   );
 };
 
 export default NonRecipePage;
 
-const NoRecipeMessageBox = styled.div`
-  display: flex;
-  justify-content: space-between;
+const NoRecipeMessageWrapper = styled.div`
+  max-width: 100rem;
   width: 100%;
-  max-width: 60rem;
-`;
-
-const NoRecipeMessage = styled.p`
-  text-align: center;
-  font-size: 30px;
-  color: #9f783a;
-  width: 100%;
+  margin-top: 8rem;
 `;
