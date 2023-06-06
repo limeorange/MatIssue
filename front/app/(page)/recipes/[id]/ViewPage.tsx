@@ -100,8 +100,8 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 스크랩 버튼 상태 관리
   const [isBooked, setIsBooked] = useState(false);
 
-  // 모달창 상태 관리
-  const [isModal, setIsModal] = useState<boolean>(false);
+  // 스크랩 저장 상태 관리
+  const [isSaved, setIsSaved] = useState(false);
 
   // 좋아요 버튼 클릭 핸들러
   const heartClickHandler = () => {
@@ -207,10 +207,17 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
           {/* 스크랩 */}
           <RecipeScrap
+            isSaved={isSaved}
+            setIsSaved={setIsSaved}
             isBooked={isBooked}
             scrapClickHandler={scrapClickHandler}
           />
-          {isBooked && <ScrapModal modalCloseHandler={modalCloseHandler} />}
+          {isBooked && (
+            <ScrapModal
+              setIsSaved={setIsSaved}
+              modalCloseHandler={modalCloseHandler}
+            />
+          )}
         </div>
 
         {/* 댓글 */}

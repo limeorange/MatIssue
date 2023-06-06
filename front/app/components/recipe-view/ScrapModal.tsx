@@ -1,18 +1,30 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type ScrapModalProps = {
   modalCloseHandler: () => void;
+  setIsSaved: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const ScrapModal: React.FC<ScrapModalProps> = ({ modalCloseHandler }) => {
-  // 스크랩 모달 마우스로 이동
+const ScrapModal: React.FC<ScrapModalProps> = ({
+  modalCloseHandler,
+  setIsSaved,
+}) => {
+  // 스크랩 모달 이동 상태 관리
   const [isDragging, setIsDragging] = useState(false);
+
+  // 스크랩 메모 내용 상태 관리
+  const [memo, setMemo] = useState("");
+
+  // 스크랩 메모 원본 상태 관리
+  const originalLocal = localStorage.getItem("scrapMemo");
+  const originalMemo = originalLocal ? originalLocal : "";
+
   const modalRef = useRef<HTMLDivElement>(null);
   const offsetXRef = useRef<number>(0);
   const offsetYRef = useRef<number>(0);
 
-  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+  const mouseDownHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true);
     const { clientX, clientY } = event;
     const { left, top } = modalRef.current!.getBoundingClientRect();
@@ -20,7 +32,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({ modalCloseHandler }) => {
     offsetYRef.current = clientY - top;
   };
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const mouseMoveHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isDragging) {
       const { clientX, clientY } = event;
       const newLeft = clientX - offsetXRef.current;
@@ -30,17 +42,42 @@ const ScrapModal: React.FC<ScrapModalProps> = ({ modalCloseHandler }) => {
     }
   };
 
-  const handleMouseUp = () => {
+  const mouseUpHandler = () => {
     setIsDragging(false);
   };
+
+  const memoChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMemo(event.target.value);
+  };
+
+  const memoSaveHandler = () => {
+    localStorage.setItem("scrapMemo", memo);
+    setIsSaved(memo ? true : false);
+    modalCloseHandler();
+  };
+
+  const memoCancelHandler = () => {
+    setMemo(originalMemo);
+    modalCloseHandler();
+  };
+
+  // 기존의 저장된 메모 보여주는 의존성 설정
+  useEffect(() => {
+    const savedMemo = localStorage.getItem("scrapMemo");
+    if (savedMemo) {
+      setMemo(savedMemo);
+    }
+  }, []);
+
+  const hasMemo = memo.trim().length > 0;
 
   return (
     <>
       <ScrapContainerDiv
         ref={modalRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+        onMouseDown={mouseDownHandler}
+        onMouseMove={mouseMoveHandler}
+        onMouseUp={mouseUpHandler}
       >
         <div className="flex flex-col">
           {/* 스크랩 메모하기 Title */}
@@ -55,11 +92,16 @@ const ScrapModal: React.FC<ScrapModalProps> = ({ modalCloseHandler }) => {
             <span className="text-[1.7rem] font-[500]">스크랩 메모하기</span>
           </div>
           <MemoContainerDiv>
-            <ScrapTextArea placeholder="마우스로 메모를 원하는 곳에 배치해보세요!"></ScrapTextArea>
+            <ScrapTextArea
+              placeholder="마우스로 메모를 원하는 곳에 배치해보세요!"
+              value={memo}
+              onChange={memoChangeHandler}
+              hasMemo={hasMemo}
+            ></ScrapTextArea>
           </MemoContainerDiv>
           <ButtonDiv>
-            <DeleteButton onClick={modalCloseHandler}>취소</DeleteButton>
-            <EditButton>저장</EditButton>
+            <CancelButton onClick={memoCancelHandler}>취소</CancelButton>
+            <SaveButton onClick={memoSaveHandler}>저장</SaveButton>
           </ButtonDiv>
         </div>
       </ScrapContainerDiv>
@@ -92,12 +134,12 @@ const MemoContainerDiv = styled.div`
 `;
 
 /** 메모 입력하는 Textarea */
-const ScrapTextArea = styled.textarea`
+const ScrapTextArea = styled.textarea<{ hasMemo: boolean }>`
   outline: none;
   width: 100%;
   height: 100%;
-  background: #fdeec7;
-  color: #9ca3af;
+  background: ${({ hasMemo }) => (hasMemo ? "#fbe2a1" : "#fdeec7")};
+  color: ${({ hasMemo }) => (hasMemo ? "#4f3d21" : "#9ca3af")};
   font-size: 15.5px;
   resize: none;
   border-radius: 1.5rem;
@@ -125,8 +167,8 @@ const ButtonDiv = styled.div`
   justify-content: flex-end;
 `;
 
-/** 수정 Button */
-const EditButton = styled.button`
+/** 저장 Button */
+const SaveButton = styled.button`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
@@ -136,8 +178,8 @@ const EditButton = styled.button`
   color: #4f3d21;
 `;
 
-/** 삭제 Button */
-const DeleteButton = styled.button`
+/** 취소 Button */
+const CancelButton = styled.button`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
