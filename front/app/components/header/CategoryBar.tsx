@@ -56,17 +56,10 @@ const CategoryBarDiv = styled.div`
   align-items: center;
   width: 100%;
   color: #4f3d21;
-  height: 4rem;
 
-  @media (max-width: 768px) {
-    overflow-x: scroll;
-    white-space: nowrap;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
+  justify-content: start;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: inline-block;
     width: 100%;
     height: 5rem;
@@ -75,33 +68,49 @@ const CategoryBarDiv = styled.div`
 
 const CategoryUl = styled.ul`
   display: flex;
-  gap: 2rem;
-`;
+  flex-wrap: wrap;
+  gap: 0.8rem;
 
-const IconWrapper = styled.div`
-  display: block;
-  position: relative;
-  width: 1.4rem;
-  height: 0.9rem;
+  @media (min-width: 1024px) {
+    gap: 2rem;
+    height: 100%;
+  }
 `;
 
 const CategoryLi = styled.li`
-  display: flex;
   position: relative;
-  box-sizing: content-box;
-  align-items: center;
-  gap: 0.8rem;
-  border-bottom: 0.4rem solid #ffffff;
-  padding: 0.8rem 1rem 0.4rem 1rem;
-  &:hover {
-    cursor: pointer;
-    font-weight: 600;
-    border-bottom: 0.4rem solid #f8b551;
-  }
+  font-size: 13px;
+  padding: 0.3rem 0.6rem;
+  background-color: #fbd26a;
+  border-radius: 0.5rem;
 
-  @media (min-width: 768px) {
-    padding: 1.3rem 1.3rem 0.9rem 1.3rem;
+  @media (min-width: 1024px) {
+    display: flex;
+    font-size: 16px;
+
+    background-color: white;
+    border-radius: 0;
+    box-sizing: content-box;
+    align-items: center;
+    gap: 0.8rem;
+    border-bottom: 0.4rem solid #ffffff;
+    padding: 0.8rem 1rem 0.4rem 1rem;
+    &:hover {
+      cursor: pointer;
+      font-weight: 600;
+      border-bottom: 0.4rem solid #f8b551;
+    }
   }
 
   transition: all 0.3s;
+`;
+
+const IconWrapper = styled.div`
+  display: none;
+  @media (min-width: 1024px) {
+    display: block;
+    position: relative;
+    width: 1.4rem;
+    height: 0.9rem;
+  }
 `;
