@@ -15,8 +15,7 @@ import {
 import { Recipe } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import { getAllRecipes } from "@/app/api/recipe";
-
-type RecipeProps = Recipe[];
+import Loading from "@/app/loading";
 
 const MainBest = () => {
   const { data: recipes, isLoading } = useQuery(["recipes1"], () =>
@@ -45,11 +44,11 @@ const MainBest = () => {
   };
 
   return (
-    <StyledContainer>
+    <>
       {isLoading ? (
         <></>
       ) : (
-        <>
+        <StyledContainer>
           <LeftSlideBtn onClick={leftBtnHandler}>
             <Image
               src="/images/main/leftSlideBtn.png"
@@ -75,8 +74,8 @@ const MainBest = () => {
                   contentsPerPage * (currentPage - 1),
                   contentsPerPage * currentPage
                 )
-                .map((data: Recipe, index: number) => (
-                  <RecipeCard key={index} data={data} />
+                .map((item: Recipe, index: number) => (
+                  <RecipeCard key={index} recipe={item} />
                 ))}
             </ListingRecipeContainer>
           </StyledContentsArea>
@@ -88,9 +87,9 @@ const MainBest = () => {
               height={122}
             />
           </RightSlideBtn>
-        </>
+        </StyledContainer>
       )}
-    </StyledContainer>
+    </>
   );
 };
 

@@ -18,13 +18,12 @@ const MainAlone = () => {
 
   const router = useRouter();
 
-  console.log(recipesAlone?.[0]);
   return (
-    <StyledContainer>
+    <>
       {isLoading ? (
         <></>
       ) : (
-        <>
+        <StyledContainer>
           <StyledContentsArea>
             <StyledTitleBox>
               <StyledTitle>혼먹 자취생 레시피</StyledTitle>
@@ -95,9 +94,9 @@ const MainAlone = () => {
               </RecipeImageWrapper4>
             </RecipeContainer>
           </StyledContentsArea>
-        </>
+        </StyledContainer>
       )}
-    </StyledContainer>
+    </>
   );
 };
 

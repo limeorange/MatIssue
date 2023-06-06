@@ -118,14 +118,20 @@ const ProfileButton = styled.div`
 `;
 
 const LoginButton = styled.button`
+  display: none;
   padding: 0.8rem 1.6rem;
   border-radius: 10rem;
   &:hover {
     background-color: rgb(230, 230, 230);
   }
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
 `;
 
 const LogoutButton = styled.button`
+  display: none;
   padding: 0.8rem 1.6rem;
   border-radius: 10rem;
   background-color: #fbd26a;
@@ -134,6 +140,10 @@ const LogoutButton = styled.button`
   }
 
   transition: background-color 0.3s;
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
 `;
 
 const IconButton = styled.div`

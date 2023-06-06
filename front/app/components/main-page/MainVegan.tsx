@@ -36,12 +36,11 @@ const MainVegan = () => {
   };
 
   return (
-    <MainVegunContainer>
+    <>
       {isLoading ? (
         <></>
       ) : (
-        <>
-          {" "}
+        <MainVegunContainer>
           <MainVegunArea>
             <VegunTitleBox>
               <StyledTitle>비건들을 위한 초록레시피</StyledTitle>
@@ -71,9 +70,9 @@ const MainVegan = () => {
               />
             </RightSlideBtn>
           </MainVegunArea>
-        </>
+        </MainVegunContainer>
       )}
-    </MainVegunContainer>
+    </>
   );
 };
 
