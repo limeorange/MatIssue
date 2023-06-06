@@ -10,7 +10,7 @@ type RecipeData = {
   author?: string;
   likes?: number;
   view?: string;
-  id?: string;
+  recipe_id?: string;
   timestamp?: number;
   servings?: number;
   duration?: number;
@@ -26,7 +26,7 @@ const RecipeCard = (props: RecipeCardProps) => {
   const router = useRouter();
 
   const handleRecipeClick = () => {
-    router.push(`/recipes/${data.id}`);
+    router.push(`/recipes/${data.recipe_id}`);
   };
 
   return (
