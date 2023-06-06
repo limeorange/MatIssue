@@ -4,6 +4,21 @@ type RecipeVideoProps = {
   recipeVideoUrl: string;
 };
 
+/** 유튜브 고유 id 추출하는 함수 */
+const extractVideoId = (url: string): string | null => {
+  const youtubeRegex =
+    /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const match = url.match(youtubeRegex);
+
+  if (match && match[4]) {
+    // 동영상 고유 id 반환
+    return match[4];
+  }
+
+  // 유튜브 링크가 아닌 경우 또는 고유 id를 찾을 수 없는 경우
+  return "https://youtu.be/jk29M4knFBw";
+};
+
 /** 레시피 비디오 컴포넌트 */
 const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipeVideoUrl }) => {
   return (
@@ -11,7 +26,9 @@ const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipeVideoUrl }) => {
       <VideoContainerDiv>
         <VideoIframe
           title="요리 동영상 썸네일"
-          src={`https://www.youtube.com/embed/${recipeVideoUrl.split("e/")[1]}`}
+          src={`https://www.youtube.com/embed/${extractVideoId(
+            recipeVideoUrl
+          )}`}
           allowFullScreen
         />
       </VideoContainerDiv>
