@@ -1,18 +1,18 @@
 "use client";
 
 import IngredientList from "@/app/components/recipe-view/IngredientList";
-import ProgressBar from "@/app/components/recipe-view/ProgressBar";
+import ProgressBar from "@/app/components/recipe-view/sticky-sidebar/ProgressBar";
 import RecipeComment from "@/app/components/recipe-view/comment/RecipeCommentItem";
 import RecipeCommentInput from "@/app/components/recipe-view/comment/RecipeCommentInput";
 import RecipeComments from "@/app/components/recipe-view/comment/RecipeCommentList";
 import RecipeInfo from "@/app/components/recipe-view/RecipeInfo";
 import RecipeScrap from "@/app/components/recipe-view/RecipeScrap";
-import RecipeSteps from "@/app/components/recipe-view/RecipeSteps";
+import RecipeSteps from "@/app/components/recipe-view/RecipeStepList";
 import RecipeUserLikes from "@/app/components/recipe-view/RecipeUserLikes";
 import RecipeVideo from "@/app/components/recipe-view/RecipeVideo";
 import ScrapModal from "@/app/components/recipe-view/ScrapModal";
-import StickyProgressBar from "@/app/components/recipe-view/StickyProgressBar";
-import StickySideBar from "@/app/components/recipe-view/StickySideBar";
+import StickyProgressBar from "@/app/components/recipe-view/sticky-sidebar/StickyProgressBar";
+import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySideBar";
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
