@@ -16,13 +16,21 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   // 스크랩 메모 내용 상태 관리
   const [memo, setMemo] = useState("");
 
+  // 스크랩 메모 내용 유무에 따른 배경, 글자색 변경을 위한 상태 관리
+  const hasMemo = memo.trim().length > 0;
+
   // 스크랩 메모 원본 상태 관리
   const originalLocal = localStorage.getItem("scrapMemo");
   const originalMemo = originalLocal ? originalLocal : "";
 
+  // 스크랩 모달창 자유 이동 설정
   const modalRef = useRef<HTMLDivElement>(null);
   const offsetXRef = useRef<number>(0);
   const offsetYRef = useRef<number>(0);
+
+  const mouseUpHandler = () => {
+    setIsDragging(false);
+  };
 
   const mouseDownHandler = (event: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true);
@@ -42,20 +50,21 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
     }
   };
 
-  const mouseUpHandler = () => {
-    setIsDragging(false);
-  };
-
+  /** 메모 작성 내용 업데이트 핸들러 */
   const memoChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMemo(event.target.value);
   };
 
+  /** 메모 저장 버튼 핸들러 */
   const memoSaveHandler = () => {
     localStorage.setItem("scrapMemo", memo);
+    // memo 내용이 있으면 색칠된 아이콘 표시하고,
+    // 내용 없을 시 아이콘 색칠 해제를 위한 상태값 부여
     setIsSaved(memo ? true : false);
     modalCloseHandler();
   };
 
+  /** 메모 취소 버튼 핸들러 */
   const memoCancelHandler = () => {
     setMemo(originalMemo);
     modalCloseHandler();
@@ -69,8 +78,6 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
     }
   }, []);
 
-  const hasMemo = memo.trim().length > 0;
-
   return (
     <>
       <ScrapContainerDiv
@@ -79,9 +86,9 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
         onMouseMove={mouseMoveHandler}
         onMouseUp={mouseUpHandler}
       >
-        <div className="flex flex-col">
+        <ScrapContentsDiv>
           {/* 스크랩 메모하기 Title */}
-          <div className="flex text-[#4F3D21] mt-[2rem] mb-[2rem] gap-[0.5rem] items-center">
+          <ScrapTitleDiv>
             <Image
               src="/images/recipe-view/note.svg"
               alt="게시글 좋아요 하트"
@@ -89,8 +96,8 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
               height={35}
               style={{ objectFit: "cover" }}
             />
-            <span className="text-[1.7rem] font-[500]">스크랩 메모하기</span>
-          </div>
+            <ScrapTitleSpan>스크랩 메모하기</ScrapTitleSpan>
+          </ScrapTitleDiv>
           <MemoContainerDiv>
             <ScrapTextArea
               placeholder="마우스로 메모를 원하는 곳에 배치해보세요!"
@@ -103,7 +110,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
             <CancelButton onClick={memoCancelHandler}>취소</CancelButton>
             <SaveButton onClick={memoSaveHandler}>저장</SaveButton>
           </ButtonDiv>
-        </div>
+        </ScrapContentsDiv>
       </ScrapContainerDiv>
     </>
   );
@@ -123,6 +130,28 @@ const ScrapContainerDiv = styled.div`
   border-radius: 20px;
   z-index: 90;
   cursor: pointer;
+`;
+
+/** 스크랩 모달창 컨텐츠 세로 정렬을 위한 Div */
+const ScrapContentsDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+/** 스크랩 메모하기 제목 및 아이콘을 담은 Div */
+const ScrapTitleDiv = styled.div`
+  display: flex;
+  text-color: #4f3d21;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  gap: 0.5rem;
+  align-items: center;
+`;
+
+/** 스크랩 메모하기 제목 Span */
+const ScrapTitleSpan = styled.span`
+  font-size: 17px;
+  font-weight: 500;
 `;
 
 /** 메모 입력칸 전체 감싸는 Div */
