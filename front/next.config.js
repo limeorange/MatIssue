@@ -9,9 +9,6 @@ const nextConfig = {
       "eliceproject.s3.ap-northeast-2.amazonaws.com",
     ],
   },
-  images: {
-    domains: ['eliceproject.s3.ap-northeast-2.amazonaws.com'],
-  },
 };
 
 module.exports = nextConfig;

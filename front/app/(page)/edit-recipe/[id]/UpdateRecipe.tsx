@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
 import VideoSection from "@/app/components/add-recipe/VideoSection";
 import IngredientSection from "@/app/components/add-recipe/IngredientSection";
@@ -9,7 +9,6 @@ import ThumbnailUpload from "@/app/components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection";
 import Button from "@/app/components/UI/Button";
 import { axiosBase } from "@/app/api/axios";
-import { getRecipeById } from "@/app/api/recipe";
 
 type Recipe = {
   recipe_category: string;
@@ -23,6 +22,7 @@ type Recipe = {
   recipe_tip: string;
   recipe_video: string;
   recipe_id: string;
+  created_at: string;
 };
 
 type RecipeFormState = {
@@ -71,6 +71,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     recipe_tip,
     recipe_video,
     recipe_id,
+    created_at,
   } = recipe;
   const [state, setState] = useState<RecipeFormState>({
     selectedCategory: recipe_category,
@@ -238,8 +239,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       })),
       recipe_tip: state.cookingTips,
       user_id: "admin",
+      created_at: created_at,
     };
-    console.log(recipeData);
 
     try {
       const response = await axiosBase.patch(
@@ -248,8 +249,9 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       );
 
       console.log(response);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log(error.response.data.detail);
+      // console.log(recipeData);
     }
   };
 
@@ -257,7 +259,6 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const handleCancel = () => {
     // 취소
   };
-  console.log(state);
   return (
     <FormWrapper>
       <Title>레시피 수정하기</Title>
