@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import FilterModal from "./FilterModal";
 import styled from "styled-components";
 import Image from "next/image";
@@ -35,11 +34,6 @@ const FilterBar = (props: FilterBarProps) => {
   const [isServingsModal, setIsServingsModal] = useState<boolean>(false); // 인원수 필터링 모달창
   const [isDurationModal, setIsDurationModal] = useState<boolean>(false); // 조리 시간 필터링 모달창
   const [isDifficultyModal, setIsDifficultyModal] = useState<boolean>(false); // 난이도 필터링 모달창
-
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("query");
 
   // 필터바 값에 따른 필터링
   useEffect(() => {

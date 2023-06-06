@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
 import RecipeCard from "../recipe-card/RecipeCard";
@@ -11,7 +10,9 @@ import {
   StyledTitle,
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
-import { RecipeData } from "@/app/types";
+import { Recipe, RecipeData } from "@/app/types";
+import { useQuery } from "@tanstack/react-query";
+import { getAllRecipes } from "@/app/api/recipe";
 
 const DUMMY_DATA: RecipeData[] = [
   {
@@ -209,30 +210,37 @@ const DUMMY_DATA: RecipeData[] = [
 ];
 
 const MainNewest = () => {
+  const { data: newestRecipes, isLoading } = useQuery(["newestRecipe"], () =>
+    getAllRecipes()
+  );
+
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const newestRecipes = DUMMY_DATA;
-
   const contentsPerPage = 8;
-  const totalPage = newestRecipes.length / contentsPerPage;
 
   return (
     <StyledContainer>
-      <StyledContentsArea>
-        <StyledNewestTitleBox>
-          <StyledTitle>최신 레시피</StyledTitle>
-        </StyledNewestTitleBox>
-        <ListingRecipeContainer contentsPerPage={contentsPerPage}>
-          {newestRecipes
-            .slice(
-              contentsPerPage * (currentPage - 1),
-              contentsPerPage * currentPage
-            )
-            .map((data, index) => (
-              <RecipeCard key={index} data={data} />
-            ))}
-        </ListingRecipeContainer>
-      </StyledContentsArea>
+      {isLoading ? (
+        <></>
+      ) : (
+        <>
+          <StyledContentsArea>
+            <StyledNewestTitleBox>
+              <StyledTitle>최신 레시피</StyledTitle>
+            </StyledNewestTitleBox>
+            <ListingRecipeContainer>
+              {newestRecipes
+                .slice(
+                  contentsPerPage * (currentPage - 1),
+                  contentsPerPage * currentPage
+                )
+                .map((data: Recipe, index: number) => (
+                  <RecipeCard key={index} data={data} />
+                ))}
+            </ListingRecipeContainer>
+          </StyledContentsArea>
+        </>
+      )}
     </StyledContainer>
   );
 };

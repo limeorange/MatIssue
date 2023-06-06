@@ -1,26 +1,37 @@
 "use client";
 
+import { Recipe } from "@/app/types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 
-const LargeRecipeCard = ({ recipe }: any) => {
+const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
+  const router = useRouter();
+
   return (
-    <CardContainer>
+    <CardContainer onClick={() => router.push(`/recipes/${recipe.recipe_id}`)}>
       <ImageWrapper>
         <Image
-          src={recipe.image}
-          alt={recipe.title}
+          src={recipe.recipe_thumbnail}
+          alt={recipe.recipe_title}
           fill
           style={{ objectFit: "cover" }}
         />
       </ImageWrapper>
       <TextContainer>
         <RecipeTitleBox>
-          <h3>{recipe.title}</h3>
+          <h3>{recipe.recipe_title}</h3>
         </RecipeTitleBox>
         <RecipeInfoBox>
-          <p>{recipe.author}</p>
-
+          <AuthorBox>
+            <Image
+              src="/images/profileIcon.png"
+              height={20}
+              width={20}
+              alt="profile_image"
+            />
+            <p>{recipe.user_nickname}</p>
+          </AuthorBox>
           <LikeIconWrapper>
             <Image
               src="/images/like.png"
@@ -28,7 +39,7 @@ const LargeRecipeCard = ({ recipe }: any) => {
               height={16}
               width={20}
             />
-            <div>{recipe.likes}</div>
+            <div>{recipe.recipe_like}</div>
           </LikeIconWrapper>
         </RecipeInfoBox>
       </TextContainer>
@@ -63,7 +74,7 @@ const ImageWrapper = styled.div`
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
   padding: 1.6rem 1.6rem 2rem 1.6rem;
   line-height: 1.6rem;
 `;
@@ -71,7 +82,7 @@ const TextContainer = styled.div`
 const RecipeTitleBox = styled.div`
   display: flex;
   width: 100%;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
 `;
 
@@ -80,11 +91,18 @@ const RecipeInfoBox = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
+`;
+
+const AuthorBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 `;
 
 const LikeIconWrapper = styled.div`
   position: relative;
   display: flex;
+  gap: 0.4rem;
 `;
