@@ -9,6 +9,7 @@ import ThumbnailUpload from "@/app/components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection";
 import Button from "@/app/components/UI/Button";
 import { axiosBase } from "@/app/api/axios";
+import { postRecipe } from "@/app/api/recipe";
 
 type RecipeFormState = {
   selectedCategory: string;
@@ -209,7 +210,7 @@ const RecipeForm = () => {
     console.log(recipeData);
 
     try {
-      const response = await axiosBase.post("recipes/", recipeData);
+      const response = await postRecipe(recipeData);
       console.log(response);
     } catch (error) {
       console.log(error);

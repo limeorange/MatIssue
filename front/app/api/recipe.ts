@@ -18,3 +18,21 @@ export const getAllRecipes = async () => {
     console.log(err.response.data.detail);
   }
 };
+
+export const postRecipe = async (recipeData: any) => {
+  try {
+    const response = await axiosBase.post("/recipes/", recipeData);
+    return response;
+  } catch (error) {
+    console.log("Error creating recipe:", error);
+  }
+};
+
+export const updateRecipe = async (recipe_id: string, recipeData: any) => {
+  try {
+    const response = await axiosBase.patch(`recipes/${recipe_id}`, recipeData);
+    return response;
+  } catch (error) {
+    console.log("Error updating recipe:", error);
+  }
+};
