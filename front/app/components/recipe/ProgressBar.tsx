@@ -4,6 +4,8 @@ import styled from "styled-components";
 const ProgressBar = () => {
   // 스크롤 진행 퍼센트 상태 관리
   const [scrollPercentage, setScrollPercentage] = useState(0);
+  // 스크롤 진행바 반응형 상태 관리
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     // 스크롤 진행 퍼센트를 현재 스크롤 위치를 기반으로 계산해주는 핸들러
@@ -24,11 +26,32 @@ const ProgressBar = () => {
     return () => window.removeEventListener("scroll", scrollHandler);
   }, []);
 
+  // 768px 이하일 때 사이드바 숨김 반응형 처리
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth <= 768) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
-      <ProgressBarContainerDiv>
-        <ProgressBarDiv progress={scrollPercentage} />
-      </ProgressBarContainerDiv>
+      {isVisible && (
+        <ProgressBarContainerDiv>
+          <ProgressBarDiv progress={scrollPercentage} />
+        </ProgressBarContainerDiv>
+      )}
     </>
   );
 };
