@@ -5,18 +5,10 @@ import Link from "next/link";
 import Button from "../../components/UI/Button";
 import { useQuery } from "@tanstack/react-query";
 import { type } from "os";
+import { User } from "@/app/types";
 
-type User = {
-  user_id: string;
-  email: string;
-  username: string;
-  img: string;
-  birth_date: string;
-  created_at: string;
-};
-
-const ProfileCard = () => {
-  const { data: currentUser } = useQuery<User>(["currentUser"]);
+const ProfileCard = ({ currentUser }: { currentUser: User }) => {
+  // const { data: currentUser } = useQuery<User>(["currentUser"]);
 
   // console.log("currentUser : ", currentUser.);
   return (

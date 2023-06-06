@@ -29,7 +29,7 @@ const ChangePassword = () => {
           <Header>비밀번호 변경</Header>
           <NewPassword>새 비밀번호</NewPassword>
           <PasswordInstruction>
-            영문, 숫자를 포함한 8자 이상의 비밀번호를 입력해주세요
+            영문, 숫자, 특수문자를 포함한 8자 이상의 비밀번호를 입력해주세요.
           </PasswordInstruction>
           <InputBox type="password" name="password" required />
           <PasswordConfirm>새 비밀번호 확인</PasswordConfirm>

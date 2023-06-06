@@ -1,27 +1,28 @@
 "use client";
 
 import styled from "styled-components";
-import Image from "next/image";
 
 const NonRecipePage = () => {
   return (
     <>
-      <NoRecipeMessageWrapper>
-        <Image
-          src={"/images/NoRecipeMessage.png"}
-          width={1000}
-          height={500}
-          alt="레시피가 없습니다 이미지"
-        />
-      </NoRecipeMessageWrapper>
+      <NoRecipeIconBox>
+        <NoRcipeIcon src={"/images/norecipe.png"} alt="요리사 로고" />
+      </NoRecipeIconBox>
     </>
   );
 };
 
 export default NonRecipePage;
 
-const NoRecipeMessageWrapper = styled.div`
-  max-width: 100rem;
+const NoRecipeIconBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  margin-top: 8rem;
+  max-width: 60rem;
+`;
+
+const NoRcipeIcon = styled.img`
+  width: 80%;
+  height: 80%;
 `;
