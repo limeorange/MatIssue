@@ -19,6 +19,37 @@ export const getAllRecipes = async () => {
   }
 };
 
+export const getRecipesByParams = async (searchParams: any) => {
+  try {
+    const response = await axiosBase.get(
+      `/recipes/search?value=${searchParams}`
+    );
+    return response.data;
+  } catch (err: any) {
+    console.log(err.response.data.detail);
+  }
+};
+
+export const getRecipesByCategory = async (category: string) => {
+  try {
+    const response = await axiosBase.get(
+      `/recipes/categories?value=${category}`
+    );
+    return response.data;
+  } catch (err: any) {
+    console.log(err.response.data.detail);
+  }
+};
+
+export const getRecipesByPopularity = async () => {
+  try {
+    const response = await axiosBase.get("/recipes/popularity");
+    return response.data;
+  } catch (err: any) {
+    console.log(err.response.data.detail);
+  }
+};
+
 export const postRecipe = async (recipeData: any) => {
   try {
     const response = await axiosBase.post("/recipes/", recipeData);

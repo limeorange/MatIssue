@@ -11,13 +11,18 @@ type FilterTagProps = {
   onRemove: (tagType: string) => void;
 };
 
+type TagListType = {
+  tag: string;
+  type: string;
+};
+
 const FilterTag = (props: FilterTagProps) => {
-  const [tagList, setTagList] = useState<{ tag: string; type: string }[]>([]);
+  const [tagList, setTagList] = useState<TagListType[]>([]);
   const { search, filter, category, onRemove } = props;
 
   // 검색바 입력값 및 필터바 필터 값에 따른 태그 추가
   useEffect(() => {
-    const newTagList: { tag: string; type: string }[] = [];
+    const newTagList: TagListType[] = [];
 
     if (search) {
       newTagList.push({ tag: `#${search}`, type: "search" });
@@ -25,30 +30,34 @@ const FilterTag = (props: FilterTagProps) => {
 
     if (category === "western") {
       newTagList.push({ tag: `#양식`, type: "category" });
-    } else if (category === "chinese") {
+    }
+    if (category === "chinese") {
       newTagList.push({ tag: `#중식`, type: "category" });
-    } else if (category === "japan") {
+    }
+    if (category === "japan") {
       newTagList.push({ tag: `#일식`, type: "category" });
-    } else if (category === "korean") {
+    }
+    if (category === "korean") {
       newTagList.push({ tag: `#한식`, type: "category" });
-    } else if (category === "best") {
+    }
+    if (category === "best") {
       newTagList.push({ tag: `#베스트 레시피`, type: "category" });
-    } else if (category === "newest") {
+    }
+    if (category === "newest") {
       newTagList.push({ tag: `#최신 레시피`, type: "category" });
-    } else if (category === "honmuk") {
+    }
+    if (category === "honmuk") {
       newTagList.push({ tag: `#혼먹 레시피`, type: "category" });
-    } else if (category === "vegetarian") {
+    }
+    if (category === "vegetarian") {
       newTagList.push({ tag: `#비건 레시피`, type: "category" });
     }
-
     if (filter.servings > 0) {
       newTagList.push({ tag: `#${filter.servings}인`, type: "servings" });
     }
-
     if (filter.duration > 0) {
       newTagList.push({ tag: `#${filter.duration}분`, type: "duration" });
     }
-
     if (filter.difficulty > -1) {
       if (filter.difficulty === 0) {
         newTagList.push({ tag: `#쉬움`, type: "difficulty" });
@@ -67,12 +76,10 @@ const FilterTag = (props: FilterTagProps) => {
       <FilterTagBox>
         <p>검색결과</p>
         {tagList.map((item, index) => (
-          <>
-            <span key={`${item.tag}-${item.type}-${index}`}>
-              {item.tag}
-              <RemoveButton onClick={() => onRemove(item.type)}>X</RemoveButton>
-            </span>
-          </>
+          <span key={index}>
+            {item.tag}
+            <RemoveButton onClick={() => onRemove(item.type)}>X</RemoveButton>
+          </span>
         ))}
       </FilterTagBox>
     </>

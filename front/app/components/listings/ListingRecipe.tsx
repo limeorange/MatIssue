@@ -43,7 +43,7 @@ const duration = [
   { value: 20, name: "20분" },
   { value: 30, name: "30분" },
   { value: 60, name: "1시간" },
-  { value: 100, name: "1시간 이상" },
+  { value: 61, name: "1시간 이상" },
 ];
 
 const difficulty = [
@@ -112,43 +112,43 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     let bestResult: Recipe[] = [];
 
     // 검색바로 레시피 필터링
-    const term = searchQuery || "";
-    if (term !== "") {
-      result = result.filter((recipe) =>
-        recipe.recipe_title.toLowerCase().includes(term.toLowerCase())
-      );
-    }
+    // const term = searchQuery || "";
+    // if (term !== "") {
+    //   result = result.filter((recipe) =>
+    //     recipe.recipe_title.toLowerCase().includes(term.toLowerCase())
+    //   );
+    // }
 
     // 혼먹 카테고리 필터링
-    if (category === "honmuk") {
-      honmukResult = result.filter(
-        (recipe) => recipe.recipe_info.serving === 1
-      );
-    }
+    // if (category === "honmuk") {
+    //   honmukResult = result.filter(
+    //     (recipe) => recipe.recipe_info.serving === 1
+    //   );
+    // }
 
-    // 최신 카테고리 필터링
+    // // 최신 카테고리 필터링
     if (category === "newest") {
       newestResult = [...result].sort((a, b) => +b.created_at - +a.created_at);
     }
 
-    // 베스트 카테고리 필터링
-    if (category === "best") {
-      bestResult = result
-        .filter((recipe) => recipe.recipe_like >= 1500)
-        .sort((a, b) => +b.created_at - +a.created_at);
-    }
+    // // 베스트 카테고리 필터링
+    // if (category === "best") {
+    //   bestResult = result
+    //     .filter((recipe) => recipe.recipe_like >= 1500)
+    //     .sort((a, b) => +b.created_at - +a.created_at);
+    // }
 
-    // 카테고리바 레시피 필터링
-    if (category) {
-      result = result.filter((recipe) =>
-        recipe.recipe_category.toLowerCase().includes(category.toLowerCase())
-      );
-    }
+    // // 카테고리바 레시피 필터링
+    // if (category) {
+    //   result = result.filter((recipe) =>
+    //     recipe.recipe_category.toLowerCase().includes(category.toLowerCase())
+    //   );
+    // }
 
     // 필터바로 레시피 필터링
     if (filter.servings > 0) {
       result = result.filter(
-        (recipe) => recipe.recipe_info.serving === filter.servings
+        (recipe) => recipe.recipe_info?.serving === filter.servings
       );
       urlParams.set("servings", filter.servings.toString());
     } else {
@@ -157,7 +157,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
     if (filter.duration > 0) {
       result = result.filter(
-        (recipe) => recipe.recipe_info.time === filter.duration
+        (recipe) => recipe.recipe_info?.time === filter.duration
       );
       urlParams.set("duration", filter.duration.toString());
     } else {
@@ -166,7 +166,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
     if (filter.difficulty > -1) {
       result = result.filter(
-        (recipe) => recipe.recipe_info.level === filter.difficulty
+        (recipe) => recipe.recipe_info?.level === filter.difficulty
       );
       urlParams.set("difficulty", filter.difficulty.toString());
     } else {
@@ -216,7 +216,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     {
       const resetValue = -1;
       if (tagType === "search" || tagType === "category") {
-        router.push("/search");
+        router.push("/recipes/search");
       }
       if (tagType === "difficulty") {
         setNewDifficulty(difficulty[0]);
@@ -273,26 +273,30 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
         <PageHeaderContainer>
           <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
           <SortButtonContainer>
-            {category !== "best" && category !== "newest" && (
-              <>
-                <SortButton
-                  selected={sortMethod === "date"}
-                  onClick={() =>
-                    setSortMethod((prev) => (prev === "date" ? null : "date"))
-                  }
-                >
-                  최신순
-                </SortButton>
-                <SortButton
-                  selected={sortMethod === "likes"}
-                  onClick={() =>
-                    setSortMethod((prev) => (prev === "likes" ? null : "likes"))
-                  }
-                >
-                  인기순
-                </SortButton>
-              </>
-            )}
+            {category !== "best" &&
+              category !== "newest" &&
+              currentRecipes.length > 0 && (
+                <>
+                  <SortButton
+                    selected={sortMethod === "date"}
+                    onClick={() =>
+                      setSortMethod((prev) => (prev === "date" ? null : "date"))
+                    }
+                  >
+                    최신순
+                  </SortButton>
+                  <SortButton
+                    selected={sortMethod === "likes"}
+                    onClick={() =>
+                      setSortMethod((prev) =>
+                        prev === "likes" ? null : "likes"
+                      )
+                    }
+                  >
+                    인기순
+                  </SortButton>
+                </>
+              )}
           </SortButtonContainer>
         </PageHeaderContainer>
         {currentRecipes.length > 0 ? (
