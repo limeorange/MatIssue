@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import styled from "styled-components";
 import Button from "../../components/UI/Button";
@@ -8,46 +7,51 @@ import RecipeCard from "../recipe-card/RecipeCard";
 import { axiosBase } from "@/app/api/axios";
 import NonRecipe from "../UI/NonRecipe";
 import { Recipe } from "@/app/types";
+import ConfirmModal from "../my-page/ConfirmModal";
 
-// type Recipe = {
-//   recipe_title: string;
-//   recipe_thumbnail: string;
-//   recipe_id: string;
-//   recipe_view: number;
-//   user_id: string;
-//   user_nickname: string;
-//   created_at: string;
-//   recipe_like: number;
-// };
-
-const RecipeCards = ({ user }: { user: string | undefined }) => {
-  const [recipes, setFilteredRecipes] = useState<Recipe[]>([]);
+const RecipeCards = () => {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      try {
-        const response = await axiosBase.get(`/recipes/${user}`);
-        console.log("response  : ", response);
-        setFilteredRecipes(response.data);
-      } catch (error) {
-        console.error(
-          "레시피 데이터를 가져오는 중에 오류가 발생했습니다:",
-          error
-        );
-      }
-    };
-
     fetchRecipes();
   }, []);
 
-  const handleDeleteRecipe = async (id: string) => {
+  const fetchRecipes = async () => {
+    try {
+      const response = await axiosBase.get(`/recipes/user`);
+      console.log("response  : ", response);
+      setRecipes(response.data);
+    } catch (error) {
+      console.error(
+        "레시피 데이터를 가져오는 중에 오류가 발생했습니다:",
+        error
+      );
+    }
+  };
+
+  const handleOpenModal = (recipe: Recipe) => {
+    setRecipeToDelete(recipe);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setRecipeToDelete(null);
+  };
+
+  const handleDeleteRecipe = async () => {
+    if (!recipeToDelete) return;
+
+    const id = recipeToDelete.recipe_id;
     const updatedRecipes = recipes.filter((recipe) => recipe.recipe_id !== id);
-    setFilteredRecipes(updatedRecipes);
+    setRecipes(updatedRecipes);
 
     try {
-      // 서버로 DELETE 요청 보내기
       await axiosBase.delete(`recipes/${id}`);
       console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
+      handleCloseModal();
     } catch (error) {
       console.error(
         "레시피 삭제 요청을 보내는 중에 오류가 발생했습니다:",
@@ -65,12 +69,20 @@ const RecipeCards = ({ user }: { user: string | undefined }) => {
         {recipes.map((recipe) => (
           <RecipeCardWrapper key={recipe.recipe_id}>
             <StyledRecipeCard recipe={recipe} />
-            <button onClick={() => handleDeleteRecipe(recipe.recipe_id)}>
+            <button onClick={() => handleOpenModal(recipe)}>
               <DeleteButtonImage src="/images/x-box.png" alt="X-box" />
             </button>
           </RecipeCardWrapper>
         ))}
       </RecipeList>
+      {isModalOpen && (
+        <StyledConfirmModal
+          icon={<AlertImage src="/images/alert.png" alt="alert" />}
+          message="레시피를 삭제하시겠습니까?"
+          onConfirm={handleDeleteRecipe}
+          onCancel={handleCloseModal}
+        />
+      )}
     </RecipeListContainer>
   );
 };
@@ -124,3 +136,10 @@ const DeleteButtonImage = styled.img`
 `;
 
 const NonRecipeMsg = styled(NonRecipe)``;
+
+const StyledConfirmModal = styled(ConfirmModal)``;
+
+const AlertImage = styled.img`
+  width: 3rem;
+  height: 3rem;
+`;

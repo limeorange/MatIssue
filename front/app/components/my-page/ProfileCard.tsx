@@ -8,7 +8,7 @@ import { Recipe, User } from "@/app/types";
 
 type ProfileCardProps = {
   currentUser: User;
-  recipes: Recipe[];
+  recipes?: Recipe[];
 };
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
