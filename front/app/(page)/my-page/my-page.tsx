@@ -16,7 +16,7 @@ const MyPage = () => {
       <Container>
         <Wrapper>
           <ProfileCard currentUser={data} />
-          <RecipeCards userId={data?.user_id} />
+          <RecipeCards user={data?.user_id} />
         </Wrapper>
       </Container>
     </>

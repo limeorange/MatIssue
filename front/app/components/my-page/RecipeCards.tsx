@@ -20,15 +20,15 @@ import { Recipe } from "@/app/types";
 //   recipe_like: number;
 // };
 
-const RecipeCards = ({ userId }: { userId: string | undefined }) => {
+const RecipeCards = ({ user }: { user: string | undefined }) => {
   const [recipes, setFilteredRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axiosBase.get(`/recipes/user/${userId}`);
+        const response = await axiosBase.get(`/recipes/${user}`);
         console.log("response  : ", response);
-        setFilteredRecipes(response.data.recipes);
+        setFilteredRecipes(response.data);
       } catch (error) {
         console.error(
           "레시피 데이터를 가져오는 중에 오류가 발생했습니다:",
