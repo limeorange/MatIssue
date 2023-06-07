@@ -12,7 +12,6 @@ export async function getCurrentUserSS() {
           Cookie: `session-id=${session_id}`,
         },
       });
-      console.log(response.data);
       if (response.data === undefined) {
         return null;
       }

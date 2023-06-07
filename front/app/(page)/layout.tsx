@@ -8,7 +8,6 @@ export default async function Layout({
 }) {
   const currentUser = await getCurrentUserSS();
 
-  console.log(currentUser);
   return (
     <>
       <Header currentUser={currentUser} />
