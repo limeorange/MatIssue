@@ -9,6 +9,7 @@ type UserScrapProps = {
   isBooked: boolean;
   isSaved: boolean;
   setIsSaved: React.Dispatch<React.SetStateAction<boolean>>;
+  localStorageKey: string;
 };
 
 /** 게시글 스크랩 컴포넌트 */
@@ -17,10 +18,11 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
   isBooked,
   isSaved,
   setIsSaved,
+  localStorageKey,
 }) => {
   // 처음 렌더링 시 클라이언트 사이드에서 로컬스토리지 받아오기 위한 의존성 관리
   useEffect(() => {
-    const savedMemo = localStorage.getItem("scrapMemo") || "";
+    const savedMemo = localStorage.getItem(localStorageKey) || "";
     const hasMemo = savedMemo.trim().length > 0;
     setIsSaved(hasMemo);
   }, []);
