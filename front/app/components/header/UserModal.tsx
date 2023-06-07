@@ -60,7 +60,7 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/my-page/add-recipe");
+            router.push("/add-recipe");
           }}
         >
           글쓰기
