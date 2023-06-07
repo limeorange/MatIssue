@@ -128,7 +128,7 @@ const FridgedTitleBox = styled(StyledTitleBox)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 4rem;
+  padding-bottom: 1.6rem;
 `;
 
 const IngredientSelectBox = styled.div`
