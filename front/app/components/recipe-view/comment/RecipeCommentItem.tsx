@@ -4,17 +4,21 @@ import Image from "next/image";
 import { useState } from "react";
 import styled, { css } from "styled-components";
 import CommentModal from "./CommentModal";
+import { axiosBase } from "@/app/api/axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 /** 요리 댓글 단일 Props */
 type RecipeCommentProps = {
   comment_author: string;
   comment_text: string;
+  comment_id: string;
 };
 
 /** 요리 댓글 단일 컴포넌트 */
 const RecipeComment: React.FC<RecipeCommentProps> = ({
   comment_author,
   comment_text,
+  comment_id,
 }) => {
   // 수정 버튼 눌렀을 때 textarea로 변경하기 위한 상태 관리
   const [isEditing, setIsEditing] = useState(false);
@@ -24,6 +28,8 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   const [isModal, setIsModal] = useState<boolean>(false);
   // 작성 중일 경우 테두리 효과 주기 위한 상태 관리
   const [isCommenting, setIsCommenting] = useState(false);
+
+  const client = useQueryClient();
 
   /** 댓글창 클릭시 상태 업데이트 핸들러 */
   const boxClickHandler = () => {
@@ -45,16 +51,17 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
     setEditedCommentText(e.target.value);
   };
 
-  /** 수정 댓글 제출 핸들러 (API 연결 작업 예정) */
-  const saveClickHandler = () => {
-    // 수정된 댓글 데이터
-    const updatedComment = {
-      comment_author,
-      comment_text: editedCommentText,
-    };
-
-    // 서버로 수정된 댓글 전송 및 업데이트 로직 구현
-
+  /** 수정 댓글 제출 핸들러 */
+  const commentSaveHandler = async () => {
+    try {
+      const response = await axiosBase.patch(`/recipes/comment/${comment_id}`, {
+        comment_text: editedCommentText,
+      });
+      client.invalidateQueries(["currentRecipe"]);
+    } catch (error) {
+      console.log("댓글 수정 실패", error);
+      alert("댓글 수정에 실패했습니다 ㅠ.ㅠ");
+    }
     // 수정 완료 후 상태 업데이트
     setIsEditing(false);
   };
@@ -65,6 +72,17 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
     setEditedCommentText(comment_text);
   };
 
+  /** 삭제 버튼 핸들러 */
+  const commentDeleteHandler = async () => {
+    try {
+      const response = await axiosBase.delete(`/recipes/comment/${comment_id}`);
+      console.log(response);
+      client.invalidateQueries(["currentRecipe"]);
+    } catch (error) {
+      console.log("댓글 삭제 실패", error);
+      alert("댓글 삭제에 실패했습니다 ㅠ.ㅠ");
+    }
+  };
   return (
     <>
       <CommentContainer>
@@ -92,6 +110,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
                   isModal={isModal}
                   modalCloseHandler={modalCloseHandler}
                   editClickHandler={editClickHandler}
+                  commentDeleteHandler={commentDeleteHandler}
                 />
               )}
               <Image
@@ -118,7 +137,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
               </CommentContainerDiv>
               <ButtonDiv>
                 <DeleteButton onClick={commentCancelHandler}>취소</DeleteButton>
-                <EditButton onClick={saveClickHandler}>수정</EditButton>
+                <EditButton onClick={commentSaveHandler}>수정</EditButton>
               </ButtonDiv>
             </>
           ) : (

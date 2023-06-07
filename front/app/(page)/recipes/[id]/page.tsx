@@ -1,3 +1,4 @@
+import { axiosBase } from "@/app/api/axios";
 import RecipeDetail from "./ViewPage";
 import { getRecipeById } from "@/app/api/recipe";
 import commentsData from "@/data/commentDummy.json";
@@ -8,11 +9,9 @@ const ViewPage = async ({ params }: { params: { id: string } }) => {
 
   /** 레시피 조회 데이터 */
   const recipe = await getRecipeById(recipe_id);
+  console.log(recipe);
 
-  /** 레시피 댓글 데이터 (dummy json 파일 이용) */
-  const recipeComment = commentsData;
-
-  return <RecipeDetail recipe={recipe} recipeComment={recipeComment} />;
+  return <RecipeDetail recipe={recipe} recipe_id={recipe_id} />;
 };
 
 export default ViewPage;

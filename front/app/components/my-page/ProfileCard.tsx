@@ -51,7 +51,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
         </RoundImage>
         <NickName>{currentUser?.username}</NickName>
         <Link href="/my-page/modify-user-info">
-          <ModifyUserButton>
+          <ModifyUserDiv>
             <Button
               isBorderColor={true}
               fullWidth={true}
@@ -61,14 +61,30 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
             >
               회원정보수정
             </Button>
-          </ModifyUserButton>
+          </ModifyUserDiv>
         </Link>
         <Divider />
-        <StyledLink href="/my-page">
-          <MyRecipeIcon src="/images/recipe-icon.png" alt="레시피 아이콘" />
-          <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-          <MyRecipeCount>{recipes.length}</MyRecipeCount>
-        </StyledLink>
+        <div className="flex gap-[1.5rem]">
+          {/* 나의 레시피 버튼 */}
+          <StyledLink href="/my-page">
+            <MyRecipeIcon
+              src="/images/my-page/my_recipe.svg"
+              alt="레시피 아이콘"
+            />
+            <MyRecipeTitle>나의 레시피</MyRecipeTitle>
+            <MyRecipeCount>{filteredRecipes.length}</MyRecipeCount>
+          </StyledLink>
+
+          {/* 나의 스크랩 버튼 */}
+          <StyledLink href="/my-page/scrap">
+            <MyRecipeIcon
+              src="/images/recipe-view/scrap_full.svg"
+              alt="스크랩 아이콘"
+            />
+            <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
+            <MyRecipeCount>{filteredRecipes.length}</MyRecipeCount>
+          </StyledLink>
+        </div>
         <Link href="/add-recipe">
           <UploadRecipeButton>
             <Button
@@ -96,6 +112,7 @@ const ProfileContainer = styled.div`
   border-radius: 2.3rem;
   height: 47rem;
   margin-right: 4rem;
+  margin-top: 3rem;
 `;
 
 const ProfileWrapper = styled.div`
@@ -148,7 +165,7 @@ const NickName = styled.h1`
   color: #4f3d21;
 `;
 
-const ModifyUserButton = styled.div`
+const ModifyUserDiv = styled.div`
   width: 10rem;
 `;
 

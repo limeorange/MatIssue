@@ -15,6 +15,9 @@ import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySid
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import { getRecipeById } from "@/app/api/recipe";
+import { Recipe } from "@/app/types";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -40,24 +43,42 @@ type RecipeDataProps = {
     }[];
     recipe_tip: string;
     recipe_id: string;
-    recipe_view?: number;
-    recipe_like?: number;
+    recipe_view: number;
+    recipe_like: number;
     user_id: string;
     user_nickname: string;
     created_at: string;
-  };
-  // 댓글 관련 Data Type 정의 (임시 dummy data)
-  recipeComment: {
+
+    // 댓글 관련 Data Type 정의
     comments: {
       comment_author: string;
       comment_text: string;
-    }[];
+      comment_like: number;
+      comment_id: string;
+      created_at: string;
+      comment_parent: string;
+      updated_at: string;
+    };
   };
+  recipe_id: string;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
 const RecipeDetail = (props: RecipeDataProps) => {
-  const { recipe, recipeComment } = props;
+  const {
+    data: recipe,
+    isLoading,
+    isError,
+  } = useQuery<Recipe>(
+    ["currentRecipe"],
+    () => getRecipeById(props.recipe_id),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: props.recipe,
+    }
+  );
+
   const {
     // 대표 이미지, 제목, 작성자, 소개글 (props로 안 내려줌)
     recipe_title: recipeTitle,
@@ -87,17 +108,21 @@ const RecipeDetail = (props: RecipeDataProps) => {
     recipe_id,
     recipe_view,
     recipe_like,
+
+    // 댓글 관련 data
+    comments,
   } = recipe;
 
-  const { comments } = recipeComment;
   const loggedInUserId = "happyuser";
+
+  console.log(recipe_id);
 
   // 로컬스토리지 key 정의
   const localStorageKey = `memo_${recipe_id}`;
 
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
-  const [count, setCount] = useState(1230);
+  const [count, setCount] = useState(recipe_like);
   const countText = count.toLocaleString();
 
   // 스크랩 버튼 상태 관리
@@ -105,6 +130,10 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
   // 스크랩 저장 상태 관리
   const [isSaved, setIsSaved] = useState(false);
+
+  // 댓글 개수
+  const commentCount =
+    Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
 
   // 좋아요 버튼 클릭 핸들러
   const heartClickHandler = () => {
@@ -237,12 +266,12 @@ const RecipeDetail = (props: RecipeDataProps) => {
                 height={22}
               ></Image>
             </CommentIconDiv>
-            <SubtitleH2>{comments.length}</SubtitleH2>
+            <SubtitleH2>{commentCount}</SubtitleH2>
           </div>
           <div className="mb-[30px]">
             <RecipeComments comments={comments} />
           </div>
-          <RecipeCommentInput />
+          <RecipeCommentInput recipe_id={recipe_id} />
         </div>
       </ContainerDiv>
     </>
