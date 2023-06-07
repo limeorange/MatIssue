@@ -1,3 +1,4 @@
+import { getCurrentUserSS } from "../action/getCurrentUser";
 import Header from "../components/header/Header";
 
 export default async function Layout({
@@ -5,9 +6,12 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
+  const currentUser = await getCurrentUserSS();
+
+  console.log(currentUser);
   return (
     <>
-      <Header />
+      <Header currentUser={currentUser} />
       <main>{children}</main>
     </>
   );
