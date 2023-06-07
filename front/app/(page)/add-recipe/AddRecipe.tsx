@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import VideoSection from "@/app/components/add-recipe/VideoSection";
 import IngredientSection from "@/app/components/add-recipe/IngredientSection";
@@ -45,6 +46,7 @@ const times = [
 const difficulties = ["쉬움", "중간", "어려움"];
 
 const RecipeForm = () => {
+  const router = useRouter();
   const [state, setState] = useState<RecipeFormState>({
     selectedCategory: "",
     selectedPeople: "",
@@ -213,6 +215,7 @@ const RecipeForm = () => {
     try {
       const response = await postRecipe(recipeData);
       console.log(response);
+      router.push("/category/newest?category=newest");
     } catch (error) {
       console.log(error);
     }
