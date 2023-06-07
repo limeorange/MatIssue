@@ -113,6 +113,14 @@ const RecipeTitleBox = styled.div`
   width: 100%;
   font-size: 18px;
   font-weight: 500;
+
+  & h3 {
+    text-align: start;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const RecipeInfoBox = styled.div`
