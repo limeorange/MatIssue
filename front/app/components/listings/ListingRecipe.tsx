@@ -43,7 +43,7 @@ const duration = [
   { value: 20, name: "20분" },
   { value: 30, name: "30분" },
   { value: 60, name: "1시간" },
-  { value: 100, name: "1시간 이상" },
+  { value: 61, name: "1시간 이상" },
 ];
 
 const difficulty = [
@@ -112,38 +112,38 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     let bestResult: Recipe[] = [];
 
     // 검색바로 레시피 필터링
-    const term = searchQuery || "";
-    if (term !== "") {
-      result = result.filter((recipe) =>
-        recipe.recipe_title.toLowerCase().includes(term.toLowerCase())
-      );
-    }
+    // const term = searchQuery || "";
+    // if (term !== "") {
+    //   result = result.filter((recipe) =>
+    //     recipe.recipe_title.toLowerCase().includes(term.toLowerCase())
+    //   );
+    // }
 
     // 혼먹 카테고리 필터링
-    if (category === "honmuk") {
-      honmukResult = result.filter(
-        (recipe) => recipe.recipe_info.serving === 1
-      );
-    }
+    // if (category === "honmuk") {
+    //   honmukResult = result.filter(
+    //     (recipe) => recipe.recipe_info.serving === 1
+    //   );
+    // }
 
-    // 최신 카테고리 필터링
+    // // 최신 카테고리 필터링
     if (category === "newest") {
       newestResult = [...result].sort((a, b) => +b.created_at - +a.created_at);
     }
 
-    // 베스트 카테고리 필터링
-    if (category === "best") {
-      bestResult = result
-        .filter((recipe) => recipe.recipe_like >= 1500)
-        .sort((a, b) => +b.created_at - +a.created_at);
-    }
+    // // 베스트 카테고리 필터링
+    // if (category === "best") {
+    //   bestResult = result
+    //     .filter((recipe) => recipe.recipe_like >= 1500)
+    //     .sort((a, b) => +b.created_at - +a.created_at);
+    // }
 
-    // 카테고리바 레시피 필터링
-    if (category) {
-      result = result.filter((recipe) =>
-        recipe.recipe_category.toLowerCase().includes(category.toLowerCase())
-      );
-    }
+    // // 카테고리바 레시피 필터링
+    // if (category) {
+    //   result = result.filter((recipe) =>
+    //     recipe.recipe_category.toLowerCase().includes(category.toLowerCase())
+    //   );
+    // }
 
     // 필터바로 레시피 필터링
     if (filter.servings > 0) {
@@ -216,7 +216,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     {
       const resetValue = -1;
       if (tagType === "search" || tagType === "category") {
-        router.push("/search");
+        router.push("/recipes/search");
       }
       if (tagType === "difficulty") {
         setNewDifficulty(difficulty[0]);
@@ -241,7 +241,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = filteredRecipes.slice(
+  const currentRecipes = filteredRecipes?.slice(
     indexOfFirstRecipe,
     indexOfLastRecipe
   );
