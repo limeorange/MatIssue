@@ -24,4 +24,5 @@ const NoRecipeMessageWrapper = styled.div`
   max-width: 100rem;
   width: 100%;
   margin-top: 8rem;
+  maring: 0 auto;
 `;
