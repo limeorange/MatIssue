@@ -15,6 +15,9 @@ import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySid
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
+import { useQuery } from "@tanstack/react-query";
+import { getRecipeById } from "@/app/api/recipe";
+import { Recipe } from "@/app/types";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -57,11 +60,25 @@ type RecipeDataProps = {
       updated_at: string;
     };
   };
+  recipe_id: string;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
 const RecipeDetail = (props: RecipeDataProps) => {
-  const { recipe } = props;
+  const {
+    data: recipe,
+    isLoading,
+    isError,
+  } = useQuery<Recipe>(
+    ["currentRecipe"],
+    () => getRecipeById(props.recipe_id),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: props.recipe,
+    }
+  );
+
   const {
     // 대표 이미지, 제목, 작성자, 소개글 (props로 안 내려줌)
     recipe_title: recipeTitle,
@@ -96,19 +113,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
     comments,
   } = recipe;
 
-  console.log(comments);
-  // 댓글 관련 data
-  const {
-    comment_author,
-    comment_text,
-    comment_like,
-    comment_id,
-    created_at,
-    comment_parent,
-    updated_at,
-  } = comments;
-
   const loggedInUserId = "happyuser";
+
+  console.log(recipe_id);
 
   // 로컬스토리지 key 정의
   const localStorageKey = `memo_${recipe_id}`;
@@ -264,7 +271,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <div className="mb-[30px]">
             <RecipeComments comments={comments} />
           </div>
-          <RecipeCommentInput />
+          <RecipeCommentInput recipe_id={recipe_id} />
         </div>
       </ContainerDiv>
     </>

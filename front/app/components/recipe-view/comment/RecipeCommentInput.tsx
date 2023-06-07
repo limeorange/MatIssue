@@ -1,22 +1,24 @@
 "use client";
 
-import axios from "axios";
 import { ChangeEvent, FormEvent, useState, useRef, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Image from "next/image";
+import { axiosBase } from "@/app/api/axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 /** 댓글 props type 지정 => id, text */
-type Comment = {
-  id: string;
-  text: string;
+type CommentProps = {
+  recipe_id: string;
 };
 
 /** 댓글 입력 컴포넌트 */
-const RecipeCommentInput = () => {
+const RecipeCommentInput: React.FC<CommentProps> = ({ recipe_id }) => {
   const [isCommenting, setIsCommenting] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState<Comment[]>([]);
+  // const [comments, setComments] = useState<CommentProps[]>([]);
   const [activatedButton, setActivatedButton] = useState(false);
+
+  const client = useQueryClient();
 
   /** 댓글창 클릭시 상태 업데이트 핸들러 */
   const boxClickHandler = () => {
@@ -34,17 +36,14 @@ const RecipeCommentInput = () => {
   };
 
   /** 작성 완료된 댓글 서버로 보내고 화면에 출력해주는 핸들러 */
-  const commentSubmitHandler = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const commentSubmitHandler = async () => {
     try {
-      const response = await axios.post<Comment>("/api/comments", {
-        text: commentText,
+      const response = await axiosBase.post(`/recipes/comment/${recipe_id}`, {
+        comment_text: commentText,
       });
-      const newComment = response.data;
 
-      // 서버 저장된 새로운 댓글을 화면에 추가
-      setComments((prevComments: Comment[]) => [...prevComments, newComment]);
+      client.invalidateQueries(["currentRecipe"]);
+      console.log(response);
     } catch (error) {
       console.log("댓글 작성 실패", error);
       alert("댓글 작성에 실패했습니다 ㅠ.ㅠ");
@@ -64,7 +63,7 @@ const RecipeCommentInput = () => {
       {/* 제출 버튼 아이콘 */}
       {/* 제출하는 함수에 props로 넘어온 댓글 정보가 있으면 API에 수정 요청,
       없으면 등록 요청 예정 */}
-      <SubmitButton disabled={!activatedButton}>
+      <SubmitButton disabled={!activatedButton} onClick={commentSubmitHandler}>
         <Image
           src={"/images/recipe-view/commentsubmitblack.svg"}
           alt="댓글 제출 아이콘"
