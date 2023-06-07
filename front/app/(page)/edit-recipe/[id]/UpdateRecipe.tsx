@@ -8,7 +8,6 @@ import CategoryAndInfo from "@/app/components/add-recipe/CategoryAndInfo";
 import ThumbnailUpload from "@/app/components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection";
 import Button from "@/app/components/UI/Button";
-import { axiosBase } from "@/app/api/axios";
 import { updateRecipe } from "@/app/api/recipe";
 
 type Recipe = {
@@ -251,8 +250,9 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
   // 취소 핸들러
   const handleCancel = () => {
-    // 취소
+    history.back();
   };
+
   return (
     <FormWrapper>
       <Title>레시피 수정하기</Title>
