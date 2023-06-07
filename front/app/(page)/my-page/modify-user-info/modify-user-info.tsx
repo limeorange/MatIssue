@@ -49,16 +49,9 @@ const ModifyUserInfo: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string | null | undefined>(
     currentUser?.img
   );
-  const [passwordMatch, setPasswordMatch] = useState<boolean>(false);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
-
-  const firstPwdRef = React.useRef<HTMLInputElement>(null);
-  const secondPwdRef = React.useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -94,6 +87,14 @@ const ModifyUserInfo: React.FC = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("form 태그 제출");
+    if (
+      password !== confirmPassword ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
     // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
     // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
     // useEffect가 실행되면서 putUser 함수가 실행된다. => 회원정보 변경
@@ -173,26 +174,22 @@ const ModifyUserInfo: React.FC = () => {
     setPreviewImage(null);
   };
 
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "password") {
-      console.log(firstPwdRef.current, secondPwdRef.current);
-    }
-
-    setUserData((prev: any) => {
-      return { ...prev, [name]: value };
-    });
-  };
-
-  const validatePassword = () => {
-    const { password, confirmPassword } = userData;
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    if (password === confirmPassword && passwordRegex.test(password)) {
-      // setPasswordMatch(true);
+      setPassword(value);
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
+      setUserData((prev: any) => {
+        return { ...prev, ["password"]: value };
+      });
     } else {
-      // setPasswordMatch(false);
+      setUserData((prev: any) => {
+        return { ...prev, [name]: value };
+      });
     }
   };
 
@@ -251,33 +248,25 @@ const ModifyUserInfo: React.FC = () => {
               />
             </Wrapper>
             <SpaceDiv />
-
             <Wrapper>
               <Title>비밀번호 </Title>
-
-              <IputAndDescription>
-                <InputBox value={""} required ref={firstPwdRef} />
-                <PassWordDescription>
-                  비밀번호는 8자 이상, 영문 대소문자, 숫자, 특수문자를 모두
-                  포함해야 합니다.
-                </PassWordDescription>
-              </IputAndDescription>
+              <InputBox
+                type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={handleChageInput}
+              />
             </Wrapper>
             <Wrapper>
               <Title>비밀번호 확인</Title>
-              <IputAndDescription>
-                <InputBox
-                  type="password"
-                  name="password"
-                  value={""}
-                  required
-                  ref={secondPwdRef}
-                  onChange={handleChageInput}
-                />
-                <PassWordDescription>
-                  변경할 비밀번호를 한 번 더 입력해주세요.
-                </PassWordDescription>
-              </IputAndDescription>
+              <InputBox
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={handleChageInput}
+              />
             </Wrapper>
           </WrapperInfo>
 
@@ -292,7 +281,7 @@ const ModifyUserInfo: React.FC = () => {
                   </button>
                 </>
               ) : (
-                "클릭하여 사진 업로드"
+                <StyledImage src="/images/dongs-logo.png" alt="Default" />
               )}
             </LabelForFile>
             {!previewImage && (

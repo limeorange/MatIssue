@@ -22,7 +22,7 @@ const RecipeCards = () => {
     try {
       const response = await axiosBase.get(`/recipes/user`);
       console.log("response  : ", response);
-      setRecipes(response.data);
+      setRecipes(response.data.recipes);
     } catch (error) {
       console.error(
         "레시피 데이터를 가져오는 중에 오류가 발생했습니다:",
@@ -51,31 +51,34 @@ const RecipeCards = () => {
     try {
       await axiosBase.delete(`recipes/${id}`);
       console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
-      handleCloseModal();
+      // setIsModalOpen(false);
     } catch (error) {
       console.error(
         "레시피 삭제 요청을 보내는 중에 오류가 발생했습니다:",
         error
       );
-      handleCloseModal();
     }
+    setIsModalOpen(false);
   };
 
   return (
     <RecipeListContainer>
       <RecipeHeading>나의 레시피</RecipeHeading>
       <RecipeHeadingCount>{recipes.length}</RecipeHeadingCount>
-      {recipes.length === 0 && <NonRecipeMsg />}
-      <RecipeList>
-        {recipes.map((recipe) => (
-          <RecipeCardWrapper key={recipe.recipe_id}>
-            <StyledRecipeCard recipe={recipe} />
-            <button onClick={() => handleOpenModal(recipe)}>
-              <DeleteButtonImage src="/images/x-box.png" alt="X-box" />
-            </button>
-          </RecipeCardWrapper>
-        ))}
-      </RecipeList>
+      {recipes.length === 0 ? (
+        <NonRecipeMsg />
+      ) : (
+        <RecipeList>
+          {recipes.map((recipe) => (
+            <RecipeCardWrapper key={recipe.recipe_id}>
+              <StyledRecipeCard recipe={recipe} />
+              <button onClick={() => handleOpenModal(recipe)}>
+                <DeleteButtonImage src="/images/x-box.png" alt="X-box" />
+              </button>
+            </RecipeCardWrapper>
+          ))}
+        </RecipeList>
+      )}
       {isModalOpen && (
         <StyledConfirmModal
           icon={<AlertImage src="/images/alert.png" alt="alert" />}
@@ -87,7 +90,6 @@ const RecipeCards = () => {
     </RecipeListContainer>
   );
 };
-
 export default RecipeCards;
 
 // 레시피 리스트
