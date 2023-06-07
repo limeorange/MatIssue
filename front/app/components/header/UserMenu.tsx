@@ -38,7 +38,7 @@ const UserMenu = ({ currentUser }: { currentUser: User | null }) => {
             }}
           >
             <Image
-              src="/images/header/writeIcon.png"
+              src={"/images/header/writeIcon.png"}
               width={28}
               height={28}
               alt="write_icon"
