@@ -1,15 +1,15 @@
 "use client";
-import Link from "next/link";
+
 import styled from "styled-components";
 import Button from "../../../components/UI/Button";
 import React, { useEffect, useState } from "react";
 import ConfirmModal from "../../../components/my-page/ConfirmModal";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import uploadImage from "@/app/api/aws";
 import { axiosBase } from "@/app/api/axios";
+import Cookies from "js-cookie";
 
 type User = {
   user_id: string;
@@ -19,6 +19,7 @@ type User = {
   birth_date: string;
   password: string;
   created_at: string;
+  session_id: string;
 };
 
 type LabelForFileProps = {
@@ -28,6 +29,7 @@ type LabelForFileProps = {
 const ModifyUserInfo: React.FC = () => {
   const { data: currentUser } = useQuery<User>(["currentUser"]); //비동기적으로 실행, 서버에서 온 값
   const [userData, setUserData] = useState<any>(); //얘가 먼저 실행되서 밸류 값 undefined, 우리가 갖고 있던 값
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     // 받아온 data 객체로 상태 저장
@@ -43,10 +45,13 @@ const ModifyUserInfo: React.FC = () => {
   }, [currentUser]);
 
   const router = useRouter();
-  const [date, setDate] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null | undefined>(
+    currentUser?.img
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -62,53 +67,92 @@ const ModifyUserInfo: React.FC = () => {
     }
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // userData 데이터 확인
-
-    // 변경한 데이터를 객체에다 담아서 서버에 전송
-    // 객체를 만들고 그 안에 key와 value를 넣어줘야 한다.
-    // value는  e.currentTarget.name명.value로 접근 가능
-    // const modifyUserInfo = {
-    //   user_id: currentUser?.user_id,
-    //   email: e.currentTarget.user_email.value,
-    //   username: e.currentTarget.nickname.value,
-    //   birth_date: e.currentTarget.birth.value,
-    //   password: "", // 사용자가 입력해야 되니 때문에 공백
-    //   img: "", // aws에 업로드한 이미지 url을 넣기 때문에 공백으로 처리
-    // };
-
+  const uploadProfileImage = async () => {
+    console.log("uploadProfileImage 함수 실행");
     // aws 이미지 업로드 로직
     if (selectedFile) {
       try {
-        const response = await uploadImage(selectedFile); // aws에 이미지 업로드하기 위한 코드
-        const imgUrl = response.imageUrl; // aws 업로드 후 반환된 이미지 aws url
-        // modifyUserInfo.img = imgUrl; // 객체에 이미지 aws url 추가
-        console.log("imgUrl : ", imgUrl);
-        setUserData({ ...userData, img: imgUrl });
+        const response = await uploadImage(selectedFile);
+        const imgUrl = response.imageUrl;
+        setUserData((prev: any) => {
+          return { ...prev, img: imgUrl };
+        });
       } catch (error) {
         console.error("Image upload failed:", error);
       }
     }
+    setReadyUpdate(true);
+  };
 
-    // PUT /api/users/
-    // TODO: modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
-    // 변경에 성공하면 alert창 띄우고 my-page로 이동
-    console.log(userData);
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("form 태그 제출");
+    if (
+      password !== confirmPassword ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
+    // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
+    // useEffect가 실행되면서 putUser 함수가 실행된다. => 회원정보 변경
+    uploadProfileImage();
+  };
+
+  // TODO: modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
+  // 변경에 성공하면 alert창 띄우고 my-page로 이동
+  async function putUser() {
+    console.log("userData  2 : ", userData);
     try {
       const response = await axiosBase.put("users", userData);
+      queryClient.invalidateQueries(["currentUser"]);
       console.log(response);
       alert("회원정보가 수정되었습니다.");
       router.push("/my-page");
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
-  const handleDeleteAccount = () => {
-    router.push("/");
-    // 회원 탈퇴 로직을 처리하는 함수
-    console.log("계정이 삭제되었습니다.");
+  useEffect(() => {
+    if (readyUpdate) {
+      console.log("putUser 실행");
+      putUser();
+      setReadyUpdate(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [readyUpdate === true]);
+
+  const handleDeleteAccount = async () => {
+    // const confirmDeletion = window.confirm("정말 탈퇴 하시겠습니까?");
+    // if (confirmDeletion) {
+    try {
+      const response = await axiosBase.delete("users", {
+        data: {
+          user_id: userData?.user_id,
+          password: userData?.password,
+          session_id: "session_id",
+        },
+      });
+      console.log("delete 후 response : ", response);
+
+      if (response.status === 200) {
+        queryClient.invalidateQueries(["currentUser"]);
+        console.log("회원탈퇴 성공");
+        Cookies.remove("session_id");
+        console.log("계정이 삭제되었습니다.");
+        await axiosBase.post("users/logout");
+        router.push("/");
+      } else {
+        console.error("계정 삭제에 실패하였습니다.");
+      }
+    } catch (error) {
+      console.error("Error occurred while deleting account:", error);
+    }
+    // }
+
     closeModal();
   };
 
@@ -120,11 +164,33 @@ const ModifyUserInfo: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const handleDeleteImage = () => {};
+  const handleLabelClick = (e: React.MouseEvent<HTMLLabelElement>) => {
+    if (previewImage) {
+      e.preventDefault();
+    }
+  };
+
+  const handleDeleteImage = () => {
+    setPreviewImage(null);
+  };
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
+    if (name === "password") {
+      setPassword(value);
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
+      setUserData((prev: any) => {
+        return { ...prev, ["password"]: value };
+      });
+    } else {
+      setUserData((prev: any) => {
+        return { ...prev, [name]: value };
+      });
+    }
   };
 
   return (
@@ -132,11 +198,6 @@ const ModifyUserInfo: React.FC = () => {
       <Container>
         <Header>회원정보수정</Header>
         <Divider />
-
-        <Link href="/my-page/modify-user-info/change-password">
-          <ChangePassword>비밀번호 변경</ChangePassword>
-        </Link>
-
         <Wrapper>
           <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
           {isModalOpen && (
@@ -154,16 +215,6 @@ const ModifyUserInfo: React.FC = () => {
         {/* form 태그에서 압력값에 접근하기 위해서는 name을 사용! */}
         <form onSubmit={handleFormSubmit}>
           <WrapperInfo>
-            <Wrapper>
-              <Title>비밀번호 *</Title>
-              <InputBox
-                type="password"
-                name="password"
-                value={userData?.password}
-                required
-                onChange={handleChageInput} // input에 입력한 값이 user 객체에 저장
-              />
-            </Wrapper>
             <Wrapper>
               <Title>이메일 *</Title>
               <InputBox
@@ -185,45 +236,62 @@ const ModifyUserInfo: React.FC = () => {
                 onChange={handleChageInput}
               />
             </Wrapper>
-          </WrapperInfo>
-          <Wrapper>
-            <Title>생년월일</Title>
+            <Wrapper>
+              <Title>생년월일</Title>
 
-            <InputDateBox
-              type="date"
-              name="birth_date"
-              value={userData?.birth_date}
-              required
-              onChange={handleChageInput}
-            />
-          </Wrapper>
+              <InputDateBox
+                type="date"
+                name="birth_date"
+                value={userData?.birth_date}
+                required
+                onChange={handleChageInput}
+              />
+            </Wrapper>
+            <SpaceDiv />
+            <Wrapper>
+              <Title>비밀번호 </Title>
+              <InputBox
+                type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={handleChageInput}
+              />
+            </Wrapper>
+            <Wrapper>
+              <Title>비밀번호 확인</Title>
+              <InputBox
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={handleChageInput}
+              />
+            </Wrapper>
+          </WrapperInfo>
+
           <ProfileImageWrapper>
             <Title>프로필 이미지</Title>
-            <LabelForFile
-              htmlFor="upload-button"
-              // backgroundImageUrl="recipe-icon.png"
-            >
-              {previewImage && (
+            <LabelForFile htmlFor="upload-button" onClick={handleLabelClick}>
+              {previewImage ? (
                 <>
                   <StyledImage src={previewImage} alt="Preview" />
-                  {handleDeleteImage && (
-                    <button type="button" onClick={handleDeleteImage}>
-                      <DeleteImage
-                        src="/images/delete-button.png"
-                        alt="delete"
-                      />
-                    </button>
-                  )}
+                  <button type="button" onClick={handleDeleteImage}>
+                    <DeleteImage src="/images/delete-button.png" alt="delete" />
+                  </button>
                 </>
+              ) : (
+                <StyledImage src="/images/dongs-logo.png" alt="Default" />
               )}
-              {!previewImage && "클릭하여 사진 업로드"}
             </LabelForFile>
-            <InputFile
-              type="file"
-              accept="image/*"
-              id="upload-button"
-              onChange={handleFileChange}
-            />
+            {!previewImage && (
+              <InputFile
+                type="file"
+                accept="image/*"
+                id="upload-button"
+                onChange={handleFileChange}
+              />
+            )}
           </ProfileImageWrapper>
           <UserModifyButton>
             <Button
@@ -267,20 +335,20 @@ const Divider = styled.div`
   margin: 2rem 0;
 `;
 
-const ChangePassword = styled.div`
-  position: absolute;
-  right: 22.4rem;
-  top: 13.5rem;
-  font-size: 13px;
-  text-decoration: underline;
-  color: #201ce0;
-`;
+// const ChangePassword = styled.div`
+//   position: absolute;
+//   right: 22.4rem;
+//   top: 13.5rem;
+//   font-size: 13px;
+//   text-decoration: underline;
+//   color: #201ce0;
+// `;
 
 const AccountDeletion = styled.div`
   position: absolute;
-  right: 15.1rem;
+  right: 16.1rem;
   top: 13.5rem;
-  font-size: 13px;
+  font-size: 14px;
   text-decoration: underline;
   color: #e11717;
   cursor: pointer;
@@ -291,24 +359,23 @@ const AlertImage = styled.img`
   height: 3rem;
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 55rem;
-  margin-top: 7rem;
-`;
-
 const WrapperInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 55rem;
+  margin-top: -4rem;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 57rem;
   margin-top: 7rem;
 `;
 
 const Title = styled.h4`
   font-size: 17px;
-  margin: 0.5rem 5.9rem 0 0.2rem;
+  margin: 0.5rem 7.5rem 0 0.2rem;
   cursor: pointer;
   color: #4f3d21;
 `;
@@ -318,7 +385,7 @@ const InputBox = styled.input`
   height: 4.8rem;
   border: 0.1rem solid #d2d2d2;
   border-radius: 0.8rem;
-  font-size: 15px;
+  font-size: 16px;
   padding: 0 1.6rem;
   &:focus {
     outline: 0.3rem solid #fbd26a;
@@ -355,6 +422,18 @@ const LabelForFile = styled.label<LabelForFileProps>`
   background-position: center;
 `;
 
+const IputAndDescription = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const PassWordDescription = styled.p`
+  padding: 0.5rem 0 0 0.5rem;
+  font-size: 13px;
+  font-weight: 400;
+  color: #black;
+`;
+
 const StyledImage = styled.img`
   width: 19.8rem;
   height: 19.8rem;
@@ -366,11 +445,6 @@ const DeleteImage = styled.img`
   right: 0.6rem;
   width: auto;
   height: auto;
-`;
-
-const UserModifyButton = styled.div`
-  margin: 6rem 0 0 15rem;
-  width: 23rem;
 `;
 
 const InputDateBox = styled.input`
@@ -398,4 +472,27 @@ const InputDateBox = styled.input`
     background: transparent;
     cursor: pointer;
   }
+`;
+
+const UserModifyButton = styled.div`
+  margin: 6rem 0 0 17rem;
+  width: 23rem;
+`;
+
+//패스워드 유효성 검사
+
+const SpaceDiv = styled.div`
+  display: block;
+  height: 1rem;
+`;
+
+const ShowIconBox = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  top: 1.1rem;
+  right: 1.1rem;
+  cursor: pointer;
 `;
