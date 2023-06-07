@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import VideoSection from "@/app/components/add-recipe/VideoSection";
 import IngredientSection from "@/app/components/add-recipe/IngredientSection";
@@ -59,6 +60,7 @@ const times = [
 const difficulties = ["쉬움", "중간", "어려움"];
 
 const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
+  const router = useRouter();
   const {
     recipe_category,
     recipe_info,
@@ -243,6 +245,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     try {
       const response = await updateRecipe(recipe_id, recipeData);
       console.log(response);
+      router.push("/category/newest?category=newest");
     } catch (error) {
       console.log(error);
     }
