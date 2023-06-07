@@ -92,6 +92,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const { comments } = recipeComment;
   const loggedInUserId = "happyuser";
 
+  // 로컬스토리지 key 정의
+  const localStorageKey = `memo_${recipe_id}`;
+
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
   const [count, setCount] = useState(1230);
@@ -211,11 +214,13 @@ const RecipeDetail = (props: RecipeDataProps) => {
             setIsSaved={setIsSaved}
             isBooked={isBooked}
             scrapClickHandler={scrapClickHandler}
+            localStorageKey={localStorageKey}
           />
           {isBooked && (
             <ScrapModal
               setIsSaved={setIsSaved}
               modalCloseHandler={modalCloseHandler}
+              localStorageKey={localStorageKey}
             />
           )}
         </div>

@@ -5,10 +5,12 @@ import { useEffect, useRef, useState } from "react";
 type ScrapModalProps = {
   modalCloseHandler: () => void;
   setIsSaved: React.Dispatch<React.SetStateAction<boolean>>;
+  localStorageKey: string;
 };
 const ScrapModal: React.FC<ScrapModalProps> = ({
   modalCloseHandler,
   setIsSaved,
+  localStorageKey,
 }) => {
   // 스크랩 모달 이동 상태 관리
   const [isDragging, setIsDragging] = useState(false);
@@ -20,7 +22,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   const hasMemo = memo.trim().length > 0;
 
   // 스크랩 메모 원본 상태 관리
-  const originalLocal = localStorage.getItem("scrapMemo");
+  const originalLocal = localStorage.getItem(localStorageKey);
   const originalMemo = originalLocal ? originalLocal : "";
 
   // 스크랩 모달창 자유 이동 설정
@@ -57,7 +59,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 
   /** 메모 저장 버튼 핸들러 */
   const memoSaveHandler = () => {
-    localStorage.setItem("scrapMemo", memo);
+    localStorage.setItem(localStorageKey, memo);
     // memo 내용이 있으면 색칠된 아이콘 표시하고,
     // 내용 없을 시 아이콘 색칠 해제를 위한 상태값 부여
     setIsSaved(memo ? true : false);
@@ -72,7 +74,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 
   // 기존의 저장된 메모 보여주는 의존성 설정
   useEffect(() => {
-    const savedMemo = localStorage.getItem("scrapMemo");
+    const savedMemo = localStorage.getItem(localStorageKey);
     if (savedMemo) {
       setMemo(savedMemo);
     }
