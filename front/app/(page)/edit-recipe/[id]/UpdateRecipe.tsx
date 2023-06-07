@@ -95,6 +95,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     cookingTips: recipe_tip,
     videoLink: recipe_video,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -291,6 +292,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
       const response = await updateRecipe(recipe_id, recipeData);
       console.log(response);
@@ -298,6 +301,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       router.push("/category/newest?category=newest");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -380,12 +385,24 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       </CookingTips>
       <ButtonContainer>
         <SaveButton>
-          <Button onClick={handleUpdate} type="button" isBgColor fullWidth>
-            수정
+          <Button
+            onClick={handleUpdate}
+            type="button"
+            isBgColor
+            fullWidth
+            disabled={isLoading}
+          >
+            {isLoading ? "수정 중..." : "수정"}
           </Button>
         </SaveButton>
         <CancleButton>
-          <Button onClick={handleCancel} type="button" isBorderColor fullWidth>
+          <Button
+            onClick={handleCancel}
+            type="button"
+            isBorderColor
+            fullWidth
+            disabled={isLoading}
+          >
             취소
           </Button>
         </CancleButton>
