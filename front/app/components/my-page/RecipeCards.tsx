@@ -57,6 +57,7 @@ const RecipeCards = () => {
         "레시피 삭제 요청을 보내는 중에 오류가 발생했습니다:",
         error
       );
+      handleCloseModal();
     }
   };
 
@@ -117,11 +118,10 @@ const RecipeList = styled.div`
 
 const RecipeCardWrapper = styled.div`
   position: relative;
+  overflow: hidden;
 `;
 
-const StyledRecipeCard = styled(RecipeCard)`
-  font-size: 13px !important;
-`;
+const StyledRecipeCard = styled(RecipeCard)``;
 
 const DeleteButtonImage = styled.img`
   position: absolute;

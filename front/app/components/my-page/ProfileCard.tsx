@@ -12,7 +12,8 @@ type ProfileCardProps = {
 };
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+
   // const { data: currentUser } = useQuery<User>(["currentUser"]);
   // console.log("currentUser : ", currentUser.);
   return (
@@ -47,7 +48,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
         <StyledLink href="/my-page">
           <MyRecipeIcon src="/images/recipe-icon.png" alt="레시피 아이콘" />
           <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-          <MyRecipeCount>{filteredRecipes.length}</MyRecipeCount>
+          <MyRecipeCount>{recipes.length}</MyRecipeCount>
         </StyledLink>
         <Link href="/add-recipe">
           <UploadRecipeButton>
