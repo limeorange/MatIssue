@@ -1,17 +1,17 @@
 "use client";
 
-import IngredientList from "@/app/components/recipe/IngredientList";
-import ProgressBar from "@/app/components/recipe/ProgressBar";
-import RecipeComment from "@/app/components/recipe/RecipeComment";
-import RecipeCommentInput from "@/app/components/recipe/RecipeCommentInput";
-import RecipeComments from "@/app/components/recipe/RecipeComments";
-import RecipeInfo from "@/app/components/recipe/RecipeInfo";
-import RecipeScrap from "@/app/components/recipe/RecipeScrap";
-import RecipeSteps from "@/app/components/recipe/RecipeSteps";
-import RecipeUserLikes from "@/app/components/recipe/RecipeUserLikes";
-import RecipeVideo from "@/app/components/recipe/RecipeVideo";
-import StickyProgressBar from "@/app/components/recipe/StickyProgressBar";
-import StickySideBar from "@/app/components/recipe/StickySideBar";
+import IngredientList from "@/app/components/recipe-view/IngredientList";
+import ProgressBar from "@/app/components/recipe-view/sticky-sidebar/ProgressBar";
+import RecipeCommentInput from "@/app/components/recipe-view/comment/RecipeCommentInput";
+import RecipeComments from "@/app/components/recipe-view/comment/RecipeCommentList";
+import RecipeInfo from "@/app/components/recipe-view/RecipeInfo";
+import RecipeScrap from "@/app/components/recipe-view/RecipeScrap";
+import RecipeSteps from "@/app/components/recipe-view/RecipeStepList";
+import RecipeUserLikes from "@/app/components/recipe-view/RecipeUserLikes";
+import RecipeVideo from "@/app/components/recipe-view/RecipeVideo";
+import ScrapModal from "@/app/components/recipe-view/ScrapModal";
+import StickyProgressBar from "@/app/components/recipe-view/sticky-sidebar/StickyProgressBar";
+import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySideBar";
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
@@ -92,11 +92,19 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const { comments } = recipeComment;
   const loggedInUserId = "happyuser";
 
+  // 로컬스토리지 key 정의
+  const localStorageKey = `memo_${recipe_id}`;
+
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
   const [count, setCount] = useState(1230);
   const countText = count.toLocaleString();
+
+  // 스크랩 버튼 상태 관리
   const [isBooked, setIsBooked] = useState(false);
+
+  // 스크랩 저장 상태 관리
+  const [isSaved, setIsSaved] = useState(false);
 
   // 좋아요 버튼 클릭 핸들러
   const heartClickHandler = () => {
@@ -111,6 +119,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 스크랩 버튼 클릭 핸들러
   const scrapClickHandler = () => {
     setIsBooked(!isBooked);
+  };
+
+  // 모달창 닫기 핸들러
+  const modalCloseHandler = () => {
+    setIsBooked(false);
   };
 
   return (
@@ -197,10 +210,21 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
           {/* 스크랩 */}
           <RecipeScrap
+            isSaved={isSaved}
+            setIsSaved={setIsSaved}
             isBooked={isBooked}
             scrapClickHandler={scrapClickHandler}
+            localStorageKey={localStorageKey}
           />
+          {isBooked && (
+            <ScrapModal
+              setIsSaved={setIsSaved}
+              modalCloseHandler={modalCloseHandler}
+              localStorageKey={localStorageKey}
+            />
+          )}
         </div>
+
         {/* 댓글 */}
         <div>
           <div className="flex">
@@ -256,6 +280,7 @@ const DeleteButton = styled.button`
   color: #4f3d21;
 `;
 
+/** 이미지 감싸는 Div */
 const ImageWrapperDiv = styled.div`
   width: 100%;
   max-width: 65rem;
@@ -264,6 +289,7 @@ const ImageWrapperDiv = styled.div`
   margin-top: 3.5rem;
 `;
 
+/** 요리 주제 소개 담은 Div */
 const TitleContainerDiv = styled.div`
   width: 100%;
   max-width: 65rem;
@@ -273,17 +299,20 @@ const TitleContainerDiv = styled.div`
   gap: 0.5rem;
 `;
 
+/** 레시피 전체 제목 H3 */
 const TitleH3 = styled.h3`
   font-weight: 600;
   font-size: 2.2rem;
   margin-right: 1rem;
 `;
 
+/** 작성자 Span */
 const AuthorSpan = styled.span`
   color: #6f6f6f;
   font-size: 1.4rem;
 `;
 
+/** 요리 간단 소개 Div */
 const DescriptionDiv = styled.div`
   margin-top: 1.5rem;
   max-width: 65rem;
@@ -291,6 +320,7 @@ const DescriptionDiv = styled.div`
   font-size: 1.62rem;
 `;
 
+/** 레시피 소제목 H2 */
 const SubtitleH2 = styled.h2`
   font-size: 2rem;
   color: #b08038;
@@ -298,10 +328,12 @@ const SubtitleH2 = styled.h2`
   margin-bottom: 1rem;
 `;
 
+/** 요리팁 Div */
 const RecipeTipDiv = styled.div`
   font-size: 1.6rem;
 `;
 
+/** 댓글 아이콘 Div */
 const CommentIconDiv = styled.div`
   margin-left: 0.7rem;
   margin-top: 0.4rem;

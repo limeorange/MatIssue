@@ -15,6 +15,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
   // 모달 컨테이너의 ref 생성
   const modalRef = useRef<HTMLDivElement>(null);
 
+  // 모달창 닫는 의존성 설정
   useEffect(() => {
     const outsideClickHandler = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {

@@ -5,47 +5,18 @@ import {
   StyledTitle,
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
-import { RecipeData } from "@/app/types";
+import { Recipe } from "@/app/types";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 
-const DUMMY_DATA: RecipeData[] = [
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
+const MainAlone = ({ aloneRecipes }: { aloneRecipes: Recipe[] }) => {
+  const router = useRouter();
 
-    id: "1",
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "메가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "2",
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "입이 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "3",
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "코가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "4",
-  },
-];
+  if (aloneRecipes.length < 5) {
+    return null;
+  }
 
-const MainAlone = () => {
   return (
     <StyledContainer>
       <StyledContentsArea>
@@ -56,49 +27,65 @@ const MainAlone = () => {
           </StyledSubTitle>
         </StyledTitleBox>
         <RecipeContainer>
-          <RecipeImageWrapperBase>
+          <RecipeImageWrapperBase
+            onClick={() =>
+              router.push(`/recipes/${aloneRecipes?.[0].recipe_id}`)
+            }
+          >
             <SquareImageWrapper>
               <Image
-                src={DUMMY_DATA[0].image}
+                src={aloneRecipes?.[0].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{DUMMY_DATA[0].title}</TitleOnImage>
+            <TitleOnImage>{aloneRecipes?.[0].recipe_title}</TitleOnImage>
           </RecipeImageWrapperBase>
-          <RecipeImageWrapper2>
+          <RecipeImageWrapper2
+            onClick={() =>
+              router.push(`/recipes/${aloneRecipes?.[0].recipe_id}`)
+            }
+          >
             <SquareImageWrapper>
               <Image
-                src={DUMMY_DATA[1].image}
+                src={aloneRecipes?.[1].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{DUMMY_DATA[1].title}</TitleOnImage>
+            <TitleOnImage>{aloneRecipes?.[1].recipe_title}</TitleOnImage>
           </RecipeImageWrapper2>
-          <RecipeImageWrapper3>
+          <RecipeImageWrapper3
+            onClick={() =>
+              router.push(`/recipes/${aloneRecipes?.[0].recipe_id}`)
+            }
+          >
             <SquareImageWrapper>
               <Image
-                src={DUMMY_DATA[2].image}
+                src={aloneRecipes?.[2].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{DUMMY_DATA[2].title}</TitleOnImage>
+            <TitleOnImage>{aloneRecipes?.[2].recipe_title}</TitleOnImage>
           </RecipeImageWrapper3>
-          <RecipeImageWrapper4>
+          <RecipeImageWrapper4
+            onClick={() =>
+              router.push(`/recipes/${aloneRecipes?.[0].recipe_id}`)
+            }
+          >
             <SquareImageWrapper>
               <Image
-                src={DUMMY_DATA[3].image}
+                src={aloneRecipes?.[3].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{DUMMY_DATA[3].title}</TitleOnImage>
+            <TitleOnImage>{aloneRecipes?.[3].recipe_title}</TitleOnImage>
           </RecipeImageWrapper4>
         </RecipeContainer>
       </StyledContentsArea>
@@ -109,14 +96,13 @@ const MainAlone = () => {
 export default MainAlone;
 
 const RecipeContainer = styled.div`
-  width: 100%;
   max-width: 120rem;
   margin: 0 auto;
   padding: 4rem 2rem;
   display: grid;
-  grid-template-columns: repeat(4, 25rem);
-  grid-template-rows: repeat(2, 25rem);
-  gap: 2.5rem;
+  grid-template-columns: repeat(4, 21rem);
+  grid-template-rows: repeat(2, 21rem);
+  gap: 2rem;
 `;
 
 const RecipeImageWrapperBase = styled.div`
@@ -153,7 +139,7 @@ const SquareImageWrapper = styled.div`
   width: 100%;
   height: 100%;
   cursor: pointer;
-  filter: drop-shadow(0px 2px 16px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.25));
 `;
 
 const TitleOnImage = styled.div`
@@ -167,6 +153,7 @@ const TitleOnImage = styled.div`
   bottom: 2rem;
   font-size: 20px;
   font-weight: 500;
+  cursor: pointer;
   color: white;
   text-shadow: 0px 0.2rem 0.2rem rgba(0, 0, 0, 0.25);
 `;

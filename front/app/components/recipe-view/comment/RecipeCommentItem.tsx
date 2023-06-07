@@ -116,10 +116,10 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
                   onChange={commentChangeHandler}
                 />
               </CommentContainerDiv>
-              <div className="flex gap-[0.8rem] justify-end">
+              <ButtonDiv>
                 <DeleteButton onClick={commentCancelHandler}>취소</DeleteButton>
                 <EditButton onClick={saveClickHandler}>수정</EditButton>
-              </div>
+              </ButtonDiv>
             </>
           ) : (
             <CommentText>{editedCommentText}</CommentText>

@@ -26,7 +26,7 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error(err.response.data.detail);
+        toast.error("로그아웃에 실패하였습니다.");
       })
       .finally(() => {
         setIsLoading(false);
@@ -58,6 +58,20 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
         >
           알림
         </UserModalItem>
+        <UserModalItem
+          onClick={() => {
+            router.push("/my-page/add-recipe");
+          }}
+        >
+          글쓰기
+        </UserModalItem>
+        <UserModalItem
+          onClick={() => {
+            router.push("/my-page/scrap");
+          }}
+        >
+          스크랩
+        </UserModalItem>
         <UnderLine />
         <UserModalItem onClick={logoutHandler}>로그아웃</UserModalItem>
       </UserModalList>
@@ -69,7 +83,7 @@ export default UserModal;
 
 const UserModalContainer = styled.div<{ visible: boolean }>`
   position: absolute;
-  z-index: 9;
+  z-index: 90;
   top: 4.3rem;
   right: 0;
   width: 13.4rem;

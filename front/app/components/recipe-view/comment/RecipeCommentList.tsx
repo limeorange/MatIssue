@@ -1,6 +1,6 @@
 "use client";
 
-import RecipeComment from "./RecipeComment";
+import RecipeComment from "./RecipeCommentItem";
 
 /** 요리 댓글 전체 Props */
 type RecipeCommentProps = {

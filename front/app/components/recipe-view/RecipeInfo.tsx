@@ -42,8 +42,8 @@ const RecipeInfo: React.FC<RecipeInfoProps> = ({ recipe_info, category }) => {
         </RecipeInfoElementDiv>
         <Divider />
         <RecipeInfoElementDiv>
-          <h2>{time}</h2>
-          <span>분</span>
+          {time === 61 ? <h2>1시간</h2> : <h2>{time}</h2>}
+          {time === 61 ? <span>이상</span> : <span>분</span>}
         </RecipeInfoElementDiv>
         <Divider />
         <RecipeInfoElementDiv>

@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
 export const StyledContainer = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  max-width: 120rem;
-  padding: 2rem 2rem 2rem 4rem;
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    max-width: 120rem;
+    padding: 2rem 2rem 4rem 2rem;
+  }
 `;
 
 export const StyledContentsArea = styled.div`
@@ -14,6 +18,7 @@ export const StyledContentsArea = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
+  max-width: 110rem;
   margin: 0 auto;
 `;
 
@@ -41,20 +46,17 @@ export const StyledList = styled.ul`
   font-size: 16px;
 `;
 
-export const ListingRecipeContainer = styled.div<{ contentsPerPage: number }>`
-  padding-top: 2rem;
-  display: flex;
-  overflow-x: auto;
-  gap: 2rem;
-  white-space: nowrap;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
+export const ListingRecipeContainer = styled.div`
   @media (min-width: 768px) {
     display: grid;
-    grid-template-columns: ${(props) =>
-      `repeat(${props.contentsPerPage / 2}, auto)`};
+    grid-template-columns: repeat(3, auto);
+    row-gap: 3rem;
+    column-gap: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
     row-gap: 3rem;
     column-gap: 2rem;
   }
@@ -62,10 +64,17 @@ export const ListingRecipeContainer = styled.div<{ contentsPerPage: number }>`
 
 export const RecipeContainer = styled.div`
   width: 100%;
-  max-width: 105rem;
+  max-width: 96rem;
   margin: 0 auto;
   padding: 4rem 2rem;
   display: grid;
-  grid-template-columns: repeat(3, auto);
-  gap: 5rem;
+  grid-template-columns: repeat(1, 1fr);
+  overflow-hidden;
+  grid-column-gap: 4rem;
+  
+
+  @media (min-width : 1024px){
+    grid-template-columns: repeat(3, 1fr);
+
+  }
 `;

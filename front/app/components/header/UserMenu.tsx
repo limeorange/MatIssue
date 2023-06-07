@@ -53,7 +53,7 @@ const UserMenu = ({ currentUser }: { currentUser: User | null }) => {
               setIsUserModal(false);
             }}
             onClick={() => {
-              setIsUserModal(true);
+              setIsUserModal(!isUserModal);
             }}
           >
             <UserModal isUserModal={isUserModal} />
@@ -89,20 +89,17 @@ const UserMenu = ({ currentUser }: { currentUser: User | null }) => {
 };
 
 const UserMenuDiv = styled.div`
-  display: none;
+  display: flex;
   position: relative;
   gap: 1.6rem;
   font-size: 16px;
   font-weight: 500;
   color: #4f3d21;
   align-items: center;
-
-  @media (min-width: 768px) {
-    display: flex;
-  }
 `;
 
 const ProfileButton = styled.div`
+  display: none;
   padding: 0.6rem 0.2rem;
   cursor: pointer;
 
@@ -114,17 +111,27 @@ const ProfileButton = styled.div`
 
     transition: all 0.3s;
   }
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
 `;
 
 const LoginButton = styled.button`
+  display: none;
   padding: 0.8rem 1.6rem;
   border-radius: 10rem;
   &:hover {
     background-color: rgb(230, 230, 230);
   }
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
 `;
 
 const LogoutButton = styled.button`
+  display: none;
   padding: 0.8rem 1.6rem;
   border-radius: 10rem;
   background-color: #fbd26a;
@@ -133,20 +140,32 @@ const LogoutButton = styled.button`
   }
 
   transition: background-color 0.3s;
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
 `;
 
-const IconButton = styled(LoginButton)`
+const IconButton = styled.div`
   font-size: 16px;
   margin-left: -1rem;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 0.8rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 10rem;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.1);
+    background-color: rgb(230, 230, 230);
   }
 
-  transition: transform 0.3s;
+  transition: all 0.3s;
+
+  @media (min-width: 1024px) {
+    display: flex;
+  }
 `;
 
 export default UserMenu;
