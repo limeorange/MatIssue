@@ -1,23 +1,37 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 type UserScrapProps = {
-  isBooked: boolean;
   scrapClickHandler: () => void;
+  isBooked: boolean;
+  isSaved: boolean;
+  setIsSaved: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 /** 게시글 스크랩 컴포넌트 */
 const RecipeScrap: React.FC<UserScrapProps> = ({
-  isBooked,
   scrapClickHandler,
+  isBooked,
+  isSaved,
+  setIsSaved,
 }) => {
+  // 처음 렌더링 시 클라이언트 사이드에서 로컬스토리지 받아오기 위한 의존성 관리
+  useEffect(() => {
+    const savedMemo = localStorage.getItem("scrapMemo") || "";
+    const hasMemo = savedMemo.trim().length > 0;
+    setIsSaved(hasMemo);
+  }, []);
+
   return (
     <>
       <ScrapWrapperButton onClick={scrapClickHandler}>
         <IconDiv>
           <Image
             src={
-              isBooked
+              isBooked || isSaved
                 ? "/images/recipe-view/scrap_full.svg"
                 : "/images/recipe-view/scrap_empty.svg"
             }
