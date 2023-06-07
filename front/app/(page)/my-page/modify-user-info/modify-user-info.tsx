@@ -1,14 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import styled from "styled-components";
 import Button from "../../../components/UI/Button";
 import React, { useEffect, useState } from "react";
 import ConfirmModal from "../../../components/my-page/ConfirmModal";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import uploadImage from "@/app/api/aws";
 import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
@@ -52,6 +50,8 @@ const ModifyUserInfo: React.FC = () => {
     currentUser?.img
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -68,6 +68,7 @@ const ModifyUserInfo: React.FC = () => {
   };
 
   const uploadProfileImage = async () => {
+    console.log("uploadProfileImage 함수 실행");
     // aws 이미지 업로드 로직
     if (selectedFile) {
       try {
@@ -80,14 +81,24 @@ const ModifyUserInfo: React.FC = () => {
         console.error("Image upload failed:", error);
       }
     }
+    setReadyUpdate(true);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("form 태그 제출");
+    if (
+      password !== confirmPassword ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
     // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
     // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
     // useEffect가 실행되면서 putUser 함수가 실행된다. => 회원정보 변경
-    await uploadProfileImage();
+    uploadProfileImage();
   };
 
   // TODO: modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
@@ -106,11 +117,13 @@ const ModifyUserInfo: React.FC = () => {
   }
 
   useEffect(() => {
-    if (userData?.img) {
+    if (readyUpdate) {
+      console.log("putUser 실행");
       putUser();
+      setReadyUpdate(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData?.img]);
+  }, [readyUpdate === true]);
 
   const handleDeleteAccount = async () => {
     // const confirmDeletion = window.confirm("정말 탈퇴 하시겠습니까?");
@@ -161,13 +174,23 @@ const ModifyUserInfo: React.FC = () => {
     setPreviewImage(null);
   };
 
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    // setUserData((prev: any) => { ...prev, [name]: value });
-    // fix error
-    setUserData((prev: any) => {
-      return { ...prev, [name]: value };
-    });
+    if (name === "password") {
+      setPassword(value);
+    } else if (name === "confirmPassword") {
+      setConfirmPassword(value);
+      setUserData((prev: any) => {
+        return { ...prev, ["password"]: value };
+      });
+    } else {
+      setUserData((prev: any) => {
+        return { ...prev, [name]: value };
+      });
+    }
   };
 
   return (
@@ -175,11 +198,6 @@ const ModifyUserInfo: React.FC = () => {
       <Container>
         <Header>회원정보수정</Header>
         <Divider />
-
-        {/* <Link href="/my-page/modify-user-info/change-password">
-          <ChangePassword>비밀번호 변경</ChangePassword>
-        </Link> */}
-
         <Wrapper>
           <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
           {isModalOpen && (
@@ -229,36 +247,26 @@ const ModifyUserInfo: React.FC = () => {
                 onChange={handleChageInput}
               />
             </Wrapper>
+            <SpaceDiv />
             <Wrapper>
-              <Title>비밀번호 변경</Title>
-              <IputAndDescription>
-                <InputBox
-                  type="password"
-                  name="password"
-                  value={userData?.password}
-                  required
-                  onChange={handleChageInput} // input에 입력한 값이 user 객체에 저장
-                />
-                <PassWordDescription>
-                  변경할 비밀번호를 영문, 숫자, 특수문자를 포함한 8자 이상으로
-                  입력해 주세요.
-                </PassWordDescription>
-              </IputAndDescription>
+              <Title>비밀번호 </Title>
+              <InputBox
+                type="password"
+                name="password"
+                id="password"
+                value={password}
+                onChange={handleChageInput}
+              />
             </Wrapper>
             <Wrapper>
               <Title>비밀번호 확인</Title>
-              <IputAndDescription>
-                <InputBox
-                  type="password"
-                  name="password"
-                  value={userData?.password}
-                  required
-                  onChange={handleChageInput}
-                />
-                <PassWordDescription>
-                  변경할 비밀번호를 한 번 더 입력해 주세요.
-                </PassWordDescription>
-              </IputAndDescription>
+              <InputBox
+                type="password"
+                name="confirmPassword"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={handleChageInput}
+              />
             </Wrapper>
           </WrapperInfo>
 
@@ -273,7 +281,7 @@ const ModifyUserInfo: React.FC = () => {
                   </button>
                 </>
               ) : (
-                "클릭하여 사진 업로드"
+                <StyledImage src="/images/dongs-logo.png" alt="Default" />
               )}
             </LabelForFile>
             {!previewImage && (
@@ -469,4 +477,22 @@ const InputDateBox = styled.input`
 const UserModifyButton = styled.div`
   margin: 6rem 0 0 17rem;
   width: 23rem;
+`;
+
+//패스워드 유효성 검사
+
+const SpaceDiv = styled.div`
+  display: block;
+  height: 1rem;
+`;
+
+const ShowIconBox = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  top: 1.1rem;
+  right: 1.1rem;
+  cursor: pointer;
 `;
