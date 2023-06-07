@@ -148,7 +148,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     // 필터바로 레시피 필터링
     if (filter.servings > 0) {
       result = result.filter(
-        (recipe) => recipe.recipe_info.serving === filter.servings
+        (recipe) => recipe.recipe_info?.serving === filter.servings
       );
       urlParams.set("servings", filter.servings.toString());
     } else {
@@ -157,7 +157,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
     if (filter.duration > 0) {
       result = result.filter(
-        (recipe) => recipe.recipe_info.time === filter.duration
+        (recipe) => recipe.recipe_info?.time === filter.duration
       );
       urlParams.set("duration", filter.duration.toString());
     } else {
@@ -166,7 +166,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
     if (filter.difficulty > -1) {
       result = result.filter(
-        (recipe) => recipe.recipe_info.level === filter.difficulty
+        (recipe) => recipe.recipe_info?.level === filter.difficulty
       );
       urlParams.set("difficulty", filter.difficulty.toString());
     } else {
@@ -241,7 +241,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = filteredRecipes?.slice(
+  const currentRecipes = filteredRecipes.slice(
     indexOfFirstRecipe,
     indexOfLastRecipe
   );
