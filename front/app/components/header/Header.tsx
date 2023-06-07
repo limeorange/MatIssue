@@ -9,18 +9,19 @@ import UserMenu from "./UserMenu";
 import CategoryBar from "./CategoryBar";
 
 import { User } from "@/app/types";
-import getCurrentUser from "@/app/api/user";
 import Cookies from "js-cookie";
+import getCurrentUser from "@/app/api/user";
 
-const Header = () => {
-  const {
-    data: currentUser,
-    isLoading,
-    isError,
-  } = useQuery<User>(["currentUser"], () => getCurrentUser(), {
-    refetchOnWindowFocus: false,
-    retry: 0,
-  });
+const Header = ({ currentUser }: { currentUser: User }) => {
+  const { data, isLoading, isError } = useQuery<User>(
+    ["currentUser"],
+    () => getCurrentUser(),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: currentUser,
+    }
+  );
 
   if (isError) {
     Cookies.remove("session_id");
@@ -32,7 +33,7 @@ const Header = () => {
         <TopNav>
           <Logo />
           <SearchBar />
-          {isLoading ? null : <UserMenu currentUser={currentUser} />}
+          {isLoading ? null : <UserMenu currentUser={data} />}
         </TopNav>
         <CategoryBar />
       </NavArea>

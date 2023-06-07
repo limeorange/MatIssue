@@ -175,7 +175,7 @@ const SignupClient = () => {
               id="user_id"
               disabled={isLoading}
               {...register("user_id", {
-                required: "아이디는 필수 입력입니다.",
+                required: "아이디를 입력하세요.",
                 pattern: {
                   value: /^[A-Za-z0-9]+$/,
                   message: "아이디는 영어와 숫자만 가능합니다.",
@@ -204,7 +204,7 @@ const SignupClient = () => {
               type="email"
               disabled={isLoading}
               {...register("email", {
-                required: "아이디를 입력해주세요.",
+                required: "이메일을 입력하세요.",
                 pattern: {
                   value: /\S+@\S+\.\S+/,
                   message: "이메일 형식에 맞지 않습니다.",
@@ -225,7 +225,7 @@ const SignupClient = () => {
               type="text"
               disabled={isLoading}
               {...register("username", {
-                required: "닉네임을 입력해주세요.",
+                required: "닉네임을 입력하세요.",
                 minLength: {
                   value: 2,
                   message: "닉네임은 최소 2글자 이상이여야 합니다.",
