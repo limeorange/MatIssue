@@ -151,16 +151,14 @@ const SignupClient = () => {
       username: data.username,
       email: data.email,
       password: data.password,
-      img: "https://i.namu.wiki/i/RrseCWTwXTo445l7nuAaGqYcQr7Q89xOHCCNYSsLklYFMfD40lVZSIxrYTMi8cwOJUHLxRDvkJ-XNvjGr6lZJcwXEQyVT6c6NCKTG0iSWyizpDF1M6H93-FM4YUuqL2uhmZJU0j3aMc7pdWLhAz5bQ.webp",
+      img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
       birth_date: birthDate,
     };
 
     axiosBase
       .post("users/", userData)
       .then((res) => {
-        console.log(res.data);
-        toast.success("회원가입이 완료되었습니다!");
-        router.push("/");
+        router.push("/auth/signup/complete");
       })
       .catch((err) => toast.error(err.response.data.detail))
       .finally(() => setIsLoading(false));
@@ -270,7 +268,7 @@ const SignupClient = () => {
                     value:
                       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/,
                     message:
-                      "비밀번호는 영문, 숫자 특수문자 조합으로 8자 이상 입력해야합니다.",
+                      "비밀번호는 영문 대소문자, 숫자, 특수문자 조합으로 8자 이상 입력해야합니다.",
                   },
                 })}
                 placeholder="비밀번호를 입력하세요."
