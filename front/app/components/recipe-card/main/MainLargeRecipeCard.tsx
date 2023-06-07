@@ -64,16 +64,21 @@ export default LargeRecipeCard;
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateY(-100%);
+    transform: translateX(-100%);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 `;
 
 const SlideContainer = styled.div`
   overflow: hidden;
+  &:hover {
+    transform: scale(1.03);
+  }
+
+  transition: all 0.5s;
 `;
 
 const CardContainer = styled.div`
@@ -84,12 +89,6 @@ const CardContainer = styled.div`
   border-radius: 1.6rem;
   color: #4f3d21;
   cursor: pointer;
-
-  &:hover {
-    transform: scale(1.03);
-  }
-
-  transition: all 0.5s;
 
   opacity: 0;
   transform: translateX(100%);
@@ -114,6 +113,14 @@ const RecipeTitleBox = styled.div`
   width: 100%;
   font-size: 18px;
   font-weight: 500;
+
+  & h3 {
+    text-align: start;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 `;
 
 const RecipeInfoBox = styled.div`
