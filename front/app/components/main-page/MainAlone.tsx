@@ -13,6 +13,10 @@ import styled from "styled-components";
 const MainAlone = ({ aloneRecipes }: { aloneRecipes: Recipe[] }) => {
   const router = useRouter();
 
+  if (aloneRecipes.length < 5) {
+    return null;
+  }
+
   return (
     <StyledContainer>
       <StyledContentsArea>
