@@ -10,6 +10,7 @@ import ThumbnailUpload from "@/app/components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection";
 import Button from "@/app/components/UI/Button";
 import { postRecipe } from "@/app/api/recipe";
+import { toast } from "react-hot-toast";
 
 type RecipeFormState = {
   selectedCategory: string;
@@ -207,14 +208,78 @@ const RecipeForm = () => {
         description: stepDetail,
       })),
       recipe_tip: state.cookingTips,
-      user_id: "admin",
     };
 
-    console.log(recipeData);
+    // 카테고리 검사
+    if (state.selectedCategory === "") {
+      toast.error("카테고리를 선택해주세요.");
+      return;
+    }
+
+    // 인원 수 검사
+    if (state.selectedPeople === "") {
+      toast.error("인원 수를 선택해주세요.");
+      return;
+    }
+
+    // 소요 시간 검사
+    if (state.selectedTime === "") {
+      toast.error("소요 시간을 선택해주세요.");
+      return;
+    }
+
+    // 난이도 검사
+    if (state.selectedDifficulty === "") {
+      toast.error("난이도를 선택해주세요.");
+      return;
+    }
+
+    // 섬네일 이미지 검사
+    if (state.selectedImage === "") {
+      toast.error("섬네일 이미지를 선택해주세요.");
+      return;
+    }
+
+    // 레시피 제목 검사
+    if (state.recipeTitle === "") {
+      toast.error("레시피 제목을 입력해주세요.");
+      return;
+    }
+
+    // 요리 소개 검사
+    if (state.cookingIntro === "") {
+      toast.error("요리 소개를 입력해주세요.");
+      return;
+    }
+
+    // 재료 검사
+    const hasEmptyIngredient = state.ingredients.some(
+      (ingredient) => ingredient.ingredient === "" || ingredient.quantity === ""
+    );
+    if (hasEmptyIngredient) {
+      toast.error("재료와 양을 모두 입력해주세요.");
+      return;
+    }
+
+    // 요리과정 유효성 검사
+    const hasEmptyStep = state.steps.some(
+      (step) => step.stepDetail.trim() === ""
+    );
+    if (hasEmptyStep) {
+      toast.error("요리과정을 모두 입력해주세요.");
+      return;
+    }
+
+    // 요리 팁 검사
+    if (state.cookingTips === "") {
+      toast.error("요리 팁을 입력해주세요.");
+      return;
+    }
 
     try {
       const response = await postRecipe(recipeData);
       console.log(response);
+      toast.success("레시피 등록이 되었습니다!");
       router.push("/category/newest?category=newest");
     } catch (error) {
       console.log(error);
