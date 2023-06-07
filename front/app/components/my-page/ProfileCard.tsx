@@ -6,8 +6,13 @@ import Button from "../../components/UI/Button";
 import { useQuery } from "@tanstack/react-query";
 import { Recipe, User } from "@/app/types";
 
-const ProfileCard = ({ currentUser }: { currentUser: User }) => {
-  const [recipes, setFilteredRecipes] = useState<Recipe[]>([]);
+type ProfileCardProps = {
+  currentUser: User;
+  recipes?: Recipe[];
+};
+
+const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
   // const { data: currentUser } = useQuery<User>(["currentUser"]);
   // console.log("currentUser : ", currentUser.);
   return (
@@ -47,7 +52,7 @@ const ProfileCard = ({ currentUser }: { currentUser: User }) => {
               alt="레시피 아이콘"
             />
             <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-            <MyRecipeCount>{recipes.length}</MyRecipeCount>
+            <MyRecipeCount>{filteredRecipes.length}</MyRecipeCount>
           </StyledLink>
 
           {/* 나의 스크랩 버튼 */}
@@ -57,7 +62,7 @@ const ProfileCard = ({ currentUser }: { currentUser: User }) => {
               alt="스크랩 아이콘"
             />
             <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>{recipes.length}</MyRecipeCount>
+            <MyRecipeCount>{filteredRecipes.length}</MyRecipeCount>
           </StyledLink>
         </div>
         <Link href="/add-recipe">
