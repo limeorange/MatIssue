@@ -9,10 +9,7 @@ const ViewPage = async ({ params }: { params: { id: string } }) => {
   /** 레시피 조회 데이터 */
   const recipe = await getRecipeById(recipe_id);
 
-  /** 레시피 댓글 데이터 (dummy json 파일 이용) */
-  const recipeComment = commentsData;
-
-  return <RecipeDetail recipe={recipe} recipeComment={recipeComment} />;
+  return <RecipeDetail recipe={recipe} />;
 };
 
 export default ViewPage;
