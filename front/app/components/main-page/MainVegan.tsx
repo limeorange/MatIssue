@@ -6,7 +6,7 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import styled from "styled-components";
-import LargeRecipeCard from "../recipe-card/LargeRecipeCard";
+import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
 import { useState } from "react";
 import Image from "next/image";

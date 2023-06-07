@@ -5,7 +5,7 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import styled from "styled-components";
-import LargeRecipeCard from "../recipe-card/LargeRecipeCard";
+import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -64,7 +64,7 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
     setFilteredRecipes(randomSelection);
   }, [selectedIngredient, recipes]);
 
-  // 선택한
+  /**  재료 선택 핸들러 */
   const ingredientSelectHandler: React.MouseEventHandler<HTMLButtonElement> = (
     e
   ) => {
