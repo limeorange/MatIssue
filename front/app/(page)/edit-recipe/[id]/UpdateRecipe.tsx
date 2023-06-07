@@ -95,6 +95,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     cookingTips: recipe_tip,
     videoLink: recipe_video,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -123,7 +124,11 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
   // 레시피 제목
   const handleRecipeTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, recipeTitle: e.target.value });
+    if (e.target.value.length > 23) {
+      toast.error("레시피 제목은 23자까지만 입력 가능합니다.");
+    } else {
+      setState({ ...state, recipeTitle: e.target.value });
+    }
   };
 
   // 요리 소개
@@ -267,21 +272,38 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       return;
     }
 
-    // 재료 검사
+    // 재료 유효성 검사
     const hasEmptyIngredient = state.ingredients.some(
-      (ingredient) => ingredient.ingredient === "" || ingredient.quantity === ""
+      (ingredient) => ingredient.ingredient === ""
     );
     if (hasEmptyIngredient) {
-      toast.error("재료와 양을 모두 입력해주세요.");
+      toast.error("재료를 입력해주세요.");
       return;
     }
 
-    // 요리과정 유효성 검사
-    const hasEmptyStep = state.steps.some(
-      (step) => step.stepDetail.trim() === ""
+    // 양 유효성 검사
+    const hasEmptyQuantity = state.ingredients.some(
+      (ingredient) => ingredient.quantity === ""
     );
-    if (hasEmptyStep) {
-      toast.error("요리과정을 모두 입력해주세요.");
+    if (hasEmptyQuantity) {
+      toast.error("재료의 양을 입력해주세요.");
+      return;
+    }
+
+    // 요리 과정 유효성 검사
+    const hasEmptyStepDetail = state.steps.some(
+      (step) => step.stepDetail === ""
+    );
+    if (hasEmptyStepDetail) {
+      toast.error("요리 과정을 입력해주세요.");
+      return;
+    }
+
+    // 요리 과정 사진 유효성 검사
+    const hasEmptyStepImage = state.stepImages.length === 0;
+
+    if (hasEmptyStepImage) {
+      toast.error("요리 과정의 이미지를 추가해주세요.");
       return;
     }
 
@@ -291,6 +313,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
       const response = await updateRecipe(recipe_id, recipeData);
       console.log(response);
@@ -298,6 +322,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       router.push("/category/newest?category=newest");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -380,12 +406,24 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       </CookingTips>
       <ButtonContainer>
         <SaveButton>
-          <Button onClick={handleUpdate} type="button" isBgColor fullWidth>
-            수정
+          <Button
+            onClick={handleUpdate}
+            type="button"
+            isBgColor
+            fullWidth
+            disabled={isLoading}
+          >
+            {isLoading ? "수정 중..." : "수정"}
           </Button>
         </SaveButton>
         <CancleButton>
-          <Button onClick={handleCancel} type="button" isBorderColor fullWidth>
+          <Button
+            onClick={handleCancel}
+            type="button"
+            isBorderColor
+            fullWidth
+            disabled={isLoading}
+          >
             취소
           </Button>
         </CancleButton>

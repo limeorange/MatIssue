@@ -273,26 +273,30 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
         <PageHeaderContainer>
           <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
           <SortButtonContainer>
-            {category !== "best" && category !== "newest" && (
-              <>
-                <SortButton
-                  selected={sortMethod === "date"}
-                  onClick={() =>
-                    setSortMethod((prev) => (prev === "date" ? null : "date"))
-                  }
-                >
-                  최신순
-                </SortButton>
-                <SortButton
-                  selected={sortMethod === "likes"}
-                  onClick={() =>
-                    setSortMethod((prev) => (prev === "likes" ? null : "likes"))
-                  }
-                >
-                  인기순
-                </SortButton>
-              </>
-            )}
+            {category !== "best" &&
+              category !== "newest" &&
+              currentRecipes.length > 0 && (
+                <>
+                  <SortButton
+                    selected={sortMethod === "date"}
+                    onClick={() =>
+                      setSortMethod((prev) => (prev === "date" ? null : "date"))
+                    }
+                  >
+                    최신순
+                  </SortButton>
+                  <SortButton
+                    selected={sortMethod === "likes"}
+                    onClick={() =>
+                      setSortMethod((prev) =>
+                        prev === "likes" ? null : "likes"
+                      )
+                    }
+                  >
+                    인기순
+                  </SortButton>
+                </>
+              )}
           </SortButtonContainer>
         </PageHeaderContainer>
         {currentRecipes.length > 0 ? (
