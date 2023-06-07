@@ -279,10 +279,10 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
     // 요리과정 유효성 검사
     const hasEmptyStep = state.steps.some(
-      (step) => step.stepDetail.trim() === ""
+      (step) => step.stepDetail.trim() === "" || step.stepImage.trim() === ""
     );
     if (hasEmptyStep) {
-      toast.error("요리과정을 모두 입력해주세요.");
+      toast.error("요리과정과 요리사진을 모두 입력해주세요.");
       return;
     }
 

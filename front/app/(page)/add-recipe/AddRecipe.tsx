@@ -91,7 +91,11 @@ const RecipeForm = () => {
 
   // 레시피 제목
   const handleRecipeTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, recipeTitle: e.target.value });
+    if (e.target.value.length > 23) {
+      toast.error("레시피 제목은 23자까지만 입력 가능합니다.");
+    } else {
+      setState({ ...state, recipeTitle: e.target.value });
+    }
   };
 
   // 요리 소개
@@ -264,10 +268,10 @@ const RecipeForm = () => {
 
     // 요리과정 유효성 검사
     const hasEmptyStep = state.steps.some(
-      (step) => step.stepDetail.trim() === ""
+      (step) => step.stepDetail.trim() === "" || step.stepImage.trim() === ""
     );
     if (hasEmptyStep) {
-      toast.error("요리과정을 모두 입력해주세요.");
+      toast.error("요리과정과 요리사진을 모두 입력해주세요.");
       return;
     }
 
