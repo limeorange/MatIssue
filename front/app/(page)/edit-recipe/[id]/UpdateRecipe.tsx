@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import VideoSection from "@/app/components/add-recipe/VideoSection";
 import IngredientSection from "@/app/components/add-recipe/IngredientSection";
@@ -8,8 +9,8 @@ import CategoryAndInfo from "@/app/components/add-recipe/CategoryAndInfo";
 import ThumbnailUpload from "@/app/components/add-recipe/ThumbnailUpload";
 import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection";
 import Button from "@/app/components/UI/Button";
-import { axiosBase } from "@/app/api/axios";
 import { updateRecipe } from "@/app/api/recipe";
+import { toast } from "react-hot-toast";
 
 type Recipe = {
   recipe_category: string;
@@ -60,6 +61,7 @@ const times = [
 const difficulties = ["쉬움", "중간", "어려움"];
 
 const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
+  const router = useRouter();
   const {
     recipe_category,
     recipe_info,
@@ -241,9 +243,59 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       recipe_tip: state.cookingTips,
     };
 
+    // 카테고리 검사
+    if (state.selectedCategory === "") {
+      toast.error("카테고리를 선택해주세요.");
+      return;
+    }
+
+    // 섬네일 이미지 검사
+    if (state.selectedImage === "") {
+      toast.error("섬네일 이미지를 선택해주세요.");
+      return;
+    }
+
+    // 레시피 제목 검사
+    if (state.recipeTitle === "") {
+      toast.error("레시피 제목을 입력해주세요.");
+      return;
+    }
+
+    // 요리 소개 검사
+    if (state.cookingIntro === "") {
+      toast.error("요리 소개를 입력해주세요.");
+      return;
+    }
+
+    // 재료 검사
+    const hasEmptyIngredient = state.ingredients.some(
+      (ingredient) => ingredient.ingredient === "" || ingredient.quantity === ""
+    );
+    if (hasEmptyIngredient) {
+      toast.error("재료와 양을 모두 입력해주세요.");
+      return;
+    }
+
+    // 요리과정 유효성 검사
+    const hasEmptyStep = state.steps.some(
+      (step) => step.stepDetail.trim() === ""
+    );
+    if (hasEmptyStep) {
+      toast.error("요리과정을 모두 입력해주세요.");
+      return;
+    }
+
+    // 요리 팁 검사
+    if (state.cookingTips === "") {
+      toast.error("요리 팁을 입력해주세요.");
+      return;
+    }
+
     try {
       const response = await updateRecipe(recipe_id, recipeData);
       console.log(response);
+      toast.success("레시피 수정이 되었습니다!");
+      router.push("/category/newest?category=newest");
     } catch (error) {
       console.log(error);
     }
@@ -251,8 +303,9 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
   // 취소 핸들러
   const handleCancel = () => {
-    // 취소
+    history.back();
   };
+
   return (
     <FormWrapper>
       <Title>레시피 수정하기</Title>
