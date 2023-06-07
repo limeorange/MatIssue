@@ -26,7 +26,7 @@ export const StyledTitleBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.6rem 0;
+  padding: 1.6rem 0 0 0;
   align-items: center;
 `;
 
