@@ -1,23 +1,14 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import Button from "../../components/UI/Button";
 import { useQuery } from "@tanstack/react-query";
-import { type } from "os";
+import { Recipe, User } from "@/app/types";
 
-type User = {
-  user_id: string;
-  email: string;
-  username: string;
-  img: string;
-  birth_date: string;
-  created_at: string;
-};
-
-const ProfileCard = () => {
-  const { data: currentUser } = useQuery<User>(["currentUser"]);
-
+const ProfileCard = ({ currentUser }: { currentUser: User }) => {
+  const [recipes, setFilteredRecipes] = useState<Recipe[]>([]);
+  // const { data: currentUser } = useQuery<User>(["currentUser"]);
   // console.log("currentUser : ", currentUser.);
   return (
     <ProfileContainer>
@@ -51,7 +42,7 @@ const ProfileCard = () => {
         <StyledLink href="/my-page">
           <MyRecipeIcon src="/images/recipe-icon.png" alt="레시피 아이콘" />
           <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-          <MyRecipeCount>5</MyRecipeCount>
+          <MyRecipeCount>{recipes.length}</MyRecipeCount>
         </StyledLink>
         <Link href="/add-recipe">
           <UploadRecipeButton>

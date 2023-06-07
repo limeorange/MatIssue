@@ -2,184 +2,71 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Button from "../../components/UI/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import RecipeCard from "../recipe-card/RecipeCard";
-import Image from "next/image";
+import { axiosBase } from "@/app/api/axios";
+import NonRecipe from "../UI/NonRecipe";
+import { Recipe } from "@/app/types";
 
-interface Recipe {
-  image: string;
-  title: string;
-  author: string;
-  likes: number;
-  view: string;
-  id: string;
-  timestamp: number;
-}
+// type Recipe = {
+//   recipe_title: string;
+//   recipe_thumbnail: string;
+//   recipe_id: string;
+//   recipe_view: number;
+//   user_id: string;
+//   user_nickname: string;
+//   created_at: string;
+//   recipe_like: number;
+// };
 
-const DUMMY_DATA: Recipe[] = [
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "ex1",
-    timestamp: 1,
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "혼자 알기 아까운 후토마끼 레시피",
-    author: "킹갓제너럴팀장윤수",
-    likes: 1112,
-    view: "15,324",
-    id: "ex2",
-    timestamp: 2,
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "전여자친구가 해주던 그 맛의 유부초밥",
-    author: "영앤리치톨엔인텔리",
-    likes: 1134,
-    view: "15,324",
-    id: "ex3",
-    timestamp: 3,
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "자취생을 위한 초간단 계란 초밥",
-    author: "브라우니물어",
-    likes: 1435,
-    view: "15,324",
-    id: "ex4",
-    timestamp: 4,
-  },
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1144,
-    view: "15,324",
-    id: "ex1",
-    timestamp: 5,
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "혼자 알기 아까운 후토마끼 레시피",
-    author: "킹갓제너럴팀장윤수",
-    likes: 1518,
-    view: "15,324",
-    id: "ex2",
-    timestamp: 6,
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "전여자친구가 해주던 그 맛의 유부초밥",
-    author: "영앤리치톨엔인텔리",
-    likes: 2324,
-    view: "15,324",
-    id: "ex3",
-    timestamp: 8,
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "자취생을 위한 초간단 계란 초밥",
-    author: "브라우니물어",
-    likes: 3324,
-    view: "15,324",
-    id: "ex4",
-    timestamp: 11,
-  },
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1888,
-    view: "15,324",
-    id: "ex1",
-    timestamp: 9,
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "혼자 알기 아까운 후토마끼 레시피",
-    author: "킹갓제너럴팀장윤수",
-    likes: 1999,
-    view: "15,324",
-    id: "ex2",
-    timestamp: 10,
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "전여자친구가 해주던 그 맛의 유부초밥",
-    author: "영앤리치톨엔인텔리",
-    likes: 4324,
-    view: "15,324",
-    id: "ex3",
-    timestamp: 14,
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "자취생을 위한 초간단 계란 초밥",
-    author: "브라우니물어",
-    likes: 1098,
-    view: "15,324",
-    id: "ex4",
-    timestamp: 12,
-  },
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1987,
-    view: "15,324",
-    id: "ex1",
-    timestamp: 13,
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "혼자 알기 아까운 후토마끼 레시피",
-    author: "킹갓제너럴팀장윤수",
-    likes: 1324,
-    view: "15,324",
-    id: "ex2",
-    timestamp: 16,
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "전여자친구가 해주던 그 맛의 유부초밥",
-    author: "영앤리치톨엔인텔리",
-    likes: 1324,
-    view: "15,324",
-    id: "ex3",
-    timestamp: 15,
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "자취생을 위한 초간단 계란 초밥",
-    author: "브라우니물어",
-    likes: 1551,
-    view: "15,324",
-    id: "ex4",
-    timestamp: 20,
-  },
-];
+const RecipeCards = ({ userId }: { userId: string | undefined }) => {
+  const [recipes, setFilteredRecipes] = useState<Recipe[]>([]);
 
-const RecipeCards = () => {
-  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(DUMMY_DATA);
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const response = await axiosBase.get(`/recipes/user/${userId}`);
+        console.log("response  : ", response);
+        setFilteredRecipes(response.data.recipes);
+      } catch (error) {
+        console.error(
+          "레시피 데이터를 가져오는 중에 오류가 발생했습니다:",
+          error
+        );
+      }
+    };
+
+    fetchRecipes();
+  }, []);
+
+  const handleDeleteRecipe = async (id: string) => {
+    const updatedRecipes = recipes.filter((recipe) => recipe.recipe_id !== id);
+    setFilteredRecipes(updatedRecipes);
+
+    try {
+      // 서버로 DELETE 요청 보내기
+      await axiosBase.delete(`recipes/${id}`);
+      console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
+    } catch (error) {
+      console.error(
+        "레시피 삭제 요청을 보내는 중에 오류가 발생했습니다:",
+        error
+      );
+    }
+  };
 
   return (
     <RecipeListContainer>
       <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{filteredRecipes.length}</RecipeHeadingCount>
+      <RecipeHeadingCount>{recipes.length}</RecipeHeadingCount>
+      {recipes.length === 0 && <NonRecipeMsg />}
       <RecipeList>
-        {filteredRecipes.length === 0 && (
-          <div>레시피가 없습니다. 레시피를 추가해주세요!</div>
-        )}
-        {filteredRecipes.map((data, index) => (
-          <RecipeCardWrapper key={index}>
-            <StyledRecipeCard data={data} />
-            <button onClick={() => console.log("Image button clicked!")}>
-              <DeleteButtonImage src="/images/delete-button.png" alt="X-box" />
+        {recipes.map((recipe) => (
+          <RecipeCardWrapper key={recipe.recipe_id}>
+            <StyledRecipeCard recipe={recipe} />
+            <button onClick={() => handleDeleteRecipe(recipe.recipe_id)}>
+              <DeleteButtonImage src="/images/x-box.png" alt="X-box" />
             </button>
           </RecipeCardWrapper>
         ))}
@@ -187,6 +74,7 @@ const RecipeCards = () => {
     </RecipeListContainer>
   );
 };
+
 export default RecipeCards;
 
 // 레시피 리스트
@@ -198,7 +86,7 @@ const RecipeListContainer = styled.div`
 const RecipeHeading = styled.span`
   font-size: 18px;
   letter-spacing: 0.01em;
-  margin: 0 0.5rem 0 0.7rem;
+  margin: 0 0.5rem 0 1.9rem;
   font-weight: 600;
   color: #4f3d21;
 `;
@@ -226,7 +114,13 @@ const StyledRecipeCard = styled(RecipeCard)`
 const DeleteButtonImage = styled.img`
   position: absolute;
   top: 21rem;
-  right: 1.4rem;
+  right: 1.5rem;
   width: 1.8rem;
   height: 1.8rem;
+  transition: transform 0.1s ease-in-out;
+  &:hover {
+    transform: scale(1.2);
+  }
 `;
+
+const NonRecipeMsg = styled(NonRecipe)``;
