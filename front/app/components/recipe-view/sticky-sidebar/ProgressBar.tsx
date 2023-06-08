@@ -30,7 +30,7 @@ const ProgressBar = () => {
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
-      if (screenWidth <= 768) {
+      if (screenWidth <= 900) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
