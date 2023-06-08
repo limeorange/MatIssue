@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type ScrapCardProps = {
   memoContent: string;
@@ -30,11 +31,17 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
   } = memoItemData;
 
   const hasMemo = memoContent ? true : false;
-  // const router = useRouter();
 
+  // const router = useRouter();
   // const scrapClickHandler = (recipe_id: string) => {
   //   router.push(`/recipes/${recipe_id}`);
   // };
+
+  const scrapDeleteHandler = () => {
+    const memoKey = `memo_${memoItemData.recipe_id}`;
+    localStorage.removeItem(memoKey);
+    toast.success("해당 스크랩이 삭제되었습니다!");
+  };
 
   return (
     <>
@@ -94,7 +101,7 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
         </MemoContainerDiv>
 
         <ButtonDiv>
-          <DeleteButton>삭제</DeleteButton>
+          <DeleteButton onClick={scrapDeleteHandler}>삭제</DeleteButton>
           {/* <SaveButton onClick={memoSaveHandler}>저장</SaveButton> */}
         </ButtonDiv>
       </ScrapCardContainerDiv>
@@ -195,6 +202,10 @@ const DeleteButton = styled.button`
   font-weight: 500;
   font-size: 16px;
   color: #4f3d21;
+
+  &:hover {
+    background-color: #fbe2a1;
+  }
 `;
 
 export default ScrapCardItem;
