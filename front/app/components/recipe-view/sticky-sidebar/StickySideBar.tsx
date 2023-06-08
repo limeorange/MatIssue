@@ -16,7 +16,7 @@ const StickySideBar = () => {
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
-      if (screenWidth <= 768) {
+      if (screenWidth <= 900) {
         setSidebarVisible(false);
       } else {
         setSidebarVisible(true);
