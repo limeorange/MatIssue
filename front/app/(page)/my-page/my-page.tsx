@@ -9,12 +9,12 @@ import { User, Recipe } from "@/app/types";
 const MyPage = ({ currentUserRecipes }: { currentUserRecipes: Recipe[] }) => {
   const { data } = useQuery<User>(["currentUser"]);
 
-  const recipesLength = currentUserRecipes.length;
+  // const recipesLength = currentUserRecipes.length;
   console.log(currentUserRecipes);
   return (
     <Container>
       <Wrapper>
-        <ProfileCard currentUser={data} recipesLength={recipesLength} />
+        <ProfileCard currentUser={data} />
         <RecipeCards initialCurrentUserRecipes={currentUserRecipes} />
       </Wrapper>
     </Container>
