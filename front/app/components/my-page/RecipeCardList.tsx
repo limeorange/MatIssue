@@ -5,7 +5,7 @@ import RecipeCard from "../recipe-card/RecipeCard";
 import { axiosBase } from "@/app/api/axios";
 import NonRecipe from "../UI/NonRecipe";
 import { Recipe } from "@/app/types";
-import ConfirmModal from "./ConfirmModal";
+import ConfirmModal from "../UI/ConfirmModal";
 import Pagination from "../pagination/Pagination";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRecipeByUserId } from "@/app/api/recipe";
@@ -32,7 +32,7 @@ const RecipeCards = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const recipesPerPage = 16;
+  const recipesPerPage = 12;
 
   const handleOpenModal = (recipe: Recipe) => {
     setRecipeToDelete(recipe);
@@ -78,11 +78,11 @@ const RecipeCards = ({
     <RecipeListContainer>
       <RecipeHeading>나의 레시피</RecipeHeading>
       <RecipeHeadingCount>{currentUserRecipes?.length}</RecipeHeadingCount>
-      {currentUserRecipes.length === 0 ? (
+      {currentUserRecipes?.length === 0 ? (
         <NonRecipeMsg />
       ) : (
         <RecipeList>
-          {currentUserRecipes.map((recipe: Recipe) => (
+          {currentUserRecipes?.map((recipe: Recipe) => (
             <RecipeCardWrapper key={recipe.recipe_id}>
               <StyledRecipeCard recipe={recipe} />
               <button onClick={() => handleOpenModal(recipe)}>
@@ -100,10 +100,10 @@ const RecipeCards = ({
           onCancel={handleCloseModal}
         />
       )}
-      {currentUserRecipes.length > 0 && (
+      {currentUserRecipes?.length > 0 && (
         <PaginationComponent
           recipesPerPage={recipesPerPage}
-          totalRecipes={currentUserRecipes.length}
+          totalRecipes={currentUserRecipes?.length}
           paginate={paginate}
           currentPage={currentPage}
         />

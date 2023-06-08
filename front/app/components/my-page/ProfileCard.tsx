@@ -4,10 +4,10 @@ import styled from "styled-components";
 import Link from "next/link";
 import Button from "../../components/UI/Button";
 import { Recipe, User } from "@/app/types";
+import { useQuery } from "@tanstack/react-query";
 
 type ProfileCardProps = {
   currentUser: User;
-  recipesLength: number;
   recipes?: Recipe[];
 };
 
@@ -21,10 +21,10 @@ const getAllMemoItems = () => {
 
 const scrapsLength = getAllMemoItems().length;
 
-const ProfileCard: React.FC<ProfileCardProps> = ({
-  currentUser,
-  recipesLength,
-}) => {
+const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
+  const { data: currentUserRecipes } = useQuery<Recipe[]>([
+    "currentUserRecipes",
+  ]);
   return (
     <ProfileContainer>
       <ProfileWrapper>
@@ -65,7 +65,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
               alt="레시피 아이콘"
             />
             <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-            <MyRecipeCount>{recipesLength}</MyRecipeCount>
+            <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
           </StyledLink>
 
           {/* 나의 스크랩 버튼 */}
