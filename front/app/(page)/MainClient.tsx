@@ -9,16 +9,24 @@ import MainNewest from "../components/main-page/MainNewest";
 import MainWrapper from "../components/main-page/MainWrapper";
 import { Recipe } from "../types";
 
-const MainPageClient = ({ recipes }: { recipes: Recipe[] }) => {
+type MainPageClientProps = {
+  recipes: Recipe[];
+  bestRecipes: Recipe[];
+  newestRecipes: Recipe[];
+  singleRecipes: Recipe[];
+  vegetarianRecipes: Recipe[];
+};
+
+const MainPageClient = (props: MainPageClientProps) => {
   return (
     <>
       <Banner />
       <MainWrapper>
-        <MainBest bestRecipes={recipes} />
-        <MainFridge recipes={recipes} />
-        <MainAlone aloneRecipes={recipes} />
-        <MainVegan veganRecipes={recipes} />
-        <MainNewest newestRecipes={recipes} />
+        <MainBest initialBestRecipes={props.bestRecipes} />
+        <MainFridge recipes={props.recipes} />
+        <MainAlone singleRecipes={props.singleRecipes} />
+        <MainVegan vegetarianRecipes={props.vegetarianRecipes} />
+        <MainNewest newestRecipes={props.newestRecipes} />
       </MainWrapper>
     </>
   );

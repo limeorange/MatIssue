@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "styled-components";
-import RecipeCards from "../../components/my-page/RecipeCards";
+import RecipeCards from "../../components/my-page/RecipeCardList";
 import ProfileCard from "../../components/my-page/ProfileCard";
 
 const Admin = () => {

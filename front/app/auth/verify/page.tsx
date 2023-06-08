@@ -16,7 +16,7 @@ const VerifyEmail = () => {
         .get(`email/verify?code=${verifyCode}`)
         .then((res) => toast.success("가입이 완료되었습니다."))
         .catch((err) => toast.error("인증이 올바르지 않습니다."))
-        .finally(() => router.push("/"));
+        .finally(() => router.replace("/"));
     }
   }, []);
 

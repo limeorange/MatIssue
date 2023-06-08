@@ -6,12 +6,80 @@ type ScrapModalProps = {
   modalCloseHandler: () => void;
   setIsSaved: React.Dispatch<React.SetStateAction<boolean>>;
   localStorageKey: string;
+  recipe: {
+    recipe_title: string;
+    recipe_thumbnail: string;
+    recipe_video: string;
+    recipe_description: string;
+    recipe_category: string;
+    recipe_info: {
+      serving: number;
+      time: number;
+      level: number;
+    };
+    recipe_ingredients: {
+      name: string;
+      amount: string;
+    }[];
+    recipe_sequence: {
+      step: number;
+      picture: string;
+      description: string;
+    }[];
+    recipe_tip: string;
+    recipe_id: string;
+    recipe_view: number;
+    recipe_like: number;
+    user_id: string;
+    user_nickname: string;
+    created_at: string;
+
+    // 댓글 관련 Data Type 정의
+    comments: {
+      comment_author: string;
+      comment_text: string;
+      comment_like: number;
+      comment_id: string;
+      created_at: string;
+      comment_parent: string;
+      updated_at: string;
+    };
+  };
 };
+
+/** 스크랩 모달 컴포넌트 */
 const ScrapModal: React.FC<ScrapModalProps> = ({
   modalCloseHandler,
   setIsSaved,
   localStorageKey,
+  recipe,
 }) => {
+  // 스크랩 카드에 필요한 정보만 객체 분해 할당
+  const {
+    created_at,
+    recipe_id,
+    recipe_like,
+    recipe_thumbnail,
+    recipe_title,
+    recipe_view,
+    user_id,
+    user_nickname,
+  } = recipe;
+
+  // 스크랩 카드 데이터 한 object에 모으기
+  const scrapData = {
+    created_at,
+    recipe_id,
+    recipe_like,
+    recipe_thumbnail,
+    recipe_title,
+    recipe_view,
+    user_id,
+    user_nickname,
+  };
+
+  console.log(scrapData);
+
   // 스크랩 모달 이동 상태 관리
   const [isDragging, setIsDragging] = useState(false);
 
@@ -22,8 +90,8 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   const hasMemo = memo.trim().length > 0;
 
   // 스크랩 메모 원본 상태 관리
-  const originalLocal = localStorage.getItem(localStorageKey);
-  const originalMemo = originalLocal ? originalLocal : "";
+  const originalSaved = localStorage.getItem(localStorageKey);
+  const originalMemo = originalSaved ? JSON.parse(originalSaved)[0] : "";
 
   // 스크랩 모달창 자유 이동 설정
   const modalRef = useRef<HTMLDivElement>(null);
@@ -59,10 +127,10 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 
   /** 메모 저장 버튼 핸들러 */
   const memoSaveHandler = () => {
-    localStorage.setItem(localStorageKey, memo);
+    localStorage.setItem(localStorageKey, JSON.stringify([memo, scrapData]));
     // memo 내용이 있으면 색칠된 아이콘 표시하고,
     // 내용 없을 시 아이콘 색칠 해제를 위한 상태값 부여
-    setIsSaved(memo ? true : false);
+    setIsSaved(localStorage.getItem(localStorageKey) ? true : false);
     modalCloseHandler();
   };
 
@@ -76,7 +144,8 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   useEffect(() => {
     const savedMemo = localStorage.getItem(localStorageKey);
     if (savedMemo) {
-      setMemo(savedMemo);
+      const memoArray = JSON.parse(savedMemo);
+      setMemo(memoArray[0]);
     }
   }, []);
 

@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { User } from "@/app/types";
-import NavBar from "../../components/my-page/NavBar";
+import ConfirmModal from "@/app/components/my-page/ConfirmModal";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: currentUser, isLoading } = useQuery<User>(["currentUser"]);
@@ -15,16 +15,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return null;
   }
 
-  if (!currentUser) {
-    // 로그인되어 있지 않은 경우 로그인 페이지로 리다이렉트
+  const handleLogin = () => {
     router.replace("/auth/login");
-    return null;
+  };
+
+  const handleCancel = () => {
+    router.replace("/");
+  };
+
+  if (!currentUser) {
+    return (
+      <ConfirmModal
+        message="글을 수정하시려면 로그인이 필요합니다."
+        onConfirm={handleLogin}
+        onCancel={handleCancel}
+      />
+    );
   }
 
-  return (
-    <>
-      <NavBar />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

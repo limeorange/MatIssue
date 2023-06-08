@@ -97,7 +97,7 @@ const IngredientInput = styled.input`
   padding: 1rem;
   font-size: 16px;
   &:focus {
-    border: 0.1rem solid #d9d9d9;
+    border: 0.1rem solid #fbd26a;
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
@@ -112,7 +112,7 @@ const QuantityInput = styled.input`
   padding: 1rem;
   font-size: 16px;
   &:focus {
-    border: 0.1rem solid #d9d9d9;
+    border: 0.1rem solid #fbd26a;
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }

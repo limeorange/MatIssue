@@ -16,6 +16,7 @@ export const StyledContainer = styled.div`
 export const StyledContentsArea = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 2rem;
   justify-content: center;
   width: 100%;
   max-width: 110rem;
