@@ -1,10 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import Image from "next/image";
 import { Recipe } from "@/app/types";
-import { useEffect, useState } from "react";
 
 const MainRecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
@@ -21,6 +20,7 @@ const MainRecipeCard = ({ recipe }: { recipe: Recipe }) => {
           alt="게시물 썸네일 이미지"
           width={270}
           height={200}
+          objectFit="cover"
         />
       </RecipeImg>
       <RecipeTitle>
@@ -83,6 +83,7 @@ const RecipeImg = styled.div`
   overflow: hidden;
   img {
     transition: transform 0.3s ease-in-out;
+    object-fit: cover;
     &:hover {
       transform: scale(1.1);
     }
