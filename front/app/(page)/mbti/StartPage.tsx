@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styled from "styled-components";
-import Button from "../UI/Button";
+import Button from "@/app/components/UI/Button";
 import { useSetRecoilState } from "recoil";
 import { EIState, JPState, SNState, TFState } from "@/app/store/mbtiAtom";
 
@@ -23,7 +23,7 @@ const StartPage = () => {
   return (
     <>
       <StratPageWrapper>
-        <StartPageTitle>
+        <StartPageTitle isAnimateOut={isAnimateOut}>
           M<span>uk</span>BTI 테스트
         </StartPageTitle>
         <StartPageMessage isAnimateOut={isAnimateOut}>
@@ -51,7 +51,7 @@ const StartPage = () => {
                 setSN(0);
                 setTF(0);
                 setJP(0);
-              }, 1000);
+              }, 0);
             }}
           >
             테스트 시작하기
@@ -82,20 +82,9 @@ const StratPageWrapper = styled.div`
       opacity: 1;
     }
   }
-
-  @keyframes slideOut {
-    0% {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    100% {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-  }
 `;
 
-const StartPageTitle = styled.p`
+const StartPageTitle = styled.p<StyledComponentProps>`
   font-size: 80px;
   color: #fbd26a;
   font-family: "Dongle-Bold";
@@ -105,8 +94,11 @@ const StartPageTitle = styled.p`
     font-size: 40px;
   }
 
-  animation: slideUp 0.6s ease-in-out;
-  animation-delay: 0.2s;
+  animation: ${(props) =>
+    props.isAnimateOut
+      ? "slideOut 1.3s ease-in-out"
+      : "slideUp 1s ease-in-out"};
+  animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
 
 const StartPageMessage = styled.p<StyledComponentProps>`
@@ -114,7 +106,9 @@ const StartPageMessage = styled.p<StyledComponentProps>`
   color: #4f3d21;
 
   animation: ${(props) =>
-    props.isAnimateOut ? "slideOut 1s ease-in-out" : "slideUp 1s ease-in-out"};
+    props.isAnimateOut
+      ? "slideOut 1.3s ease-in-out"
+      : "slideUp 1s ease-in-out"};
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
 
@@ -144,7 +138,7 @@ const ButtonBox = styled.div<StyledComponentProps>`
 
   animation: ${(props) =>
     props.isAnimateOut
-      ? "slideOut 1s ease-in-out"
+      ? "slideOut 1.3s ease-in-out"
       : "slideUp 1.5s ease-in-out"};
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.4s")};
 `;

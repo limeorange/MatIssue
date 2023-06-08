@@ -1,9 +1,9 @@
-import MbtiClient from "./MbtiClient";
+import StartPage from "./StartPage";
 
 const MbtiPage = () => {
   return (
     <>
-      <MbtiClient />
+      <StartPage />
     </>
   );
 };
