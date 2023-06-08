@@ -11,6 +11,7 @@ import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection
 import Button from "@/app/components/UI/Button";
 import { updateRecipe } from "@/app/api/recipe";
 import { toast } from "react-hot-toast";
+import LoadingModal from "@/app/components/UI/LoadingModal";
 
 type Recipe = {
   recipe_category: string;
@@ -315,16 +316,18 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
     setIsLoading(true);
 
-    try {
-      const response = await updateRecipe(recipe_id, recipeData);
-      console.log(response);
-      toast.success("레시피 수정이 되었습니다!");
-      router.push("/category/newest?category=newest");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+    updateRecipe(recipe_id, recipeData)
+      .then((res) => {
+        console.log(res);
+        toast.success("레시피 수정이 되었습니다!");
+        router.push("/category/newest?category=newest");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.detail);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   // 취소 핸들러
@@ -334,6 +337,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
   return (
     <FormWrapper>
+      {isLoading && <LoadingModal />}
       <Title>레시피 수정하기</Title>
       <MainSection>
         <ImageContainer>
