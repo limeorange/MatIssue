@@ -199,8 +199,8 @@ const MyRecipeTitle = styled.h4`
 
 const MyRecipeCount = styled.h4`
   margin-top: 0.4rem;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   color: #4f3d21;
 `;
 
