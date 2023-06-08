@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   if (!currentUser) {
     return (
       <ConfirmModal
-        message="글을 작성하시려면 로그인이 필요합니다."
+        message="글을 수정하시려면 로그인이 필요합니다."
         onConfirm={handleLogin}
         onCancel={handleCancel}
       />
