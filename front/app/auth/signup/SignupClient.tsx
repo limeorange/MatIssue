@@ -158,7 +158,7 @@ const SignupClient = () => {
     axiosBase
       .post("users/", userData)
       .then((res) => {
-        router.push("/auth/signup/complete");
+        router.replace("/auth/signup/complete");
       })
       .catch((err) => toast.error(err.response.data.detail))
       .finally(() => setIsLoading(false));

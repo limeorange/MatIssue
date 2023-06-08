@@ -82,7 +82,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
               alt="스크랩 아이콘"
             />
             <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>0</MyRecipeCount>
+            <MyRecipeCount>{recipes.length}</MyRecipeCount>
           </StyledLink>
         </div>
         <Link href="/add-recipe">

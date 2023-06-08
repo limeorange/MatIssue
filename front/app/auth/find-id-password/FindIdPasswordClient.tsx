@@ -168,7 +168,7 @@ const FindIdPasswordClient = () => {
       {message && (
         <ConfirmModal
           onConfirm={() => {
-            router.push("/auth/login");
+            router.replace("/auth/login");
           }}
           onClose={() => {
             setMessage("");

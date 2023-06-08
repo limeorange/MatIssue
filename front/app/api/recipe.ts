@@ -13,6 +13,10 @@ export const getRecipeById = async (recipe_id: string) => {
 export const getAllRecipes = async () => {
   try {
     const response = await axiosBase.get("/recipes/");
+
+    if (!response.data) {
+      return [];
+    }
     return response.data;
   } catch (err: any) {
     console.log(err.response.data.detail);
@@ -24,6 +28,10 @@ export const getRecipesByParams = async (searchParams: any) => {
     const response = await axiosBase.get(
       `/recipes/search?value=${searchParams}`
     );
+
+    if (!response.data) {
+      return [];
+    }
     return response.data;
   } catch (err: any) {
     console.log(err.response.data.detail);
@@ -35,6 +43,10 @@ export const getRecipesByCategory = async (category: string) => {
     const response = await axiosBase.get(
       `/recipes/categories?value=${category}`
     );
+
+    if (!response.data) {
+      return [];
+    }
     return response.data;
   } catch (err: any) {
     console.log(err.response.data.detail);
@@ -44,6 +56,10 @@ export const getRecipesByCategory = async (category: string) => {
 export const getRecipesByPopularity = async () => {
   try {
     const response = await axiosBase.get("/recipes/popularity");
+
+    if (!response.data) {
+      return [];
+    }
     return response.data;
   } catch (err: any) {
     console.log(err.response.data.detail);

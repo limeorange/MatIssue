@@ -1,5 +1,5 @@
-import { getCurrentUserSS } from "../action/getCurrentUser";
 import Header from "../components/header/Header";
+import { getCurrentUserSS } from "../action/getCurrentUser";
 
 export default async function Layout({
   children,
