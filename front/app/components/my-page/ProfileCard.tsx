@@ -1,40 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
 import styled from "styled-components";
 import Link from "next/link";
 import Button from "../../components/UI/Button";
-import { useQuery } from "@tanstack/react-query";
 import { Recipe, User } from "@/app/types";
-import { axiosBase } from "@/app/api/axios";
 
 type ProfileCardProps = {
   currentUser: User;
+  recipesLength: number;
   recipes?: Recipe[];
 };
 
-const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-  useEffect(() => {
-    console.log("object");
-    fetchRecipes();
-  }, []);
-
-  const fetchRecipes = async () => {
-    try {
-      const response = await axiosBase.get(`/recipes/user`);
-      console.log("response  : ", response);
-      setRecipes(response.data.recipes);
-    } catch (error) {
-      console.error(
-        "레시피 데이터를 가져오는 중에 오류가 발생했습니다:",
-        error
-      );
-    }
-  };
-
-  // const { data: currentUser } = useQuery<User>(["currentUser"]);
-  // console.log("currentUser : ", currentUser.);
+const ProfileCard: React.FC<ProfileCardProps> = ({
+  currentUser,
+  recipesLength,
+}) => {
   return (
     <ProfileContainer>
       <ProfileWrapper>
@@ -72,7 +52,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
               alt="레시피 아이콘"
             />
             <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-            <MyRecipeCount>{recipes.length}</MyRecipeCount>
+            <MyRecipeCount>{recipesLength}</MyRecipeCount>
           </StyledLink>
 
           {/* 나의 스크랩 버튼 */}
@@ -82,7 +62,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
               alt="스크랩 아이콘"
             />
             <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>{recipes.length}</MyRecipeCount>
+            <MyRecipeCount>0</MyRecipeCount>
           </StyledLink>
         </div>
         <Link href="/add-recipe">

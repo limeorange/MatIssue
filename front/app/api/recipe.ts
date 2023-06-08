@@ -83,3 +83,18 @@ export const updateRecipe = async (recipe_id: string, recipeData: any) => {
     console.log("Error updating recipe:", error);
   }
 };
+
+export const getRecipeByUserId = async () => {
+  try {
+    const response = await axiosBase.get("/recipes/user");
+
+    if (!response.data.recipes) {
+      return [];
+    }
+
+    return response.data.recipes;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};

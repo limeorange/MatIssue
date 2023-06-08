@@ -1,7 +1,5 @@
-import Link from "next/link";
 import styled from "styled-components";
-import Button from "../UI/Button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import React from "react";
 import RecipeCard from "../recipe-card/RecipeCard";
 import { axiosBase } from "@/app/api/axios";
@@ -9,13 +7,28 @@ import NonRecipe from "../UI/NonRecipe";
 import { Recipe } from "@/app/types";
 import ConfirmModal from "./ConfirmModal";
 import Pagination from "../pagination/Pagination";
-import { useSearchParams } from "next/navigation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getRecipeByUserId } from "@/app/api/recipe";
 
 const RecipeCards = ({
-  currentUserRecipes,
+  initialCurrentUserRecipes,
 }: {
-  currentUserRecipes: Recipe[];
+  initialCurrentUserRecipes: Recipe[];
 }) => {
+  const { data: currentUserRecipes } = useQuery(
+    ["currentUserRecipes"],
+    () => getRecipeByUserId(),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: initialCurrentUserRecipes,
+    }
+  );
+
+  console.log(currentUserRecipes);
+
+  const client = useQueryClient();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -39,6 +52,7 @@ const RecipeCards = ({
     try {
       await axiosBase.delete(`recipes/${id}`);
       console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
+      client.invalidateQueries(["currentUserRecipes"]);
       // setIsModalOpen(false);
     } catch (error) {
       console.error(
@@ -55,7 +69,7 @@ const RecipeCards = ({
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = currentUserRecipes.slice(
+  const currentRecipes = currentUserRecipes?.slice(
     indexOfFirstRecipe,
     indexOfLastRecipe
   );
@@ -63,12 +77,12 @@ const RecipeCards = ({
   return (
     <RecipeListContainer>
       <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{currentUserRecipes.length}</RecipeHeadingCount>
+      <RecipeHeadingCount>{currentUserRecipes?.length}</RecipeHeadingCount>
       {currentUserRecipes.length === 0 ? (
         <NonRecipeMsg />
       ) : (
         <RecipeList>
-          {currentUserRecipes.map((recipe) => (
+          {currentUserRecipes.map((recipe: Recipe) => (
             <RecipeCardWrapper key={recipe.recipe_id}>
               <StyledRecipeCard recipe={recipe} />
               <button onClick={() => handleOpenModal(recipe)}>
