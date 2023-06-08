@@ -51,10 +51,12 @@ const ModifyUserInfo: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
 
+  // TODO: password 주석 시작
   const [password, setPassword] = useState({
     password: "",
     confirmPassword: "",
   });
+  // TODO: password 주석 끝
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -89,6 +91,8 @@ const ModifyUserInfo: React.FC = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("form 태그 제출");
+
+    // TODO: 아래 if문 제거 시작
     if (
       password.password === password.confirmPassword && // 비밀번호와 비밀번호 확인이 같은지
       password.password.length >= 8 && // 비밀번호가 8자리 이상인지
@@ -107,6 +111,10 @@ const ModifyUserInfo: React.FC = () => {
         "비빌번호를 확인해주세요. 8자리 이상, 대소문자, 숫자, 특수문자가 포함되어어 있어야 합니다."
       );
     }
+    // TODO: 아래 if문 제거 끝
+
+    // TODO: 주석 해제
+    // uploadProfileImage();
   };
 
   // modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
@@ -114,7 +122,7 @@ const ModifyUserInfo: React.FC = () => {
   async function modifyUser() {
     const modifyUserInfo = {
       ...userData,
-      password: password.password,
+      password: password.password, // TODO: 주석처리
     };
 
     try {
@@ -252,6 +260,7 @@ const ModifyUserInfo: React.FC = () => {
               />
             </Wrapper>
             <SpaceDiv />
+            {/* TODO: 비밀번호 입력칸 주석 시작 */}
             <Wrapper>
               <Title>비밀번호 </Title>
               <InputBox
@@ -272,6 +281,7 @@ const ModifyUserInfo: React.FC = () => {
                 onChange={handleChageInput}
               />
             </Wrapper>
+            {/* TODO: 비밀번호 입력칸 주석 끝 */}
           </WrapperInfo>
 
           <ProfileImageWrapper>

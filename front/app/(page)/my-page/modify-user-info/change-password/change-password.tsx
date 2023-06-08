@@ -3,9 +3,10 @@
 import styled from "styled-components";
 import Button from "../../../../components/UI/Button";
 import React, { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { axiosBase } from "@/app/api/axios";
 import { useRouter } from "next/navigation";
+import ConfirmModal from "../../../../components/UI/ConfirmModal";
 
 type User = {
   password: string;
@@ -17,6 +18,23 @@ const ChangePassword = () => {
     password: "",
     confirmPassword: "",
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleChangePassword = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirm = () => {
+    setIsModalOpen(false);
+    // 비밀번호 변경 로직 처리
+    console.log("비밀번호가 성공적으로 변경되었습니다.");
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const router = useRouter();
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,53 +69,65 @@ const ChangePassword = () => {
     console.log("modifyUserInfo : ", modifyUserInfo);
     try {
       const response = await axiosBase.patch("users", modifyUserInfo);
-      alert("회원정보가 수정되었습니다.");
-      router.push("/my-page");
+      alert("비밀번호가 변경되었습니다.");
+      router.push("/my-page/modify-user-info");
     } catch (error) {
       console.error(error);
     }
   }
 
   return (
-    <Container>
-      <Wrapper>
-        <Header>비밀번호 변경</Header>
-        <form onSubmit={handleFormSubmit}>
-          <NewPassword>새 비밀번호</NewPassword>
-          <PasswordInstruction>
-            영문, 숫자, 특수문자를 포함한 8자 이상의 비밀번호를 입력해주세요.
-          </PasswordInstruction>
-          <InputBox
-            type="password"
-            name="password"
-            id="password"
-            value={password?.password}
-            onChange={handleChangeInput}
-            required
-          />
-          <PasswordConfirm>새 비밀번호 확인</PasswordConfirm>
-          <InputBox
-            type="password"
-            name="confirmPassword"
-            id="confirmPassword"
-            value={password?.confirmPassword}
-            onChange={handleChangeInput}
-            required
-          />
-          <ChangePasswordButton>
-            <Button
-              type="submit"
-              isBgColor={true}
-              fullWidth={true}
-              isBorderColor={false}
-              isHoverColor={false}
-            >
-              비밀번호 변경
-            </Button>
-          </ChangePasswordButton>
-        </form>
-      </Wrapper>
-    </Container>
+    <>
+      <Container>
+        <Wrapper>
+          <Header>비밀번호 변경</Header>
+          <form onSubmit={handleFormSubmit}>
+            <NewPassword>새 비밀번호</NewPassword>
+            <PasswordInstruction>
+              영문, 숫자, 특수문자를 포함한 8자 이상의 비밀번호를 입력해주세요.
+            </PasswordInstruction>
+            <InputBox
+              type="password"
+              name="password"
+              id="password"
+              value={password?.password}
+              onChange={handleChangeInput}
+              required
+            />
+            <PasswordConfirm>새 비밀번호 확인</PasswordConfirm>
+            <InputBox
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
+              value={password?.confirmPassword}
+              onChange={handleChangeInput}
+              required
+            />
+            <ChangePasswordButton>
+              <Button
+                type="submit"
+                isBgColor={true}
+                fullWidth={true}
+                isBorderColor={false}
+                isHoverColor={false}
+                onClick={handleChangePassword}
+              >
+                비밀번호 변경
+              </Button>
+            </ChangePasswordButton>
+          </form>
+        </Wrapper>
+      </Container>
+      {isModalOpen && (
+        <ConfirmModal
+          icon={null}
+          message="비밀번호가 성공적으로 변경되었습니다."
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+          showCancelButton={false}
+        />
+      )}
+    </>
   );
 };
 

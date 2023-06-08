@@ -32,7 +32,7 @@ const RecipeCards = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const recipesPerPage = 9;
+  const recipesPerPage = 12;
 
   const handleOpenModal = (recipe: Recipe) => {
     setRecipeToDelete(recipe);
