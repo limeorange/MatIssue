@@ -1,5 +1,7 @@
+import WorldcupStart from "./WorldcupStart";
+
 const worldcup = () => {
-  return <h1>worldcup page</h1>;
+  return <WorldcupStart />;
 };
 
 export default worldcup;
