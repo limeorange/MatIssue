@@ -10,10 +10,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 
-const MainAlone = ({ aloneRecipes }: { aloneRecipes: Recipe[] }) => {
+const MainAlone = ({ singleRecipes }: { singleRecipes: Recipe[] }) => {
   const router = useRouter();
 
-  if (aloneRecipes.length < 5) {
+  console.log(singleRecipes);
+
+  if (singleRecipes.length < 5) {
     return null;
   }
 
@@ -29,63 +31,63 @@ const MainAlone = ({ aloneRecipes }: { aloneRecipes: Recipe[] }) => {
         <RecipeContainer>
           <RecipeImageWrapperBase
             onClick={() =>
-              router.push(`/recipes/${aloneRecipes?.[0].recipe_id}`)
+              router.push(`/recipes/${singleRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
               <Image
-                src={aloneRecipes?.[0].recipe_thumbnail}
+                src={singleRecipes?.[0].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{aloneRecipes?.[0].recipe_title}</TitleOnImage>
+            <TitleOnImage>{singleRecipes?.[0].recipe_title}</TitleOnImage>
           </RecipeImageWrapperBase>
           <RecipeImageWrapper2
             onClick={() =>
-              router.push(`/recipes/${aloneRecipes?.[0].recipe_id}`)
+              router.push(`/recipes/${singleRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
               <Image
-                src={aloneRecipes?.[1].recipe_thumbnail}
+                src={singleRecipes?.[1].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{aloneRecipes?.[1].recipe_title}</TitleOnImage>
+            <TitleOnImage>{singleRecipes?.[1].recipe_title}</TitleOnImage>
           </RecipeImageWrapper2>
           <RecipeImageWrapper3
             onClick={() =>
-              router.push(`/recipes/${aloneRecipes?.[0].recipe_id}`)
+              router.push(`/recipes/${singleRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
               <Image
-                src={aloneRecipes?.[2].recipe_thumbnail}
+                src={singleRecipes?.[2].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{aloneRecipes?.[2].recipe_title}</TitleOnImage>
+            <TitleOnImage>{singleRecipes?.[2].recipe_title}</TitleOnImage>
           </RecipeImageWrapper3>
           <RecipeImageWrapper4
             onClick={() =>
-              router.push(`/recipes/${aloneRecipes?.[0].recipe_id}`)
+              router.push(`/recipes/${singleRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
               <Image
-                src={aloneRecipes?.[3].recipe_thumbnail}
+                src={singleRecipes?.[3].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{aloneRecipes?.[3].recipe_title}</TitleOnImage>
+            <TitleOnImage>{singleRecipes?.[3].recipe_title}</TitleOnImage>
           </RecipeImageWrapper4>
         </RecipeContainer>
       </StyledContentsArea>
