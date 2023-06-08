@@ -3,20 +3,20 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Button from "../../components/UI/Button";
-import RecipeCards from "../../components/my-page/RecipeCards";
+import RecipeCards from "../../components/my-page/RecipeCardList";
 import { useEffect, useState } from "react";
 import ProfileCard from "../../components/my-page/ProfileCard";
 import { useQuery } from "@tanstack/react-query";
-import { User } from "@/app/types";
+import { User, Recipe } from "@/app/types";
 
-const MyPage = () => {
+const MyPage = ({ currentUserRecipes }: { currentUserRecipes: Recipe[] }) => {
   const { data } = useQuery<User>(["currentUser"]);
   return (
     <>
       <Container>
         <Wrapper>
           <ProfileCard currentUser={data} />
-          <RecipeCards />
+          <RecipeCards currentUserRecipes={currentUserRecipes} />
         </Wrapper>
       </Container>
     </>

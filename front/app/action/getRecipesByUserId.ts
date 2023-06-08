@@ -12,14 +12,12 @@ export async function getRecipesByUserIdSS() {
           Cookie: `session-id=${session_id}`,
         },
       });
-      if (response.data === undefined) {
-        return null;
+      if (!response.data) {
+        return [];
       }
       return response.data;
     } catch (err: any) {
-      return null;
+      return [];
     }
   }
-
-  return null;
 }
