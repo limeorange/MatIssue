@@ -98,7 +98,7 @@ export default MainAlone;
 const RecipeContainer = styled.div`
   max-width: 120rem;
   margin: 0 auto;
-  padding: 4rem 2rem;
+  padding: 2rem 2rem;
   display: grid;
   grid-template-columns: repeat(4, 21rem);
   grid-template-rows: repeat(2, 21rem);
