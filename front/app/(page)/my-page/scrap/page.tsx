@@ -1,8 +1,10 @@
+import { getRecipesByUserIdSS } from "@/app/action/getRecipesByUserId";
 import Scrap from "./ScrapPage";
 
 /** 레시피 스크랩 조회 페이지 컴포넌트 */
-const ScrapPage = () => {
-  return <Scrap />;
+const ScrapPage = async () => {
+  const currentUserRecipes = await getRecipesByUserIdSS();
+  return <Scrap currentUserRecipes={currentUserRecipes} />;
 };
 
 export default ScrapPage;

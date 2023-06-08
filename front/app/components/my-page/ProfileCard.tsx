@@ -11,6 +11,16 @@ type ProfileCardProps = {
   recipes?: Recipe[];
 };
 
+/** 로컬스토리지에 있는 아이템 모두 가져오는 함수 */
+const getAllMemoItems = () => {
+  const keys = Object.keys(localStorage);
+  const memoItems = keys.filter((key) => key.startsWith("memo_"));
+  const memoItemValues = memoItems.map((key) => localStorage.getItem(key));
+  return memoItemValues;
+};
+
+const scrapsLength = getAllMemoItems().length;
+
 const ProfileCard: React.FC<ProfileCardProps> = ({
   currentUser,
   recipesLength,
@@ -65,7 +75,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
               alt="스크랩 아이콘"
             />
             <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>0</MyRecipeCount>
+            <MyRecipeCount>{scrapsLength}</MyRecipeCount>
           </StyledLink>
         </div>
         <Link href="/add-recipe">
