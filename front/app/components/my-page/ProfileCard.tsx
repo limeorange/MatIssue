@@ -11,6 +11,16 @@ type ProfileCardProps = {
   recipes?: Recipe[];
 };
 
+/** 로컬스토리지에 있는 아이템 모두 가져오는 함수 */
+const getAllMemoItems = () => {
+  const keys = Object.keys(localStorage);
+  const memoItems = keys.filter((key) => key.startsWith("memo_"));
+  const memoItemValues = memoItems.map((key) => localStorage.getItem(key));
+  return memoItemValues;
+};
+
+const scrapsLength = getAllMemoItems().length;
+
 const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
   const { data: currentUserRecipes } = useQuery<Recipe[]>([
     "currentUserRecipes",
@@ -19,7 +29,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
     <ProfileContainer>
       <ProfileWrapper>
         <Link href="/my-page/notification">
-          <NotificationIcon src="/images/notification.png" alt="알림 아이콘" />
+          <NotificationIcon
+            src="/images/my-page/notification.svg"
+            alt="알림 아이콘"
+          />
           <NotificationDot />
         </Link>
 
@@ -36,7 +49,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
               isBorderColor={true}
               fullWidth={true}
               fullHeight={true}
-              isSmallFont={true}
+              isMediumFont={true}
               isHoverColor={true}
             >
               회원정보수정
@@ -62,7 +75,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
               alt="스크랩 아이콘"
             />
             <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>0</MyRecipeCount>
+            <MyRecipeCount>{scrapsLength}</MyRecipeCount>
           </StyledLink>
         </div>
         <Link href="/add-recipe">
@@ -92,7 +105,7 @@ const ProfileContainer = styled.div`
   border-radius: 2.3rem;
   height: 47rem;
   margin-right: 4rem;
-  margin-top: 3rem;
+  margin-top: 4.1rem;
 `;
 
 const ProfileWrapper = styled.div`
@@ -140,13 +153,13 @@ const ProfileImage = styled.img`
 
 const NickName = styled.h1`
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 600;
   margin: 1rem;
   color: #4f3d21;
 `;
 
 const ModifyUserDiv = styled.div`
-  width: 10rem;
+  width: 12rem;
 `;
 
 const Divider = styled.div`
@@ -176,8 +189,8 @@ const MyRecipeTitle = styled.h4`
 
 const MyRecipeCount = styled.h4`
   margin-top: 0.4rem;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   color: #4f3d21;
 `;
 

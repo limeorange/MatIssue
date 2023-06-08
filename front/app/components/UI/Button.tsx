@@ -14,6 +14,7 @@ type ButtonProps = {
   onClick?: () => void;
   disabled?: boolean;
   isSmallFont?: boolean;
+  isMediumFont?: boolean;
 };
 
 const Button = (props: ButtonProps) => {
@@ -28,6 +29,7 @@ const Button = (props: ButtonProps) => {
     onClick,
     disabled,
     isSmallFont,
+    isMediumFont,
   } = props;
   return (
     <StyledButton
@@ -40,6 +42,7 @@ const Button = (props: ButtonProps) => {
       fullHeight={fullHeight}
       disabled={disabled}
       isSmallFont={isSmallFont}
+      isMediumFont={isMediumFont}
     >
       {children}
     </StyledButton>
@@ -60,7 +63,8 @@ const StyledButton = styled.button<ButtonProps>`
       props.isHoverColor ? "#FBD26A" : "#F8B551"}; 
   }
 
-font-size: ${(props) => (props.isSmallFont ? "12px" : "16px")};
+font-size: ${(props) =>
+  props.isSmallFont ? "12px" : props.isMediumFont ? "15px" : "16px"};
   background-color: ${(props) => (props.isBgColor ? "#FBD26A" : "#ffffff")};
   border: ${(props) => (props.isBorderColor ? "0.2rem solid #FBD26A" : "none")};
   width: ${(props) => props.fullWidth && "100%"};
