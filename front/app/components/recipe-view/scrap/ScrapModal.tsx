@@ -162,7 +162,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
           <ScrapTitleDiv>
             <Image
               src="/images/recipe-view/note.svg"
-              alt="게시글 좋아요 하트"
+              alt="스크랩 노트 이모티콘"
               width={36}
               height={35}
               style={{ objectFit: "cover" }}
