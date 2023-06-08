@@ -39,7 +39,10 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
     <ProfileContainer>
       <ProfileWrapper>
         <Link href="/my-page/notification">
-          <NotificationIcon src="/images/notification.png" alt="알림 아이콘" />
+          <NotificationIcon
+            src="/images/my-page/notification.svg"
+            alt="알림 아이콘"
+          />
           <NotificationDot />
         </Link>
 
@@ -56,7 +59,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
               isBorderColor={true}
               fullWidth={true}
               fullHeight={true}
-              isSmallFont={true}
+              isMediumFont={true}
               isHoverColor={true}
             >
               회원정보수정
@@ -112,7 +115,7 @@ const ProfileContainer = styled.div`
   border-radius: 2.3rem;
   height: 47rem;
   margin-right: 4rem;
-  margin-top: 3rem;
+  margin-top: 4.1rem;
 `;
 
 const ProfileWrapper = styled.div`
@@ -160,13 +163,13 @@ const ProfileImage = styled.img`
 
 const NickName = styled.h1`
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 600;
   margin: 1rem;
   color: #4f3d21;
 `;
 
 const ModifyUserDiv = styled.div`
-  width: 10rem;
+  width: 12rem;
 `;
 
 const Divider = styled.div`
