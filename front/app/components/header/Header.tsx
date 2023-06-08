@@ -11,8 +11,13 @@ import CategoryBar from "./CategoryBar";
 import { User } from "@/app/types";
 import Cookies from "js-cookie";
 import getCurrentUser from "@/app/api/user";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { loginState } from "@/app/store/authAtom";
 
 const Header = ({ currentUser }: { currentUser: User }) => {
+  const setIsLoggedIn = useSetRecoilState(loginState);
+
   const { data, isLoading, isError } = useQuery<User>(
     ["currentUser"],
     () => getCurrentUser(),
@@ -22,6 +27,14 @@ const Header = ({ currentUser }: { currentUser: User }) => {
       initialData: currentUser,
     }
   );
+
+  useEffect(() => {
+    if (currentUser) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [currentUser]);
 
   if (isError) {
     Cookies.remove("session_id");

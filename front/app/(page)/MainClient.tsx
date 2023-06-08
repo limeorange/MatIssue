@@ -12,6 +12,9 @@ import { Recipe } from "../types";
 type MainPageClientProps = {
   recipes: Recipe[];
   bestRecipes: Recipe[];
+  newestRecipes: Recipe[];
+  singleRecipes: Recipe[];
+  vegetarianRecipes: Recipe[];
 };
 
 const MainPageClient = (props: MainPageClientProps) => {
@@ -21,9 +24,9 @@ const MainPageClient = (props: MainPageClientProps) => {
       <MainWrapper>
         <MainBest initialBestRecipes={props.bestRecipes} />
         <MainFridge recipes={props.recipes} />
-        <MainAlone aloneRecipes={props.recipes} />
-        <MainVegan veganRecipes={props.recipes} />
-        <MainNewest newestRecipes={props.recipes} />
+        <MainAlone singleRecipes={props.singleRecipes} />
+        <MainVegan vegetarianRecipes={props.vegetarianRecipes} />
+        <MainNewest newestRecipes={props.newestRecipes} />
       </MainWrapper>
     </>
   );
