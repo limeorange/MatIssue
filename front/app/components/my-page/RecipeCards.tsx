@@ -8,11 +8,18 @@ import { axiosBase } from "@/app/api/axios";
 import NonRecipe from "../UI/NonRecipe";
 import { Recipe } from "@/app/types";
 import ConfirmModal from "../my-page/ConfirmModal";
+import Pagination from "../pagination/Pagination";
+import { useSearchParams } from "next/navigation";
 
 const RecipeCards = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const recipesPerPage = 16;
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get("query"); // URL의 query값 추출
+  const category = searchParams.get("category");
 
   useEffect(() => {
     fetchRecipes();
@@ -61,6 +68,14 @@ const RecipeCards = () => {
     setIsModalOpen(false);
   };
 
+  // 페이지네이션
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // 현재 페이지 데이터
+  const indexOfLastRecipe = currentPage * recipesPerPage;
+  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+
   return (
     <RecipeListContainer>
       <RecipeHeading>나의 레시피</RecipeHeading>
@@ -69,7 +84,7 @@ const RecipeCards = () => {
         <NonRecipeMsg />
       ) : (
         <RecipeList>
-          {recipes.map((recipe) => (
+          {currentRecipes.map((recipe) => (
             <RecipeCardWrapper key={recipe.recipe_id}>
               <StyledRecipeCard recipe={recipe} />
               <button onClick={() => handleOpenModal(recipe)}>
@@ -87,6 +102,12 @@ const RecipeCards = () => {
           onCancel={handleCloseModal}
         />
       )}
+      <PaginationComponent
+        recipesPerPage={recipesPerPage}
+        totalRecipes={recipes.length}
+        paginate={paginate}
+        currentPage={currentPage}
+      />
     </RecipeListContainer>
   );
 };
@@ -145,3 +166,5 @@ const AlertImage = styled.img`
   width: 3rem;
   height: 3rem;
 `;
+
+const PaginationComponent = styled(Pagination)``;
