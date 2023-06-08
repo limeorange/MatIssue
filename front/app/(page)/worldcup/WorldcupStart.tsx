@@ -20,7 +20,7 @@ const GameStart: React.FC = () => {
       try {
         const recipes = await getAllRecipes();
         recipes.sort(() => Math.random() - 0.5);
-        const selectedRecipes = recipes.slice(0, 32); // 랜덤으로 32개의 레시피 선택
+        const selectedRecipes = recipes.slice(0, 32); // 랜덤으로 32개의 레시피 선택함
         setFoods(selectedRecipes);
         setDisplays([selectedRecipes[0], selectedRecipes[1]]);
       } catch (error) {
