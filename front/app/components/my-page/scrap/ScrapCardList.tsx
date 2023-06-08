@@ -48,7 +48,6 @@ const ScrapCardList: React.FC = () => {
           })}
         </ScrapListGrid>
       )}
-      ;
     </ScrapListContainer>
   );
 };
@@ -73,8 +72,8 @@ const ScrapListGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 1.5rem;
-  margin-right: -1.5rem;
-  margin-bottom: 1.5rem;
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
 `;
 
 /** 레시피가 없을 경우 띄워주는 안내 그림 */
