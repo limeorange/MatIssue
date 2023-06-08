@@ -54,7 +54,11 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
             height={35}
             style={{ objectFit: "cover" }}
           />
-          <ScrapTitleSpan>{recipe_title.slice(0, 15) + "..."}</ScrapTitleSpan>
+          <ScrapTitleSpan>
+            {recipe_title.length > 15
+              ? `${recipe_title.slice(0, 15)}...`
+              : recipe_title}
+          </ScrapTitleSpan>
         </div>
         {/* 레시피 썸네일 */}
         <div className="w-[24rem] h-[18rem] mb-[1rem]">
