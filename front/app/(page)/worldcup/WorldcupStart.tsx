@@ -14,6 +14,8 @@ const GameStart: React.FC = () => {
   const [foods, setFoods] = useState<Recipe[]>([]);
   const [displays, setDisplays] = useState<Recipe[]>([]);
   const [winners, setWinners] = useState<Recipe[]>([]);
+  const [stage, setStage] = useState(32);
+  const [selectedCount, setSelectedCount] = useState(0);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -32,6 +34,10 @@ const GameStart: React.FC = () => {
   }, []);
 
   const clickHandler = (food: Recipe) => () => {
+    if (stage !== 1) {
+      setSelectedCount((prevCount) => prevCount + 1);
+    }
+
     if (foods.length <= 2) {
       if (winners.length === 0) {
         setDisplays([food]);
@@ -40,6 +46,8 @@ const GameStart: React.FC = () => {
         setFoods(updatedFood);
         setDisplays([updatedFood[0], updatedFood[1]]);
         setWinners([]);
+        setStage((prevStage) => prevStage / 2);
+        setSelectedCount(0);
       }
     } else if (foods.length > 2) {
       setWinners([...winners, food]);
@@ -51,6 +59,13 @@ const GameStart: React.FC = () => {
   return (
     <WorldcupLayout>
       <GameHeader>레시피 이상형 월드컵!</GameHeader>
+      <GameProgress>
+        {stage === 1 && displays.length === 1
+          ? "우승 레시피 선정!"
+          : stage === 2
+          ? "결승전"
+          : `${stage}강 (${selectedCount + 1}/${stage / 2})`}
+      </GameProgress>
 
       <CardContainer>
         {displays.map((recipe) => (
@@ -83,6 +98,11 @@ const WorldcupLayout = styled.div`
 const GameHeader = styled.h1`
   text-align: center;
   margin-bottom: 2rem;
+`;
+
+const GameProgress = styled.h2`
+  text-align: center;
+  margin-bottom: 1rem;
 `;
 
 const CardContainer = styled.div`
