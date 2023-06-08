@@ -16,7 +16,7 @@ const CompleteClient = () => {
         <LoginBtn
           type="button"
           onClick={() => {
-            router.push("/auth/login");
+            router.replace("/auth/login");
           }}
         >
           로그인 하러가기
