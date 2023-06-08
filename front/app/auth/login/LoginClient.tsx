@@ -44,7 +44,7 @@ const LoginClient = () => {
         Cookies.set("session_id", sessionId);
         client.invalidateQueries(["currentUser"]);
         toast.success("로그인 되었습니다.");
-        router.back();
+        router.replace("/");
       })
       .catch((err) => {
         toast.error(err.response.data.detail);
