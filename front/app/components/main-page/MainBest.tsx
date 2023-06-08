@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import RecipeCard from "../recipe-card/RecipeCard";
 import {
   StyledContentsArea,
   ListingRecipeContainer,
@@ -18,7 +17,7 @@ import { Recipe } from "@/app/types";
 import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipesByPopularity } from "@/app/api/recipe";
-import NonRecipePage from "../UI/NonRecipe";
+import NonRecipeCrying from "../UI/NonRecipeCrying";
 
 const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   /*  베스트 레시피 데이터를 리액트쿼리를 사용해서 캐시로 관리
@@ -142,8 +141,8 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
             </StyledItem>
           </StyledList>
         </StyledBestTitleBox>
+        {bestRecipes.length === 0 && <NonRecipeCrying />}
         <ListingRecipeContainer>
-          {bestRecipes.length === 0 && <NonRecipePage />}
           {filteredBestRecipes
             .slice(
               contentsPerPage * (currentPage - 1),
