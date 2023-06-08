@@ -332,7 +332,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
   // 취소 핸들러
   const handleCancel = () => {
-    history.back();
+    router.back();
   };
 
   return (

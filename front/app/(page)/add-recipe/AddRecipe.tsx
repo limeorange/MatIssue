@@ -317,7 +317,7 @@ const RecipeForm = () => {
 
   // 취소 핸들러
   const handleCancel = () => {
-    history.back();
+    router.back();
   };
 
   return (
