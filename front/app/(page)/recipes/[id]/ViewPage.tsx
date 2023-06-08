@@ -5,11 +5,11 @@ import ProgressBar from "@/app/components/recipe-view/sticky-sidebar/ProgressBar
 import RecipeCommentInput from "@/app/components/recipe-view/comment/RecipeCommentInput";
 import RecipeComments from "@/app/components/recipe-view/comment/RecipeCommentList";
 import RecipeInfo from "@/app/components/recipe-view/RecipeInfo";
-import RecipeScrap from "@/app/components/recipe-view/RecipeScrap";
+import RecipeScrap from "@/app/components/recipe-view/scrap/RecipeScrap";
 import RecipeSteps from "@/app/components/recipe-view/RecipeStepList";
 import RecipeUserLikes from "@/app/components/recipe-view/RecipeUserLikes";
 import RecipeVideo from "@/app/components/recipe-view/RecipeVideo";
-import ScrapModal from "@/app/components/recipe-view/ScrapModal";
+import ScrapModal from "@/app/components/recipe-view/scrap/ScrapModal";
 import StickyProgressBar from "@/app/components/recipe-view/sticky-sidebar/StickyProgressBar";
 import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySideBar";
 import Image from "next/image";
@@ -250,6 +250,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
               setIsSaved={setIsSaved}
               modalCloseHandler={modalCloseHandler}
               localStorageKey={localStorageKey}
+              recipe={recipe}
             />
           )}
         </div>
