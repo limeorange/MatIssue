@@ -50,7 +50,7 @@ const FilterTag = (props: FilterTagProps) => {
       newTagList.push({ tag: `#혼먹 레시피`, type: "category" });
     }
     if (category === "vegetarian") {
-      newTagList.push({ tag: `#비건 레시피`, type: "category" });
+      newTagList.push({ tag: `#채식 레시피`, type: "category" });
     }
     if (filter.servings > 0) {
       newTagList.push({ tag: `#${filter.servings}인`, type: "servings" });
