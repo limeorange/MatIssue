@@ -18,6 +18,7 @@ import { Recipe } from "@/app/types";
 import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipesByPopularity } from "@/app/api/recipe";
+import NonRecipePage from "../UI/NonRecipe";
 
 const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   /*  베스트 레시피 데이터를 리액트쿼리를 사용해서 캐시로 관리
@@ -96,14 +97,16 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
 
   return (
     <StyledContainer>
-      <LeftSlideBtn onClick={leftBtnHandler}>
-        <Image
-          src="/images/main/leftSlideBtn.png"
-          alt="left_slice_btn"
-          width={42}
-          height={122}
-        />
-      </LeftSlideBtn>
+      {bestRecipes.length > 8 && (
+        <LeftSlideBtn onClick={leftBtnHandler}>
+          <Image
+            src="/images/main/leftSlideBtn.png"
+            alt="left_slice_btn"
+            width={42}
+            height={122}
+          />
+        </LeftSlideBtn>
+      )}
       <StyledContentsArea>
         <StyledBestTitleBox>
           <StyledTitle>베스트 레시피</StyledTitle>
@@ -140,6 +143,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
           </StyledList>
         </StyledBestTitleBox>
         <ListingRecipeContainer>
+          {bestRecipes.length === 0 && <NonRecipePage />}
           {filteredBestRecipes
             .slice(
               contentsPerPage * (currentPage - 1),
@@ -150,14 +154,16 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
             ))}
         </ListingRecipeContainer>
       </StyledContentsArea>
-      <RightSlideBtn onClick={rightBtnHandler}>
-        <Image
-          src="/images/main/rightSlideBtn.png"
-          alt="right_slice_btn"
-          width={42}
-          height={122}
-        />
-      </RightSlideBtn>
+      {bestRecipes.length > 8 && (
+        <RightSlideBtn onClick={rightBtnHandler}>
+          <Image
+            src="/images/main/rightSlideBtn.png"
+            alt="right_slice_btn"
+            width={42}
+            height={122}
+          />
+        </RightSlideBtn>
+      )}
     </StyledContainer>
   );
 };

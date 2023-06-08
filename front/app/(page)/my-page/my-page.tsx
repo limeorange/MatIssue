@@ -1,25 +1,23 @@
 "use client";
 
-import Link from "next/link";
 import styled from "styled-components";
-import Button from "../../components/UI/Button";
-import RecipeCards from "../../components/my-page/RecipeCards";
-import { useEffect, useState } from "react";
+import RecipeCards from "../../components/my-page/RecipeCardList";
 import ProfileCard from "../../components/my-page/ProfileCard";
 import { useQuery } from "@tanstack/react-query";
-import { User } from "@/app/types";
+import { User, Recipe } from "@/app/types";
 
-const MyPage = () => {
+const MyPage = ({ currentUserRecipes }: { currentUserRecipes: Recipe[] }) => {
   const { data } = useQuery<User>(["currentUser"]);
+
+  const recipesLength = currentUserRecipes.length;
+  console.log(currentUserRecipes);
   return (
-    <>
-      <Container>
-        <Wrapper>
-          <ProfileCard currentUser={data} />
-          <RecipeCards />
-        </Wrapper>
-      </Container>
-    </>
+    <Container>
+      <Wrapper>
+        <ProfileCard currentUser={data} recipesLength={recipesLength} />
+        <RecipeCards initialCurrentUserRecipes={currentUserRecipes} />
+      </Wrapper>
+    </Container>
   );
 };
 

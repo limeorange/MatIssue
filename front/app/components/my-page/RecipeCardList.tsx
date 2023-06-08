@@ -1,42 +1,38 @@
-import Link from "next/link";
 import styled from "styled-components";
-import Button from "../../components/UI/Button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import React from "react";
 import RecipeCard from "../recipe-card/RecipeCard";
 import { axiosBase } from "@/app/api/axios";
 import NonRecipe from "../UI/NonRecipe";
 import { Recipe } from "@/app/types";
-import ConfirmModal from "../my-page/ConfirmModal";
+import ConfirmModal from "./ConfirmModal";
 import Pagination from "../pagination/Pagination";
-import { useSearchParams } from "next/navigation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getRecipeByUserId } from "@/app/api/recipe";
 
-const RecipeCards = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+const RecipeCards = ({
+  initialCurrentUserRecipes,
+}: {
+  initialCurrentUserRecipes: Recipe[];
+}) => {
+  const { data: currentUserRecipes } = useQuery(
+    ["currentUserRecipes"],
+    () => getRecipeByUserId(),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: initialCurrentUserRecipes,
+    }
+  );
+
+  console.log(currentUserRecipes);
+
+  const client = useQueryClient();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recipesPerPage = 16;
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("query"); // URL의 query값 추출
-  const category = searchParams.get("category");
-
-  useEffect(() => {
-    fetchRecipes();
-  }, []);
-
-  const fetchRecipes = async () => {
-    try {
-      const response = await axiosBase.get(`/recipes/user`);
-      console.log("response  : ", response);
-      setRecipes(response.data.recipes);
-    } catch (error) {
-      console.error(
-        "레시피 데이터를 가져오는 중에 오류가 발생했습니다:",
-        error
-      );
-    }
-  };
 
   const handleOpenModal = (recipe: Recipe) => {
     setRecipeToDelete(recipe);
@@ -52,12 +48,11 @@ const RecipeCards = () => {
     if (!recipeToDelete) return;
 
     const id = recipeToDelete.recipe_id;
-    const updatedRecipes = recipes.filter((recipe) => recipe.recipe_id !== id);
-    setRecipes(updatedRecipes);
 
     try {
       await axiosBase.delete(`recipes/${id}`);
       console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
+      client.invalidateQueries(["currentUserRecipes"]);
       // setIsModalOpen(false);
     } catch (error) {
       console.error(
@@ -74,17 +69,20 @@ const RecipeCards = () => {
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const currentRecipes = currentUserRecipes?.slice(
+    indexOfFirstRecipe,
+    indexOfLastRecipe
+  );
 
   return (
     <RecipeListContainer>
       <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{recipes.length}</RecipeHeadingCount>
-      {recipes.length === 0 ? (
+      <RecipeHeadingCount>{currentUserRecipes?.length}</RecipeHeadingCount>
+      {currentUserRecipes.length === 0 ? (
         <NonRecipeMsg />
       ) : (
         <RecipeList>
-          {currentRecipes.map((recipe) => (
+          {currentUserRecipes.map((recipe: Recipe) => (
             <RecipeCardWrapper key={recipe.recipe_id}>
               <StyledRecipeCard recipe={recipe} />
               <button onClick={() => handleOpenModal(recipe)}>
@@ -102,12 +100,14 @@ const RecipeCards = () => {
           onCancel={handleCloseModal}
         />
       )}
-      <PaginationComponent
-        recipesPerPage={recipesPerPage}
-        totalRecipes={recipes.length}
-        paginate={paginate}
-        currentPage={currentPage}
-      />
+      {currentUserRecipes.length > 0 && (
+        <PaginationComponent
+          recipesPerPage={recipesPerPage}
+          totalRecipes={currentUserRecipes.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
+      )}
     </RecipeListContainer>
   );
 };

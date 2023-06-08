@@ -11,7 +11,7 @@ import { Recipe } from "@/app/types";
 import { useState } from "react";
 import Image from "next/image";
 
-const MainVegan = ({ veganRecipes }: { veganRecipes: Recipe[] }) => {
+const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
   const [slide, setSlide] = useState<number>(1);
 
   const leftBtnHandler = () => {
@@ -39,7 +39,7 @@ const MainVegan = ({ veganRecipes }: { veganRecipes: Recipe[] }) => {
         </VegunTitleBox>
         <RecipeSliderContainer>
           <VegunRecipeContainer slide={slide}>
-            {veganRecipes.slice(0, 15).map((item: Recipe) => (
+            {vegetarianRecipes.slice(0, 15).map((item: Recipe) => (
               <LargeRecipeCard key={item._id} recipe={item} />
             ))}
           </VegunRecipeContainer>
