@@ -11,6 +11,7 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
+import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
 
 const MainNewest = ({ newestRecipes }: { newestRecipes: Recipe[] }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -30,7 +31,7 @@ const MainNewest = ({ newestRecipes }: { newestRecipes: Recipe[] }) => {
               contentsPerPage * currentPage
             )
             .map((item, index: number) => (
-              <RecipeCard key={index} recipe={item} />
+              <MainRecipeCard key={index} recipe={item} />
             ))}
         </ListingRecipeContainer>
       </StyledContentsArea>

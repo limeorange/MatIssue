@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 
 const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const setIsLoggedIn = useSetRecoilState(loginState);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -22,7 +23,9 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
       .post(`users/logout`)
       .then((res) => {
         Cookies.remove("session_id");
-        queryClient.invalidateQueries(["currentUser"]);
+        setIsLoggedIn(false);
+        queryClient.removeQueries(["currentUser"]);
+        queryClient.removeQueries(["currentUserRecipes"]);
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {

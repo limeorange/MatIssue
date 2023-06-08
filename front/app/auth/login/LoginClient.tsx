@@ -20,9 +20,12 @@ import {
 } from "@/app/styles/auth/auth.style";
 import Cookies from "js-cookie";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSetRecoilState } from "recoil";
+import { loginState } from "@/app/store/authAtom";
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const setIsLoggedIn = useSetRecoilState(loginState);
 
   const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
@@ -31,7 +34,6 @@ const LoginClient = () => {
     },
   });
 
-  const client = useQueryClient();
   const router = useRouter();
 
   /** auth 폼 제출 핸들러 */
@@ -42,7 +44,7 @@ const LoginClient = () => {
       .then((res) => {
         const sessionId = res.data.session_id;
         Cookies.set("session_id", sessionId);
-        client.invalidateQueries(["currentUser"]);
+        setIsLoggedIn(true);
         toast.success("로그인 되었습니다.");
         router.replace("/");
       })
