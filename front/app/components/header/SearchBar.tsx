@@ -50,6 +50,7 @@ const SearchBarDiv = styled.div`
   border-radius: 0.8rem;
 
   &:focus-within {
+    border: 0.1rem solid #fbd26a;
     box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
   }
 
