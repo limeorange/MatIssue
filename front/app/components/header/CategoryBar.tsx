@@ -42,7 +42,7 @@ const CategoryBar = () => {
             router.push("/recipes/category/vegetarian?category=vegetarian")
           }
         >
-          비건 레시피
+          채식 레시피
         </CategoryLi>
       </CategoryUl>
     </CategoryBarDiv>

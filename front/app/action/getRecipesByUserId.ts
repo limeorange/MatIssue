@@ -15,7 +15,6 @@ export async function getRecipesByUserIdSS() {
       if (!response.data) {
         return [];
       }
-      console.log(response.data);
       return response.data.recipes;
     } catch (err: any) {
       return [];
