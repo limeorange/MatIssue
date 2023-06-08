@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type ScrapCardProps = {
   memoContent: string;
@@ -29,6 +30,11 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
   } = memoItemData;
 
   const hasMemo = memoContent ? true : false;
+  // const router = useRouter();
+
+  // const scrapClickHandler = (recipe_id: string) => {
+  //   router.push(`/recipes/${recipe_id}`);
+  // };
 
   return (
     <>
@@ -80,7 +86,7 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
         {/* 스크랩 메모 내용 */}
         <MemoContainerDiv>
           <ScrapTextArea
-            placeholder="마우스로 메모를 원하는 곳에 배치해보세요!"
+            placeholder="게시글에서 메모를 입력해보세요!"
             value={memoContent}
             // onChange={memoChangeHandler}
             hasMemo={hasMemo}
@@ -106,6 +112,7 @@ const ScrapCardContainerDiv = styled.div`
   background: #ffffff;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+  cursor: pointer;
 `;
 
 /** 스크랩 메모하기 제목 Span */
