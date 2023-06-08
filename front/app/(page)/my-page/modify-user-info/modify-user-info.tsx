@@ -1,10 +1,10 @@
 "use client";
 
 import styled from "styled-components";
+import Link from "next/link";
 import Button from "../../../components/UI/Button";
 import React, { useEffect, useState } from "react";
-import ConfirmModal from "../../../components/my-page/ConfirmModal";
-import Image from "next/image";
+import ConfirmModal from "../../../components/UI/ConfirmModal";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import uploadImage from "@/app/api/aws";
@@ -38,7 +38,6 @@ const ModifyUserInfo: React.FC = () => {
       email: currentUser?.email,
       username: currentUser?.username,
       birth_date: currentUser?.birth_date,
-      password: "",
       img: currentUser?.img,
     };
     setUserData(tempUserInfo);
@@ -50,8 +49,12 @@ const ModifyUserInfo: React.FC = () => {
     currentUser?.img
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
+
+  const [password, setPassword] = useState({
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -68,7 +71,6 @@ const ModifyUserInfo: React.FC = () => {
   };
 
   const uploadProfileImage = async () => {
-    console.log("uploadProfileImage 함수 실행");
     // aws 이미지 업로드 로직
     if (selectedFile) {
       try {
@@ -88,26 +90,35 @@ const ModifyUserInfo: React.FC = () => {
     e.preventDefault();
     console.log("form 태그 제출");
     if (
-      password !== confirmPassword ||
-      password === "" ||
-      confirmPassword === ""
+      password.password === password.confirmPassword && // 비밀번호와 비밀번호 확인이 같은지
+      password.password.length >= 8 && // 비밀번호가 8자리 이상인지
+      password.password.search(/[0-9]/g) !== -1 && // 숫자가 포함되어 있는지
+      password.password.search(/[a-z]/gi) !== -1 && // 영문 대소문자가 포함되어 있는지
+      password.password.search(/[~!@#$%^&*()_+|<>?:{}]/gi) !== -1 && // 특수문자가 포함되어 있는지
+      password.password !== "" && // 비밀번호가 공백인지
+      password.confirmPassword !== "" // 비밀번호 확인이 공백인지
     ) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
+      // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
+      // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
+      // useEffect가 실행되면서 modifyUser 함수가 실행된다. => 회원정보 변경
+      uploadProfileImage();
+    } else {
+      alert(
+        "비빌번호를 확인해주세요. 8자리 이상, 대소문자, 숫자, 특수문자가 포함되어어 있어야 합니다."
+      );
     }
-    // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
-    // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
-    // useEffect가 실행되면서 putUser 함수가 실행된다. => 회원정보 변경
-    uploadProfileImage();
   };
 
-  // TODO: modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
+  // modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
   // 변경에 성공하면 alert창 띄우고 my-page로 이동
-  async function putUser() {
-    console.log("userData  2 : ", userData);
+  async function modifyUser() {
+    const modifyUserInfo = {
+      ...userData,
+      password: password.password,
+    };
+
     try {
-      const response = await axiosBase.put("users", userData);
-      queryClient.invalidateQueries(["currentUser"]);
+      const response = await axiosBase.patch("users", modifyUserInfo);
       console.log(response);
       alert("회원정보가 수정되었습니다.");
       router.push("/my-page");
@@ -118,16 +129,13 @@ const ModifyUserInfo: React.FC = () => {
 
   useEffect(() => {
     if (readyUpdate) {
-      console.log("putUser 실행");
-      putUser();
+      modifyUser();
       setReadyUpdate(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [readyUpdate === true]);
 
   const handleDeleteAccount = async () => {
-    // const confirmDeletion = window.confirm("정말 탈퇴 하시겠습니까?");
-    // if (confirmDeletion) {
     try {
       const response = await axiosBase.delete("users", {
         data: {
@@ -151,8 +159,6 @@ const ModifyUserInfo: React.FC = () => {
     } catch (error) {
       console.error("Error occurred while deleting account:", error);
     }
-    // }
-
     closeModal();
   };
 
@@ -174,23 +180,17 @@ const ModifyUserInfo: React.FC = () => {
     setPreviewImage(null);
   };
 
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
   const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "password") {
-      setPassword(value);
-    } else if (name === "confirmPassword") {
-      setConfirmPassword(value);
-      setUserData((prev: any) => {
-        return { ...prev, ["password"]: value };
-      });
-    } else {
-      setUserData((prev: any) => {
-        return { ...prev, [name]: value };
-      });
+
+    if (name === "password" || name === "confirmPassword") {
+      setPassword({ ...password, [name]: value });
+      return;
     }
+
+    setUserData((prev: any) => {
+      return { ...prev, [name]: value };
+    });
   };
 
   return (
@@ -198,6 +198,10 @@ const ModifyUserInfo: React.FC = () => {
       <Container>
         <Header>회원정보수정</Header>
         <Divider />
+        <Link href="/my-page/modify-user-info/change-password">
+          <StyledChangePassword>비밀번호 변경</StyledChangePassword>
+        </Link>
+
         <Wrapper>
           <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
           {isModalOpen && (
@@ -254,7 +258,7 @@ const ModifyUserInfo: React.FC = () => {
                 type="password"
                 name="password"
                 id="password"
-                value={password}
+                value={password.password}
                 onChange={handleChageInput}
               />
             </Wrapper>
@@ -264,7 +268,7 @@ const ModifyUserInfo: React.FC = () => {
                 type="password"
                 name="confirmPassword"
                 id="confirmPassword"
-                value={confirmPassword}
+                value={password.confirmPassword}
                 onChange={handleChageInput}
               />
             </Wrapper>
@@ -273,14 +277,15 @@ const ModifyUserInfo: React.FC = () => {
           <ProfileImageWrapper>
             <Title>프로필 이미지</Title>
             <LabelForFile htmlFor="upload-button" onClick={handleLabelClick}>
-              {previewImage ? (
+              {previewImage && (
                 <>
                   <StyledImage src={previewImage} alt="Preview" />
                   <button type="button" onClick={handleDeleteImage}>
                     <DeleteImage src="/images/delete-button.png" alt="delete" />
                   </button>
                 </>
-              ) : (
+              )}
+              {!previewImage && (
                 <StyledImage src="/images/dongs-logo.png" alt="Default" />
               )}
             </LabelForFile>
@@ -335,14 +340,14 @@ const Divider = styled.div`
   margin: 2rem 0;
 `;
 
-// const ChangePassword = styled.div`
-//   position: absolute;
-//   right: 22.4rem;
-//   top: 13.5rem;
-//   font-size: 13px;
-//   text-decoration: underline;
-//   color: #201ce0;
-// `;
+const StyledChangePassword = styled.div`
+  position: absolute;
+  right: 22.4rem;
+  top: 13.5rem;
+  font-size: 13px;
+  text-decoration: underline;
+  color: #201ce0;
+`;
 
 const AccountDeletion = styled.div`
   position: absolute;
