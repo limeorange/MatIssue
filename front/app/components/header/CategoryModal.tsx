@@ -15,7 +15,7 @@ const CategoryModal = ({ isModal }: { isModal: boolean }) => {
         {DUMMY_DATA.map((category) => (
           <CategoryModalLi key={category.id}>
             <Link
-              href={`/repcipes/category/${category.name}?category=${category.qeury}`}
+              href={`/recipes/category/${category.name}?category=${category.qeury}`}
               style={{ width: "100%" }}
             >
               {category.name}
