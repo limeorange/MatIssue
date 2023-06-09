@@ -440,7 +440,7 @@ export default UpdateRecipeForm;
 
 // 공통 스타일 적용
 const Label = styled.label`
-  width: 8.8rem;
+  width: 9.8rem;
   height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
@@ -506,7 +506,7 @@ const FormWrapper = styled.form`
 `;
 
 const Title = styled.h2`
-  width: 14.8rem;
+  width: 15.8rem;
   height: 2.7rem;
   font-family: "Inter";
   font-style: normal;
