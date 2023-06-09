@@ -27,7 +27,7 @@ const ScrapCardList: React.FC = () => {
 
   return (
     <ScrapListContainer>
-      <ScrapTitleH2>나의 스크랩</ScrapTitleH2>
+      {/* <ScrapTitleH2>나의 스크랩</ScrapTitleH2>
       {parsedItems.length === 0 ? (
         <NonRecipeMsg />
       ) : (
@@ -47,7 +47,7 @@ const ScrapCardList: React.FC = () => {
             );
           })}
         </ScrapListGrid>
-      )}
+      )} */}
     </ScrapListContainer>
   );
 };

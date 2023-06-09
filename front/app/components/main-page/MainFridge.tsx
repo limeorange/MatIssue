@@ -101,7 +101,7 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
       ) : (
         <RecipeContainer>
           {filteredRecipes.slice(0, 3).map((item: Recipe) => (
-            <LargeRecipeCard key={item._id} recipe={item} />
+            <LargeRecipeCard key={item.recipe_id} recipe={item} />
           ))}
         </RecipeContainer>
       )}
