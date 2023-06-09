@@ -18,6 +18,7 @@ import styled from "styled-components";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipeById } from "@/app/api/recipe";
 import { Recipe } from "@/app/types";
+import WriterProfile from "@/app/components/recipe-view/sticky-sidebar/WriterProfile";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -167,6 +168,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <StickySideBar />
         </div>
 
+        {/* 작성자 프로필 */}
+        <WriterProfile></WriterProfile>
+
         {/* 요리 대표 이미지 */}
         <ImageWrapperDiv>
           <Image
@@ -283,7 +287,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70rem;
+  width: 67rem;
   margin: 0 auto;
   gap: 2.5rem;
 `;
