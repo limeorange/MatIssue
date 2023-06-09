@@ -13,10 +13,12 @@ import Image from "next/image";
 
 const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
   const [slide, setSlide] = useState<number>(1);
-  const totalSlide = 5;
+  const totalRecipesNumber = vegetarianRecipes.length;
+  const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
 
+  console.log(slide);
   const leftBtnHandler = () => {
-    if (slide <= 2) {
+    if (slide < 2) {
       return;
     }
     setSlide(slide - 1);
@@ -128,7 +130,7 @@ const LeftSlideBtn = styled.div<{ slide: number }>`
     transform: scale(120%);
   }
 
-  ${(props) => props.slide <= 2 && "opacity : 0.3;"};
+  ${(props) => props.slide < 2 && "display : none;"};
 `;
 
 const RightSlideBtn = styled.div<{ slide: number; totalSlide: number }>`
@@ -144,5 +146,5 @@ const RightSlideBtn = styled.div<{ slide: number; totalSlide: number }>`
     transform: scale(120%);
   }
 
-  ${(props) => props.slide >= props.totalSlide && "opacity : 0.3;"};
+  ${(props) => props.slide >= props.totalSlide && "display : none;"};
 `;
