@@ -42,7 +42,7 @@ const Ingredient = [
     id: 6,
   },
   {
-    title: "삼겹살",
+    title: "밥",
     img: "/images/main/fridge/rice.png",
     id: 7,
   },

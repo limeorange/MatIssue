@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import Pagenation from "./Pagenation";
 
 type UserData = {
   user_id: string;
@@ -93,9 +95,179 @@ const DUMMY_DATA: UserData[] = [
     authority: "admin",
     state: "활동가능",
   },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
+  {
+    user_id: "shagrat",
+    username: "ynnsuis",
+    email: "shagrat@naver.com",
+    birthdate: "2000-01-01",
+    authority: "admin",
+    state: "활동가능",
+  },
 ];
 
 const Userthel = () => {
+  const [selectedUser, setSelectedUser] = useState();
+
+  const limit = 12;
+  const [page, setPage] = useState<number>(1);
+  const offset = (page - 1) * limit;
+
+  useEffect(() => {
+    setPage(1);
+  }, []);
+
   return (
     <PanelContainer>
       <PanelTitle>
@@ -113,7 +285,7 @@ const Userthel = () => {
           <MediumSpan>생성일</MediumSpan>
           <ShortSpan>권한</ShortSpan>
         </PanelHeader>
-        {DUMMY_DATA.map((user, index) => {
+        {DUMMY_DATA?.slice(offset, offset + limit).map((user, index) => {
           return (
             <PanelItem key={index}>
               <input
@@ -147,6 +319,16 @@ const Userthel = () => {
           );
         })}
       </PanelList>
+      <PagenationContainer>
+        <PagenationBox>
+          <Pagenation
+            total={DUMMY_DATA?.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        </PagenationBox>
+      </PagenationContainer>
     </PanelContainer>
   );
 };
@@ -169,7 +351,6 @@ const PanelList = styled.ul`
   display: flex;
   flex-direction: column;
   background-color: white;
-  width: 100%;
   border: 1px solid #ddd;
   border-radius: 0.5rem;
 `;
@@ -204,4 +385,14 @@ const MediumSpan = styled.span`
 const LongSpan = styled.span`
   padding: 0.8rem 1.2rem;
   width: 25rem;
+`;
+
+const PagenationContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const PagenationBox = styled.div`
+  font-size: 16px;
 `;
