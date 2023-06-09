@@ -4,7 +4,7 @@ import styled from "styled-components";
 const DUMMY_DATA = [
   { id: 1, name: "양식", qeury: "western" },
   { id: 2, name: "중식", qeury: "chinese" },
-  { id: 3, name: "일식", qeury: "japan" },
+  { id: 3, name: "일식", qeury: "japanese" },
   { id: 4, name: "한식", qeury: "korean" },
 ];
 
