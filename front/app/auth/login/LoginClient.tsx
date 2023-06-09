@@ -49,7 +49,9 @@ const LoginClient = () => {
         router.replace("/");
       })
       .catch((err) => {
-        toast.error(err.response.data.detail);
+        toast.error(
+          "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
+        );
       })
       .finally(() => {
         setIsLoading(false);

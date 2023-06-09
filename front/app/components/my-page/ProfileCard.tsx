@@ -6,25 +6,15 @@ import Button from "../../components/UI/Button";
 import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 
-type ProfileCardProps = {
-  currentUser: User;
-  recipes?: Recipe[];
-};
+const ProfileCard = () => {
+  // 캐시에 저장된 현재 유저정보를 가져옴
+  const { data: currentUser } = useQuery<User>(["currentUser"]);
 
-/** 로컬스토리지에 있는 아이템 모두 가져오는 함수 */
-const getAllMemoItems = () => {
-  const keys = Object.keys(localStorage);
-  const memoItems = keys.filter((key) => key.startsWith("memo_"));
-  const memoItemValues = memoItems.map((key) => localStorage.getItem(key));
-  return memoItemValues;
-};
-
-const scrapsLength = getAllMemoItems().length;
-
-const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
+  // 캐시에 저장된 현재 유저가 작성한 레시피들을 가져옴
   const { data: currentUserRecipes } = useQuery<Recipe[]>([
     "currentUserRecipes",
   ]);
+
   return (
     <ProfileContainer>
       <ProfileWrapper>
@@ -75,7 +65,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ currentUser }) => {
               alt="스크랩 아이콘"
             />
             <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>{scrapsLength}</MyRecipeCount>
+            <MyRecipeCount>0</MyRecipeCount>
           </StyledLink>
         </div>
         <Link href="/add-recipe">
