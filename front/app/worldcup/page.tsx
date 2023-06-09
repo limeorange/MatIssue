@@ -1,7 +1,7 @@
-import WorldcupStart from "./WorldcupStart";
+import StartPage from "../mbti/StartPage";
 
-const worldcup = () => {
-  return <WorldcupStart />;
+const WorldcupPage = () => {
+  return <StartPage />;
 };
 
-export default worldcup;
+export default WorldcupPage;
