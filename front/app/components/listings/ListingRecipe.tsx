@@ -75,8 +75,8 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recipesPerPage = 16;
   const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("query"); // url의 query값 추출
-  const category = searchParams.get("category");
+  const searchQuery = searchParams?.get("query"); // url의 query값 추출
+  const category = searchParams?.get("category");
   const router = useRouter();
 
   useEffect(() => {
@@ -270,12 +270,12 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
             difficulty={difficulty}
           />
         </FilterBarBox>
-        <FilterTag
+        {/* <FilterTag
           search={searchQuery}
           filter={filter}
           category={category}
           onRemove={removeTag}
-        />
+        /> */}
         <PageHeaderContainer>
           <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
           <SortButtonContainer>

@@ -32,7 +32,7 @@ const ScrapCardList: React.FC = () => {
         <NonRecipeMsg />
       ) : (
         <ScrapListGrid>
-          {parsedItems.map((item, index) => {
+          {/* {parsedItems.map((item, index) => {
             // 로컬스토리지에 있는 데이터 객체 분해 할당
             const parsedItem = JSON.parse(getAllMemoItems()[index]);
             const memoContent = parsedItem[0];
@@ -45,7 +45,7 @@ const ScrapCardList: React.FC = () => {
                 memoItemData={memoItemData}
               ></ScrapCardItem>
             );
-          })}
+          })} */}
         </ScrapListGrid>
       )}
     </ScrapListContainer>
