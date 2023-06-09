@@ -97,7 +97,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   return (
     <StyledContainer>
       {bestRecipes.length > 8 && (
-        <LeftSlideBtn onClick={leftBtnHandler}>
+        <LeftSlideBtn onClick={leftBtnHandler} currentPage={currentPage}>
           <Image
             src="/images/main/leftSlideBtn.png"
             alt="left_slice_btn"
@@ -174,7 +174,7 @@ const StyledBestTitleBox = styled(StyledTitleBox)`
   flex-direction: row;
 `;
 
-const LeftSlideBtn = styled.button`
+const LeftSlideBtn = styled.button<{ currentPage: number }>`
   display: none;
 
   @media (min-width: 768px) {
@@ -188,6 +188,8 @@ const LeftSlideBtn = styled.button`
       transform: scale(130%, 130%);
     }
   }
+
+  ${(props) => props.currentPage === 1 && "display:none;"}
 `;
 
 const RightSlideBtn = styled.button`
