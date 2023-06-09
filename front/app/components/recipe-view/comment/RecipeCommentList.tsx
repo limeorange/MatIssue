@@ -12,6 +12,8 @@ type CommentProps = {
     created_at: string;
     comment_parent: string;
     updated_at: string;
+    comment_nickname: string;
+    comment_profile_img: string;
   };
 };
 
@@ -31,6 +33,8 @@ const RecipeComments: React.FC<CommentProps> = ({ comments }) => {
             comment_like={comment.comment_like}
             created_at={comment.created_at}
             updated_at={comment.updated_at}
+            comment_nickname={comment.comment_nickname}
+            comment_profile_img={comment.comment_profile_img}
           />
         ))}
     </div>

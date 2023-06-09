@@ -16,6 +16,8 @@ type RecipeCommentProps = {
   comment_like: number;
   created_at: string;
   updated_at: string;
+  comment_nickname: string;
+  comment_profile_img: string;
 };
 
 /** 요리 댓글 단일 컴포넌트 */
@@ -26,6 +28,8 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   comment_like,
   created_at,
   updated_at,
+  comment_nickname,
+  comment_profile_img,
 }) => {
   // 수정 버튼 눌렀을 때 textarea로 변경하기 위한 상태 관리
   const [isEditing, setIsEditing] = useState(false);
@@ -118,8 +122,8 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
       <CommentContainer>
         <ProfileImageDiv>
           <Image
-            src={"/images/recipe-view/기본 프로필.png"}
-            alt="기본 프로필 사진"
+            src={comment_profile_img}
+            alt="유저 프로필 사진"
             fill
             style={{
               objectFit: "cover",
@@ -133,7 +137,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
           <AuthorDotsDiv>
             {/* 작성자, 작성 시간 */}
             <AuthorTimeDiv>
-              <AuthorNameSpan>{comment_author}</AuthorNameSpan>
+              <AuthorNameSpan>{comment_nickname}</AuthorNameSpan>
               <CreatedTimeSpan>
                 {koreanCreatedAt.split(":").slice(0, -1).join(":")}
               </CreatedTimeSpan>
