@@ -15,7 +15,7 @@ const Scrap = ({ currentUserRecipes }: { currentUserRecipes: Recipe[] }) => {
     <>
       <Container>
         <Wrapper>
-          <ProfileCard currentUser={data} />
+          <ProfileCard />
           <ScrapCardList />
         </Wrapper>
       </Container>

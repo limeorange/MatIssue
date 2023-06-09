@@ -26,6 +26,7 @@ import {
   StyledLabel,
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
+import LoadingModal from "@/app/components/UI/LoadingModal";
 
 const SignupClient = () => {
   const {
@@ -166,6 +167,7 @@ const SignupClient = () => {
 
   return (
     <AuthContainer>
+      {isLoading && <LoadingModal />}
       <AuthFormWrapper>
         <Logo />
         <form onSubmit={handleSubmit(onSubmit)}>
