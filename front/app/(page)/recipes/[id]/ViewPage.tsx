@@ -120,9 +120,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
   const loggedInUserId = "happyuser";
 
-  // 로컬스토리지 key 정의
-  const localStorageKey = `memo_${recipe_id}`;
-
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
   const [count, setCount] = useState(recipe_like);
@@ -138,7 +135,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const commentCount =
     Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
 
-  // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능을 활용
+  // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능 활용
   const client = useQueryClient();
 
   // 좋아요 버튼 클릭 핸들러
@@ -260,13 +257,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
             setIsSaved={setIsSaved}
             isBooked={isBooked}
             scrapClickHandler={scrapClickHandler}
-            localStorageKey={localStorageKey}
           />
           {isBooked && (
             <ScrapModal
               setIsSaved={setIsSaved}
               modalCloseHandler={modalCloseHandler}
-              localStorageKey={localStorageKey}
               recipe={recipe}
             />
           )}
