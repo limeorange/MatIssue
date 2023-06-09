@@ -8,6 +8,16 @@ import ReactQuery from "./context/ReactQueryContext";
 export const metadata = {
   title: "맛이슈",
   description: "자신만의 레시피를 올리고 공유하는 플랫폼 입니다.",
+  openGraph: {
+    images: [
+      {
+        url: "/about/opengraph-image.png",
+        width: 400,
+        height: 300,
+        alt: "logo",
+      },
+    ],
+  },
 };
 
 export default async function RootLayout({
