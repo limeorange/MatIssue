@@ -20,11 +20,12 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
+import NonDataCrying from "../UI/NonDataCrying";
 
 const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   /*  베스트 레시피 데이터를 리액트쿼리를 사용해서 캐시로 관리
   초기값은 서버에서 받아온 데이터를 넣고, 클라이언트에서 데이터를 업데이트하면 리패치함 */
-  const { data: bestRecipes } = useQuery<Recipe[]>(
+  const { data: bestRecipes, isError } = useQuery<Recipe[]>(
     ["bestRecipes"],
     () => getRecipesByPopularity(),
     {
@@ -40,7 +41,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
     useState<Recipe[]>(bestRecipes);
 
   const contentsPerPage = 8;
-  const totalRecipes = bestRecipes.length;
+  const totalRecipes = bestRecipes?.length;
   const totalPage = totalRecipes / contentsPerPage;
   const currentDate = dayjs();
   dayjs.extend(isBetween);
@@ -66,7 +67,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
       const startOfDay = currentDate.startOf("day");
       const endOfDay = currentDate.endOf("day");
 
-      const dailyBestPosts = bestRecipes.filter((recipe: Recipe) => {
+      const dailyBestPosts = bestRecipes?.filter((recipe: Recipe) => {
         const postDate = dayjs(recipe.created_at);
         return postDate.isBetween(startOfDay, endOfDay);
       });
@@ -143,10 +144,11 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
             </StyledItem>
           </StyledList>
         </StyledBestTitleBox>
-        {bestRecipes.length === 0 && <NonRecipeCrying />}
+        {totalRecipes === 0 && <NonRecipeCrying />}
+        {isError && <NonDataCrying />}
         <ListingRecipeContainer>
           {filteredBestRecipes
-            .slice(
+            ?.slice(
               contentsPerPage * (currentPage - 1),
               contentsPerPage * currentPage
             )
