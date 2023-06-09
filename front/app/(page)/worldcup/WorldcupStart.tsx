@@ -46,6 +46,7 @@ const GameStart: React.FC = () => {
     if (foods.length <= 2) {
       if (winners.length === 0) {
         setDisplays([food]);
+        setStage(1);
       } else {
         const updatedFood = [...winners, food];
         setFoods(updatedFood);
