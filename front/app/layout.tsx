@@ -11,7 +11,7 @@ export const metadata = {
   openGraph: {
     title: "맛이슈",
     description: "자신만의 레시피를 올리고 공유하는 플랫폼 입니다.",
-    images: "https://eliceproject.s3.amazonaws.com/20230609154957512_logo1.png",
+    images: "https://eliceproject.s3.amazonaws.com/20230609163939760_og.jpg",
   },
 };
 
