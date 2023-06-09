@@ -264,7 +264,6 @@ const TestPage = () => {
             isBgColor={true}
             isBorderColor={false}
             isHoverColor={false}
-            className={lastButtonNumbers[count - 1] === 1 ? "selected" : ""}
             onClick={() => goNext(1)}
           >
             {data[count].ans1}
@@ -273,7 +272,6 @@ const TestPage = () => {
             isBgColor={true}
             isBorderColor={false}
             isHoverColor={false}
-            className={lastButtonNumbers[count - 1] === 2 ? "selected" : ""}
             onClick={() => goNext(2)}
           >
             {data[count].ans2}

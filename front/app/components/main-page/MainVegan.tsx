@@ -40,7 +40,7 @@ const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
         <RecipeSliderContainer>
           <VegunRecipeContainer slide={slide}>
             {vegetarianRecipes.slice(0, 15).map((item: Recipe) => (
-              <LargeRecipeCard key={item._id} recipe={item} />
+              <LargeRecipeCard key={item.recipe_id} recipe={item} />
             ))}
           </VegunRecipeContainer>
         </RecipeSliderContainer>
