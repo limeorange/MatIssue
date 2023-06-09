@@ -107,9 +107,9 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     let result = [...recipes];
-    let honmukResult: Recipe[] = [];
-    let newestResult: Recipe[] = [];
-    let bestResult: Recipe[] = [];
+    // let honmukResult: Recipe[] = [];
+    // let newestResult: Recipe[] = [];
+    // let bestResult: Recipe[] = [];
 
     // 검색바로 레시피 필터링
     // const term = searchQuery || "";
@@ -127,12 +127,12 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     // }
 
     // 최신 카테고리 필터링
-    if (category === "newest") {
-      newestResult = [...result].sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-    }
+    // if (category === "newest") {
+    //   newestResult = [...result].sort(
+    //     (a, b) =>
+    //       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    //   );
+    // }
 
     // // 베스트 카테고리 필터링
     // if (category === "best") {
@@ -184,15 +184,15 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     );
 
     // 각 카테고리 별 result 할당
-    if (category === "honmuk") {
-      result = honmukResult;
-    } else if (category === "newest") {
-      result = newestResult;
-    } else if (category === "best") {
-      result = bestResult;
-    } else {
-      result = result;
-    }
+    // if (category === "honmuk") {
+    //   result = honmukResult;
+    // } else if (category === "newest") {
+    //   result = newestResult;
+    // } else if (category === "best") {
+    //   result = bestResult;
+    // } else {
+    //   result = result;
+    // }
 
     // 버튼으로 레시피 정렬
     if (sortMethod === "date") {

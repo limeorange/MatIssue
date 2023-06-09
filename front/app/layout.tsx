@@ -15,6 +15,12 @@ export const metadata = {
   },
 };
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
 export default async function RootLayout({
   children,
 }: {
@@ -28,6 +34,7 @@ export default async function RootLayout({
           <Recoil>
             <ReactQuery>{children}</ReactQuery>
           </Recoil>
+          <script src={"https://developers.kakao.com/sdk/js/kakao.js"} async />
         </body>
       </StyledComponentsRegistry>
     </html>
