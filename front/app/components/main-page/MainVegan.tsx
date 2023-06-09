@@ -13,7 +13,10 @@ import Image from "next/image";
 
 const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
   const [slide, setSlide] = useState<number>(1);
+  const totalRecipesNumber = vegetarianRecipes.length;
+  const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
 
+  console.log(slide);
   const leftBtnHandler = () => {
     if (slide < 2) {
       return;
@@ -22,7 +25,7 @@ const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
   };
 
   const rightBtnHandler = () => {
-    if (slide > 2) {
+    if (slide >= totalSlide) {
       return;
     }
     setSlide(slide + 1);
@@ -39,19 +42,23 @@ const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
         </VegunTitleBox>
         <RecipeSliderContainer>
           <VegunRecipeContainer slide={slide}>
-            {vegetarianRecipes.slice(0, 15).map((item: Recipe) => (
-              <LargeRecipeCard key={item._id} recipe={item} />
+            {vegetarianRecipes.slice(0, totalSlide * 3).map((item: Recipe) => (
+              <LargeRecipeCard key={item.recipe_id} recipe={item} />
             ))}
           </VegunRecipeContainer>
         </RecipeSliderContainer>
-        <LeftSlideBtn onClick={leftBtnHandler}>
+        <LeftSlideBtn onClick={leftBtnHandler} slide={slide}>
           <Image
             src="/images/main/GreenLeftSlideBtn.png"
             alt="left_button"
             fill
           />
         </LeftSlideBtn>
-        <RightSlideBtn onClick={rightBtnHandler}>
+        <RightSlideBtn
+          onClick={rightBtnHandler}
+          slide={slide}
+          totalSlide={totalSlide}
+        >
           <Image
             src="/images/main/GreenRightSlideBtn.png"
             alt="left_button"
@@ -111,7 +118,7 @@ const VegunRecipeContainer = styled.div<{ slide: number }>`
   grid-column-gap: 4rem;
 `;
 
-const LeftSlideBtn = styled.div`
+const LeftSlideBtn = styled.div<{ slide: number }>`
   position: absolute;
   top: 24rem;
   cursor: pointer;
@@ -122,9 +129,11 @@ const LeftSlideBtn = styled.div`
   &:hover {
     transform: scale(120%);
   }
+
+  ${(props) => props.slide < 2 && "display : none;"};
 `;
 
-const RightSlideBtn = styled.div`
+const RightSlideBtn = styled.div<{ slide: number; totalSlide: number }>`
   position: absolute;
   top: 24rem;
   right: 0;
@@ -136,4 +145,6 @@ const RightSlideBtn = styled.div`
   &:hover {
     transform: scale(120%);
   }
+
+  ${(props) => props.slide >= props.totalSlide && "display : none;"};
 `;
