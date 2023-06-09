@@ -38,7 +38,7 @@ export const StyledTitle = styled.h2`
 
 export const StyledSubTitle = styled.h3`
   font-size: 16px;
-  color: rgb(150, 150, 150);
+  color: #666;
 `;
 
 export const StyledList = styled.ul`
