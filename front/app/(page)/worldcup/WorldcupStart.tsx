@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { getAllRecipes } from "@/app/api/recipe";
+import Link from "next/link";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -73,22 +74,45 @@ const GameStart: React.FC = () => {
           : `${stage}강 (${selectedCount + 1}/${stage / 2})`}
       </GameProgress>
       <CardContainer>
-        {displays.map((recipe) => (
-          <Card key={recipe.recipe_id} onClick={clickHandler(recipe)}>
-            <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
-            <ImageWrapper>
-              <ImageContainer>
-                <Image
-                  src={recipe.recipe_thumbnail}
-                  alt={recipe.recipe_title}
-                  layout="fill"
-                  objectFit="cover"
-                  style={{ borderRadius: "1.5rem" }}
-                />
-              </ImageContainer>
-            </ImageWrapper>
-          </Card>
-        ))}
+        {displays.map((recipe) =>
+          stage === 1 && displays.length === 1 ? (
+            <Link
+              href={`/recipes/${recipe.recipe_id}`}
+              key={recipe.recipe_id}
+              passHref
+            >
+              <Card onClick={clickHandler(recipe)}>
+                <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+                <ImageWrapper>
+                  <ImageContainer>
+                    <Image
+                      src={recipe.recipe_thumbnail}
+                      alt={recipe.recipe_title}
+                      layout="fill"
+                      objectFit="cover"
+                      style={{ borderRadius: "1.5rem" }}
+                    />
+                  </ImageContainer>
+                </ImageWrapper>
+              </Card>
+            </Link>
+          ) : (
+            <Card onClick={clickHandler(recipe)} key={recipe.recipe_id}>
+              <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+              <ImageWrapper>
+                <ImageContainer>
+                  <Image
+                    src={recipe.recipe_thumbnail}
+                    alt={recipe.recipe_title}
+                    layout="fill"
+                    objectFit="cover"
+                    style={{ borderRadius: "1.5rem" }}
+                  />
+                </ImageContainer>
+              </ImageWrapper>
+            </Card>
+          )
+        )}
         <TextContainer>
           {displays.length === 1 && (
             <ResultText>
