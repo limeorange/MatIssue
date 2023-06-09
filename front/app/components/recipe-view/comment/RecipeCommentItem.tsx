@@ -82,7 +82,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
       toast.success("댓글 수정이 완료되었습니다");
       client.invalidateQueries(["currentRecipe"]);
     } catch (error) {
-      console.log("댓글 수정 실패", error);
+      console.log("댓글 수정 실패와 관련한 오류는...🧐", error);
       toast.error("댓글 수정에 실패했습니다 ㅠ.ㅠ");
     }
     // 수정 완료 후 상태 업데이트
