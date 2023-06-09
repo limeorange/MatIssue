@@ -24,10 +24,16 @@ const CategoryBar = () => {
           </IconWrapper>
           음식 카테고리
         </CategoryLi>
-        <CategoryLi onClick={() => router.push("/recipes/category/best")}>
+        <CategoryLi
+          onClick={() => router.push("/recipes/category/best?category=best")}
+        >
           베스트 레시피
         </CategoryLi>
-        <CategoryLi onClick={() => router.push("/recipes/category/newest")}>
+        <CategoryLi
+          onClick={() =>
+            router.push("/recipes/category/newest?category=newest")
+          }
+        >
           최신 레시피
         </CategoryLi>
         <CategoryLi
