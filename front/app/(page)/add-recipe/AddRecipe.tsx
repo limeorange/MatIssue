@@ -33,7 +33,7 @@ const categories = [
   { label: "중식", value: "chinese" },
   { label: "일식", value: "japanese" },
   { label: "양식", value: "western" },
-  { label: "비건", value: "vegetarian" },
+  { label: "채식", value: "vegetarian" },
   { label: "기타", value: "other" },
 ];
 const peopleCount = [1, 2, 3, 4, 5];
