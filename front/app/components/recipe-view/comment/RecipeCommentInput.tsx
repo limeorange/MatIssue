@@ -1,10 +1,11 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState, useRef, useEffect } from "react";
+import { ChangeEvent, useState } from "react";
 import styled, { css } from "styled-components";
 import Image from "next/image";
 import { axiosBase } from "@/app/api/axios";
 import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 /** 댓글 props type 지정 => id, text */
 type CommentProps = {
@@ -15,7 +16,6 @@ type CommentProps = {
 const RecipeCommentInput: React.FC<CommentProps> = ({ recipe_id }) => {
   const [isCommenting, setIsCommenting] = useState(false);
   const [commentText, setCommentText] = useState("");
-  // const [comments, setComments] = useState<CommentProps[]>([]);
   const [activatedButton, setActivatedButton] = useState(false);
 
   const client = useQueryClient();
@@ -41,12 +41,11 @@ const RecipeCommentInput: React.FC<CommentProps> = ({ recipe_id }) => {
       const response = await axiosBase.post(`/recipes/comment/${recipe_id}`, {
         comment_text: commentText,
       });
-
       client.invalidateQueries(["currentRecipe"]);
-      console.log(response);
+      toast.success("댓글 작성이 완료되었습니다");
     } catch (error) {
       console.log("댓글 작성 실패", error);
-      alert("댓글 작성에 실패했습니다 ㅠ.ㅠ");
+      toast.error("댓글 작성에 실패했습니다 ㅠ.ㅠ");
     }
 
     // 댓글 작성 완료 후 초기화

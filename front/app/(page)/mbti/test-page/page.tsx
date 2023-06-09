@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
-import { EIState, SNState, TFState, JPState } from "@/app/store/mbtiAtom";
+import {
+  EIState,
+  SNState,
+  TFState,
+  JPState,
+  MBTIState,
+} from "@/app/store/mbtiAtom";
 import Button from "@/app/components/UI/Button";
 import styled from "styled-components";
 
@@ -29,6 +35,13 @@ const TestPage = () => {
   const [SN, setSN] = useRecoilState(SNState);
   const [TF, setTF] = useRecoilState(TFState);
   const [JP, setJP] = useRecoilState(JPState);
+  let [MBTI, setMBTI] = useRecoilState(MBTIState);
+  const [animation, setAnimation] = useState("opacity-0");
+  const [nextAnimation, setNextAnimation] = useState(false);
+  const [backAnimation, setBackAnimation] = useState(false);
+  const [lastButtonNumbers, setLastButtonNumbers] = useState<
+    Array<number | null>
+  >(new Array(12).fill(null));
 
   let [data] = useState<DataType>({
     1: {
@@ -39,7 +52,7 @@ const TestPage = () => {
     2: {
       ques: "모처럼 친구들과의 점심 약속!\n예약을 맡은 내가 정한 식당은?",
       ans1: "점심에도 사람들로 붐비는\n활기찬 분위기의 핫플레이스!",
-      ans2: "오랜만에 만나는 친구들이니,\n조용한 분위기에서 대화할 수 있는 룸으로 갈까?",
+      ans2: "오랜만에 만나는 친구들이니,\n조용한 분위기의 식당으로 갈까?",
     },
     3: {
       ques: "이사한 집에 손님들이 오기로 했어요!\n식사를 준비하는 나의 모습은?",
@@ -93,50 +106,133 @@ const TestPage = () => {
     },
   });
 
+  // MBTI 계산
+  const calculateMBTI = () => {
+    let result = "";
+    if (EI > 0) {
+      result += "E";
+    } else {
+      result += "I";
+    }
+    if (SN > 0) {
+      result += "S";
+    } else {
+      result += "N";
+    }
+    if (TF > 0) {
+      result += "T";
+    } else {
+      result += "F";
+    }
+    if (JP > 0) {
+      result += "J";
+    } else {
+      result += "P";
+    }
+
+    setMBTI(result);
+  };
+
+  // 이전 버튼
   const goBack = () => {
     if (count > 1) {
-      setCount((count) => count - 1);
-      setProgressStep((step) => step - 1);
+      setBackAnimation(true);
+      setTimeout(() => {
+        setCount((prevCount) => prevCount - 1);
+        setProgressStep((prevStep) => prevStep - 1);
+        // 이전 문제에서 클릭한 버튼 번호를 null로 초기화
+        setLastButtonNumbers((lastButtonNumbers) => {
+          const updatedLastButtonNumbers = lastButtonNumbers.map((num, index) =>
+            index === count - 2 ? null : num
+          );
+          const lastButtonNumber = updatedLastButtonNumbers[count - 2];
+          if (lastButtonNumber !== null) {
+            // lastButtonNumber에 따라 MBTI 성향을 업데이트
+            if (lastButtonNumber === 1) {
+              if (count <= 3) {
+                setEI((EI) => EI - 1);
+              } else if (count >= 4 && count <= 6) {
+                setSN((SN) => SN - 1);
+              } else if (count >= 7 && count <= 9) {
+                setTF((TF) => TF - 1);
+              } else if (count >= 10 && count <= 12) {
+                setJP((JP) => JP - 1);
+              }
+            } else {
+              if (count <= 3) {
+                setEI((EI) => EI + 1);
+              } else if (count >= 4 && count <= 6) {
+                setSN((SN) => SN + 1);
+              } else if (count >= 7 && count <= 9) {
+                setTF((TF) => TF + 1);
+              } else if (count >= 10 && count <= 12) {
+                setJP((JP) => JP + 1);
+              }
+            }
+          }
+          return updatedLastButtonNumbers;
+        });
+        setBackAnimation(false);
+      }, 300);
     }
   };
 
+  // 정답 버튼
   const goNext = (buttonNumber: number) => {
+    // buttonNumber에 따라 MBTI 성향을 업데이트
     if (buttonNumber === 1) {
-      // 버튼 1에만 해당하는 로직
+      // 버튼 1
       if (count <= 3) {
-        setEI(EI - 1);
+        setEI((EI) => EI + 1);
       } else if (count >= 4 && count <= 6) {
-        setSN(SN - 1);
+        setSN((SN) => SN + 1);
       } else if (count >= 7 && count <= 9) {
-        setTF(TF - 1);
+        setTF((TF) => TF + 1);
       } else if (count >= 10 && count <= 12) {
-        setJP(JP - 1);
+        setJP((JP) => JP + 1);
       }
+      // 버튼 2
     } else {
-      // 버튼 2에만 해당하는 로직
       if (count <= 3) {
-        setEI(EI - 1);
+        setEI((EI) => EI - 1);
       } else if (count >= 4 && count <= 6) {
-        setSN(SN - 1);
+        setSN((SN) => SN - 1);
       } else if (count >= 7 && count <= 9) {
-        setTF(TF - 1);
+        setTF((TF) => TF - 1);
       } else if (count >= 10 && count <= 12) {
-        setJP(JP - 1);
+        setJP((JP) => JP - 1);
       }
     }
 
-    // 공통 로직
-    if (count === 12) {
-      router.push("/mbti/result-page");
-    } else {
-      setCount((prevCount) => prevCount + 1);
-      setProgressStep((prevStep) => prevStep + 1);
-    }
+    // 클릭한 버튼 번호를 lastButtonNumbers에 업데이트
+    setLastButtonNumbers((lastButtonNumbers) =>
+      lastButtonNumbers.map((num, index) =>
+        index === count - 1 ? buttonNumber : num
+      )
+    );
+
+    setNextAnimation(true);
+
+    setTimeout(() => {
+      if (count === 12) {
+        calculateMBTI();
+        router.push("/mbti/result-page");
+      } else {
+        setCount((prevCount) => prevCount + 1);
+        setProgressStep((prevStep) => prevStep + 1);
+        setNextAnimation(false);
+      }
+    }, 300);
   };
+
+  // 시작 버튼 클릭시 페이지 렌더링 애니메이션
+  useEffect(() => {
+    setAnimation("opacity-1");
+  }, []);
 
   return (
     <>
-      <PageWrapper>
+      <PageWrapper className={animation}>
         <PageTitle>
           M<span>uk</span>BTI 테스트
         </PageTitle>
@@ -145,13 +241,30 @@ const TestPage = () => {
           <ProgressBar progress={(progressStep / 12) * 100} />
           <ProgressNumber>{`${count}/12`}</ProgressNumber>
         </ProgressSection>
-        <QuestionNum>Q{count}.</QuestionNum>
-        <Question>{data[count].ques}</Question>
-        <AnswerButtonContainer>
+        <QuestionNum
+          className={
+            nextAnimation ? "grow" : backAnimation ? "shrink" : "normal"
+          }
+        >
+          Q{count}.
+        </QuestionNum>
+        <Question
+          className={
+            nextAnimation ? "grow" : backAnimation ? "shrink" : "normal"
+          }
+        >
+          {data[count].ques}
+        </Question>
+        <AnswerButtonContainer
+          className={
+            nextAnimation ? "grow" : backAnimation ? "shrink" : "normal"
+          }
+        >
           <Button
             isBgColor={true}
             isBorderColor={false}
             isHoverColor={false}
+            className={lastButtonNumbers[count - 1] === 1 ? "selected" : ""}
             onClick={() => goNext(1)}
           >
             {data[count].ans1}
@@ -160,6 +273,7 @@ const TestPage = () => {
             isBgColor={true}
             isBorderColor={false}
             isHoverColor={false}
+            className={lastButtonNumbers[count - 1] === 2 ? "selected" : ""}
             onClick={() => goNext(2)}
           >
             {data[count].ans2}
@@ -178,6 +292,12 @@ const PageWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 3em;
+
+  opacity: 0;
+  transition: opacity 1s;
+  &.opacity-1 {
+    opacity: 1;
+  }
 `;
 
 const PageTitle = styled.p`
@@ -196,6 +316,22 @@ const QuestionNum = styled.div`
   color: #4f3d21;
   margin-bottom: 5rem;
   font-family: "Dongle-Bold";
+  transform-origin: center;
+  transition: all 0.5s ease;
+  opacity: 1;
+
+  &.grow {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  &.normal {
+    transform: scale(1);
+    opacity: 1;
+  }
+  &.shrink {
+    transform: scale(0.1);
+    opacity: 0;
+  }
 `;
 
 const Question = styled.div`
@@ -203,6 +339,22 @@ const Question = styled.div`
   color: #4f3d21;
   white-space: pre-line;
   text-align: center;
+  transform-origin: center;
+  transition: all 0.5s ease;
+  opacity: 1;
+
+  &.grow {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  &.normal {
+    transform: scale(1);
+    opacity: 1;
+  }
+  &.shrink {
+    transform: scale(0.1);
+    opacity: 0;
+  }
 `;
 
 const AnswerButtonContainer = styled.div`
@@ -212,6 +364,22 @@ const AnswerButtonContainer = styled.div`
   gap: 3rem;
   width: 100%;
   max-width: 40rem;
+  transform-origin: center;
+  transition: all 0.5s ease;
+  opacity: 1;
+
+  &.grow {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  &.normal {
+    transform: scale(1);
+    opacity: 1;
+  }
+  &.shrink {
+    transform: scale(0.1);
+    opacity: 0;
+  }
 
   & Button {
     width: 100%;
@@ -221,7 +389,7 @@ const AnswerButtonContainer = styled.div`
     white-space: pre-line;
     line-height: 1.5;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
 
     &:hover {
       transform: translateY(-3px);
@@ -250,6 +418,12 @@ const BackButton = styled.button`
   border-radius: 10rem;
   width: 5%;
   margin-right: 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #f8b551;
+  }
 `;
 
 const ProgressBar = styled.div<StyledComponentProps>`

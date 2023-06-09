@@ -465,7 +465,7 @@ const Input = styled.input`
   font-size: 16px;
   line-height: 1.9rem;
   &:focus {
-    border: 0.1rem solid #d9d9d9;
+    border: 0.1rem solid #fbd26a;
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
@@ -489,7 +489,7 @@ const TextArea = styled.textarea`
     color: #a9a9a9;
   }
   &:focus {
-    border: 0.1rem solid #d9d9d9;
+    border: 0.1rem solid #fbd26a;
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }

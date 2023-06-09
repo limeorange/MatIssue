@@ -126,9 +126,12 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     //   );
     // }
 
-    // // 최신 카테고리 필터링
+    // 최신 카테고리 필터링
     if (category === "newest") {
-      newestResult = [...result].sort((a, b) => +b.created_at - +a.created_at);
+      newestResult = [...result].sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
     }
 
     // // 베스트 카테고리 필터링
@@ -193,7 +196,10 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
     // 버튼으로 레시피 정렬
     if (sortMethod === "date") {
-      result.sort((a, b) => +a.created_at - +b.created_at);
+      result.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
       urlParams.set("sortMethod", "date");
     } else if (sortMethod === "likes") {
       result.sort((a, b) => b.recipe_like - a.recipe_like);

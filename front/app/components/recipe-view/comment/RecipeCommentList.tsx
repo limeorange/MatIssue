@@ -28,6 +28,9 @@ const RecipeComments: React.FC<CommentProps> = ({ comments }) => {
             comment_author={comment.comment_author}
             comment_text={comment.comment_text}
             comment_id={comment.comment_id}
+            comment_like={comment.comment_like}
+            created_at={comment.created_at}
+            updated_at={comment.updated_at}
           />
         ))}
     </div>
