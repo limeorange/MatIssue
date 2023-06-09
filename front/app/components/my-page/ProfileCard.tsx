@@ -5,6 +5,18 @@ import Link from "next/link";
 import Button from "../../components/UI/Button";
 import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+
+type MemoItemProps = {
+  created_at: string;
+  recipe_id: string;
+  recipe_like: number;
+  recipe_thumbnail: string;
+  recipe_title: string;
+  recipe_view: number;
+  user_id: string;
+  user_nickname: string;
+};
 
 const ProfileCard = () => {
   // 캐시에 저장된 현재 유저정보를 가져옴
@@ -14,6 +26,17 @@ const ProfileCard = () => {
   const { data: currentUserRecipes } = useQuery<Recipe[]>([
     "currentUserRecipes",
   ]);
+
+  const [parsedMemo, setParsedMemo] = useState<MemoItemProps[]>([]);
+
+  // 나의 스크랩 개수 추출을 위한 parsedMemo 정의
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const existingMemo = localStorage.getItem("scrapMemo");
+      const parsedMemo = existingMemo ? JSON.parse(existingMemo) : [];
+      setParsedMemo(parsedMemo);
+    }
+  }, []);
 
   return (
     <ProfileContainer>
@@ -65,7 +88,7 @@ const ProfileCard = () => {
               alt="스크랩 아이콘"
             />
             <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>0</MyRecipeCount>
+            <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
           </StyledLink>
         </div>
         <Link href="/add-recipe">
