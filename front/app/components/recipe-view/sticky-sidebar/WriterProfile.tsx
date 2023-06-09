@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import Image from "next/image";
 
-const WriterProfile = () => {
+type WriterProfileProps = {
+  user_nickname: string;
+};
+
+const WriterProfile: React.FC<WriterProfileProps> = ({ user_nickname }) => {
   return (
     <>
       <ProfileContainerDiv>
@@ -19,7 +23,7 @@ const WriterProfile = () => {
           </ProfileImageDiv>
 
           {/* 닉네임 */}
-          <NicknameSpan>자몽오렌지</NicknameSpan>
+          <NicknameSpan>{user_nickname}</NicknameSpan>
 
           {/* 팔로잉, 팔로워 */}
           <FollowDiv>
