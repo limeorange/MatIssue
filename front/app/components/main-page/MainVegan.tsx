@@ -32,7 +32,7 @@ const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
     <MainVegunContainer>
       <MainVegunArea>
         <VegunTitleBox>
-          <StyledTitle>비건들을 위한 초록레시피</StyledTitle>
+          <StyledTitle>채식러들을 위한 초록레시피</StyledTitle>
           <StyledSubTitle>
             건강과 환경을 생각하는 비건 레시피로 맛있는 변화를 경험하세요
           </StyledSubTitle>
