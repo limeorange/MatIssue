@@ -319,13 +319,11 @@ const CreatedTimeSpan = styled.span`
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImageDiv = styled.div`
-  min-width: 5rem;
-  min-height: 5rem;
-  width: 5rem;
-  height: 5rem;
+  min-width: 4.9rem;
+  min-height: 4.9rem;
+  width: 4.9rem;
+  height: 4.9rem;
   position: relative;
-  border-width: 0.2rem;
-  border-color: #fbd26a;
   border-radius: 50%;
   overflow: hidden;
 `;
