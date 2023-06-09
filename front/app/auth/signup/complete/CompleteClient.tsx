@@ -11,7 +11,9 @@ const CompleteClient = () => {
     <AuthContainer>
       <MessageWrapper>
         <StyledTitleBox>
-          <StyledTitle>이메일로 인증메일을 전송했습니다</StyledTitle>
+          <StyledTitle>
+            인증메일을 전송했습니다. <br></br> 확인후 회원가입을 완료해주세요.
+          </StyledTitle>
         </StyledTitleBox>
         <LoginBtn
           type="button"
@@ -44,6 +46,7 @@ const StyledTitleBox = styled.div`
 `;
 
 const StyledTitle = styled.div`
+  text-align: center;
   font-size: 22px;
   font-weight: 500;
   margin-bottom: 2rem;
