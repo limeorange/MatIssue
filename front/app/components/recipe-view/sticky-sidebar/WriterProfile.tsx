@@ -46,9 +46,9 @@ const ProfileContainerDiv = styled.div`
   flex-direction: column;
   position: fixed;
   width: 18.5rem;
-  height: 31.5rem;
-  left: 113rem;
-  top: 21rem;
+  height: 33rem;
+  left: 115rem;
+  top: 20.15rem;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 2rem;
 `;
@@ -56,11 +56,11 @@ const ProfileContainerDiv = styled.div`
 /** 프로필 헤더 박스 Div */
 const ProfileHeaderDiv = styled.div`
   width: 18.5rem;
-  height: 4.2rem;
+  height: 4.3rem;
   background: #fbe2a1;
   border-radius: 20px 20px 0px 0px;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 17px;
   color: #4f3d21;
   padding: 1rem;
   padding-left: 1.5rem;
@@ -71,7 +71,7 @@ const ProfileContentsDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 2.1rem;
+  margin-top: 1.9rem;
 `;
 
 /** 프로필 이미지 감싸는 Div */
@@ -87,19 +87,19 @@ const ProfileImageDiv = styled.div`
 
 /** 닉네임 Span */
 const NicknameSpan = styled.span`
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   font-weight: 500;
   color: #4f3d21;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.4rem;
 `;
 
 /** 팔로잉, 팔로워 Div */
 const FollowDiv = styled.div`
   display: flex;
   color: #4f3d21;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   gap: 0.3rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.65rem;
 `;
 
 /** 팔로잉, 팔로워수 강조 Span */
@@ -109,13 +109,18 @@ const BoldSpan = styled.span`
 
 /** 팔로우 버튼 */
 const FollowButton = styled.button`
-  width: 8rem;
-  height: 3rem;
-  font-size: 1.5rem;
+  width: 14rem;
+  height: 3.5rem;
+  font-size: 16px;
   font-weight: 500;
   background-color: #fbe2a1;
   color: #4f3d21;
   border-radius: 1rem;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #fbd26a;
+  }
 `;
 
 export default WriterProfile;
