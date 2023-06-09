@@ -1,3 +1,5 @@
+"use client";
+
 import styled from "styled-components";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -5,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 type ScrapModalProps = {
   modalCloseHandler: () => void;
   setIsSaved: React.Dispatch<React.SetStateAction<boolean>>;
-  localStorageKey: string;
   recipe: {
     recipe_title: string;
     recipe_thumbnail: string;
@@ -51,7 +52,6 @@ type ScrapModalProps = {
 const ScrapModal: React.FC<ScrapModalProps> = ({
   modalCloseHandler,
   setIsSaved,
-  localStorageKey,
   recipe,
 }) => {
   // 스크랩 카드에 필요한 정보만 객체 분해 할당
@@ -78,8 +78,6 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
     user_nickname,
   };
 
-  console.log(scrapData);
-
   // 스크랩 모달 이동 상태 관리
   const [isDragging, setIsDragging] = useState(false);
 
@@ -87,11 +85,14 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   const [memo, setMemo] = useState("");
 
   // 스크랩 메모 내용 유무에 따른 배경, 글자색 변경을 위한 상태 관리
-  const hasMemo = memo.trim().length > 0;
+  const hasMemo = memo ? true : false;
 
   // 스크랩 메모 원본 상태 관리
-  const originalSaved = localStorage.getItem(localStorageKey);
-  const originalMemo = originalSaved ? JSON.parse(originalSaved)[0] : "";
+  const originalSaved = localStorage.getItem("scrapMemo");
+  const originalArray = originalSaved ? JSON.parse(originalSaved) : [];
+  const originalMemo = originalArray.filter(
+    (item: any) => item.recipe_id == recipe_id
+  );
 
   // 스크랩 모달창 자유 이동 설정
   const modalRef = useRef<HTMLDivElement>(null);
@@ -120,6 +121,22 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
     }
   };
 
+  // 기존의 저장된 메모 보여주는 의존성 설정
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedMemo = localStorage.getItem("scrapMemo");
+      const savedParsedMemo = savedMemo ? JSON.parse(savedMemo) : [];
+      const savedMemotext = savedParsedMemo.filter(
+        (item: any) => item.scrapData.recipe_id === recipe_id
+      );
+      if (savedMemotext.length !== 0) {
+        setMemo(savedMemotext[0]["memo"]);
+      } else {
+        setMemo("");
+      }
+    }
+  }, []);
+
   /** 메모 작성 내용 업데이트 핸들러 */
   const memoChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMemo(event.target.value);
@@ -127,10 +144,21 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 
   /** 메모 저장 버튼 핸들러 */
   const memoSaveHandler = () => {
-    localStorage.setItem(localStorageKey, JSON.stringify([memo, scrapData]));
-    // memo 내용이 있으면 색칠된 아이콘 표시하고,
-    // 내용 없을 시 아이콘 색칠 해제를 위한 상태값 부여
-    setIsSaved(localStorage.getItem(localStorageKey) ? true : false);
+    const existingMemo = localStorage.getItem("scrapMemo");
+    const parsedMemo = existingMemo ? JSON.parse(existingMemo) : [];
+
+    // 해당 recipe_id 값을 가진 객체 삭제한 배열
+    const updatedMemo = parsedMemo.filter(
+      (item: any) => item.scrapData.recipe_id !== recipe_id
+    );
+    const newMemo = { scrapData, memo };
+    updatedMemo.push(newMemo);
+
+    // 업데이트된 배열을 다시 localStorage에 저장
+    localStorage.setItem("scrapMemo", JSON.stringify(updatedMemo));
+
+    // memo 내용이 있으면 색칠 아이콘 표시하기 위한 상태값 부여
+    setIsSaved(true);
     modalCloseHandler();
   };
 
@@ -139,15 +167,6 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
     setMemo(originalMemo);
     modalCloseHandler();
   };
-
-  // 기존의 저장된 메모 보여주는 의존성 설정
-  useEffect(() => {
-    const savedMemo = localStorage.getItem(localStorageKey);
-    if (savedMemo) {
-      const memoArray = JSON.parse(savedMemo);
-      setMemo(memoArray[0]);
-    }
-  }, []);
 
   return (
     <>
