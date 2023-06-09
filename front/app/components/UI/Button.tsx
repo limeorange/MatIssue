@@ -72,6 +72,10 @@ font-size: ${(props) => (props.isSmallFont ? "12px" : "16px")};
     outline: 2px solid #a17c43;
     outline-offset: 2px;
   }
+
+  &.selected {
+    background-color: #f8b551;
+  }
 `;
 
 export default Button;
