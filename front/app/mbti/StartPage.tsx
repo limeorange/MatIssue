@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styled from "styled-components";
 import Button from "@/app/components/UI/Button";
+import Logo from "../components/header/Logo";
 import { useSetRecoilState } from "recoil";
 import { EIState, JPState, SNState, TFState } from "@/app/store/mbtiAtom";
 
@@ -23,6 +24,7 @@ const StartPage = () => {
   return (
     <>
       <StratPageWrapper>
+        <Logo />
         <StartPageTitle isAnimateOut={isAnimateOut}>
           M<span>uk</span>BTI 테스트
         </StartPageTitle>
@@ -69,7 +71,10 @@ const StratPageWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3em;
+  margin: auto;
+  width: 100%;
+  max-width: 50rem;
+  height: 100vh;
 
   @keyframes slideUp {
     0% {
