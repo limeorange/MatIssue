@@ -33,7 +33,7 @@ const categories = [
   { label: "중식", value: "chinese" },
   { label: "일식", value: "japanese" },
   { label: "양식", value: "western" },
-  { label: "비건", value: "vegetarian" },
+  { label: "채식", value: "vegetarian" },
   { label: "기타", value: "other" },
 ];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -304,7 +304,7 @@ const RecipeForm = () => {
     postRecipe(recipeData)
       .then((res) => {
         console.log(res);
-        toast.success("레시피 등록이 되었습니다!");
+        toast.success("레시피가 등록이 되었습니다!");
         router.push("/category/newest?category=newest");
       })
       .catch((err) => {
@@ -400,9 +400,9 @@ const RecipeForm = () => {
             type="button"
             isBgColor
             fullWidth
-            // disabled={isLoading}
+            disabled={isLoading}
           >
-            {/* {isLoading ? "저장 중..." : "저장"} */}
+            {isLoading ? "저장 중..." : "저장"}
             저장
           </Button>
         </SaveButton>
@@ -426,7 +426,7 @@ export default RecipeForm;
 
 // 공통 스타일 적용
 const Label = styled.label`
-  width: 8.8rem;
+  width: 9.8rem;
   height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
@@ -492,7 +492,7 @@ const FormWrapper = styled.form`
 `;
 
 const Title = styled.h2`
-  width: 14.8rem;
+  width: 16.8rem;
   height: 2.7rem;
   font-family: "Inter";
   font-style: normal;

@@ -7,26 +7,13 @@ import NonRecipe from "../UI/NonRecipe";
 import { Recipe } from "@/app/types";
 import ConfirmModal from "../UI/ConfirmModal";
 import Pagination from "../pagination/Pagination";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getRecipeByUserId } from "@/app/api/recipe";
+import { useQueryClient } from "@tanstack/react-query";
 
 const RecipeCards = ({
-  initialCurrentUserRecipes,
+  currentUserRecipes,
 }: {
-  initialCurrentUserRecipes: Recipe[];
+  currentUserRecipes: Recipe[];
 }) => {
-  const { data: currentUserRecipes } = useQuery(
-    ["currentUserRecipes"],
-    () => getRecipeByUserId(),
-    {
-      refetchOnWindowFocus: false,
-      retry: 0,
-      initialData: initialCurrentUserRecipes,
-    }
-  );
-
-  console.log(currentUserRecipes);
-
   const client = useQueryClient();
 
   const [isModalOpen, setIsModalOpen] = useState(false);

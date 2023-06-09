@@ -5,7 +5,12 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import RecipeCard from "../recipe-card/RecipeCard";
+import { useQuery } from "@tanstack/react-query";
+import { getRecipesByPopularity } from "@/app/api/recipe";
+
+import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
+import NonRecipeCrying from "../UI/NonRecipeCrying";
+
 import {
   StyledContentsArea,
   ListingRecipeContainer,
@@ -15,15 +20,12 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
-import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
-import { useQuery } from "@tanstack/react-query";
-import { getRecipesByPopularity } from "@/app/api/recipe";
-import NonRecipePage from "../UI/NonRecipe";
+import NonDataCrying from "../UI/NonDataCrying";
 
 const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   /*  베스트 레시피 데이터를 리액트쿼리를 사용해서 캐시로 관리
   초기값은 서버에서 받아온 데이터를 넣고, 클라이언트에서 데이터를 업데이트하면 리패치함 */
-  const { data: bestRecipes } = useQuery<Recipe[]>(
+  const { data: bestRecipes, isError } = useQuery<Recipe[]>(
     ["bestRecipes"],
     () => getRecipesByPopularity(),
     {
@@ -39,7 +41,8 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
     useState<Recipe[]>(bestRecipes);
 
   const contentsPerPage = 8;
-  const totalPage = bestRecipes.length / contentsPerPage;
+  const totalRecipes = bestRecipes?.length;
+  const totalPage = totalRecipes / contentsPerPage;
   const currentDate = dayjs();
   dayjs.extend(isBetween);
 
@@ -64,7 +67,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
       const startOfDay = currentDate.startOf("day");
       const endOfDay = currentDate.endOf("day");
 
-      const dailyBestPosts = bestRecipes.filter((recipe: Recipe) => {
+      const dailyBestPosts = bestRecipes?.filter((recipe: Recipe) => {
         const postDate = dayjs(recipe.created_at);
         return postDate.isBetween(startOfDay, endOfDay);
       });
@@ -97,16 +100,15 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
 
   return (
     <StyledContainer>
-      {bestRecipes.length > 8 && (
-        <LeftSlideBtn onClick={leftBtnHandler}>
-          <Image
-            src="/images/main/leftSlideBtn.png"
-            alt="left_slice_btn"
-            width={42}
-            height={122}
-          />
-        </LeftSlideBtn>
-      )}
+      <LeftSlideBtn onClick={leftBtnHandler} currentPage={currentPage}>
+        <Image
+          src="/images/main/leftSlideBtn.png"
+          alt="left_slice_btn"
+          width={42}
+          height={122}
+        />
+      </LeftSlideBtn>
+
       <StyledContentsArea>
         <StyledBestTitleBox>
           <StyledTitle>베스트 레시피</StyledTitle>
@@ -142,10 +144,11 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
             </StyledItem>
           </StyledList>
         </StyledBestTitleBox>
+        {totalRecipes === 0 && <NonRecipeCrying />}
+        {isError && <NonDataCrying />}
         <ListingRecipeContainer>
-          {bestRecipes.length === 0 && <NonRecipePage />}
           {filteredBestRecipes
-            .slice(
+            ?.slice(
               contentsPerPage * (currentPage - 1),
               contentsPerPage * currentPage
             )
@@ -154,16 +157,19 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
             ))}
         </ListingRecipeContainer>
       </StyledContentsArea>
-      {bestRecipes.length > 8 && (
-        <RightSlideBtn onClick={rightBtnHandler}>
-          <Image
-            src="/images/main/rightSlideBtn.png"
-            alt="right_slice_btn"
-            width={42}
-            height={122}
-          />
-        </RightSlideBtn>
-      )}
+
+      <RightSlideBtn
+        onClick={rightBtnHandler}
+        currentPage={currentPage}
+        totalPage={totalPage}
+      >
+        <Image
+          src="/images/main/rightSlideBtn.png"
+          alt="right_slice_btn"
+          width={42}
+          height={122}
+        />
+      </RightSlideBtn>
     </StyledContainer>
   );
 };
@@ -175,11 +181,11 @@ const StyledBestTitleBox = styled(StyledTitleBox)`
   flex-direction: row;
 `;
 
-const LeftSlideBtn = styled.button`
+const LeftSlideBtn = styled.button<{ currentPage: number }>`
   display: none;
 
   @media (min-width: 768px) {
-    display: block;
+    ${(props) => (props.currentPage === 1 ? "display:none;" : "display:block")}
     position: absolute;
     width: 3rem;
     height: 9rem;
@@ -191,11 +197,12 @@ const LeftSlideBtn = styled.button`
   }
 `;
 
-const RightSlideBtn = styled.button`
+const RightSlideBtn = styled.button<{ currentPage: number; totalPage: number }>`
   display: none;
 
   @media (min-width: 768px) {
-    display: block;
+    ${(props) =>
+      props.currentPage > props.totalPage ? "display:none;" : "display:block"}
     position: absolute;
     width: 3rem;
     height: 9rem;

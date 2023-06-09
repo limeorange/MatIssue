@@ -23,6 +23,13 @@ const IngredientSection = ({
   handleRemoveIngredient,
 }: IngredientSectionProps) => {
   const showRemoveButton = ingredients.length > 1;
+  // 재료 추가를 위한 엔터키 핸들러
+  const handleIngredientKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // 'Enter' 키를 눌렀을 때 발생하는 기본 동작(폼 제출)을 막음
+      handleAddIngredient(); // 'Enter' 키를 눌렀을 때 재료 추가 함수 호출
+    }
+  };
 
   return (
     <div
@@ -42,12 +49,14 @@ const IngredientSection = ({
               type="text"
               value={ingredients[index].ingredient}
               onChange={(e) => handleIngredientChange(e, index)}
+              onKeyPress={handleIngredientKeyPress}
               placeholder="재료"
             />
             <QuantityInput
               type="text"
               value={ingredients[index].quantity}
               onChange={(e) => handleQuantityChange(e, index)}
+              onKeyPress={handleIngredientKeyPress}
               placeholder="재료의 양"
             />
             {showRemoveButton && (
@@ -64,6 +73,7 @@ const IngredientSection = ({
             event.preventDefault();
             handleAddIngredient();
           }}
+          onKeyPress={handleIngredientKeyPress}
         >
           + 재료 추가하기
         </AddIngredientButton>
@@ -75,7 +85,7 @@ const IngredientSection = ({
 export default IngredientSection;
 
 const Label = styled.label`
-  width: 8.8rem;
+  width: 9.8rem;
   height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;

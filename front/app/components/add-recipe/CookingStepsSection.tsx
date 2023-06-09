@@ -102,7 +102,7 @@ const CookingStepsSection = ({
 export default CookingStepsSection;
 
 const Label = styled.label`
-  width: 8.8rem;
+  width: 9.8rem;
   height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;

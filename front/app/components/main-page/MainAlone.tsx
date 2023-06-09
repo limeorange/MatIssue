@@ -13,9 +13,7 @@ import styled from "styled-components";
 const MainAlone = ({ singleRecipes }: { singleRecipes: Recipe[] }) => {
   const router = useRouter();
 
-  console.log(singleRecipes);
-
-  if (singleRecipes.length < 5) {
+  if (singleRecipes?.length < 5) {
     return null;
   }
 

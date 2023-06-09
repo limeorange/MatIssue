@@ -1,70 +1,54 @@
 "use client";
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import styled from "styled-components";
+import Image from "next/image";
+
 import Button from "@/app/components/UI/Button";
-import { useSetRecoilState } from "recoil";
-import { EIState, JPState, SNState, TFState } from "@/app/store/mbtiAtom";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
 };
 
 const StartPage = () => {
-  const router = useRouter();
-  const setEI = useSetRecoilState(EIState);
-  const setSN = useSetRecoilState(SNState);
-  const setTF = useSetRecoilState(TFState);
-  const setJP = useSetRecoilState(JPState);
   const [isAnimateOut, setIsAnimateOut] = useState(false);
+  const router = useRouter();
 
   return (
-    <>
-      <StratPageWrapper>
-        <StartPageTitle isAnimateOut={isAnimateOut}>
-          M<span>uk</span>BTI 테스트
-        </StartPageTitle>
-        <StartPageMessage isAnimateOut={isAnimateOut}>
-          나에게 어울리는 음식은?
-        </StartPageMessage>
-        <ImageBox isAnimateOut={isAnimateOut}>
-          <Image
-            src={"/images/foodIcon.png"}
-            alt="음식 아이콘 이미지"
-            width={400}
-            height={200}
-            style={{ marginRight: "2rem", marginTop: "15rem" }}
-          />
-        </ImageBox>
-        <ButtonBox isAnimateOut={isAnimateOut}>
-          <Button
-            isBgColor={true}
-            isBorderColor={false}
-            isHoverColor={false}
-            onClick={() => {
-              setIsAnimateOut(true);
-              setTimeout(() => {
-                router.push("/mbti/test-page");
-                setEI(0);
-                setSN(0);
-                setTF(0);
-                setJP(0);
-              }, 0);
-            }}
-          >
-            테스트 시작하기
-          </Button>
-        </ButtonBox>
-      </StratPageWrapper>
-    </>
+    <WorldcupLayout>
+      <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
+      <StartPageMessage isAnimateOut={isAnimateOut}>
+        뭐 먹을지 고민이 될 때!!
+      </StartPageMessage>
+      <ImageBox isAnimateOut={isAnimateOut}>
+        <Image
+          src={"/images/worldcupIcon3.png"}
+          alt="월드컵 캐릭터 이미지"
+          width={400}
+          height={200}
+          style={{ marginRight: "2rem", marginTop: "5rem" }}
+        />
+      </ImageBox>
+      <ButtonBox isAnimateOut={isAnimateOut}>
+        <Button
+          isBgColor={true}
+          isBorderColor={false}
+          isHoverColor={false}
+          onClick={() => {
+            setIsAnimateOut(true);
+            router.push("/worldcup/game-page");
+          }}
+        >
+          월드컵 시작하기
+        </Button>
+      </ButtonBox>
+    </WorldcupLayout>
   );
 };
 
 export default StartPage;
 
-const StratPageWrapper = styled.div`
+const WorldcupLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,7 +68,7 @@ const StratPageWrapper = styled.div`
   }
 `;
 
-const StartPageTitle = styled.p<StyledComponentProps>`
+const GameHeader = styled.p<StyledComponentProps>`
   font-size: 80px;
   color: #fbd26a;
   font-family: "Dongle-Bold";
@@ -121,7 +105,7 @@ const ImageBox = styled.div<StyledComponentProps>`
 `;
 
 const ButtonBox = styled.div<StyledComponentProps>`
-  margin-top: 6rem;
+  margin-top: 4rem;
 
   & Button {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

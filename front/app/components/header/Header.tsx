@@ -15,18 +15,18 @@ import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
 
-const Header = ({ currentUser }: { currentUser: User }) => {
+const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   const setIsLoggedIn = useSetRecoilState(loginState);
 
-  const { data, isLoading, isError } = useQuery<User>(
-    ["currentUser"],
-    () => getCurrentUser(),
-    {
-      refetchOnWindowFocus: false,
-      retry: 0,
-      initialData: currentUser,
-    }
-  );
+  const {
+    data: currentUser,
+    isLoading,
+    isError,
+  } = useQuery<User>(["currentUser"], () => getCurrentUser(), {
+    refetchOnWindowFocus: false,
+    retry: 0,
+    initialData: initialCurrentUser,
+  });
 
   useEffect(() => {
     if (currentUser) {
@@ -46,7 +46,7 @@ const Header = ({ currentUser }: { currentUser: User }) => {
         <TopNav>
           <Logo />
           <SearchBar />
-          {isLoading ? null : <UserMenu currentUser={data} />}
+          {isLoading ? null : <UserMenu currentUser={currentUser} />}
         </TopNav>
         <CategoryBar />
       </NavArea>

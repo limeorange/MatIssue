@@ -11,6 +11,7 @@ import {
   MBTIState,
 } from "@/app/store/mbtiAtom";
 import Button from "@/app/components/UI/Button";
+import Logo from "@/app/components/header/Logo";
 import styled from "styled-components";
 
 type QuestionType = {
@@ -30,7 +31,7 @@ type StyledComponentProps = {
 const TestPage = () => {
   const router = useRouter();
   const [count, setCount] = useState(1);
-  const [progressStep, setProgressStep] = useState(0);
+  const [progressStep, setProgressStep] = useState(1);
   const [EI, setEI] = useRecoilState(EIState);
   const [SN, setSN] = useRecoilState(SNState);
   const [TF, setTF] = useRecoilState(TFState);
@@ -215,8 +216,11 @@ const TestPage = () => {
 
     setTimeout(() => {
       if (count === 12) {
-        calculateMBTI();
-        router.push("/mbti/result-page");
+        setProgressStep((prevStep) => prevStep + 1);
+        setTimeout(() => {
+          calculateMBTI();
+          router.push("/mbti/result-page");
+        }, 300);
       } else {
         setCount((prevCount) => prevCount + 1);
         setProgressStep((prevStep) => prevStep + 1);
@@ -233,12 +237,13 @@ const TestPage = () => {
   return (
     <>
       <PageWrapper className={animation}>
+        <Logo />
         <PageTitle>
           M<span>uk</span>BTI 테스트
         </PageTitle>
         <ProgressSection>
           <BackButton onClick={goBack}>←</BackButton>
-          <ProgressBar progress={(progressStep / 12) * 100} />
+          <ProgressBar progress={(progressStep / 13) * 100} />
           <ProgressNumber>{`${count}/12`}</ProgressNumber>
         </ProgressSection>
         <QuestionNum
@@ -264,7 +269,6 @@ const TestPage = () => {
             isBgColor={true}
             isBorderColor={false}
             isHoverColor={false}
-            className={lastButtonNumbers[count - 1] === 1 ? "selected" : ""}
             onClick={() => goNext(1)}
           >
             {data[count].ans1}
@@ -273,7 +277,6 @@ const TestPage = () => {
             isBgColor={true}
             isBorderColor={false}
             isHoverColor={false}
-            className={lastButtonNumbers[count - 1] === 2 ? "selected" : ""}
             onClick={() => goNext(2)}
           >
             {data[count].ans2}
@@ -291,8 +294,10 @@ const PageWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3em;
-
+  width: 100%;
+  max-width: 50rem;
+  margin: 0 auto;
+  padding-top: 13rem;
   opacity: 0;
   transition: opacity 1s;
   &.opacity-1 {
@@ -361,7 +366,7 @@ const AnswerButtonContainer = styled.div`
   margin-top: 8rem;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 6rem;
   width: 100%;
   max-width: 40rem;
   transform-origin: center;
