@@ -211,8 +211,8 @@ const RecipeDetail = (props: RecipeDataProps) => {
         </div>
 
         {/* 요리 정보 (인원, 시간, 난이도, 종류) */}
-        <div id="content1">
-          <SubtitleH2 id="heading1">요리 정보</SubtitleH2>
+        <div id="heading1">
+          <SubtitleH2>요리 정보</SubtitleH2>
           <RecipeInfo
             recipe_category={recipe_category}
             recipe_info={recipe_info}
@@ -220,26 +220,26 @@ const RecipeDetail = (props: RecipeDataProps) => {
         </div>
 
         {/* 재료 준비 목록 */}
-        <div>
-          <SubtitleH2 id="heading2">재료 준비</SubtitleH2>
+        <div id="heading2">
+          <SubtitleH2>재료 준비</SubtitleH2>
           <IngredientList recipe_ingredients={recipe_ingredients} />
         </div>
 
         {/* 요리 과정 */}
-        <div>
-          <SubtitleH2 id="heading3">요리 과정</SubtitleH2>
+        <div id="heading3">
+          <SubtitleH2>요리 과정</SubtitleH2>
           <RecipeSteps recipe_sequence={recipe_sequence}></RecipeSteps>
         </div>
 
         {/* 요리팁 */}
-        <div>
-          <SubtitleH2 id="heading4">요리팁</SubtitleH2>
+        <div id="heading4">
+          <SubtitleH2>요리팁</SubtitleH2>
           <RecipeTipDiv>{recipe_tip}</RecipeTipDiv>
         </div>
 
         {/* 요리 동영상 */}
-        <div>
-          <SubtitleH2 id="heading5">요리 동영상</SubtitleH2>
+        <div id="heading5">
+          <SubtitleH2>요리 동영상</SubtitleH2>
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
@@ -252,25 +252,27 @@ const RecipeDetail = (props: RecipeDataProps) => {
           />
 
           {/* 스크랩 */}
-          <RecipeScrap
-            isSaved={isSaved}
-            setIsSaved={setIsSaved}
-            isBooked={isBooked}
-            scrapClickHandler={scrapClickHandler}
-          />
-          {isBooked && (
-            <ScrapModal
+          <div id="heading6">
+            <RecipeScrap
+              isSaved={isSaved}
               setIsSaved={setIsSaved}
-              modalCloseHandler={modalCloseHandler}
-              recipe={recipe}
+              isBooked={isBooked}
+              scrapClickHandler={scrapClickHandler}
             />
-          )}
+            {isBooked && (
+              <ScrapModal
+                setIsSaved={setIsSaved}
+                modalCloseHandler={modalCloseHandler}
+                recipe={recipe}
+              />
+            )}
+          </div>
         </div>
 
         {/* 댓글 */}
         <div>
           <div className="flex">
-            <SubtitleH2 id="heading6">댓글</SubtitleH2>
+            <SubtitleH2>댓글</SubtitleH2>
             <CommentIconDiv>
               <Image
                 src="/images/recipe-view/comment.svg"
