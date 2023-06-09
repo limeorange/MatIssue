@@ -5,6 +5,7 @@ import Image from "next/image";
 import { getAllRecipes } from "@/app/api/recipe";
 import Link from "next/link";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import Logo from "@/app/components/header/Logo";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -74,6 +75,7 @@ const WorldcupGame: React.FC = () => {
 
   return (
     <WorldcupLayout>
+      <Logo />
       <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
       <GameProgress>
         {stage === 1 && displays.length === 1
