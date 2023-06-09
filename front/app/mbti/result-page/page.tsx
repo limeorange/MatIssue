@@ -6,6 +6,7 @@ import { MBTIState } from "@/app/store/mbtiAtom";
 import { useRecoilValue } from "recoil";
 import Image from "next/image";
 import Button from "@/app/components/UI/Button";
+import Logo from "@/app/components/header/Logo";
 import styled from "styled-components";
 
 type ResultData = {
@@ -197,6 +198,7 @@ const ResultPage = () => {
   return (
     <>
       <PageWrapper className={animation}>
+        <Logo />
         <PageTitle>
           나의 M<span>uk</span>BTI는?
         </PageTitle>
@@ -214,7 +216,6 @@ const ResultPage = () => {
           <Percent>전체 결과 중 {resultData[MBTI]?.per}</Percent>
           <Rank>전체 순위 {resultData[MBTI]?.rank}위</Rank>
           <DivBar>-</DivBar>
-
           <JangJum>이런 장점을 가졌어요!</JangJum>
           <JangJumText>{resultData[MBTI]?.talk.join(", ")}</JangJumText>
           <Gomin>이런 고민도 있어요</Gomin>
@@ -241,13 +242,11 @@ const PageWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 3rem auto;
-  border-radius: 10px;
+  margin: auto;
   width: 100%;
   max-width: 50rem;
-  height: 100%;
-  max-height: 100%;
-  padding: 1.5rem;0rem;
+  heigth: 100vh;
+  padding: 1.5rem 0rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
   opacity: 0;
@@ -294,19 +293,19 @@ const DivBar = styled.div`
 `;
 
 const MBTIcard = styled.div`
-font-family: "Dongle-Bold";
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-margin: 3rem auto;
-border-radius: 10px;
-width: 100%;
-max-width: 40rem;
-height: 100%;
-max-height: 100%;
-padding: 1.5rem;0rem;
-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  font-family: "Dongle-Bold";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem auto;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 40rem;
+  height: 100%;
+  max-height: 100%;
+  padding: 1.5rem 0rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const Percent = styled.div`
@@ -348,7 +347,6 @@ const GominText = styled.div`
 `;
 
 const RestartButtonBox = styled.button`
-  display: flex;
   width: 100%;
   max-width: 20rem;
 
@@ -357,8 +355,8 @@ const RestartButtonBox = styled.button`
     margin-bottom: 1.5rem;
     height: 7rem;
     font-size: 15px;
-    text-align: center;
     background-color: #fbd26a;
+    text-align: center;
 
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: all 0.3s ease;
