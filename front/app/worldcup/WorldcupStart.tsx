@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Image from "next/image";
 import { getAllRecipes } from "@/app/api/recipe";
 import Link from "next/link";
+import LoadingModal from "@/app/components/UI/LoadingModal";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -22,6 +23,7 @@ const GameStart: React.FC = () => {
   const [stage, setStage] = useState(32);
   const [selectedCount, setSelectedCount] = useState(0);
   const [isAnimateOut, setIsAnimateOut] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -31,8 +33,10 @@ const GameStart: React.FC = () => {
         const selectedRecipes = recipes.slice(0, 32); // 랜덤으로 32개의 레시피 선택
         setFoods(selectedRecipes);
         setDisplays([selectedRecipes[0], selectedRecipes[1]]);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
+        setIsLoading(false);
       }
     };
 
@@ -62,6 +66,11 @@ const GameStart: React.FC = () => {
       setFoods(foods.slice(2));
     }
   };
+
+  if (isLoading) {
+    // 데이터 로딩 중일 때 로딩 모달 표시
+    return <LoadingModal />;
+  }
 
   return (
     <WorldcupLayout>
