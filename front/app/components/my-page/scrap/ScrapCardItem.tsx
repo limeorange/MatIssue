@@ -1,11 +1,13 @@
+"use client";
+
 import styled from "styled-components";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 type ScrapCardProps = {
-  memoContent: string;
-  memoItemData: {
+  memoText: string;
+  recipeData: {
     created_at: string;
     recipe_id: string;
     recipe_like: number;
@@ -17,35 +19,45 @@ type ScrapCardProps = {
   };
 };
 
-const ScrapCardItem: React.FC<ScrapCardProps> = ({
-  memoItemData,
-  memoContent,
-}) => {
+const ScrapCardItem: React.FC<ScrapCardProps> = ({ recipeData, memoText }) => {
   const {
+    created_at,
     recipe_id,
     recipe_like,
     recipe_thumbnail,
     recipe_title,
     recipe_view,
+    user_id,
     user_nickname,
-  } = memoItemData;
+  } = recipeData;
 
-  const hasMemo = memoContent ? true : false;
+  const hasMemo = memoText ? true : false;
+  const router = useRouter();
 
-  // const router = useRouter();
-  // const scrapClickHandler = (recipe_id: string) => {
-  //   router.push(`/recipes/${recipe_id}`);
-  // };
+  /** 해당 스크랩 데이터 로컬스토리지에서 삭제하는 핸들러 */
+  const scrapDeleteHandler = (recipe_id: string) => {
+    const memoScrapData = localStorage.getItem("scrapMemo");
 
-  const scrapDeleteHandler = () => {
-    const memoKey = `memo_${memoItemData.recipe_id}`;
-    localStorage.removeItem(memoKey);
+    // 가져온 데이터가 존재하면 배열로 변환
+    const memoScrapArray = memoScrapData ? JSON.parse(memoScrapData) : [];
+
+    // recipe_id를 가지고 있는 객체를 찾아서 삭제
+    const filteredScrapArray = memoScrapArray.filter(
+      (item: any) => item.recipe_id !== recipe_id
+    );
+
+    // 수정된 배열을 다시 로컬 스토리지에 저장
+    localStorage.setItem("scrapMemo", JSON.stringify(filteredScrapArray));
     toast.success("해당 스크랩이 삭제되었습니다!");
   };
 
   return (
     <>
-      <ScrapCardContainerDiv>
+      <ScrapCardContainerDiv
+        onClick={() => {
+          router.push(`/recipes/${recipe_id}`);
+        }}
+      >
         <div className="flex items-center mb-[1.7rem]">
           <Image
             src="/images/recipe-view/note.svg"
@@ -98,7 +110,7 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
         <MemoContainerDiv>
           <ScrapTextArea
             placeholder="게시글에서 메모를 입력해보세요!"
-            value={memoContent}
+            value={memoText}
             // onChange={memoChangeHandler}
             hasMemo={hasMemo}
           ></ScrapTextArea>
