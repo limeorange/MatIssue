@@ -9,7 +9,9 @@ export const metadata = {
   title: "맛이슈",
   description: "자신만의 레시피를 올리고 공유하는 플랫폼 입니다.",
   openGraph: {
-    images: ["/images/logo1.png"],
+    title: "맛이슈",
+    description: "자신만의 레시피를 올리고 공유하는 플랫폼 입니다.",
+    images: "/images/logo1.png",
   },
 };
 
