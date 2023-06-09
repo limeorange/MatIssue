@@ -8,14 +8,13 @@ import styled from "styled-components";
 import Image from "next/image";
 
 import UserModal from "./UserModal";
-
 import { User } from "@/app/types";
 
-const UserMenu = ({ currentUser }: { currentUser: User | null }) => {
-  const router = useRouter();
-
+const UserMenu = ({ currentUser }: { currentUser: User }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const isLoggedIn = useRecoilValue(loginState);
+  const router = useRouter();
+
   return (
     <UserMenuDiv>
       {isLoggedIn ? (

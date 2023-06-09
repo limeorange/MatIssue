@@ -6,11 +6,11 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const currentUser = await getCurrentUserSS();
+  const initialCurrentUser = await getCurrentUserSS();
 
   return (
     <>
-      <Header currentUser={currentUser} />
+      <Header initialCurrentUser={initialCurrentUser} />
       <main>{children}</main>
     </>
   );
