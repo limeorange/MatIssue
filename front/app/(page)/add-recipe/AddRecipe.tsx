@@ -305,7 +305,7 @@ const RecipeForm = () => {
       .then((res) => {
         console.log(res);
         toast.success("레시피가 등록이 되었습니다!");
-        router.push("/category/newest?category=newest");
+        router.push("recipes/category/newest?category=newest");
       })
       .catch((err) => {
         toast.error(err.response.data.detail);
@@ -403,7 +403,6 @@ const RecipeForm = () => {
             disabled={isLoading}
           >
             {isLoading ? "저장 중..." : "저장"}
-            저장
           </Button>
         </SaveButton>
         <CancleButton>

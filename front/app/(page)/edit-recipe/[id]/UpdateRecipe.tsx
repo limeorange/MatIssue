@@ -320,7 +320,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       .then((res) => {
         console.log(res);
         toast.success("레시피가 수정이 되었습니다!");
-        router.push("/category/newest?category=newest");
+        router.push("recipes/category/newest?category=newest");
       })
       .catch((err) => {
         toast.error(err.response.data.detail);

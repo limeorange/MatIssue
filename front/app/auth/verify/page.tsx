@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 const VerifyEmail = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const verifyCode = searchParams.get("code");
+  const verifyCode = searchParams?.get("code");
 
   useEffect(() => {
     if (verifyCode) {

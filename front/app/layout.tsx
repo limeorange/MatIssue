@@ -9,16 +9,17 @@ export const metadata = {
   title: "맛이슈",
   description: "자신만의 레시피를 올리고 공유하는 플랫폼 입니다.",
   openGraph: {
-    images: [
-      {
-        url: "/about/opengraph-image.png",
-        width: 400,
-        height: 300,
-        alt: "logo",
-      },
-    ],
+    title: "맛이슈",
+    description: "자신만의 레시피를 올리고 공유하는 플랫폼 입니다.",
+    images: "https://eliceproject.s3.amazonaws.com/20230609163939760_og.jpg",
   },
 };
+
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
 
 export default async function RootLayout({
   children,
@@ -33,6 +34,7 @@ export default async function RootLayout({
           <Recoil>
             <ReactQuery>{children}</ReactQuery>
           </Recoil>
+          <script src={"https://developers.kakao.com/sdk/js/kakao.js"} async />
         </body>
       </StyledComponentsRegistry>
     </html>
