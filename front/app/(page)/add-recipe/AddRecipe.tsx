@@ -403,7 +403,6 @@ const RecipeForm = () => {
             disabled={isLoading}
           >
             {isLoading ? "저장 중..." : "저장"}
-            저장
           </Button>
         </SaveButton>
         <CancleButton>
