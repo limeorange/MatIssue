@@ -3,10 +3,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { MBTIState } from "@/app/store/mbtiAtom";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
+import RecipeCard from "@/app/components/recipe-card/main/MainRecipeCard";
 import Image from "next/image";
 import Button from "@/app/components/UI/Button";
 import Logo from "@/app/components/header/Logo";
+import KakaoShareButton from "@/app/utils/kakaoShare";
+import { toast } from "react-hot-toast";
 import styled from "styled-components";
 
 type ResultData = {
@@ -21,7 +24,7 @@ type ResultData = {
 };
 
 const ResultPage = () => {
-  let MBTI = useRecoilValue(MBTIState);
+  const [MBTI, setMBTI] = useRecoilState(MBTIState);
 
   const router = useRouter();
 
@@ -104,7 +107,7 @@ const ResultPage = () => {
       talk: [
         "- 대표적인 인싸 유형, 사람들을 좋아하고 사람들이 좋아해요.\n- 같이 있으면 긍정 에너지 뿜뿜!\n주변 사람들 기분 좋게 해줘요.\n- 단순해요. 안좋은 일 있어서 기분 안좋다가도 금방 잊어요.",
       ],
-      text: "- 게획 없이 충동적으로 행동할 때가 많아요.",
+      text: "- 계획 없이 충동적으로 행동할 때가 많아요.",
       text2: "파티의 분위기를 살리는 피자",
       img: "/images/ESFP.png",
     },
@@ -142,9 +145,9 @@ const ResultPage = () => {
       per: "3.11%",
       rank: "14",
       talk: [
-        "- 새로운 거 배우는 거 좋아해요! 그게 지식 습득이든, 스포츠든, 취미든!\n- 뭔가에 꽂히면 A to Z, 그 주변 물건까지 다 사는 덕후기질 발휘!\n- 할 일 미룰 때까지 미루는데 벼락치기를 잘해서 생각보다 결과가 좋아요.\n- 새로운 변화나 상황에 뛰어난 적응력을 가지고 있어요.",
+        "- 새로운 거 배우는 거 좋아해요!\n그게 지식 습득이든, 스포츠든, 취미든!\n- 뭔가에 꽂히면 A to Z,\n그 주변 물건까지 다 사는 덕후기질 발휘!\n- 할 일 미룰 때까지 미루는데 벼락치기를 잘해서\n생각보다 결과가 좋아요.\n- 새로운 변화나 상황에 뛰어난 적응력을 가지고 있어요.",
       ],
-      text: "- 뭐든 쉽게 질리는 탓에 한 가지 일을 끈기있게 하는 건 어려워요.",
+      text: "- 뭐든 쉽게 질리는 탓에\n한 가지 일을 끈기있게 하는 건 어려워요.",
       text2: "간단하고 즉흥적인 라면",
       img: "/images/ISTP.png",
     },
@@ -190,10 +193,40 @@ const ResultPage = () => {
     },
   };
 
-  // 시작 버튼 클릭시 페이지 렌더링 애니메이션
+  // Url 복사하는 함수
+  const copyToClipboard = async () => {
+    const currentPageUrl = window.location.href;
+    try {
+      await navigator.clipboard.writeText(currentPageUrl);
+      toast.success("Url이 복사 되었습니다!");
+    } catch (err: any) {
+      toast.error("Url 복사에 실패했습니다.", err);
+    }
+  };
+
+  // 렌더링 시 페이지 애니메이션, urlParams에서 MBTI 가져옴
   useEffect(() => {
     setAnimation("opacity-1");
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const savedMBTI = urlParams.get("MBTI");
+      if (savedMBTI) {
+        setMBTI((prevMBTI) => (prevMBTI = savedMBTI));
+      }
+    }
+  }, [setMBTI]);
+
+  // MBTI 결과가 변경될 때마다 urlParmas에 저장
+  useEffect(() => {
+    if (MBTI && typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set("MBTI", MBTI);
+      window.history.replaceState({}, "", `?${urlParams.toString()}`);
+    }
+  }, [MBTI]);
 
   return (
     <>
@@ -216,10 +249,26 @@ const ResultPage = () => {
           <Percent>전체 결과 중 {resultData[MBTI]?.per}</Percent>
           <Rank>전체 순위 {resultData[MBTI]?.rank}위</Rank>
           <DivBar>-</DivBar>
-          <JangJum>이런 장점을 가졌어요!</JangJum>
-          <JangJumText>{resultData[MBTI]?.talk.join(", ")}</JangJumText>
-          <Gomin>이런 고민도 있어요</Gomin>
-          <GominText>{resultData[MBTI]?.text}</GominText>
+          <TextTitle>이런 장점을 가졌어요!</TextTitle>
+          <Text>{resultData[MBTI]?.talk.join(", ")}</Text>
+          <TextTitle style={{ marginTop: "2rem" }}>
+            이런 고민도 있어요
+          </TextTitle>
+          <Text>{resultData[MBTI]?.text}</Text>
+          <DivBar>-</DivBar>
+          {/* <FoodTitle>나의 소울푸드 만들러 가기</FoodTitle> */}
+          <ShareText>테스트 공유하기</ShareText>
+          <ShareButtonBox>
+            <div onClick={copyToClipboard}>
+              <Image
+                src="/images/link.png"
+                alt="링크 공유 아이콘"
+                width={60}
+                height={50}
+              />
+            </div>
+            <KakaoShareButton />
+          </ShareButtonBox>
         </MBTIcard>
         <RestartButtonBox>
           <Button
@@ -227,6 +276,12 @@ const ResultPage = () => {
               router.push("/mbti");
             }}
           >
+            <Image
+              src="/images/reload.png"
+              alt="뒤로가기 아이콘"
+              width={30}
+              height={30}
+            />
             테스트 다시하기
           </Button>
         </RestartButtonBox>
@@ -318,45 +373,67 @@ const Rank = styled.div`
   color: rgb(154, 110, 96);
 `;
 
-const JangJum = styled.div`
+const TextTitle = styled.div`
   font-size: 30px;
   color: #f8b551;
-  margin-top: 1.5rem;
 `;
 
-const JangJumText = styled.div`
+const Text = styled.div`
   font-size: 25px;
   color: grey;
   text-align: center;
   white-space: pre-line;
-  line-height: 1.5;
 `;
 
-const Gomin = styled.div`
+const FoodTitle = styled.div`
   font-size: 30px;
-  color: #f8b551;
-  margin-top: 1.5rem;
+  color: rgb(154, 110, 96);
 `;
 
-const GominText = styled.div`
-  font-size: 25px;
-  color: grey;
-  text-align: center;
-  white-space: pre-line;
-  line-height: 1.5;
+const ShareText = styled.p`
+  font-family: "Dongle-Bold";
+  font-size: 30px;
+  color: #5c8984;
 `;
 
-const RestartButtonBox = styled.button`
+const ShareButtonBox = styled.div`
   width: 100%;
   max-width: 20rem;
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem 2rem 2rem;
+
+  & div {
+    cursor: pointer;
+    border-radius: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
+`;
+
+const RestartButtonBox = styled.div`
+  width: 100%;
+  max-width: 20rem;
+  gap: 1rem;
+  display: flex;
 
   & Button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     margin-bottom: 1.5rem;
-    height: 7rem;
+    height: 5rem;
     font-size: 15px;
     background-color: #fbd26a;
     text-align: center;
+    gap: 0.5rem;
 
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: all 0.3s ease;
