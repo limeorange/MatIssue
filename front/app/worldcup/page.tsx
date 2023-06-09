@@ -1,4 +1,4 @@
-import StartPage from "../mbti/StartPage";
+import StartPage from "./StartPage";
 
 const WorldcupPage = () => {
   return <StartPage />;

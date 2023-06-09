@@ -16,7 +16,7 @@ type Recipe = {
   recipe_thumbnail: string;
 };
 
-const WorldGame: React.FC = () => {
+const WorldcupGame: React.FC = () => {
   const [foods, setFoods] = useState<Recipe[]>([]);
   const [displays, setDisplays] = useState<Recipe[]>([]);
   const [winners, setWinners] = useState<Recipe[]>([]);
@@ -135,7 +135,7 @@ const WorldGame: React.FC = () => {
   );
 };
 
-export default WorldGame;
+export default WorldcupGame;
 
 const WorldcupLayout = styled.div`
   display: flex;
