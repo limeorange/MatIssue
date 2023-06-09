@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 type RecipeVideoProps = {
-  recipeVideoUrl: string;
+  recipe_video: string;
 };
 
 /** 유튜브 고유 id 추출하는 함수 */
@@ -20,15 +20,13 @@ const extractVideoId = (url: string): string | null => {
 };
 
 /** 레시피 비디오 컴포넌트 */
-const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipeVideoUrl }) => {
+const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipe_video }) => {
   return (
     <>
       <VideoContainerDiv>
         <VideoIframe
           title="요리 동영상 썸네일"
-          src={`https://www.youtube.com/embed/${extractVideoId(
-            recipeVideoUrl
-          )}`}
+          src={`https://www.youtube.com/embed/${extractVideoId(recipe_video)}`}
           allowFullScreen
         />
       </VideoContainerDiv>

@@ -9,7 +9,7 @@ const ViewPage = async ({ params }: { params: { id: string } }) => {
 
   /** 레시피 조회 데이터 */
   const recipe = await getRecipeById(recipe_id);
-  console.log(recipe);
+  console.log("recipe 데이터에 담긴 것은...🤓", recipe);
 
   return <RecipeDetail recipe={recipe} recipe_id={recipe_id} />;
 };
