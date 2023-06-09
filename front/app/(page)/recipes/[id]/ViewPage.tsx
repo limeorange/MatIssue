@@ -15,9 +15,12 @@ import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySid
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRecipeById } from "@/app/api/recipe";
 import { Recipe } from "@/app/types";
+import WriterProfile from "@/app/components/recipe-view/sticky-sidebar/WriterProfile";
+import { axiosBase } from "@/app/api/axios";
+import toast from "react-hot-toast";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -58,6 +61,8 @@ type RecipeDataProps = {
       created_at: string;
       comment_parent: string;
       updated_at: string;
+      comment_nickname: string;
+      comment_profile_img: string;
     };
   };
   recipe_id: string;
@@ -115,11 +120,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
   const loggedInUserId = "happyuser";
 
-  console.log(recipe_id);
-
-  // 로컬스토리지 key 정의
-  const localStorageKey = `memo_${recipe_id}`;
-
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
   const [count, setCount] = useState(recipe_like);
@@ -135,13 +135,24 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const commentCount =
     Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
 
+  // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능 활용
+  const client = useQueryClient();
+
   // 좋아요 버튼 클릭 핸들러
-  const heartClickHandler = () => {
-    setIsLiked(!isLiked);
-    if (isLiked) {
-      setCount(count - 1);
-    } else {
-      setCount(count + 1);
+  const heartClickHandler = async () => {
+    try {
+      const response = await axiosBase.patch(`/recipes/${recipe_id}/like`);
+      setIsLiked(!isLiked);
+      if (isLiked) {
+        setCount(count - 1);
+      } else {
+        setCount(count + 1);
+      }
+      toast.success("좋아요가 반영되었습니다!");
+      client.invalidateQueries(["currentRecipe"]);
+    } catch (error) {
+      console.log("좋아요 요청 실패와 관련한 오류는..🧐", error);
+      toast.error("좋아요 요청에 실패했습니다 ㅠ.ㅠ");
     }
   };
 
@@ -166,6 +177,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <StickyProgressBar />
           <StickySideBar />
         </div>
+
+        {/* 작성자 프로필 */}
+        <WriterProfile></WriterProfile>
 
         {/* 요리 대표 이미지 */}
         <ImageWrapperDiv>
@@ -243,13 +257,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
             setIsSaved={setIsSaved}
             isBooked={isBooked}
             scrapClickHandler={scrapClickHandler}
-            localStorageKey={localStorageKey}
           />
           {isBooked && (
             <ScrapModal
               setIsSaved={setIsSaved}
               modalCloseHandler={modalCloseHandler}
-              localStorageKey={localStorageKey}
               recipe={recipe}
             />
           )}
@@ -283,7 +295,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70rem;
+  width: 67rem;
   margin: 0 auto;
   gap: 2.5rem;
 `;

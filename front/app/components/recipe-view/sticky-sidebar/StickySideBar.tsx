@@ -66,7 +66,7 @@ const StickySideBar = () => {
 const ContainerDiv = styled.div`
   position: fixed;
   top: 20rem;
-  right: 16rem;
+  left: 20rem;
   z-index: 50;
 `;
 
