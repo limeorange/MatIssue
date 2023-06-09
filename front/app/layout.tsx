@@ -10,6 +10,12 @@ export const metadata = {
   description: "자신만의 레시피를 올리고 공유하는 플랫폼 입니다.",
 };
 
+declare global {
+  interface Window {
+    Kakao: any;
+  }
+}
+
 export default async function RootLayout({
   children,
 }: {
@@ -23,6 +29,7 @@ export default async function RootLayout({
           <Recoil>
             <ReactQuery>{children}</ReactQuery>
           </Recoil>
+          <script src={"https://developers.kakao.com/sdk/js/kakao.js"} async />
         </body>
       </StyledComponentsRegistry>
     </html>
