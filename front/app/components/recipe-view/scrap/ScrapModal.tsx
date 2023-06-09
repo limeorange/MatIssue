@@ -87,13 +87,6 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   // 스크랩 메모 내용 유무에 따른 배경, 글자색 변경을 위한 상태 관리
   const hasMemo = memo ? true : false;
 
-  // 스크랩 메모 원본 상태 관리
-  const originalSaved = localStorage.getItem("scrapMemo");
-  const originalArray = originalSaved ? JSON.parse(originalSaved) : [];
-  const originalMemo = originalArray.filter(
-    (item: any) => item.recipe_id == recipe_id
-  );
-
   // 스크랩 모달창 자유 이동 설정
   const modalRef = useRef<HTMLDivElement>(null);
   const offsetXRef = useRef<number>(0);
@@ -163,8 +156,9 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   };
 
   /** 메모 취소 버튼 핸들러 */
+  // memo 변수는 ScrapModal 컴포넌트의 상태로서 해당 컴포넌트가 언마운트되면 초기화됨
+  // 즉, 모달이 닫히면 메모 내용이 사라짐 => 원본 따로 저장해서 띄워줄 필요 없음!
   const memoCancelHandler = () => {
-    setMemo(originalMemo);
     modalCloseHandler();
   };
 
