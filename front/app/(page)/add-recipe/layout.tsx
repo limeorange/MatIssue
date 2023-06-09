@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { User } from "@/app/types";
-import ConfirmModal from "@/app/components/my-page/ConfirmModal";
+import ConfirmModal from "@/app/components/UI/ConfirmModal";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: currentUser, isLoading } = useQuery<User>(["currentUser"]);
