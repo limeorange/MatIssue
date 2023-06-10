@@ -90,6 +90,7 @@ const GameHeader = styled.p<StyledComponentProps>`
 const StartPageMessage = styled.p<StyledComponentProps>`
   font-size: 17px;
   color: #4f3d21;
+  margin-top: 2rem;
 
   animation: ${(props) =>
     props.isAnimateOut
@@ -107,7 +108,7 @@ const ImageBox = styled.div<StyledComponentProps>`
 `;
 
 const ButtonBox = styled.div<StyledComponentProps>`
-  margin-top: 4rem;
+  margin-top: 1rem;
 
   & Button {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
