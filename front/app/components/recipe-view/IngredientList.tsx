@@ -19,15 +19,15 @@ type Ingredient = {
 
 /** 요리 재료 리스트 Props */
 type IngredientListProps = {
-  recipeIngredients: Ingredient[];
+  recipe_ingredients: Ingredient[];
 };
 
 /** 재료 준비 목록 컴포넌트 */
 const IngredientList: React.FC<IngredientListProps> = ({
-  recipeIngredients,
+  recipe_ingredients,
 }) => {
   const [isCheckedList, setIsCheckedList] = useState<boolean[]>(
-    Array(recipeIngredients.length).fill(false)
+    Array(recipe_ingredients.length).fill(false)
   );
 
   // 체크박스 클릭 핸들러
@@ -40,7 +40,7 @@ const IngredientList: React.FC<IngredientListProps> = ({
   return (
     <ContainerDiv>
       <IngredientUl>
-        {recipeIngredients.map((item, index) => (
+        {recipe_ingredients.map((item, index) => (
           <IngredientItemLi key={index}>
             <IngredientSpan isChecked={isCheckedList[index]}>
               {item.name}

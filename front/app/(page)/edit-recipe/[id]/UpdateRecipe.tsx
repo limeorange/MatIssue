@@ -47,7 +47,7 @@ const categories = [
   { label: "중식", value: "chinese" },
   { label: "일식", value: "japanese" },
   { label: "양식", value: "western" },
-  { label: "비건", value: "vegetarian" },
+  { label: "채식", value: "vegetarian" },
   { label: "기타", value: "other" },
 ];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -319,8 +319,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     updateRecipe(recipe_id, recipeData)
       .then((res) => {
         console.log(res);
-        toast.success("레시피 수정이 되었습니다!");
-        router.push("/category/newest?category=newest");
+        toast.success("레시피가 수정이 되었습니다!");
+        router.push("recipes/category/newest?category=newest");
       })
       .catch((err) => {
         toast.error(err.response.data.detail);
@@ -440,7 +440,7 @@ export default UpdateRecipeForm;
 
 // 공통 스타일 적용
 const Label = styled.label`
-  width: 8.8rem;
+  width: 9.8rem;
   height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
@@ -506,7 +506,7 @@ const FormWrapper = styled.form`
 `;
 
 const Title = styled.h2`
-  width: 14.8rem;
+  width: 15.8rem;
   height: 2.7rem;
   font-family: "Inter";
   font-style: normal;

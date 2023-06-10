@@ -61,7 +61,7 @@ const StickyProgressBar = () => {
 const ProgressBarContainerDiv = styled.div`
   position: fixed;
   top: 24rem;
-  right: 26rem;
+  left: 16.5rem;
   height: 29rem;
   width: 1rem;
   background-color: #f2f2f2;

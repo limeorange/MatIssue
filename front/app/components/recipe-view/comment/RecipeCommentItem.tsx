@@ -16,6 +16,8 @@ type RecipeCommentProps = {
   comment_like: number;
   created_at: string;
   updated_at: string;
+  comment_nickname: string;
+  comment_profile_img: string;
 };
 
 /** 요리 댓글 단일 컴포넌트 */
@@ -26,6 +28,8 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   comment_like,
   created_at,
   updated_at,
+  comment_nickname,
+  comment_profile_img,
 }) => {
   // 수정 버튼 눌렀을 때 textarea로 변경하기 위한 상태 관리
   const [isEditing, setIsEditing] = useState(false);
@@ -78,7 +82,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
       toast.success("댓글 수정이 완료되었습니다");
       client.invalidateQueries(["currentRecipe"]);
     } catch (error) {
-      console.log("댓글 수정 실패", error);
+      console.log("댓글 수정 실패와 관련한 오류는...🧐", error);
       toast.error("댓글 수정에 실패했습니다 ㅠ.ㅠ");
     }
     // 수정 완료 후 상태 업데이트
@@ -118,8 +122,8 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
       <CommentContainer>
         <ProfileImageDiv>
           <Image
-            src={"/images/recipe-view/기본 프로필.png"}
-            alt="기본 프로필 사진"
+            src={comment_profile_img}
+            alt="유저 프로필 사진"
             fill
             style={{
               objectFit: "cover",
@@ -133,7 +137,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
           <AuthorDotsDiv>
             {/* 작성자, 작성 시간 */}
             <AuthorTimeDiv>
-              <AuthorNameSpan>{comment_author}</AuthorNameSpan>
+              <AuthorNameSpan>{comment_nickname}</AuthorNameSpan>
               <CreatedTimeSpan>
                 {koreanCreatedAt.split(":").slice(0, -1).join(":")}
               </CreatedTimeSpan>
@@ -315,13 +319,11 @@ const CreatedTimeSpan = styled.span`
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImageDiv = styled.div`
-  min-width: 5rem;
-  min-height: 5rem;
-  width: 5rem;
-  height: 5rem;
+  min-width: 4.9rem;
+  min-height: 4.9rem;
+  width: 4.9rem;
+  height: 4.9rem;
   position: relative;
-  border-width: 0.2rem;
-  border-color: #fbd26a;
   border-radius: 50%;
   overflow: hidden;
 `;

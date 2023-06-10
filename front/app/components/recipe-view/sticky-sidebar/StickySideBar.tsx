@@ -1,18 +1,25 @@
-"use client";
-
-import useIntersectionObservation from "@/app/hooks/useIntersectionObservation";
 import { useEffect, useState } from "react";
+import { Link } from "react-scroll";
 import styled from "styled-components";
 
 /** 목차 사이드바 컴포넌트 */
 const StickySideBar = () => {
-  // 활성화된 ID 상태 관리
-  const [activeId, setActiveId] = useState("content1");
-  // useIntersectionObservation(setActiveId);
+  const sections = [
+    { id: "heading1", label: "요리 정보" },
+    { id: "heading2", label: "재료 준비" },
+    { id: "heading3", label: "요리 과정" },
+    { id: "heading4", label: "요리팁" },
+    { id: "heading5", label: "요리 동영상" },
+    { id: "heading6", label: "댓글" },
+  ];
+
+  /** 목차 클릭 시 해당 위치로 스크롤 이동 */
+  const titleClickHandler = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   // 768px 이하일 때 사이드바 숨김 반응형 처리
   const [isSidebarVisible, setSidebarVisible] = useState(true);
-
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
@@ -22,10 +29,8 @@ const StickySideBar = () => {
         setSidebarVisible(true);
       }
     };
-
     window.addEventListener("resize", handleResize);
     handleResize();
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
@@ -34,62 +39,60 @@ const StickySideBar = () => {
   return (
     <>
       {isSidebarVisible && (
-        <ContainerDiv>
+        <>
           <TitleH3>목차</TitleH3>
-          <Nav>
-            <NavItemA href="#heading1" active={activeId === "content1"}>
-              요리 정보
-            </NavItemA>
-            <NavItemA href="#heading2" active={activeId === "content2"}>
-              재료 준비
-            </NavItemA>
-            <NavItemA href="#heading3" active={activeId === "content3"}>
-              요리 과정
-            </NavItemA>
-            <NavItemA href="#heading4" active={activeId === "content4"}>
-              요리팁
-            </NavItemA>
-            <NavItemA href="#heading5" active={activeId === "content5"}>
-              요리 동영상
-            </NavItemA>
-            <NavItemA href="#heading6" active={activeId === "content6"}>
-              댓글
-            </NavItemA>
-          </Nav>
-        </ContainerDiv>
+          <SidebarContainerDiv>
+            {sections.map((section) => (
+              <ItemLink
+                key={section.id}
+                to={section.id}
+                smooth={true}
+                duration={500}
+                spy={true}
+                offset={-160}
+                activeClass="active"
+                onClick={() => titleClickHandler(section.id)}
+              >
+                {section.label}
+              </ItemLink>
+            ))}
+          </SidebarContainerDiv>
+        </>
       )}
     </>
   );
 };
 
 /** 목차 사이드바 감싸는 Div */
-const ContainerDiv = styled.div`
+const SidebarContainerDiv = styled.div`
   position: fixed;
-  top: 20rem;
-  right: 16rem;
+  top: 25.5rem;
+  left: 20rem;
   z-index: 50;
 `;
 
 /** 목차 H3 */
 const TitleH3 = styled.h3`
+  position: fixed;
+  top: 20rem;
+  left: 20rem;
   font-size: 22px;
   color: #b08038;
   font-weight: 500;
   margin-bottom: 2.5rem;
 `;
 
-/** 목차 아이템 감싸는 Nav */
-const Nav = styled.nav`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-`;
-
-/** 목차 아이템 */
-const NavItemA = styled.a<{ active: boolean }>`
+/** 목차 제목 Link */
+const ItemLink = styled(Link)`
+  display: block;
   font-size: 16.5px;
+  margin-bottom: 2.1rem;
+  cursor: pointer;
 
-  color: ${({ active }) => (active ? "#DFB443" : "inherit")};
+  &.active {
+    color: #d2a225;
+    font-weight: 500;
+  }
 `;
 
 export default StickySideBar;

@@ -12,44 +12,44 @@ import { useEffect, useState } from "react";
 
 const Ingredient = [
   {
-    title: "소금",
-    img: "/images/main/bob.png",
+    title: "계란",
+    img: "/images/main/fridge/egg.png",
     id: 1,
   },
   {
-    title: "참치",
-    img: "/images/main/bob.png",
+    title: "치즈",
+    img: "/images/main/fridge/cheese.png",
     id: 2,
   },
   {
-    title: "스팸",
-    img: "/images/main/bob.png",
+    title: "감자",
+    img: "/images/main/fridge/potato.png",
     id: 3,
   },
   {
-    title: "양파",
-    img: "/images/main/bob.png",
+    title: "버섯",
+    img: "/images/main/fridge/mushroom.png",
     id: 4,
   },
   {
-    title: "파",
-    img: "/images/main/bob.png",
+    title: "양파",
+    img: "/images/main/fridge/onion.png",
     id: 5,
   },
   {
     title: "김치",
-    img: "/images/main/bob.png",
+    img: "/images/main/fridge/kimchi.png",
     id: 6,
   },
   {
-    title: "삼겹살",
-    img: "/images/main/bob.png",
+    title: "밥",
+    img: "/images/main/fridge/rice.png",
     id: 7,
   },
 ];
 
 const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
-  const [selectedIngredient, setSelectedIngredient] = useState<string>("소금");
+  const [selectedIngredient, setSelectedIngredient] = useState<string>("계란");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
 
   // 레시피 재료에 선택한 재료가 들어간 레시피들 필터링 후 랜덤정렬
@@ -59,6 +59,7 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
         (ingredient) => ingredient.name === selectedIngredient
       )
     );
+
     const randomSelection = filteredRecipes.sort(() => 0.5 - Math.random());
 
     setFilteredRecipes(randomSelection);
@@ -89,8 +90,8 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
             checked={selectedIngredient === item.title}
             onClick={ingredientSelectHandler}
           >
-            <IngredientImageWrapper>
-              <Image src={item.img} alt="ingredient" fill />
+            <IngredientImageWrapper checked={selectedIngredient === item.title}>
+              <Image src={item.img} alt="ingredient" width={35} height={35} />
             </IngredientImageWrapper>
             <h3>{item.title}</h3>
           </IngredientButton>
@@ -101,7 +102,7 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
       ) : (
         <RecipeContainer>
           {filteredRecipes.slice(0, 3).map((item: Recipe) => (
-            <LargeRecipeCard key={item._id} recipe={item} />
+            <LargeRecipeCard key={item.recipe_id} recipe={item} />
           ))}
         </RecipeContainer>
       )}
@@ -141,14 +142,21 @@ const IngredientSelectBox = styled.div`
 
 const IngredientButton = styled.button<{ checked: boolean }>`
   font-size: 16px;
-  opacity: ${(props) => (props.checked ? 1 : 0.4)};
+  opacity: ${(props) => (props.checked ? 1 : 0.6)};
+
+  font-weight: ${(props) => (props.checked ? "600" : "400")};
 
   transition: opacity 0.3s;
 `;
 
-const IngredientImageWrapper = styled.div`
+const IngredientImageWrapper = styled.div<{ checked: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   width: 5rem;
   height: 5rem;
   margin-bottom: 1rem;
+  border-radius: 50rem;
+  background-color: ${(props) => (props.checked ? "#444" : "#aaa")};
 `;

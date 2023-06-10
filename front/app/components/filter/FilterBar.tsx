@@ -111,7 +111,7 @@ const FilterContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0.8rem 1.6rem;
-  width: 30rem;
+  width: 31rem;
   height: 4rem;
   color: #ababab;
   border: 0.1rem solid rgb(200, 200, 200);
@@ -129,7 +129,7 @@ const FilterBarLi = styled.li`
   display: flex;
   position: relative;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1.2rem;
   border-bottom: 0.4rem solid #ffffff;
   padding: 1.3rem 1.3rem 0.9rem 1.3rem;
   margin: 0 auto;

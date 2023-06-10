@@ -1,21 +1,16 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { Recipe, User } from "@/app/types";
 import ProfileCard from "@/app/components/my-page/ProfileCard";
 import styled from "styled-components";
 import ScrapCardList from "@/app/components/my-page/scrap/ScrapCardList";
 
 /** 레시피 스크랩 조회 페이지 컴포넌트 */
-const Scrap = ({ currentUserRecipes }: { currentUserRecipes: Recipe[] }) => {
-  const { data } = useQuery<User>(["currentUser"]);
-  const recipesLength = currentUserRecipes.length;
-
+const Scrap = () => {
   return (
     <>
       <Container>
         <Wrapper>
-          <ProfileCard currentUser={data} />
+          <ProfileCard />
           <ScrapCardList />
         </Wrapper>
       </Container>

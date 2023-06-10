@@ -1,7 +1,7 @@
 import WorldcupStart from "./WorldcupStart";
 
-const worldcup = () => {
+const GamePage = () => {
   return <WorldcupStart />;
 };
 
-export default worldcup;
+export default GamePage;

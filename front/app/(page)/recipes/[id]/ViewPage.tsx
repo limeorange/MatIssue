@@ -15,9 +15,12 @@ import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySid
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRecipeById } from "@/app/api/recipe";
 import { Recipe } from "@/app/types";
+import WriterProfile from "@/app/components/recipe-view/sticky-sidebar/WriterProfile";
+import { axiosBase } from "@/app/api/axios";
+import toast from "react-hot-toast";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -58,6 +61,8 @@ type RecipeDataProps = {
       created_at: string;
       comment_parent: string;
       updated_at: string;
+      comment_nickname: string;
+      comment_profile_img: string;
     };
   };
   recipe_id: string;
@@ -81,28 +86,28 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
   const {
     // 대표 이미지, 제목, 작성자, 소개글 (props로 안 내려줌)
-    recipe_title: recipeTitle,
-    recipe_thumbnail: recipeCover,
-    user_nickname: author,
-    recipe_description: description,
+    recipe_title,
+    recipe_thumbnail,
+    user_nickname,
+    recipe_description,
 
     // 요리 정보 (인원, 시간, 난이도, 종류)
-    recipe_category: category,
+    recipe_category,
     recipe_info,
 
     // 요리팁, 동영상 링크
-    recipe_tip: recipeTip,
-    recipe_video: recipeVideoUrl,
+    recipe_tip,
+    recipe_video,
 
     // 레시피 작성자 아이디, 작성된 시각
-    user_id: recipeUserId,
-    created_at: createdAt,
+    user_id,
+    created_at,
 
     // 요리 재료
-    recipe_ingredients: recipeIngredients,
+    recipe_ingredients,
 
     // 요리 과정
-    recipe_sequence: recipeSequence,
+    recipe_sequence,
 
     // 요리 레시피 게시글 ID, 조회수, 좋아요수
     recipe_id,
@@ -114,11 +119,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
   } = recipe;
 
   const loggedInUserId = "happyuser";
-
-  console.log(recipe_id);
-
-  // 로컬스토리지 key 정의
-  const localStorageKey = `memo_${recipe_id}`;
 
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);
@@ -135,13 +135,24 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const commentCount =
     Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
 
+  // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능 활용
+  const client = useQueryClient();
+
   // 좋아요 버튼 클릭 핸들러
-  const heartClickHandler = () => {
-    setIsLiked(!isLiked);
-    if (isLiked) {
-      setCount(count - 1);
-    } else {
-      setCount(count + 1);
+  const heartClickHandler = async () => {
+    try {
+      const response = await axiosBase.patch(`/recipes/${recipe_id}/like`);
+      setIsLiked(!isLiked);
+      if (isLiked) {
+        setCount(count - 1);
+      } else {
+        setCount(count + 1);
+      }
+      toast.success("좋아요가 반영되었습니다!");
+      client.invalidateQueries(["currentRecipe"]);
+    } catch (error) {
+      console.log("좋아요 요청 실패와 관련한 오류는..🧐", error);
+      toast.error("좋아요 요청에 실패했습니다 ㅠ.ㅠ");
     }
   };
 
@@ -167,10 +178,13 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <StickySideBar />
         </div>
 
+        {/* 작성자 프로필 */}
+        <WriterProfile user_nickname={user_nickname} />
+
         {/* 요리 대표 이미지 */}
         <ImageWrapperDiv>
           <Image
-            src={recipeCover}
+            src={recipe_thumbnail}
             alt="요리 대표 사진"
             fill
             style={{ objectFit: "cover", borderRadius: 20 }}
@@ -181,52 +195,52 @@ const RecipeDetail = (props: RecipeDataProps) => {
         <div>
           <TitleContainerDiv>
             <div className="flex items-center">
-              <TitleH3>{recipeTitle}</TitleH3>
-              <AuthorSpan>by {author}</AuthorSpan>
-              <AuthorSpan>&nbsp;• {createdAt.slice(0, 10)}</AuthorSpan>
+              <TitleH3>{recipe_title}</TitleH3>
+              <AuthorSpan>by {user_nickname}</AuthorSpan>
+              <AuthorSpan>&nbsp;• {created_at.slice(0, 10)}</AuthorSpan>
             </div>
 
-            {recipeUserId === loggedInUserId && (
+            {user_id === loggedInUserId && (
               <div className="flex gap-[0.8rem]">
                 <EditButton>수정</EditButton>
                 <DeleteButton>삭제</DeleteButton>
               </div>
             )}
           </TitleContainerDiv>
-          <DescriptionDiv>{description}</DescriptionDiv>
+          <DescriptionDiv>{recipe_description}</DescriptionDiv>
         </div>
 
         {/* 요리 정보 (인원, 시간, 난이도, 종류) */}
-        <div id="content1">
-          <SubtitleH2 id="heading1">요리 정보</SubtitleH2>
+        <div id="heading1">
+          <SubtitleH2>요리 정보</SubtitleH2>
           <RecipeInfo
-            category={category}
+            recipe_category={recipe_category}
             recipe_info={recipe_info}
           ></RecipeInfo>
         </div>
 
         {/* 재료 준비 목록 */}
-        <div>
-          <SubtitleH2 id="heading2">재료 준비</SubtitleH2>
-          <IngredientList recipeIngredients={recipeIngredients} />
+        <div id="heading2">
+          <SubtitleH2>재료 준비</SubtitleH2>
+          <IngredientList recipe_ingredients={recipe_ingredients} />
         </div>
 
         {/* 요리 과정 */}
-        <div>
-          <SubtitleH2 id="heading3">요리 과정</SubtitleH2>
-          <RecipeSteps recipeSequence={recipeSequence}></RecipeSteps>
+        <div id="heading3">
+          <SubtitleH2>요리 과정</SubtitleH2>
+          <RecipeSteps recipe_sequence={recipe_sequence}></RecipeSteps>
         </div>
 
         {/* 요리팁 */}
-        <div>
-          <SubtitleH2 id="heading4">요리팁</SubtitleH2>
-          <RecipeTipDiv>{recipeTip}</RecipeTipDiv>
+        <div id="heading4">
+          <SubtitleH2>요리팁</SubtitleH2>
+          <RecipeTipDiv>{recipe_tip}</RecipeTipDiv>
         </div>
 
         {/* 요리 동영상 */}
-        <div>
-          <SubtitleH2 id="heading5">요리 동영상</SubtitleH2>
-          <RecipeVideo recipeVideoUrl={recipeVideoUrl}></RecipeVideo>
+        <div id="heading5">
+          <SubtitleH2>요리 동영상</SubtitleH2>
+          <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
         <div className="flex gap-[1rem] justify-center">
@@ -238,27 +252,27 @@ const RecipeDetail = (props: RecipeDataProps) => {
           />
 
           {/* 스크랩 */}
-          <RecipeScrap
-            isSaved={isSaved}
-            setIsSaved={setIsSaved}
-            isBooked={isBooked}
-            scrapClickHandler={scrapClickHandler}
-            localStorageKey={localStorageKey}
-          />
-          {isBooked && (
-            <ScrapModal
+          <div id="heading6">
+            <RecipeScrap
+              isSaved={isSaved}
               setIsSaved={setIsSaved}
-              modalCloseHandler={modalCloseHandler}
-              localStorageKey={localStorageKey}
-              recipe={recipe}
+              isBooked={isBooked}
+              scrapClickHandler={scrapClickHandler}
             />
-          )}
+            {isBooked && (
+              <ScrapModal
+                setIsSaved={setIsSaved}
+                modalCloseHandler={modalCloseHandler}
+                recipe={recipe}
+              />
+            )}
+          </div>
         </div>
 
         {/* 댓글 */}
         <div>
           <div className="flex">
-            <SubtitleH2 id="heading6">댓글</SubtitleH2>
+            <SubtitleH2>댓글</SubtitleH2>
             <CommentIconDiv>
               <Image
                 src="/images/recipe-view/comment.svg"
@@ -283,7 +297,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70rem;
+  width: 67rem;
   margin: 0 auto;
   gap: 2.5rem;
 `;

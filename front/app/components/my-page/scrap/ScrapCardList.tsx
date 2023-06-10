@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ScrapCardItem from "./ScrapCardItem";
 import NonRecipe from "../../UI/NonRecipe";
+import { useEffect, useState } from "react";
 
 type MemoItemProps = {
   created_at: string;
@@ -13,36 +14,35 @@ type MemoItemProps = {
   user_nickname: string;
 };
 
-/** 로컬스토리지에 있는 아이템 모두 가져오는 함수 */
-const getAllMemoItems = () => {
-  const keys = Object.keys(localStorage);
-  const memoItems = keys.filter((key) => key.startsWith("memo_"));
-  const memoItemValues = memoItems.map((key) => localStorage.getItem(key));
-  return memoItemValues;
-};
-
 /** 스크랩 리스트 컴포넌트 */
 const ScrapCardList: React.FC = () => {
-  const parsedItems = getAllMemoItems();
+  const [parsedMemo, setParsedMemo] = useState<MemoItemProps[]>([]);
+
+  // localStorage is not defined 에러 해결
+  // 페이지가 client에 마운트될 때까지 기다렸다가 localStorage에 접근
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const existingMemo = localStorage.getItem("scrapMemo");
+      const parsedMemo = existingMemo ? JSON.parse(existingMemo) : [];
+      setParsedMemo(parsedMemo);
+    }
+  }, []);
 
   return (
     <ScrapListContainer>
       <ScrapTitleH2>나의 스크랩</ScrapTitleH2>
-      {parsedItems.length === 0 ? (
+      {parsedMemo.length === 0 ? (
         <NonRecipeMsg />
       ) : (
         <ScrapListGrid>
-          {parsedItems.map((item, index) => {
-            // 로컬스토리지에 있는 데이터 객체 분해 할당
-            const parsedItem = JSON.parse(getAllMemoItems()[index]);
-            const memoContent = parsedItem[0];
-            const memoItemData = parsedItem[1];
-
+          {parsedMemo.map((item: any, index: number) => {
+            const recipeData = item["scrapData"];
+            const memoText = item["memo"];
             return (
               <ScrapCardItem
                 key={index}
-                memoContent={memoContent}
-                memoItemData={memoItemData}
+                recipeData={recipeData}
+                memoText={memoText}
               ></ScrapCardItem>
             );
           })}
