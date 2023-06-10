@@ -1,11 +1,8 @@
 "use client";
 
-import { User } from "../../types/index";
 import { axiosBase } from "@/app/api/axios";
 import Button from "../UI/Button";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import {
   Title,
@@ -13,7 +10,6 @@ import {
   IputAndDescription,
   EmailDescription,
   Wrapper,
-  WrapperInfo,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 const VerificationEmail = ({
@@ -48,24 +44,7 @@ const VerificationEmail = ({
     }
   };
 
-  const handleConfirmCode = async () => {
-    try {
-      const response = await axiosBase.post(
-        `/email/email-verification-check?email=${email}&code=${code}`
-      );
-
-      if (!response.data.verified) {
-        alert("Email successfully updated!");
-      } else {
-        alert("Invalid verification code.");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("서버 에러가 발생하였습니다.");
-    }
-  };
-
-  const handleChangeCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCode(e.target.value);
   };
 
@@ -74,6 +53,7 @@ const VerificationEmail = ({
       <Wrapper>
         <Title>이메일 *</Title>
         <IputAndDescription>
+          <ReadOnlyEmail>{email}</ReadOnlyEmail>
           <InputBox
             type="email"
             name="email"
@@ -97,22 +77,23 @@ const VerificationEmail = ({
           isSmallFont={true}
           onClick={handleVerificationButton}
         >
-          인증 코드 전송
+          이메일 수정
         </Button>
       </SendingCodeButton>
+
       {isButtonClicked && (
         <>
           <Wrapper>
             <Title>인증코드 *</Title>
             <IputAndDescription>
-              <InputBox type="text" value={code} onChange={handleChangeCode} />
+              <InputBox type="text" value={code} onChange={handleInputCode} />
 
               <EmailDescription>
                 인증코드를 입력 후 인증 코드 확인 버튼을 클릭하세요.
               </EmailDescription>
             </IputAndDescription>
           </Wrapper>
-          <VerifyCodeButton>
+          <SendingCodeButton>
             <Button
               type="button"
               isBgColor={true}
@@ -121,11 +102,11 @@ const VerificationEmail = ({
               isBorderColor={false}
               isHoverColor={false}
               isSmallFont={true}
-              onClick={handleConfirmCode}
+              onClick={handleVerificationButton}
             >
-              인증 코드 확인
+              인증 코드 전송
             </Button>
-          </VerifyCodeButton>
+          </SendingCodeButton>
         </>
       )}
     </>
@@ -148,4 +129,15 @@ const VerifyCodeButton = styled.div`
   top: 21.7rem;
   width: 10rem;
   height: 4rem;
+`;
+
+const ReadOnlyEmail = styled.div`
+  width: 40rem;
+  height: 4.8rem;
+  font-size: 16px;
+  padding: 0 1.6rem;
+  &:focus {
+    outline: 0.3rem solid #fbd26a;
+    border: none;
+  }
 `;
