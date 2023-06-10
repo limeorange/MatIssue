@@ -48,6 +48,7 @@ const ScrapCardList: React.FC = () => {
                 key={index}
                 recipeData={recipeData}
                 memoText={memoText}
+                setParsedMemo={setParsedMemo}
               ></ScrapCardItem>
             );
           })}

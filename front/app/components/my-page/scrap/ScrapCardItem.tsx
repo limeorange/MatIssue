@@ -5,6 +5,22 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
+type MemoItemProps = {
+  created_at: string;
+  recipe_id: string;
+  recipe_like: number;
+  recipe_thumbnail: string;
+  recipe_title: string;
+  recipe_view: number;
+  user_id: string;
+  user_nickname: string;
+};
+
+type ScrapItemProps = {
+  scrapData: MemoItemProps;
+  memo: string;
+};
+
 type ScrapCardProps = {
   memoText: string;
   recipeData: {
@@ -17,10 +33,15 @@ type ScrapCardProps = {
     user_id: string;
     user_nickname: string;
   };
+  setParsedMemo: React.Dispatch<React.SetStateAction<ScrapItemProps[]>>;
 };
 
 /** 스크랩 카드 컴포넌트 */
-const ScrapCardItem: React.FC<ScrapCardProps> = ({ recipeData, memoText }) => {
+const ScrapCardItem: React.FC<ScrapCardProps> = ({
+  recipeData,
+  memoText,
+  setParsedMemo,
+}) => {
   const {
     created_at,
     recipe_id,
@@ -49,64 +70,70 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({ recipeData, memoText }) => {
 
     // 수정된 배열을 다시 로컬 스토리지에 저장
     localStorage.setItem("scrapMemo", JSON.stringify(filteredScrapArray));
+    setParsedMemo(filteredScrapArray);
     toast.success("해당 스크랩이 삭제되었습니다!");
   };
 
   return (
     <>
-      <ScrapCardContainerDiv
-        onClick={() => {
-          router.push(`/recipes/${recipe_id}`);
-        }}
-      >
-        <RecipeTitleDiv>
-          <Image
-            src="/images/recipe-view/note.svg"
-            alt="스크랩 노트 이모티콘"
-            width={30}
-            height={35}
-            style={{ objectFit: "cover" }}
-          />
-          <ScrapTitleSpan>
-            {recipe_title.length > 15
-              ? `${recipe_title.slice(0, 15)}...`
-              : recipe_title}
-          </ScrapTitleSpan>
-        </RecipeTitleDiv>
-        {/* 레시피 썸네일 */}
-        <RecipeImageDiv>
-          <Image
-            src={recipe_thumbnail}
-            alt="스크랩 레시피 썸네일"
-            width={244}
-            height={150}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: 15,
-            }}
-          />
-        </RecipeImageDiv>
-        {/* 레시피 제목, 작성자, 좋아요 수 */}
-        <RecipeDescriptionDiv>
-          <RecipeTitleH2>{recipe_title}</RecipeTitleH2>
-          <NicknameLikeDiv>
-            <div className="text-[1.35rem] text-[#6F6F6F]">{user_nickname}</div>
-            <LikesWrapperButton>
-              <IconDiv>
-                <Image
-                  src="/images/recipe-view/heart_full.svg"
-                  alt="게시글 좋아요 하트"
-                  width={28}
-                  height={24}
-                  style={{ objectFit: "cover", cursor: "pointer" }}
-                />
-              </IconDiv>
-              <LikesCount>{recipe_like}</LikesCount>
-            </LikesWrapperButton>
-          </NicknameLikeDiv>
-        </RecipeDescriptionDiv>
+      <ScrapCardContainerDiv>
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            router.push(`/recipes/${recipe_id}`);
+          }}
+        >
+          <RecipeTitleDiv>
+            <Image
+              src="/images/recipe-view/note.svg"
+              alt="스크랩 노트 이모티콘"
+              width={30}
+              height={35}
+              style={{ objectFit: "cover" }}
+            />
+            <ScrapTitleSpan>
+              {recipe_title.length > 15
+                ? `${recipe_title.slice(0, 15)}...`
+                : recipe_title}
+            </ScrapTitleSpan>
+          </RecipeTitleDiv>
+          {/* 레시피 썸네일 */}
+          <RecipeImageDiv>
+            <Image
+              src={recipe_thumbnail}
+              alt="스크랩 레시피 썸네일"
+              width={244}
+              height={150}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: 15,
+              }}
+            />
+          </RecipeImageDiv>
+          {/* 레시피 제목, 작성자, 좋아요 수 */}
+          <RecipeDescriptionDiv>
+            <RecipeTitleH2>{recipe_title}</RecipeTitleH2>
+            <NicknameLikeDiv>
+              <div className="text-[1.35rem] text-[#6F6F6F]">
+                {user_nickname}
+              </div>
+              <LikesWrapperButton>
+                <IconDiv>
+                  <Image
+                    src="/images/recipe-view/heart_full.svg"
+                    alt="게시글 좋아요 하트"
+                    width={28}
+                    height={24}
+                    style={{ objectFit: "cover", cursor: "pointer" }}
+                  />
+                </IconDiv>
+                <LikesCount>{recipe_like}</LikesCount>
+              </LikesWrapperButton>
+            </NicknameLikeDiv>
+          </RecipeDescriptionDiv>
+        </div>
         {/* 스크랩 메모 내용 */}
         <MemoContainerDiv>
           <ScrapTextArea
@@ -136,7 +163,6 @@ const ScrapCardContainerDiv = styled.div`
   background: #ffffff;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
-  cursor: pointer;
 `;
 
 /** 스크랩 카드 제목 Div */
