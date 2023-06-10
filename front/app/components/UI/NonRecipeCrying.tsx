@@ -21,7 +21,7 @@ const NoRecipeIconBox = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 60rem;
+  max-width: 25rem;
   margin: 0 auto;
 `;
 
