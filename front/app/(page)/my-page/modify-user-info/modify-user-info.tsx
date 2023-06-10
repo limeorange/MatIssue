@@ -10,17 +10,32 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import uploadImage from "@/app/api/aws";
 import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
-
-type User = {
-  user_id: string;
-  email: string;
-  username: string;
-  img: string;
-  birth_date: string;
-  password: string;
-  created_at: string;
-  session_id: string;
-};
+import { User } from "../../../types/index";
+import VerificationEmail from "@/app/components/my-page/VerificationEmail";
+import {
+  Container,
+  Header,
+  Divider,
+  WrapperInfo,
+  Wrapper,
+  Title,
+  InputBox,
+  ProfileImageWrapper,
+  InputFile,
+  IputAndDescription,
+  StyledImage,
+  DeleteImage,
+  InputDateBox,
+  UserModifyButton,
+  SpaceDiv,
+  ShowIconBox,
+  AccountDeletion,
+  AlertImage,
+  ConfirmCodeInput,
+  SendingCodeButton,
+  EmailDescription,
+  StyledChangePassword,
+} from "@/app/styles/my-page/modify-user-info.style";
 
 type LabelForFileProps = {
   backgroundImageUrl?: string;
@@ -52,10 +67,10 @@ const ModifyUserInfo: React.FC = () => {
   const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
 
   // TODO: password 주석 시작
-  const [password, setPassword] = useState({
-    password: "",
-    confirmPassword: "",
-  });
+  // const [password, setPassword] = useState({
+  //   password: "",
+  //   confirmPassword: "",
+  // });
   // TODO: password 주석 끝
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,8 +87,8 @@ const ModifyUserInfo: React.FC = () => {
     }
   };
 
+  // aws 이미지 업로드 로직
   const uploadProfileImage = async () => {
-    // aws 이미지 업로드 로직
     if (selectedFile) {
       try {
         const response = await uploadImage(selectedFile);
@@ -93,28 +108,28 @@ const ModifyUserInfo: React.FC = () => {
     console.log("form 태그 제출");
 
     // TODO: 아래 if문 제거 시작
-    if (
-      password.password === password.confirmPassword && // 비밀번호와 비밀번호 확인이 같은지
-      password.password.length >= 8 && // 비밀번호가 8자리 이상인지
-      password.password.search(/[0-9]/g) !== -1 && // 숫자가 포함되어 있는지
-      password.password.search(/[a-z]/gi) !== -1 && // 영문 대소문자가 포함되어 있는지
-      password.password.search(/[~!@#$%^&*()_+|<>?:{}]/gi) !== -1 && // 특수문자가 포함되어 있는지
-      password.password !== "" && // 비밀번호가 공백인지
-      password.confirmPassword !== "" // 비밀번호 확인이 공백인지
-    ) {
-      // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
-      // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
-      // useEffect가 실행되면서 modifyUser 함수가 실행된다. => 회원정보 변경
-      uploadProfileImage();
-    } else {
-      alert(
-        "비빌번호를 확인해주세요. 8자리 이상, 대소문자, 숫자, 특수문자가 포함되어어 있어야 합니다."
-      );
-    }
+    // if (
+    //   password.password === password.confirmPassword && // 비밀번호와 비밀번호 확인이 같은지
+    //   password.password.length >= 8 && // 비밀번호가 8자리 이상인지
+    //   password.password.search(/[0-9]/g) !== -1 && // 숫자가 포함되어 있는지
+    //   password.password.search(/[a-z]/gi) !== -1 && // 영문 대소문자가 포함되어 있는지
+    //   password.password.search(/[~!@#$%^&*()_+|<>?:{}]/gi) !== -1 && // 특수문자가 포함되어 있는지
+    //   password.password !== "" && // 비밀번호가 공백인지
+    //   password.confirmPassword !== "" // 비밀번호 확인이 공백인지
+    // ) {
+    //   // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
+    //   // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
+    //   // useEffect가 실행되면서 modifyUser 함수가 실행된다. => 회원정보 변경
+    //   uploadProfileImage();
+    // } else {
+    //   alert(
+    //     "비빌번호를 확인해주세요. 8자리 이상, 대소문자, 숫자, 특수문자가 포함되어어 있어야 합니다."
+    //   );
+    // }
     // TODO: 아래 if문 제거 끝
 
     // TODO: 주석 해제
-    // uploadProfileImage();
+    uploadProfileImage();
   };
 
   // modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
@@ -122,7 +137,7 @@ const ModifyUserInfo: React.FC = () => {
   async function modifyUser() {
     const modifyUserInfo = {
       ...userData,
-      password: password.password, // TODO: 주석처리
+      // password: password.password, // TODO: 주석처리
     };
 
     try {
@@ -143,6 +158,7 @@ const ModifyUserInfo: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [readyUpdate === true]);
 
+  // 회원 탈퇴 컴포넌트
   const handleDeleteAccount = async () => {
     try {
       const response = await axiosBase.delete("users", {
@@ -170,6 +186,7 @@ const ModifyUserInfo: React.FC = () => {
     closeModal();
   };
 
+  // 모달 컨트롤
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -178,24 +195,27 @@ const ModifyUserInfo: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  //이미지
   const handleLabelClick = (e: React.MouseEvent<HTMLLabelElement>) => {
     if (previewImage) {
       e.preventDefault();
     }
   };
 
+  //이미지 삭제
   const handleDeleteImage = () => {
     setPreviewImage(null);
   };
 
-  const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    if (name === "password" || name === "confirmPassword") {
-      setPassword({ ...password, [name]: value });
-      return;
-    }
+    // if (name === "password" || name === "confirmPassword") {
+    //   setPassword({ ...password, [name]: value });
+    //   return;
+    // }
 
+    // 유저데이타
     setUserData((prev: any) => {
       return { ...prev, [name]: value };
     });
@@ -227,17 +247,11 @@ const ModifyUserInfo: React.FC = () => {
         {/* form 태그에서 압력값에 접근하기 위해서는 name을 사용! */}
         <form onSubmit={handleFormSubmit}>
           <WrapperInfo>
-            <Wrapper>
-              <Title>이메일 *</Title>
-              <InputBox
-                type="email"
-                name="email"
-                value={userData?.email}
-                required
-                readOnly
-                onChange={handleChageInput}
-              />
-            </Wrapper>
+            <VerificationEmail
+              email={userData?.email}
+              handleChangeInput={handleChangeInput}
+            />
+
             <Wrapper>
               <Title>별명 *</Title>
               <InputBox
@@ -245,7 +259,7 @@ const ModifyUserInfo: React.FC = () => {
                 name="username"
                 value={userData?.username}
                 required
-                onChange={handleChageInput}
+                onChange={handleChangeInput}
               />
             </Wrapper>
             <Wrapper>
@@ -256,19 +270,19 @@ const ModifyUserInfo: React.FC = () => {
                 name="birth_date"
                 value={userData?.birth_date}
                 required
-                onChange={handleChageInput}
+                onChange={handleChangeInput}
               />
             </Wrapper>
             <SpaceDiv />
             {/* TODO: 비밀번호 입력칸 주석 시작 */}
-            <Wrapper>
+            {/* <Wrapper>
               <Title>비밀번호 </Title>
               <InputBox
                 type="password"
                 name="password"
                 id="password"
                 value={password.password}
-                onChange={handleChageInput}
+                onChange={handleChangeInput}
               />
             </Wrapper>
             <Wrapper>
@@ -278,9 +292,9 @@ const ModifyUserInfo: React.FC = () => {
                 name="confirmPassword"
                 id="confirmPassword"
                 value={password.confirmPassword}
-                onChange={handleChageInput}
+                onChange={handleChangeInput}
               />
-            </Wrapper>
+            </Wrapper> */}
             {/* TODO: 비밀번호 입력칸 주석 끝 */}
           </WrapperInfo>
 
@@ -327,97 +341,6 @@ const ModifyUserInfo: React.FC = () => {
 
 export default ModifyUserInfo;
 
-const Container = styled.div`
-  position: relative;
-  width: 100%;
-  max-width: 120rem;
-  margin: 0 auto;
-  padding: 6.4rem 14rem 0;
-`;
-
-const Header = styled.h1`
-  font-size: 26px;
-  font-weight: 700;
-  color: #4f3d21;
-  padding-left: 2.5rem;
-  cursor: pointer;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: #4f3d21;
-  margin: 2rem 0;
-`;
-
-const StyledChangePassword = styled.div`
-  position: absolute;
-  right: 22.4rem;
-  top: 13.5rem;
-  font-size: 13px;
-  text-decoration: underline;
-  color: #201ce0;
-`;
-
-const AccountDeletion = styled.div`
-  position: absolute;
-  right: 16.1rem;
-  top: 13.5rem;
-  font-size: 14px;
-  text-decoration: underline;
-  color: #e11717;
-  cursor: pointer;
-`;
-
-const AlertImage = styled.img`
-  width: 3rem;
-  height: 3rem;
-`;
-
-const WrapperInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-top: -4rem;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 57rem;
-  margin-top: 7rem;
-`;
-
-const Title = styled.h4`
-  font-size: 17px;
-  margin: 0.5rem 7.5rem 0 0.2rem;
-  cursor: pointer;
-  color: #4f3d21;
-`;
-
-const InputBox = styled.input`
-  width: 40rem;
-  height: 4.8rem;
-  border: 0.1rem solid #d2d2d2;
-  border-radius: 0.8rem;
-  font-size: 16px;
-  padding: 0 1.6rem;
-  &:focus {
-    outline: 0.3rem solid #fbd26a;
-    border: none;
-  }
-`;
-
-const ProfileImageWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 7rem;
-`;
-
-const InputFile = styled.input`
-  display: none;
-`;
-
 const LabelForFile = styled.label<LabelForFileProps>`
   position: relative;
   width: 19.8rem;
@@ -435,79 +358,4 @@ const LabelForFile = styled.label<LabelForFileProps>`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-`;
-
-const IputAndDescription = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const PassWordDescription = styled.p`
-  padding: 0.5rem 0 0 0.5rem;
-  font-size: 13px;
-  font-weight: 400;
-  color: #black;
-`;
-
-const StyledImage = styled.img`
-  width: 19.8rem;
-  height: 19.8rem;
-`;
-
-const DeleteImage = styled.img`
-  position: absolute;
-  top: 0.7rem;
-  right: 0.6rem;
-  width: auto;
-  height: auto;
-`;
-
-const InputDateBox = styled.input`
-  position: relative;
-  width: 40rem;
-  height: 4.8rem;
-  border: 0.1rem solid #d2d2d2;
-  border-radius: 0.8rem;
-  padding: 0 1.6rem;
-  background: url(/images/calendar.png) no-repeat right 1.6rem center / 2rem
-    auto;
-  font-size: 15px;
-  color: #4f3d21;
-  cursor: pointer;
-  &:hover {
-    outline: 0.3rem solid #fbd26a;
-    border: none;
-  }
-  &::-webkit-calendar-picker-indicator {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    cursor: pointer;
-  }
-`;
-
-const UserModifyButton = styled.div`
-  margin: 6rem 0 0 17rem;
-  width: 23rem;
-`;
-
-//패스워드 유효성 검사
-
-const SpaceDiv = styled.div`
-  display: block;
-  height: 1rem;
-`;
-
-const ShowIconBox = styled.div`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
-  top: 1.1rem;
-  right: 1.1rem;
-  cursor: pointer;
 `;

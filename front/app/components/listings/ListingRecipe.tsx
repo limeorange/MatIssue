@@ -270,12 +270,12 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
             difficulty={difficulty}
           />
         </FilterBarBox>
-        {/* <FilterTag
+        <FilterTag
           search={searchQuery}
           filter={filter}
           category={category}
           onRemove={removeTag}
-        /> */}
+        />
         <PageHeaderContainer>
           <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
           <SortButtonContainer>
