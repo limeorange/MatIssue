@@ -1,10 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { getAllRecipes } from "@/app/api/recipe";
 import Link from "next/link";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import Logo from "@/app/components/header/Logo";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -17,10 +19,11 @@ type Recipe = {
 };
 
 const WorldcupGame: React.FC = () => {
+  const router = useRouter();
   const [foods, setFoods] = useState<Recipe[]>([]);
   const [displays, setDisplays] = useState<Recipe[]>([]);
   const [winners, setWinners] = useState<Recipe[]>([]);
-  const [stage, setStage] = useState(32);
+  const [stage, setStage] = useState(16);
   const [selectedCount, setSelectedCount] = useState(0);
   const [isAnimateOut, setIsAnimateOut] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +33,7 @@ const WorldcupGame: React.FC = () => {
       try {
         const recipes = await getAllRecipes();
         recipes.sort(() => Math.random() - 0.5);
-        const selectedRecipes = recipes.slice(0, 32); // 랜덤으로 32개의 레시피 선택
+        const selectedRecipes = recipes.slice(0, 16);
         setFoods(selectedRecipes);
         setDisplays([selectedRecipes[0], selectedRecipes[1]]);
         setIsLoading(false);
@@ -50,8 +53,9 @@ const WorldcupGame: React.FC = () => {
 
     if (foods.length <= 2) {
       if (winners.length === 0) {
-        setDisplays([food]);
-        setStage(1);
+        const queryParams = { winnerId: food.recipe_id };
+        const query = new URLSearchParams(queryParams).toString();
+        router.push(`/worldcup/game-page/result?${query}`);
       } else {
         const updatedFood = [...winners, food];
         setFoods(updatedFood);
@@ -68,12 +72,12 @@ const WorldcupGame: React.FC = () => {
   };
 
   if (isLoading) {
-    // 데이터 로딩 중일 때 로딩 모달 표시
     return <LoadingModal />;
   }
 
   return (
     <WorldcupLayout>
+      <Logo />
       <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
       <GameProgress>
         {stage === 1 && displays.length === 1
