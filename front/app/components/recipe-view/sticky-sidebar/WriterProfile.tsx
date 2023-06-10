@@ -30,7 +30,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({ user_nickname }) => {
 
           {/* 팔로잉, 팔로워 */}
           <FollowDiv>
-            <span>팔로잉</span>
+            <span>팔로워</span>
             <BoldSpan>99</BoldSpan>
             <span>|</span>
             <span>팔로잉</span>
