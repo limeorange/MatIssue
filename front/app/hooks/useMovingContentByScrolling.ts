@@ -6,7 +6,7 @@ const useMovingContentByScrolling = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const pathname = usePathname();
 
-  const isViewPage = pathname?.startsWith("/recipes") ? true : false;
+  const isViewPage = pathname?.startsWith("/recipe/") ? true : false;
 
   useEffect(() => {
     const handleScroll = () => {
