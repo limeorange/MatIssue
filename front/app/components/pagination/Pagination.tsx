@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
@@ -11,28 +12,34 @@ type PaginationProps = {
 };
 
 const Pagination = (props: PaginationProps) => {
-  const pageNumbers = [];
+  const [startPage, setStartPage] = useState(1);
+  const [endPage, setEndPage] = useState(10);
 
   const totalPages = Math.ceil(props.totalRecipes / props.recipesPerPage);
-
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
 
   // 이전 버튼 로직
   const handlePrevClick = () => {
     if (props.currentPage > 1) {
       props.paginate(props.currentPage - 1);
     }
+
+    if (startPage > 1) {
+      setStartPage(startPage - 10);
+      setEndPage(endPage - 10);
+    }
   };
 
   // 다음 버튼 로직
   const handleNextClick = () => {
-    if (props.currentPage < pageNumbers.length) {
+    if (props.currentPage < totalPages) {
       props.paginate(props.currentPage + 1);
     }
-  };
 
+    if (endPage < totalPages) {
+      setStartPage(startPage + 10);
+      setEndPage(endPage + 10);
+    }
+  };
   return (
     <PaginationWrapper>
       <PaginationUl>
@@ -46,21 +53,23 @@ const Pagination = (props: PaginationProps) => {
             />
           </PaginationPrevButton>
         </PaginationPrevButtonBox>
-        {pageNumbers.map((number) => (
-          <PaginationLi key={number} className="page-item">
-            <PaginationButtonBox
-              onClick={() => props.paginate(number)}
-              className={props.currentPage === number ? "active" : ""}
-            >
-              <PaginationButton
+        {Array.from({ length: 10 }, (_, i) => startPage + i)
+          .filter((pageNumber) => pageNumber <= totalPages)
+          .map((number) => (
+            <PaginationLi key={number}>
+              <PaginationButtonBox
                 onClick={() => props.paginate(number)}
                 className={props.currentPage === number ? "active" : ""}
               >
-                {number}
-              </PaginationButton>
-            </PaginationButtonBox>
-          </PaginationLi>
-        ))}
+                <PaginationButton
+                  onClick={() => props.paginate(number)}
+                  className={props.currentPage === number ? "active" : ""}
+                >
+                  {number}
+                </PaginationButton>
+              </PaginationButtonBox>
+            </PaginationLi>
+          ))}
         <PaginationNextButtonBox onClick={handleNextClick}>
           <PaginationNextButton onClick={handleNextClick}>
             <Image
