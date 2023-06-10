@@ -6,6 +6,9 @@ import Button from "../../components/UI/Button";
 import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { getRecipeByUserId } from "@/app/api/recipe";
+import getCurrentUser from "@/app/api/user";
+import { useRouter } from "next/navigation";
 
 type MemoItemProps = {
   created_at: string;
@@ -20,14 +23,19 @@ type MemoItemProps = {
 
 const ProfileCard = () => {
   // 캐시에 저장된 현재 유저정보를 가져옴
-  const { data: currentUser } = useQuery<User>(["currentUser"]);
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
 
   // 캐시에 저장된 현재 유저가 작성한 레시피들을 가져옴
-  const { data: currentUserRecipes } = useQuery<Recipe[]>([
-    "currentUserRecipes",
-  ]);
+  const { data: currentUserRecipes } = useQuery<Recipe[]>(
+    ["currentUserRecipes"],
+    () => getRecipeByUserId()
+  );
 
   const [parsedMemo, setParsedMemo] = useState<MemoItemProps[]>([]);
+
+  const router = useRouter();
 
   // 나의 스크랩 개수 추출을 위한 parsedMemo 정의
   useEffect(() => {
@@ -41,13 +49,17 @@ const ProfileCard = () => {
   return (
     <ProfileContainer>
       <ProfileWrapper>
-        <Link href="/my-page/notification">
+        <LinkBtn
+          onClick={() => {
+            router.push("/my-page/notification");
+          }}
+        >
           <NotificationIcon
             src="/images/my-page/notification.svg"
             alt="알림 아이콘"
           />
           <NotificationDot />
-        </Link>
+        </LinkBtn>
 
         <RoundImage>
           <ProfileImage
@@ -56,7 +68,11 @@ const ProfileCard = () => {
           />
         </RoundImage>
         <NickName>{currentUser?.username}</NickName>
-        <Link href="/my-page/modify-user-info">
+        <LinkBtn
+          onClick={() => {
+            router.push("/my-page/modify-user-info");
+          }}
+        >
           <ModifyUserDiv>
             <Button
               isBorderColor={true}
@@ -68,30 +84,42 @@ const ProfileCard = () => {
               회원정보수정
             </Button>
           </ModifyUserDiv>
-        </Link>
+        </LinkBtn>
         <Divider />
         <div className="flex gap-[1.5rem]">
           {/* 나의 레시피 버튼 */}
-          <StyledLink href="/my-page">
+          <LinkBtn
+            onClick={() => {
+              router.push("/my-page");
+            }}
+          >
             <MyRecipeIcon
               src="/images/my-page/my_recipe.svg"
               alt="레시피 아이콘"
             />
             <MyRecipeTitle>나의 레시피</MyRecipeTitle>
             <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
-          </StyledLink>
+          </LinkBtn>
 
           {/* 나의 스크랩 버튼 */}
-          <StyledLink href="/my-page/scrap">
+          <LinkBtn
+            onClick={() => {
+              router.push("/my-page/scrap");
+            }}
+          >
             <MyRecipeIcon
               src="/images/recipe-view/scrap_full.svg"
               alt="스크랩 아이콘"
             />
             <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
             <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
-          </StyledLink>
+          </LinkBtn>
         </div>
-        <Link href="/add-recipe">
+        <LinkBtn
+          onClick={() => {
+            router.push("/add-recipe");
+          }}
+        >
           <UploadRecipeButton>
             <Button
               type="button"
@@ -103,7 +131,7 @@ const ProfileCard = () => {
               레시피 올리기
             </Button>
           </UploadRecipeButton>
-        </Link>
+        </LinkBtn>
       </ProfileWrapper>
     </ProfileContainer>
   );
@@ -182,12 +210,6 @@ const Divider = styled.div`
   margin: 2rem 0;
 `;
 
-const StyledLink = styled.a`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 const MyRecipeIcon = styled.img`
   width: 2.8rem;
   height: 2.8rem;
@@ -210,4 +232,11 @@ const MyRecipeCount = styled.h4`
 const UploadRecipeButton = styled.div`
   margin-top: 1.8rem;
   width: 14rem;
+`;
+
+const LinkBtn = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
