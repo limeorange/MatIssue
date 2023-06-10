@@ -5,7 +5,10 @@ export type User =
       email: string;
       birth_date: string;
       img: string;
+      password: string;
       created_at: string;
+      session_id: string;
+      email_code?: string;
     }
   | undefined;
 
