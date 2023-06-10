@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
@@ -11,68 +12,117 @@ type PaginationProps = {
 };
 
 const Pagination = (props: PaginationProps) => {
-  const pageNumbers = [];
+  const [startPage, setStartPage] = useState(1);
+  const [endPage, setEndPage] = useState(10);
+  const [pageInput, setPageInput] = useState("");
 
   const totalPages = Math.ceil(props.totalRecipes / props.recipesPerPage);
-
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
 
   // 이전 버튼 로직
   const handlePrevClick = () => {
     if (props.currentPage > 1) {
       props.paginate(props.currentPage - 1);
     }
+
+    if (startPage > 1) {
+      setStartPage(startPage - 10);
+      setEndPage(endPage - 10);
+    }
   };
 
   // 다음 버튼 로직
   const handleNextClick = () => {
-    if (props.currentPage < pageNumbers.length) {
+    if (props.currentPage < totalPages) {
       props.paginate(props.currentPage + 1);
+    }
+
+    if (endPage < totalPages) {
+      setStartPage(startPage + 10);
+      setEndPage(endPage + 10);
+    }
+  };
+
+  // 입력한 페이지로 이동하는 inputHandler
+  const handlePageInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Enter 키를 눌렀을 때 실행
+    if (e.key === "Enter") {
+      const pageNum = Number(pageInput);
+
+      // 페이지 번호가 적절한 범위 내에 있을 경우 해당 페이지로 이동
+      if (pageNum >= 1 && pageNum <= totalPages) {
+        props.paginate(pageNum);
+      } else {
+        alert(
+          `해당 페이지가 존재하지 않습니다. 마지막 페이지는 ${totalPages}페이지 입니다.`
+        );
+      }
+
+      // 페이지 입력 상태 초기화
+      setPageInput("");
     }
   };
 
   return (
-    <PaginationWrapper>
-      <PaginationUl>
-        <PaginationPrevButtonBox onClick={handlePrevClick}>
-          <PaginationPrevButton onClick={handlePrevClick}>
-            <Image
-              src="/images/prevButtonIcon.png"
-              alt="이전 버튼"
-              width={9.5}
-              height={15}
-            />
-          </PaginationPrevButton>
-        </PaginationPrevButtonBox>
-        {pageNumbers.map((number) => (
-          <PaginationLi key={number} className="page-item">
-            <PaginationButtonBox
-              onClick={() => props.paginate(number)}
-              className={props.currentPage === number ? "active" : ""}
-            >
-              <PaginationButton
-                onClick={() => props.paginate(number)}
-                className={props.currentPage === number ? "active" : ""}
-              >
-                {number}
-              </PaginationButton>
-            </PaginationButtonBox>
-          </PaginationLi>
-        ))}
-        <PaginationNextButtonBox onClick={handleNextClick}>
-          <PaginationNextButton onClick={handleNextClick}>
-            <Image
-              src="/images/nextButtonIcon.png"
-              alt="다음 버튼"
-              width={9.5}
-              height={15}
-            />
-          </PaginationNextButton>
-        </PaginationNextButtonBox>
-      </PaginationUl>
-    </PaginationWrapper>
+    <>
+      <PaginationWrapper>
+        <PaginationUl>
+          <PaginationPrevButtonBox onClick={handlePrevClick}>
+            <PaginationPrevButton onClick={handlePrevClick}>
+              <Image
+                src="/images/prevButtonIcon.png"
+                alt="이전 버튼"
+                width={9.5}
+                height={15}
+              />
+            </PaginationPrevButton>
+          </PaginationPrevButtonBox>
+          {Array.from({ length: 10 }, (_, i) => startPage + i)
+            .filter((pageNumber) => pageNumber <= totalPages)
+            .map((number) => (
+              <PaginationLi key={number}>
+                <PaginationButtonBox
+                  onClick={() => props.paginate(number)}
+                  className={props.currentPage === number ? "active" : ""}
+                >
+                  <PaginationButton
+                    onClick={() => props.paginate(number)}
+                    className={props.currentPage === number ? "active" : ""}
+                  >
+                    {number}
+                  </PaginationButton>
+                </PaginationButtonBox>
+              </PaginationLi>
+            ))}
+          <PaginationNextButtonBox onClick={handleNextClick}>
+            <PaginationNextButton onClick={handleNextClick}>
+              <Image
+                src="/images/nextButtonIcon.png"
+                alt="다음 버튼"
+                width={9.5}
+                height={15}
+              />
+            </PaginationNextButton>
+          </PaginationNextButtonBox>
+        </PaginationUl>
+      </PaginationWrapper>
+      <PaginationInputDiv>
+        <div>
+          <Image
+            src="/images/bookicon.png"
+            width={20}
+            height={20}
+            alt="searchIcon"
+          />
+        </div>
+        <PaginationInput
+          type="number"
+          value={pageInput}
+          onChange={(e) => setPageInput(e.target.value)}
+          onKeyDown={handlePageInput}
+          placeholder="페이지 번호를 입력하세요."
+        />
+      </PaginationInputDiv>
+    </>
   );
 };
 
@@ -82,7 +132,7 @@ const PaginationWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding: 5rem 0;
+  padding: 3rem 0;
 `;
 
 const PaginationUl = styled.ul`
@@ -151,5 +201,33 @@ const PaginationNextButtonBox = styled.div`
   &: hover {
     background-color: #e6bb4e;
     cursor: pointer;
+  }
+`;
+
+const PaginationInputDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.6rem;
+  height: 4rem;
+  gap: 1.6rem;
+  max-width: 25rem;
+  margin: 0 auto;
+
+  border: 0.1rem solid rgb(200, 200, 200);
+  border-radius: 0.8rem;
+
+  &:focus-within {
+    border: 0.1rem solid #fbd26a;
+    box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
+  }
+`;
+
+const PaginationInput = styled.input`
+  width: 100%;
+  border: none;
+  font-size: 16px;
+  font-weight: 400;
+  &:focus {
+    outline: none;
   }
 `;

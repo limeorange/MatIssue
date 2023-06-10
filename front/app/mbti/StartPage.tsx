@@ -33,7 +33,7 @@ const StartPage = () => {
         </StartPageMessage>
         <ImageBox isAnimateOut={isAnimateOut}>
           <Image
-            src={"/images/foodIcon.png"}
+            src={"/images/mbti/foodIcon.png"}
             alt="음식 아이콘 이미지"
             width={400}
             height={200}
