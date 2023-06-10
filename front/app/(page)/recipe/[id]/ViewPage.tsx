@@ -22,57 +22,20 @@ import WriterProfile from "@/app/components/recipe-view/sticky-sidebar/WriterPro
 import { axiosBase } from "@/app/api/axios";
 import toast from "react-hot-toast";
 import getCurrentUser from "@/app/api/user";
+import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
+import { useRouter } from "next/navigation";
+import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
+import ConfirmModal from "@/app/components/UI/ConfirmModal";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
-  recipe: {
-    recipe_title: string;
-    recipe_thumbnail: string;
-    recipe_video: string;
-    recipe_description: string;
-    recipe_category: string;
-    recipe_info: {
-      serving: number;
-      time: number;
-      level: number;
-    };
-    recipe_ingredients: {
-      name: string;
-      amount: string;
-    }[];
-    recipe_sequence: {
-      step: number;
-      picture: string;
-      description: string;
-    }[];
-    recipe_tip: string;
-    recipe_id: string;
-    recipe_view: number;
-    recipe_like: number;
-    user_id: string;
-    user_nickname: string;
-    created_at: string;
-
-    // 댓글 관련 Data Type 정의
-    comments: Comments[];
-  };
+  recipe: Recipe;
   recipe_id: string;
-};
-
-type Comments = {
-  comment_author: string;
-  comment_text: string;
-  comment_like: number;
-  comment_id: string;
-  created_at: string;
-  comment_parent: string;
-  updated_at: string;
-  comment_nickname: string;
-  comment_profile_img: string;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
 const RecipeDetail = (props: RecipeDataProps) => {
+  // 캐시에 저장된 현재 레시피 정보를 가져옴
   const {
     data: recipe,
     isLoading,
@@ -87,6 +50,16 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   );
 
+  // 캐시에 저장된 현재 유저정보를 가져옴
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
+  const loggedInUserId: string | undefined = currentUser?.user_id;
+
+  // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능 활용
+  const client = useQueryClient();
+
+  // recipe 데이터 객체 분해 할당
   const {
     // 대표 이미지, 제목, 작성자, 소개글 (props로 안 내려줌)
     recipe_title,
@@ -117,19 +90,25 @@ const RecipeDetail = (props: RecipeDataProps) => {
     recipe_view,
     recipe_like,
 
+    // 팔로우, 팔로잉 관련
+    user_fan,
+    user_subscription,
+
     // 댓글 관련 data
     comments,
   } = recipe;
 
-  // 캐시에 저장된 현재 유저정보를 가져옴
-  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
-    getCurrentUser()
-  );
-  const loggedInUserId = currentUser?.user_id;
+  // 댓글 개수
+  const commentCount =
+    Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
+
+  const router = useRouter();
 
   // 좋아요 버튼, 카운트 상태 관리
-  const [isLiked, setIsLiked] = useState(false);
-  const [count, setCount] = useState(recipe_like);
+  const [isLiked, setIsLiked] = useState(
+    loggedInUserId !== undefined && recipe_like.includes(loggedInUserId)
+  );
+  const [count, setCount] = useState(recipe_like.length);
   const countText = count.toLocaleString();
 
   // 스크랩 버튼 상태 관리
@@ -138,24 +117,36 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 스크랩 저장 상태 관리
   const [isSaved, setIsSaved] = useState(false);
 
-  // 댓글 개수
-  const commentCount =
-    Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
+  // 삭제 확인 모달 상태 관리
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
 
-  // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능 활용
-  const client = useQueryClient();
+  // 스크롤에 의한 컨텐츠 이동 Hook
+  const isHeaderVisible = useMovingContentByScrolling();
 
-  // 좋아요 버튼 클릭 핸들러
+  /** 좋아요 버튼 클릭 핸들러 */
   const heartClickHandler = async () => {
     try {
-      const response = await axiosBase.patch(`/recipes/${recipe_id}/like`);
-      setIsLiked(!isLiked);
-      if (isLiked) {
+      // 이미 좋아요를 누른 경우 해당 user_id를 배열에서 삭제 (좋아요 취소)
+      if (
+        loggedInUserId !== undefined &&
+        recipe_like.includes(loggedInUserId)
+      ) {
+        const recipeUpdated: string[] = recipe_like.filter(
+          (id) => id !== loggedInUserId
+        );
+        await axiosBase.patch(`/recipes/${recipe_id}/like`, recipeUpdated);
+        setIsLiked(false);
         setCount(count - 1);
-      } else {
-        setCount(count + 1);
+        toast.success("좋아요가 취소되었습니다ㅠ.ㅠ");
       }
-      toast.success("좋아요가 반영되었습니다!");
+      // 좋아요를 처음 누른 경우
+      else if (loggedInUserId !== undefined) {
+        recipe_like.push(loggedInUserId);
+        await axiosBase.patch(`/recipes/${recipe_id}/like`, recipe_like);
+        setIsLiked(true);
+        setCount(count + 1);
+        toast.success("맛이슈와 함께라면 언제든 좋아요!");
+      }
       client.invalidateQueries(["currentRecipe"]);
     } catch (error) {
       console.log("좋아요 요청 실패와 관련한 오류는..🧐", error);
@@ -163,19 +154,52 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
-  // 스크랩 버튼 클릭 핸들러
+  /** 스크랩 버튼 클릭 핸들러 */
   const scrapClickHandler = () => {
     setIsBooked(!isBooked);
   };
 
-  // 모달창 닫기 핸들러
+  /** 모달창 닫기 핸들러 */
   const modalCloseHandler = () => {
     setIsBooked(false);
+  };
+
+  /** 게시글 삭제 버튼 클릭 핸들러 */
+  const recipeDeleteHandler = () => {
+    setDeleteConfirmModal(true);
+  };
+
+  const confirmModalCloseHandler = () => {
+    setDeleteConfirmModal(false);
+  };
+
+  /** 삭제 확인 모달 핸들러 */
+  const deleteConfirmHandler = async () => {
+    try {
+      await axiosBase.delete(`recipes/${recipe_id}`);
+      toast.success("게시글이 삭제되었습니다!");
+      router.back();
+      client.invalidateQueries(["currentUserRecipes"]);
+    } catch (error) {
+      console.log("게시글 삭제 실패와 관련한 오류는..🧐", error);
+      toast.error("게시글 삭제에 실패했습니다 ㅠ.ㅠ");
+    } finally {
+      setDeleteConfirmModal(false);
+    }
   };
 
   return (
     <>
       <ContainerDiv>
+        {deleteConfirmModal && (
+          <StyledConfirmModal
+            icon={<AlertImage src="/images/alert.png" alt="alert" />}
+            message="레시피를 삭제하시겠습니까?"
+            onConfirm={deleteConfirmHandler}
+            onCancel={confirmModalCloseHandler}
+          />
+        )}
+
         {/* 스크롤 상태 진행바 */}
         <ProgressBar />
 
@@ -187,6 +211,18 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 작성자 프로필 */}
         <WriterProfile user_nickname={user_nickname} />
+        {user_id === loggedInUserId && (
+          <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
+            <EditButton
+              onClick={() => {
+                router.push(`/edit-recipe/${recipe_id}`);
+              }}
+            >
+              수정
+            </EditButton>
+            <DeleteButton onClick={recipeDeleteHandler}>삭제</DeleteButton>
+          </WriterButtonDiv>
+        )}
 
         {/* 요리 대표 이미지 */}
         <ImageWrapperDiv>
@@ -206,13 +242,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
               <AuthorSpan>by {user_nickname}</AuthorSpan>
               <AuthorSpan>&nbsp;• {created_at.slice(0, 10)}</AuthorSpan>
             </div>
-
-            {user_id === loggedInUserId && (
-              <div className="flex gap-[0.8rem]">
-                <EditButton>수정</EditButton>
-                <DeleteButton>삭제</DeleteButton>
-              </div>
-            )}
           </TitleContainerDiv>
           <DescriptionDiv>{recipe_description}</DescriptionDiv>
         </div>
@@ -331,6 +360,9 @@ const DeleteButton = styled.button`
   color: #4f3d21;
 `;
 
+/** 삭제 컨펌 모달창 */
+const StyledConfirmModal = styled(ConfirmModal)``;
+
 /** 이미지 감싸는 Div */
 const ImageWrapperDiv = styled.div`
   width: 100%;
@@ -389,6 +421,19 @@ const CommentIconDiv = styled.div`
   margin-left: 0.7rem;
   margin-top: 0.4rem;
   margin-right: 0.4rem;
+`;
+
+/** 게시글 수정, 삭제 버튼 Div */
+const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
+  display: flex;
+  gap: 0.8rem;
+  position: fixed;
+  right: 14.7rem;
+  top: 55.1rem;
+
+  transform: ${(props) =>
+    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+  transition: transform 0.3s ease-in-out;
 `;
 
 export default RecipeDetail;
