@@ -29,7 +29,7 @@ const MainAlone = ({ singleRecipes }: { singleRecipes: Recipe[] }) => {
         <RecipeContainer>
           <RecipeImageWrapperBase
             onClick={() =>
-              router.push(`/recipes/${singleRecipes?.[0].recipe_id}`)
+              router.push(`/recipe/${singleRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
@@ -44,7 +44,7 @@ const MainAlone = ({ singleRecipes }: { singleRecipes: Recipe[] }) => {
           </RecipeImageWrapperBase>
           <RecipeImageWrapper2
             onClick={() =>
-              router.push(`/recipes/${singleRecipes?.[0].recipe_id}`)
+              router.push(`/recipe/${singleRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
@@ -59,7 +59,7 @@ const MainAlone = ({ singleRecipes }: { singleRecipes: Recipe[] }) => {
           </RecipeImageWrapper2>
           <RecipeImageWrapper3
             onClick={() =>
-              router.push(`/recipes/${singleRecipes?.[0].recipe_id}`)
+              router.push(`/recipe/${singleRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
@@ -74,7 +74,7 @@ const MainAlone = ({ singleRecipes }: { singleRecipes: Recipe[] }) => {
           </RecipeImageWrapper3>
           <RecipeImageWrapper4
             onClick={() =>
-              router.push(`/recipes/${singleRecipes?.[0].recipe_id}`)
+              router.push(`/recipe/${singleRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
