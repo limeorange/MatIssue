@@ -177,7 +177,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
 export default MainBest;
 
 const StyledBestTitleBox = styled(StyledTitleBox)`
-  align-items: end;
+  align-items: center;
   flex-direction: row;
 `;
 
