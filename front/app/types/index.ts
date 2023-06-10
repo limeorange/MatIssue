@@ -35,10 +35,12 @@ export type Recipe = {
   }[];
   recipe_tip: string;
   recipe_view: number;
-  recipe_like: number;
+  recipe_like: string[];
   user_id: string;
   user_nickname: string;
   created_at: string;
+  user_fan: number;
+  user_subscription: number;
 
   // 댓글 관련 Data Type 정의
   comments: Comments[];
