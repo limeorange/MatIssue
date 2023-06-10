@@ -35,7 +35,8 @@ const ScrapCardList: React.FC = () => {
 
   return (
     <ScrapListContainer>
-      <ScrapTitleH2>나의 스크랩</ScrapTitleH2>
+      <ScrapTitleSpan>나의 스크랩</ScrapTitleSpan>
+      <ScrapCountSpan>{parsedMemo.length}</ScrapCountSpan>
       {parsedMemo.length === 0 ? (
         <NonRecipeMsg />
       ) : (
@@ -63,14 +64,20 @@ const ScrapListContainer = styled.div`
   width: 100%;
 `;
 
-/** 스크랩 제목 H2 */
-const ScrapTitleH2 = styled.h2`
+/** 스크랩 제목 Span */
+const ScrapTitleSpan = styled.span`
   font-size: 18px;
   letter-spacing: 0.01em;
   margin: 0 0.5rem 0 1.9rem;
   font-weight: 600;
   color: #4f3d21;
-  margin-bottom: 1.5rem;
+`;
+
+/** 스크랩 개수 Span */
+const ScrapCountSpan = styled.span`
+  font-size: 17px;
+  font-weight: 700;
+  color: #545454;
 `;
 
 /** 레시피 스크랩 grid Div */
