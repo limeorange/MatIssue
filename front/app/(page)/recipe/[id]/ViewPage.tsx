@@ -25,54 +25,13 @@ import getCurrentUser from "@/app/api/user";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
-  recipe: {
-    recipe_title: string;
-    recipe_thumbnail: string;
-    recipe_video: string;
-    recipe_description: string;
-    recipe_category: string;
-    recipe_info: {
-      serving: number;
-      time: number;
-      level: number;
-    };
-    recipe_ingredients: {
-      name: string;
-      amount: string;
-    }[];
-    recipe_sequence: {
-      step: number;
-      picture: string;
-      description: string;
-    }[];
-    recipe_tip: string;
-    recipe_id: string;
-    recipe_view: number;
-    recipe_like: number;
-    user_id: string;
-    user_nickname: string;
-    created_at: string;
-
-    // 댓글 관련 Data Type 정의
-    comments: Comments[];
-  };
+  recipe: Recipe;
   recipe_id: string;
-};
-
-type Comments = {
-  comment_author: string;
-  comment_text: string;
-  comment_like: number;
-  comment_id: string;
-  created_at: string;
-  comment_parent: string;
-  updated_at: string;
-  comment_nickname: string;
-  comment_profile_img: string;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
 const RecipeDetail = (props: RecipeDataProps) => {
+  // 캐시에 저장된 현재 레시피 정보를 가져옴
   const {
     data: recipe,
     isLoading,
@@ -87,6 +46,16 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   );
 
+  // 캐시에 저장된 현재 유저정보를 가져옴
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
+  const loggedInUserId: string | undefined = currentUser?.user_id;
+
+  // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능 활용
+  const client = useQueryClient();
+
+  // recipe 데이터 객체 분해 할당
   const {
     // 대표 이미지, 제목, 작성자, 소개글 (props로 안 내려줌)
     recipe_title,
@@ -117,19 +86,19 @@ const RecipeDetail = (props: RecipeDataProps) => {
     recipe_view,
     recipe_like,
 
+    // 팔로우, 팔로잉 관련
+    user_fan,
+    user_subscription,
+
     // 댓글 관련 data
     comments,
   } = recipe;
 
-  // 캐시에 저장된 현재 유저정보를 가져옴
-  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
-    getCurrentUser()
-  );
-  const loggedInUserId = currentUser?.user_id;
-
   // 좋아요 버튼, 카운트 상태 관리
-  const [isLiked, setIsLiked] = useState(false);
-  const [count, setCount] = useState(recipe_like);
+  const [isLiked, setIsLiked] = useState(
+    loggedInUserId !== undefined && recipe_like.includes(loggedInUserId)
+  );
+  const [count, setCount] = useState(recipe_like.length);
   const countText = count.toLocaleString();
 
   // 스크랩 버튼 상태 관리
@@ -142,20 +111,32 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const commentCount =
     Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
 
-  // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능 활용
-  const client = useQueryClient();
-
-  // 좋아요 버튼 클릭 핸들러
+  /** 좋아요 버튼 클릭 핸들러 */
   const heartClickHandler = async () => {
     try {
-      const response = await axiosBase.patch(`/recipes/${recipe_id}/like`);
-      setIsLiked(!isLiked);
-      if (isLiked) {
+      // 이미 좋아요를 누른 경우 해당 user_id를 배열에서 삭제 (좋아요 취소)
+      if (
+        loggedInUserId !== undefined &&
+        recipe_like.includes(loggedInUserId)
+      ) {
+        const recipe_like_updated: string[] = recipe_like.filter(
+          (id) => id !== loggedInUserId
+        );
+        setIsLiked(false);
         setCount(count - 1);
-      } else {
+        await axiosBase.patch(
+          `/recipes/${recipe_id}/like`,
+          recipe_like_updated
+        );
+        toast.success("좋아요가 취소되었습니다ㅠ.ㅠ");
+      } else if (loggedInUserId !== undefined) {
+        // 좋아요를 처음 누른 경우
+        recipe_like.push(loggedInUserId);
+        setIsLiked(true);
         setCount(count + 1);
+        await axiosBase.patch(`/recipes/${recipe_id}/like`, recipe_like);
+        toast.success("맛이슈와 함께라면 언제든 좋아요!");
       }
-      toast.success("좋아요가 반영되었습니다!");
       client.invalidateQueries(["currentRecipe"]);
     } catch (error) {
       console.log("좋아요 요청 실패와 관련한 오류는..🧐", error);
@@ -163,12 +144,12 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
-  // 스크랩 버튼 클릭 핸들러
+  /** 스크랩 버튼 클릭 핸들러 */
   const scrapClickHandler = () => {
     setIsBooked(!isBooked);
   };
 
-  // 모달창 닫기 핸들러
+  /** 모달창 닫기 핸들러 */
   const modalCloseHandler = () => {
     setIsBooked(false);
   };
