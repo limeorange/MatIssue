@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Image from "next/image";
 
 import Button from "@/app/components/UI/Button";
+import Logo from "@/app/components/header/Logo";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -16,6 +17,7 @@ const StartPage = () => {
 
   return (
     <WorldcupLayout>
+      <Logo />
       <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
       <StartPageMessage isAnimateOut={isAnimateOut}>
         뭐 먹을지 고민이 될 때!!
@@ -88,6 +90,7 @@ const GameHeader = styled.p<StyledComponentProps>`
 const StartPageMessage = styled.p<StyledComponentProps>`
   font-size: 17px;
   color: #4f3d21;
+  margin-top: 2rem;
 
   animation: ${(props) =>
     props.isAnimateOut
@@ -105,7 +108,7 @@ const ImageBox = styled.div<StyledComponentProps>`
 `;
 
 const ButtonBox = styled.div<StyledComponentProps>`
-  margin-top: 4rem;
+  margin-top: 1rem;
 
   & Button {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

@@ -16,7 +16,7 @@ const extractVideoId = (url: string): string | null => {
   }
 
   // 유튜브 링크가 아닌 경우 또는 고유 id를 찾을 수 없는 경우
-  return "https://youtu.be/jk29M4knFBw";
+  return "JVQaQBsCbrE";
 };
 
 /** 레시피 비디오 컴포넌트 */

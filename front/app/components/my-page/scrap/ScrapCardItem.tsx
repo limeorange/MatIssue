@@ -80,7 +80,7 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
         <div
           className="cursor-pointer"
           onClick={() => {
-            router.push(`/recipes/${recipe_id}`);
+            router.push(`/recipe/${recipe_id}`);
           }}
         >
           <RecipeTitleDiv>
