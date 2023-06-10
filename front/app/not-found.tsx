@@ -9,7 +9,7 @@ const NotFound = () => {
       <ErrorTitle>404 ERROR!</ErrorTitle>
       <ErrorImageWrapper>
         <Image
-          src="/images/error/404.png"
+          src="/images/error/404error.png"
           height={200}
           width={240}
           alt="404_icon"
@@ -31,7 +31,8 @@ const ErrorPageContainer = styled.div`
 `;
 
 const ErrorTitle = styled.div`
-  font-size: 40px;
+  font-size: 36px;
+  color: #444;
 `;
 
 const ErrorImageWrapper = styled.div`
