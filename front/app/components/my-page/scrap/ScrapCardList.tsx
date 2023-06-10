@@ -14,9 +14,14 @@ type MemoItemProps = {
   user_nickname: string;
 };
 
+type ScrapItemProps = {
+  scrapData: MemoItemProps;
+  memo: string;
+};
+
 /** 스크랩 리스트 컴포넌트 */
 const ScrapCardList: React.FC = () => {
-  const [parsedMemo, setParsedMemo] = useState<MemoItemProps[]>([]);
+  const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
 
   // localStorage is not defined 에러 해결
   // 페이지가 client에 마운트될 때까지 기다렸다가 localStorage에 접근
@@ -35,7 +40,7 @@ const ScrapCardList: React.FC = () => {
         <NonRecipeMsg />
       ) : (
         <ScrapListGrid>
-          {parsedMemo.map((item: any, index: number) => {
+          {parsedMemo.map((item: ScrapItemProps, index: number) => {
             const recipeData = item["scrapData"];
             const memoText = item["memo"];
             return (
@@ -43,6 +48,7 @@ const ScrapCardList: React.FC = () => {
                 key={index}
                 recipeData={recipeData}
                 memoText={memoText}
+                setParsedMemo={setParsedMemo}
               ></ScrapCardItem>
             );
           })}

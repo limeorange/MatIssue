@@ -1,24 +1,10 @@
 "use client";
 
+import { Comments } from "@/app/types";
 import RecipeComment from "./RecipeCommentItem";
 
-/** 요리 댓글 전체 Props */
-type CommentProps = {
-  comments: {
-    comment_author: string;
-    comment_text: string;
-    comment_like: number;
-    comment_id: string;
-    created_at: string;
-    comment_parent: string;
-    updated_at: string;
-    comment_nickname: string;
-    comment_profile_img: string;
-  };
-};
-
 /** 요리 댓글 전체 컴포넌트 */
-const RecipeComments: React.FC<CommentProps> = ({ comments }) => {
+const RecipeComments = ({ comments }: { comments: Comments[] }) => {
   return (
     <div>
       {/* 댓글이 빈 배열인 경우에 대한 예외 처리 */}

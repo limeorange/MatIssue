@@ -21,7 +21,7 @@ const SearchBar = () => {
     <SearchBarDiv>
       <div>
         <Image
-          src="/images/searchIcon.png"
+          src="/images/searchIcon.svg"
           width={18}
           height={18}
           alt="searchIcon"

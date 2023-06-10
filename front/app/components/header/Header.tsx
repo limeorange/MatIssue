@@ -11,12 +11,15 @@ import CategoryBar from "./CategoryBar";
 import { User } from "@/app/types";
 import Cookies from "js-cookie";
 import getCurrentUser from "@/app/api/user";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
+import { usePathname } from "next/navigation";
+import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 
 const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   const setIsLoggedIn = useSetRecoilState(loginState);
+  const isHeaderVisible = useMovingContentByScrolling();
 
   const {
     data: currentUser,
@@ -41,7 +44,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   }
 
   return (
-    <HeaderDiv>
+    <HeaderDiv isHeaderVisible={isHeaderVisible}>
       <NavArea>
         <TopNav>
           <Logo />
@@ -55,7 +58,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   );
 };
 
-const HeaderDiv = styled.div`
+const HeaderDiv = styled.div<{ isHeaderVisible: boolean }>`
   position: relative;
   @media (min-width: 1024px) {
     position: fixed;
@@ -64,6 +67,10 @@ const HeaderDiv = styled.div`
     z-index: 60;
     font-size: 16px;
   }
+
+  transform: ${(props) =>
+    props.isHeaderVisible ? "translateY(0)" : "translateY(-100%)"};
+  transition: transform 0.3s ease-in-out;
 `;
 
 const NavArea = styled.div`

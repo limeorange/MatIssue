@@ -17,10 +17,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRecipeById } from "@/app/api/recipe";
-import { Recipe } from "@/app/types";
+import { Recipe, User } from "@/app/types";
 import WriterProfile from "@/app/components/recipe-view/sticky-sidebar/WriterProfile";
 import { axiosBase } from "@/app/api/axios";
 import toast from "react-hot-toast";
+import getCurrentUser from "@/app/api/user";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -53,19 +54,21 @@ type RecipeDataProps = {
     created_at: string;
 
     // 댓글 관련 Data Type 정의
-    comments: {
-      comment_author: string;
-      comment_text: string;
-      comment_like: number;
-      comment_id: string;
-      created_at: string;
-      comment_parent: string;
-      updated_at: string;
-      comment_nickname: string;
-      comment_profile_img: string;
-    };
+    comments: Comments[];
   };
   recipe_id: string;
+};
+
+type Comments = {
+  comment_author: string;
+  comment_text: string;
+  comment_like: number;
+  comment_id: string;
+  created_at: string;
+  comment_parent: string;
+  updated_at: string;
+  comment_nickname: string;
+  comment_profile_img: string;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
@@ -118,7 +121,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
     comments,
   } = recipe;
 
-  const loggedInUserId = "happyuser";
+  // 캐시에 저장된 현재 유저정보를 가져옴
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
+  const loggedInUserId = currentUser?.user_id;
 
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(false);

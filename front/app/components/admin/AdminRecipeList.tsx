@@ -4,6 +4,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import AdminPagination from "./AdminPagenation";
 import { useEffect, useState } from "react";
+import { Recipe } from "@/app/types";
 
 const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
   const limit = 12;
@@ -16,7 +17,7 @@ const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
 
   return (
     <>
-      <PanelList>
+      {/* <PanelList>
         <PanelListHeader>
           <input
             type="checkbox"
@@ -75,7 +76,7 @@ const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
             setPage={setPage}
           />
         </PagenationBox>
-      </PagenationContainer>
+      </PagenationContainer> */}
     </>
   );
 };

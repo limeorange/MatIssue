@@ -21,6 +21,11 @@ type MemoItemProps = {
   user_nickname: string;
 };
 
+type ScrapItemProps = {
+  scrapData: MemoItemProps;
+  memo: string;
+};
+
 const ProfileCard = () => {
   // 캐시에 저장된 현재 유저정보를 가져옴
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
@@ -33,7 +38,7 @@ const ProfileCard = () => {
     () => getRecipeByUserId()
   );
 
-  const [parsedMemo, setParsedMemo] = useState<MemoItemProps[]>([]);
+  const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
 
   const router = useRouter();
 
