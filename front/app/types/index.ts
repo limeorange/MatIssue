@@ -10,6 +10,7 @@ export type User =
   | undefined;
 
 export type Recipe = {
+  recipe_id: string;
   recipe_title: string;
   recipe_thumbnail: string;
   recipe_video: string;
@@ -30,7 +31,6 @@ export type Recipe = {
     description: string;
   }[];
   recipe_tip: string;
-  recipe_id: string;
   recipe_view: number;
   recipe_like: number;
   user_id: string;
@@ -38,13 +38,17 @@ export type Recipe = {
   created_at: string;
 
   // 댓글 관련 Data Type 정의
-  comments: {
-    comment_author: string;
-    comment_text: string;
-    comment_like: number;
-    comment_id: string;
-    created_at: string;
-    comment_parent: string;
-    updated_at: string;
-  };
+  comments: Comments[];
+};
+
+export type Comments = {
+  comment_author: string;
+  comment_text: string;
+  comment_like: number;
+  comment_id: string;
+  created_at: string;
+  comment_parent: string;
+  updated_at: string;
+  comment_nickname: string;
+  comment_profile_img: string;
 };

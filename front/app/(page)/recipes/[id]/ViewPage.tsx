@@ -53,19 +53,21 @@ type RecipeDataProps = {
     created_at: string;
 
     // 댓글 관련 Data Type 정의
-    comments: {
-      comment_author: string;
-      comment_text: string;
-      comment_like: number;
-      comment_id: string;
-      created_at: string;
-      comment_parent: string;
-      updated_at: string;
-      comment_nickname: string;
-      comment_profile_img: string;
-    };
+    comments: Comments[];
   };
   recipe_id: string;
+};
+
+type Comments = {
+  comment_author: string;
+  comment_text: string;
+  comment_like: number;
+  comment_id: string;
+  created_at: string;
+  comment_parent: string;
+  updated_at: string;
+  comment_nickname: string;
+  comment_profile_img: string;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
