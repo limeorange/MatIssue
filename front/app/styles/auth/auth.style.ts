@@ -65,6 +65,7 @@ export const StyledInput = styled.input<StyledInputProps>`
   color: #333333;
   outline: none;
   &:focus {
+  border : 0.1rem solid #fb26a;
   box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
   opacity: ${(props) => props.disabled && "0.5"};
   cursor: ${(props) => props.disabled && "default"};
