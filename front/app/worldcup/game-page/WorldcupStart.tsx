@@ -80,9 +80,7 @@ const WorldcupGame: React.FC = () => {
       <Logo />
       <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
       <GameProgress>
-        {stage === 1 && displays.length === 1
-          ? "우승 레시피 선정!"
-          : stage === 2
+        {stage === 2
           ? "결승전"
           : `${stage}강 (${selectedCount + 1}/${stage / 2})`}
       </GameProgress>
@@ -126,14 +124,6 @@ const WorldcupGame: React.FC = () => {
             </Card>
           )
         )}
-        <TextContainer>
-          {displays.length === 1 && (
-            <ResultText>
-              짜잔! 우승 레시피입니다. <br /> 사진을 클릭시 해당 레시피로
-              이동합니다.
-            </ResultText>
-          )}
-        </TextContainer>
       </CardContainer>
     </WorldcupLayout>
   );
@@ -260,23 +250,4 @@ const ImageContainer = styled.div`
   ${ImageWrapper}:hover & {
     opacity: 0.8;
   }
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 1rem;
-`;
-
-const ResultText = styled.p<StyledComponentProps>`
-  font-size: 17px;
-  color: #4f3d21;
-
-  animation: ${(props) =>
-    props.isAnimateOut
-      ? "slideOut 1.3s ease-in-out"
-      : "slideUp 1s ease-in-out"};
-  animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
