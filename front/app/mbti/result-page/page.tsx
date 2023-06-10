@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { MBTIState } from "@/app/store/mbtiAtom";
 import { useRecoilState } from "recoil";
-import RecipeCard from "@/app/components/recipe-card/main/MainRecipeCard";
 import Image from "next/image";
 import Button from "@/app/components/UI/Button";
 import Logo from "@/app/components/header/Logo";
