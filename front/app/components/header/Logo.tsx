@@ -12,7 +12,7 @@ const Logo = () => {
       <Image
         onClick={() => router.push("/")}
         style={{ cursor: "pointer" }}
-        src="/images/logo1.png"
+        src="/logo.svg"
         fill
         alt="Logo"
       />

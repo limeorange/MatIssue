@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 
-const BannerSearchBar = () => {
+const AdminSearchBar = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -13,7 +13,7 @@ const BannerSearchBar = () => {
     e
   ) => {
     if (e.key === "Enter") {
-      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
+      router.push(`/recipes/search?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -21,9 +21,9 @@ const BannerSearchBar = () => {
     <SearchBarDiv>
       <div>
         <Image
-          src="/images/searchIcon.svg"
-          width={24}
-          height={24}
+          src="/images/searchIcon.png"
+          width={18}
+          height={18}
           alt="searchIcon"
         />
       </div>
@@ -32,7 +32,6 @@ const BannerSearchBar = () => {
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setSearchQuery(e.target.value)
         }
-        placeholder="검색어를 입력하세요."
       />
     </SearchBarDiv>
   );
@@ -41,24 +40,29 @@ const BannerSearchBar = () => {
 const SearchBarDiv = styled.div`
   display: flex;
   align-items: center;
-  padding: 1.2rem 2.4rem;
-  flex: grow;
-  height: 5.5rem;
-  width: 100%;
+  padding: 0.8rem 1.6rem;
+  height: 4rem;
+  flex-grow: 1;
   gap: 1.6rem;
+  max-width: 36rem;
 
-  background-color: rgb(255, 255, 255);
-  border-radius: 10rem;
+  border: 0.1rem solid #ddd;
+  border-radius: 0.5rem;
+
+  &:focus-within {
+    border: 0.1rem solid #fbd26a;
+    box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
+  }
 `;
 
 const SearchBarInput = styled.input`
   width: 100%;
   border: none;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 400;
   &:focus {
     outline: none;
   }
 `;
 
-export default BannerSearchBar;
+export default AdminSearchBar;

@@ -19,7 +19,7 @@ const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
     <SlideContainer>
       <CardContainer
         className={showImage ? "show" : ""}
-        onClick={() => router.push(`/recipes/${recipe.recipe_id}`)}
+        onClick={() => router.push(`/recipe/${recipe.recipe_id}`)}
       >
         <ImageWrapper>
           <Image

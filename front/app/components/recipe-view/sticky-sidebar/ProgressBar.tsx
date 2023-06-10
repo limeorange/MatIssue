@@ -1,3 +1,4 @@
+import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -6,6 +7,8 @@ const ProgressBar = () => {
   const [scrollPercentage, setScrollPercentage] = useState(0);
   // 스크롤 진행바 반응형 상태 관리
   const [isVisible, setIsVisible] = useState(true);
+
+  const isHeaderVisible = useMovingContentByScrolling();
 
   useEffect(() => {
     // 스크롤 진행 퍼센트를 현재 스크롤 위치를 기반으로 계산해주는 핸들러
@@ -48,7 +51,7 @@ const ProgressBar = () => {
   return (
     <>
       {isVisible && (
-        <ProgressBarContainerDiv>
+        <ProgressBarContainerDiv isHeaderVisible={isHeaderVisible}>
           <ProgressBarDiv progress={scrollPercentage} />
         </ProgressBarContainerDiv>
       )}
@@ -57,13 +60,17 @@ const ProgressBar = () => {
 };
 
 // 스크롤 진행바 전체 박스
-const ProgressBarContainerDiv = styled.div`
+const ProgressBarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
   left: 0;
   width: 100%;
   height: 1rem;
   background-color: #f2f2f2;
   z-index: 40;
+
+  transform: ${(props) =>
+    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+  transition: transform 0.3s ease-in-out;
 `;
 
 // 스크롤 진행바

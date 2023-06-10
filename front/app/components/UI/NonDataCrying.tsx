@@ -7,7 +7,7 @@ const NonDataCrying = () => {
     <>
       <NoRecipeIconBox>
         <div>
-          <NoRcipeIcon src={"/images/error/errorIcon.png"} alt="에러 아이콘" />
+          <NoRcipeIcon src={"/images/error/cryingIcon.png"} alt="에러 아이콘" />
         </div>
       </NoRecipeIconBox>
     </>

@@ -9,7 +9,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
 
   const handleRecipeClick = () => {
-    router.push(`/recipes/${recipe.recipe_id}`);
+    router.push(`/recipe/${recipe.recipe_id}`);
   };
 
   return (
