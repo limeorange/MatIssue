@@ -4,6 +4,7 @@ import { axiosBase } from "@/app/api/axios";
 import Button from "../UI/Button";
 import { useState } from "react";
 import styled from "styled-components";
+import { toast } from "react-hot-toast";
 import {
   Title,
   InputBox,
@@ -31,16 +32,18 @@ const VerificationEmail = ({
         `email/email-verification?email=${email}`
       );
       if (response.status === 200) {
-        alert(
+        toast.success(
           "인증 코드가 이메일로 발송되었습니다. 이메일을 확인하여 인증코드를 입력해주세요."
         );
         setIsButtonClicked(true);
       } else {
-        alert("인증코드 전송을 실패하였습니다. 이메일을 다시 확인해 주세요.");
+        toast.error(
+          "인증코드 전송을 실패하였습니다. 이메일을 다시 확인해 주세요."
+        );
       }
     } catch (error) {
       console.error(error);
-      alert("서버 에러가 발생했습니다. 다시 시도해 주세요.");
+      toast.error("서버 에러가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 

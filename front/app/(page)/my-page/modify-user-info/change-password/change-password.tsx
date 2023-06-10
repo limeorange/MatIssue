@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosBase } from "@/app/api/axios";
 import { useRouter } from "next/navigation";
 import ConfirmModal from "../../../../components/UI/ConfirmModal";
+import { toast } from "react-hot-toast";
 
 type User = {
   password: string;
@@ -55,7 +56,7 @@ const ChangePassword = () => {
     ) {
       modifyUser();
     } else {
-      alert(
+      toast.error(
         "비빌번호를 확인해주세요. 8자리 이상, 대소문자, 숫자, 특수문자가 포함되어어 있어야 합니다."
       );
     }
@@ -69,7 +70,7 @@ const ChangePassword = () => {
     console.log("modifyUserInfo : ", modifyUserInfo);
     try {
       const response = await axiosBase.patch("users", modifyUserInfo);
-      alert("비밀번호가 변경되었습니다.");
+      toast.success("비밀번호가 변경되었습니다.");
       router.push("/my-page/modify-user-info");
     } catch (error) {
       console.error(error);

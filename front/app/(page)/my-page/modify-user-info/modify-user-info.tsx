@@ -12,6 +12,8 @@ import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
 import { User } from "../../../types/index";
 import VerificationEmail from "@/app/components/my-page/VerificationEmail";
+import { toast } from "react-hot-toast";
+
 import {
   Container,
   Header,
@@ -143,10 +145,10 @@ const ModifyUserInfo: React.FC = () => {
     try {
       const response = await axiosBase.patch("users", modifyUserInfo);
       console.log(response);
-      alert("회원정보가 수정되었습니다.");
+      toast.success("회원정보가 수정되었습니다.");
       router.push("/my-page");
     } catch (error) {
-      console.error(error);
+      toast.error("회원정보 수정에 실패하였습니다.");
     }
   }
 
@@ -305,7 +307,7 @@ const ModifyUserInfo: React.FC = () => {
                 <>
                   <StyledImage src={previewImage} alt="Preview" />
                   <button type="button" onClick={handleDeleteImage}>
-                    <DeleteImage src="/images/delete-button.png" alt="delete" />
+                    <DeleteImage src="/images/delete-button.svg" alt="delete" />
                   </button>
                 </>
               )}
