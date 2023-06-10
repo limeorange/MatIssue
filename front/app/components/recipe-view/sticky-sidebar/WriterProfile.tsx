@@ -1,14 +1,17 @@
 import styled from "styled-components";
 import Image from "next/image";
+import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 
 type WriterProfileProps = {
   user_nickname: string;
 };
 
 const WriterProfile: React.FC<WriterProfileProps> = ({ user_nickname }) => {
+  const isHeaderVisible = useMovingContentByScrolling();
+
   return (
     <>
-      <ProfileContainerDiv>
+      <ProfileContainerDiv isHeaderVisible={isHeaderVisible}>
         <ProfileHeaderDiv>오늘의 요리사</ProfileHeaderDiv>
         <ProfileContentsDiv>
           {/* 프로필 사진 */}
@@ -41,7 +44,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({ user_nickname }) => {
 };
 
 /** 프로필 박스 전체 감싸는 Div */
-const ProfileContainerDiv = styled.div`
+const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -51,6 +54,10 @@ const ProfileContainerDiv = styled.div`
   top: 20.15rem;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 2rem;
+
+  transform: ${(props) =>
+    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+  transition: transform 0.3s ease-in-out;
 `;
 
 /** 프로필 헤더 박스 Div */

@@ -1,9 +1,12 @@
+import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { useEffect, useState } from "react";
 import { Link } from "react-scroll";
 import styled from "styled-components";
 
 /** 목차 사이드바 컴포넌트 */
 const StickySideBar = () => {
+  const isHeaderVisible = useMovingContentByScrolling();
+
   const sections = [
     { id: "heading1", label: "요리 정보" },
     { id: "heading2", label: "재료 준비" },
@@ -39,9 +42,9 @@ const StickySideBar = () => {
   return (
     <>
       {isSidebarVisible && (
-        <>
+        <SidebarContainerDiv isHeaderVisible={isHeaderVisible}>
           <TitleH3>목차</TitleH3>
-          <SidebarContainerDiv>
+          <SidebarContentsDiv>
             {sections.map((section) => (
               <ItemLink
                 key={section.id}
@@ -56,26 +59,30 @@ const StickySideBar = () => {
                 {section.label}
               </ItemLink>
             ))}
-          </SidebarContainerDiv>
-        </>
+          </SidebarContentsDiv>
+        </SidebarContainerDiv>
       )}
     </>
   );
 };
 
-/** 목차 사이드바 감싸는 Div */
-const SidebarContainerDiv = styled.div`
+const SidebarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
-  top: 25.5rem;
+  top: 20rem;
   left: 20rem;
+
+  transform: ${(props) =>
+    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+  transition: transform 0.3s ease-in-out;
+`;
+
+/** 목차 사이드바 감싸는 Div */
+const SidebarContentsDiv = styled.div`
   z-index: 50;
 `;
 
 /** 목차 H3 */
 const TitleH3 = styled.h3`
-  position: fixed;
-  top: 20rem;
-  left: 20rem;
   font-size: 22px;
   color: #b08038;
   font-weight: 500;
