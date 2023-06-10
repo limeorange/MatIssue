@@ -34,7 +34,7 @@ const FilterTag = (props: FilterTagProps) => {
     if (category === "chinese") {
       newTagList.push({ tag: `#중식`, type: "category" });
     }
-    if (category === "japan") {
+    if (category === "japanese") {
       newTagList.push({ tag: `#일식`, type: "category" });
     }
     if (category === "korean") {
