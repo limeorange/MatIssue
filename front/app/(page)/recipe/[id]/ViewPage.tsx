@@ -126,22 +126,20 @@ const RecipeDetail = (props: RecipeDataProps) => {
         loggedInUserId !== undefined &&
         recipe_like.includes(loggedInUserId)
       ) {
-        const recipe_like_updated: string[] = recipe_like.filter(
+        const recipeUpdated: string[] = recipe_like.filter(
           (id) => id !== loggedInUserId
         );
+        await axiosBase.patch(`/recipes/${recipe_id}/like`, recipeUpdated);
         setIsLiked(false);
         setCount(count - 1);
-        await axiosBase.patch(
-          `/recipes/${recipe_id}/like`,
-          recipe_like_updated
-        );
         toast.success("좋아요가 취소되었습니다ㅠ.ㅠ");
-      } else if (loggedInUserId !== undefined) {
-        // 좋아요를 처음 누른 경우
+      }
+      // 좋아요를 처음 누른 경우
+      else if (loggedInUserId !== undefined) {
         recipe_like.push(loggedInUserId);
+        await axiosBase.patch(`/recipes/${recipe_id}/like`, recipe_like);
         setIsLiked(true);
         setCount(count + 1);
-        await axiosBase.patch(`/recipes/${recipe_id}/like`, recipe_like);
         toast.success("맛이슈와 함께라면 언제든 좋아요!");
       }
       client.invalidateQueries(["currentRecipe"]);
@@ -160,6 +158,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const modalCloseHandler = () => {
     setIsBooked(false);
   };
+
+  /** 게시글 삭제 버튼 클릭 핸들러 */
+  const recipeDeleteHandler = async () => {};
 
   return (
     <>
@@ -184,7 +185,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
             >
               수정
             </EditButton>
-            <DeleteButton>삭제</DeleteButton>
+            <DeleteButton onClick={recipeDeleteHandler}>삭제</DeleteButton>
           </WriterButtonDiv>
         )}
 
