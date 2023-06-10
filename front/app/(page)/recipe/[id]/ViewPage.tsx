@@ -24,6 +24,8 @@ import toast from "react-hot-toast";
 import getCurrentUser from "@/app/api/user";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { useRouter } from "next/navigation";
+import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
+import ConfirmModal from "@/app/components/UI/ConfirmModal";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -115,6 +117,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 스크랩 저장 상태 관리
   const [isSaved, setIsSaved] = useState(false);
 
+  // 삭제 확인 모달 상태 관리
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
+
   // 스크롤에 의한 컨텐츠 이동 Hook
   const isHeaderVisible = useMovingContentByScrolling();
 
@@ -160,11 +165,41 @@ const RecipeDetail = (props: RecipeDataProps) => {
   };
 
   /** 게시글 삭제 버튼 클릭 핸들러 */
-  const recipeDeleteHandler = async () => {};
+  const recipeDeleteHandler = () => {
+    setDeleteConfirmModal(true);
+  };
+
+  const confirmModalCloseHandler = () => {
+    setDeleteConfirmModal(false);
+  };
+
+  /** 삭제 확인 모달 핸들러 */
+  const deleteConfirmHandler = async () => {
+    try {
+      await axiosBase.delete(`recipes/${recipe_id}`);
+      toast.success("게시글이 삭제되었습니다!");
+      router.back();
+      client.invalidateQueries(["currentUserRecipes"]);
+    } catch (error) {
+      console.log("게시글 삭제 실패와 관련한 오류는..🧐", error);
+      toast.error("게시글 삭제에 실패했습니다 ㅠ.ㅠ");
+    } finally {
+      setDeleteConfirmModal(false);
+    }
+  };
 
   return (
     <>
       <ContainerDiv>
+        {deleteConfirmModal && (
+          <StyledConfirmModal
+            icon={<AlertImage src="/images/alert.png" alt="alert" />}
+            message="레시피를 삭제하시겠습니까?"
+            onConfirm={deleteConfirmHandler}
+            onCancel={confirmModalCloseHandler}
+          />
+        )}
+
         {/* 스크롤 상태 진행바 */}
         <ProgressBar />
 
@@ -324,6 +359,9 @@ const DeleteButton = styled.button`
   font-size: 16.5px;
   color: #4f3d21;
 `;
+
+/** 삭제 컨펌 모달창 */
+const StyledConfirmModal = styled(ConfirmModal)``;
 
 /** 이미지 감싸는 Div */
 const ImageWrapperDiv = styled.div`
