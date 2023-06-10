@@ -4,6 +4,7 @@ import Image from "next/image";
 import styled from "styled-components";
 import AdminPagination from "./AdminPagenation";
 import { useEffect, useState } from "react";
+import { Recipe } from "@/app/types";
 
 const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
   const limit = 12;
