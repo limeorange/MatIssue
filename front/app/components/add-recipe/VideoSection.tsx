@@ -45,7 +45,7 @@ const VideoSection = ({
 export default VideoSection;
 
 const Label = styled.label`
-  width: 8.8rem;
+  width: 9.8rem;
   height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
@@ -83,7 +83,7 @@ const VideoTextArea = styled.textarea`
     color: #a9a9a9;
   }
   &:focus {
-    border: 0.1rem solid #d9d9d9;
+    border: 0.1rem solid #fbd26a;
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }

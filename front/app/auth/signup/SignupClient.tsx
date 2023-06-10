@@ -26,6 +26,7 @@ import {
   StyledLabel,
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
+import LoadingModal from "@/app/components/UI/LoadingModal";
 
 const SignupClient = () => {
   const {
@@ -151,16 +152,14 @@ const SignupClient = () => {
       username: data.username,
       email: data.email,
       password: data.password,
-      img: "https://i.namu.wiki/i/RrseCWTwXTo445l7nuAaGqYcQr7Q89xOHCCNYSsLklYFMfD40lVZSIxrYTMi8cwOJUHLxRDvkJ-XNvjGr6lZJcwXEQyVT6c6NCKTG0iSWyizpDF1M6H93-FM4YUuqL2uhmZJU0j3aMc7pdWLhAz5bQ.webp",
+      img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
       birth_date: birthDate,
     };
 
     axiosBase
       .post("users/", userData)
       .then((res) => {
-        console.log(res.data);
-        toast.success("회원가입이 완료되었습니다!");
-        router.push("/");
+        router.replace("/auth/signup/complete");
       })
       .catch((err) => toast.error(err.response.data.detail))
       .finally(() => setIsLoading(false));
@@ -168,6 +167,7 @@ const SignupClient = () => {
 
   return (
     <AuthContainer>
+      {isLoading && <LoadingModal />}
       <AuthFormWrapper>
         <Logo />
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -177,7 +177,7 @@ const SignupClient = () => {
               id="user_id"
               disabled={isLoading}
               {...register("user_id", {
-                required: "아이디는 필수 입력입니다.",
+                required: "아이디를 입력하세요.",
                 pattern: {
                   value: /^[A-Za-z0-9]+$/,
                   message: "아이디는 영어와 숫자만 가능합니다.",
@@ -206,7 +206,7 @@ const SignupClient = () => {
               type="email"
               disabled={isLoading}
               {...register("email", {
-                required: "아이디를 입력해주세요.",
+                required: "이메일을 입력하세요.",
                 pattern: {
                   value: /\S+@\S+\.\S+/,
                   message: "이메일 형식에 맞지 않습니다.",
@@ -227,9 +227,9 @@ const SignupClient = () => {
               type="text"
               disabled={isLoading}
               {...register("username", {
-                required: "닉네임을 입력해주세요.",
+                required: "닉네임을 입력하세요.",
                 minLength: {
-                  value: 4,
+                  value: 2,
                   message: "닉네임은 최소 2글자 이상이여야 합니다.",
                 },
                 maxLength: {
@@ -268,9 +268,9 @@ const SignupClient = () => {
                   required: "비밀번호를 입력해주세요.",
                   pattern: {
                     value:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/,
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_=+])[A-Za-z\!@#$%^&*()-_=+]{8,}/,
                     message:
-                      "비밀번호는 영문, 숫자 특수문자 조합으로 8자 이상 입력해야합니다.",
+                      "비밀번호는 영문 대소문자, 숫자, 특수문자 조합으로 8자 이상 입력해야합니다.",
                   },
                 })}
                 placeholder="비밀번호를 입력하세요."

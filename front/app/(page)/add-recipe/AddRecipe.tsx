@@ -1,14 +1,17 @@
 "use client";
 
 import React, { useState, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
-import VideoSection from "../../components/add-recipe/VideoSection";
-import IngredientSection from "../../components/add-recipe/IngredientSection";
-import CategoryAndInfo from "../../components/add-recipe/CategoryAndInfo";
-import ThumbnailUpload from "../../components/add-recipe/ThumbnailUpload";
-import CookingStepsSection from "../../components/add-recipe/CookingStepsSection";
-import Button from "../../components/UI/Button";
-import { axiosBase } from "../../api/axios";
+import VideoSection from "@/app/components/add-recipe/VideoSection";
+import IngredientSection from "@/app/components/add-recipe/IngredientSection";
+import CategoryAndInfo from "@/app/components/add-recipe/CategoryAndInfo";
+import ThumbnailUpload from "@/app/components/add-recipe/ThumbnailUpload";
+import CookingStepsSection from "@/app/components/add-recipe/CookingStepsSection";
+import Button from "@/app/components/UI/Button";
+import { postRecipe } from "@/app/api/recipe";
+import { toast } from "react-hot-toast";
+import LoadingModal from "@/app/components/UI/LoadingModal";
 
 type RecipeFormState = {
   selectedCategory: string;
@@ -30,7 +33,7 @@ const categories = [
   { label: "중식", value: "chinese" },
   { label: "일식", value: "japanese" },
   { label: "양식", value: "western" },
-  { label: "비건", value: "vegetarian" },
+  { label: "채식", value: "vegetarian" },
   { label: "기타", value: "other" },
 ];
 const peopleCount = [1, 2, 3, 4, 5];
@@ -45,6 +48,7 @@ const times = [
 const difficulties = ["쉬움", "중간", "어려움"];
 
 const RecipeForm = () => {
+  const router = useRouter();
   const [state, setState] = useState<RecipeFormState>({
     selectedCategory: "",
     selectedPeople: "",
@@ -59,6 +63,7 @@ const RecipeForm = () => {
     cookingTips: "",
     videoLink: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -87,7 +92,11 @@ const RecipeForm = () => {
 
   // 레시피 제목
   const handleRecipeTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, recipeTitle: e.target.value });
+    if (e.target.value.length > 23) {
+      toast.error("레시피 제목은 23자까지만 입력 가능합니다.");
+    } else {
+      setState({ ...state, recipeTitle: e.target.value });
+    }
   };
 
   // 요리 소개
@@ -185,7 +194,9 @@ const RecipeForm = () => {
     const recipeData = {
       recipe_title: state.recipeTitle,
       recipe_thumbnail: state.selectedImage,
-      recipe_video: state.videoLink,
+      recipe_video: state.videoLink
+        ? state.videoLink
+        : "https://www.youtube.com/watch?v=JVQaQBsCbrE",
       recipe_description: state.cookingIntro,
       recipe_category: state.selectedCategory,
       recipe_info: {
@@ -197,32 +208,121 @@ const RecipeForm = () => {
         name: ingredient,
         amount: quantity,
       })),
-      recipe_sequence: state.steps.map(({ stepDetail, stepImage }, index) => ({
+      recipe_sequence: state.steps.map(({ stepDetail }, index) => ({
         step: index + 1,
         picture: state.stepImages[index],
         description: stepDetail,
       })),
       recipe_tip: state.cookingTips,
-      user_id: "admin",
     };
 
-    console.log(recipeData);
-
-    try {
-      const response = await axiosBase.post("recipes/", recipeData);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+    // 카테고리 검사
+    if (state.selectedCategory === "") {
+      toast.error("카테고리를 선택해주세요.");
+      return;
     }
+
+    // 인원 수 검사
+    if (state.selectedPeople === "") {
+      toast.error("인원 수를 선택해주세요.");
+      return;
+    }
+
+    // 소요 시간 검사
+    if (state.selectedTime === "") {
+      toast.error("소요 시간을 선택해주세요.");
+      return;
+    }
+
+    // 난이도 검사
+    if (state.selectedDifficulty === "") {
+      toast.error("난이도를 선택해주세요.");
+      return;
+    }
+
+    // 섬네일 이미지 검사
+    if (state.selectedImage === "") {
+      toast.error("섬네일 이미지를 선택해주세요.");
+      return;
+    }
+
+    // 레시피 제목 검사
+    if (state.recipeTitle === "") {
+      toast.error("레시피 제목을 입력해주세요.");
+      return;
+    }
+
+    // 요리 소개 검사
+    if (state.cookingIntro === "") {
+      toast.error("요리 소개를 입력해주세요.");
+      return;
+    }
+
+    // 재료 유효성 검사
+    const hasEmptyIngredient = state.ingredients.some(
+      (ingredient) => ingredient.ingredient === ""
+    );
+    if (hasEmptyIngredient) {
+      toast.error("재료를 입력해주세요.");
+      return;
+    }
+
+    // 양 유효성 검사
+    const hasEmptyQuantity = state.ingredients.some(
+      (ingredient) => ingredient.quantity === ""
+    );
+    if (hasEmptyQuantity) {
+      toast.error("재료의 양을 입력해주세요.");
+      return;
+    }
+
+    // 요리 과정 유효성 검사
+    const hasEmptyStepDetail = state.steps.some(
+      (step) => step.stepDetail === ""
+    );
+    if (hasEmptyStepDetail) {
+      toast.error("요리 과정을 입력해주세요.");
+      return;
+    }
+
+    // 요리 과정 사진 유효성 검사
+    const hasEmptyStepImage = state.stepImages.length === 0;
+
+    if (hasEmptyStepImage) {
+      toast.error("요리 과정의 이미지를 추가해주세요.");
+      return;
+    }
+
+    // 요리 팁 검사
+    if (state.cookingTips === "") {
+      toast.error("요리 팁을 입력해주세요.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    postRecipe(recipeData)
+      .then((res) => {
+        console.log(res);
+        toast.success("레시피가 등록이 되었습니다!");
+        router.push("recipes/category/newest?category=newest");
+      })
+      .catch((err) => {
+        toast.error(err.response.data.detail);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   // 취소 핸들러
   const handleCancel = () => {
-    // 취소
+    router.back();
   };
 
   return (
     <FormWrapper>
+      {isLoading && <LoadingModal />}
       <Title>레시피 등록하기</Title>
       <MainSection>
         <ImageContainer>
@@ -295,12 +395,24 @@ const RecipeForm = () => {
       </CookingTips>
       <ButtonContainer>
         <SaveButton>
-          <Button onClick={handleSave} type="button" isBgColor fullWidth>
-            저장
+          <Button
+            onClick={handleSave}
+            type="button"
+            isBgColor
+            fullWidth
+            disabled={isLoading}
+          >
+            {isLoading ? "저장 중..." : "저장"}
           </Button>
         </SaveButton>
         <CancleButton>
-          <Button onClick={handleCancel} type="button" isBorderColor fullWidth>
+          <Button
+            onClick={handleCancel}
+            type="button"
+            isBorderColor
+            fullWidth
+            disabled={isLoading}
+          >
             취소
           </Button>
         </CancleButton>
@@ -313,7 +425,7 @@ export default RecipeForm;
 
 // 공통 스타일 적용
 const Label = styled.label`
-  width: 8.8rem;
+  width: 9.8rem;
   height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
@@ -338,7 +450,7 @@ const Input = styled.input`
   font-size: 16px;
   line-height: 1.9rem;
   &:focus {
-    border: 0.1rem solid #d9d9d9;
+    border: 0.1rem solid #fbd26a;
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
@@ -362,7 +474,7 @@ const TextArea = styled.textarea`
     color: #a9a9a9;
   }
   &:focus {
-    border: 0.1rem solid #d9d9d9;
+    border: 0.1rem solid #fbd26a;
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
@@ -379,7 +491,7 @@ const FormWrapper = styled.form`
 `;
 
 const Title = styled.h2`
-  width: 14.8rem;
+  width: 16.8rem;
   height: 2.7rem;
   font-family: "Inter";
   font-style: normal;

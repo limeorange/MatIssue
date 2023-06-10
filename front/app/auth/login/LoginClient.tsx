@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { axiosBase } from "@/app/api/axios";
@@ -19,9 +19,13 @@ import {
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
 import Cookies from "js-cookie";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSetRecoilState } from "recoil";
+import { loginState } from "@/app/store/authAtom";
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const setIsLoggedIn = useSetRecoilState(loginState);
 
   const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
@@ -40,11 +44,14 @@ const LoginClient = () => {
       .then((res) => {
         const sessionId = res.data.session_id;
         Cookies.set("session_id", sessionId);
+        setIsLoggedIn(true);
+        router.replace("/");
         toast.success("로그인 되었습니다.");
-        router.back();
       })
       .catch((err) => {
-        toast.error(err.response.data.detail);
+        toast.error(
+          "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
+        );
       })
       .finally(() => {
         setIsLoading(false);
@@ -85,6 +92,7 @@ const LoginClient = () => {
           <AuthNavBox>
             <div>로그인 유지</div>
             <button
+              type="button"
               onClick={() => {
                 router.push("/auth/find-id-password");
               }}

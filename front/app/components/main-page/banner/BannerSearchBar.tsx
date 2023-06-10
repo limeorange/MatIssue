@@ -21,7 +21,7 @@ const BannerSearchBar = () => {
     <SearchBarDiv>
       <div>
         <Image
-          src="/images/searchIcon.png"
+          src="/images/searchIcon.svg"
           width={24}
           height={24}
           alt="searchIcon"
@@ -43,7 +43,7 @@ const SearchBarDiv = styled.div`
   align-items: center;
   padding: 1.2rem 2.4rem;
   flex: grow;
-  height: 6rem;
+  height: 5.5rem;
   width: 100%;
   gap: 1.6rem;
 

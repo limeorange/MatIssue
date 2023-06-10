@@ -19,12 +19,7 @@ const Banner = () => {
         </SearchArea>
         <ImageArea>
           <ImageWrapper>
-            <Image
-              src="/images/banner/bannerImage1.png"
-              alt="banner"
-              width={590}
-              height={360}
-            />
+            <Image src="/images/banner/bannerImage1.png" alt="banner" fill />
           </ImageWrapper>
         </ImageArea>
       </BannerWrapper>
@@ -39,17 +34,17 @@ const BannerContainer = styled.div`
   color: rgb(75, 75, 75);
   @media (min-width: 1024px) {
     display: block;
-    width: 100%;
     min-width: 102.4rem;
-    height: 46rem;
+    height: 40rem;
     background-color: #ffea85;
+    margin: 0 auto;
   }
 `;
 
 const BannerWrapper = styled.div`
   position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   max-width: 120rem;
   height: 100%;
@@ -59,14 +54,17 @@ const BannerWrapper = styled.div`
 
 const SearchArea = styled.div`
   display: flex;
-  margin-top: 7rem;
+  margin-top: 8rem;
   flex-direction: column;
   padding: 2rem;
-  width: 50%;
+  width: 45%;
 `;
 
 const SearchTextContainer = styled.div`
-  padding: 3rem 0;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const SearchTextWrapper = styled.div`
@@ -85,6 +83,7 @@ const ImageWrapper = styled.div`
   display: flex;
   obejct-fit: contain;
   position: relative;
-  width: 100%;
+  width: 45rem;
+  height: 30rem;
   right: 0;
 `;

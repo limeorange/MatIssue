@@ -1,31 +1,70 @@
 "use client";
-import React from "react";
+
 import styled from "styled-components";
 import Link from "next/link";
 import Button from "../../components/UI/Button";
+import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
-import { type } from "os";
+import { useEffect, useState } from "react";
+import { getRecipeByUserId } from "@/app/api/recipe";
+import getCurrentUser from "@/app/api/user";
+import { useRouter } from "next/navigation";
 
-type User = {
-  user_id: string;
-  email: string;
-  username: string;
-  img: string;
-  birth_date: string;
+type MemoItemProps = {
   created_at: string;
+  recipe_id: string;
+  recipe_like: number;
+  recipe_thumbnail: string;
+  recipe_title: string;
+  recipe_view: number;
+  user_id: string;
+  user_nickname: string;
+};
+
+type ScrapItemProps = {
+  scrapData: MemoItemProps;
+  memo: string;
 };
 
 const ProfileCard = () => {
-  const { data: currentUser } = useQuery<User>(["currentUser"]);
+  // 캐시에 저장된 현재 유저정보를 가져옴
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
 
-  // console.log("currentUser : ", currentUser.);
+  // 캐시에 저장된 현재 유저가 작성한 레시피들을 가져옴
+  const { data: currentUserRecipes } = useQuery<Recipe[]>(
+    ["currentUserRecipes"],
+    () => getRecipeByUserId()
+  );
+
+  const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
+
+  const router = useRouter();
+
+  // 나의 스크랩 개수 추출을 위한 parsedMemo 정의
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const existingMemo = localStorage.getItem("scrapMemo");
+      const parsedMemo = existingMemo ? JSON.parse(existingMemo) : [];
+      setParsedMemo(parsedMemo);
+    }
+  }, []);
+
   return (
     <ProfileContainer>
       <ProfileWrapper>
-        <Link href="/my-page/notification">
-          <NotificationIcon src="/images/notification.png" alt="알림 아이콘" />
+        <LinkBtn
+          onClick={() => {
+            router.push("/my-page/notification");
+          }}
+        >
+          <NotificationIcon
+            src="/images/my-page/notification.svg"
+            alt="알림 아이콘"
+          />
           <NotificationDot />
-        </Link>
+        </LinkBtn>
 
         <RoundImage>
           <ProfileImage
@@ -34,26 +73,58 @@ const ProfileCard = () => {
           />
         </RoundImage>
         <NickName>{currentUser?.username}</NickName>
-        <Link href="/my-page/modify-user-info">
-          <ModifyUserButton>
+        <LinkBtn
+          onClick={() => {
+            router.push("/my-page/modify-user-info");
+          }}
+        >
+          <ModifyUserDiv>
             <Button
               isBorderColor={true}
               fullWidth={true}
               fullHeight={true}
-              isSmallFont={true}
+              isMediumFont={true}
               isHoverColor={true}
             >
               회원정보수정
             </Button>
-          </ModifyUserButton>
-        </Link>
+          </ModifyUserDiv>
+        </LinkBtn>
         <Divider />
-        <StyledLink href="/my-page">
-          <MyRecipeIcon src="/images/recipe-icon.png" alt="레시피 아이콘" />
-          <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-          <MyRecipeCount>5</MyRecipeCount>
-        </StyledLink>
-        <Link href="/add-recipe">
+        <div className="flex gap-[1.5rem]">
+          {/* 나의 레시피 버튼 */}
+          <LinkBtn
+            onClick={() => {
+              router.push("/my-page");
+            }}
+          >
+            <MyRecipeIcon
+              src="/images/my-page/my_recipe.svg"
+              alt="레시피 아이콘"
+            />
+            <MyRecipeTitle>나의 레시피</MyRecipeTitle>
+            <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
+          </LinkBtn>
+
+          {/* 나의 스크랩 버튼 */}
+          <LinkBtn
+            onClick={() => {
+              router.push("/my-page/scrap");
+            }}
+          >
+            <MyRecipeIcon
+              src="/images/recipe-view/scrap_full.svg"
+              alt="스크랩 아이콘"
+            />
+            <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
+            <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
+          </LinkBtn>
+        </div>
+        <LinkBtn
+          onClick={() => {
+            router.push("/add-recipe");
+          }}
+        >
           <UploadRecipeButton>
             <Button
               type="button"
@@ -65,7 +136,7 @@ const ProfileCard = () => {
               레시피 올리기
             </Button>
           </UploadRecipeButton>
-        </Link>
+        </LinkBtn>
       </ProfileWrapper>
     </ProfileContainer>
   );
@@ -80,6 +151,7 @@ const ProfileContainer = styled.div`
   border-radius: 2.3rem;
   height: 47rem;
   margin-right: 4rem;
+  margin-top: 4.1rem;
 `;
 
 const ProfileWrapper = styled.div`
@@ -127,13 +199,13 @@ const ProfileImage = styled.img`
 
 const NickName = styled.h1`
   font-size: 26px;
-  font-weight: 700;
+  font-weight: 600;
   margin: 1rem;
   color: #4f3d21;
 `;
 
-const ModifyUserButton = styled.div`
-  width: 10rem;
+const ModifyUserDiv = styled.div`
+  width: 12rem;
 `;
 
 const Divider = styled.div`
@@ -141,12 +213,6 @@ const Divider = styled.div`
   height: 1px;
   background-color: #ccc;
   margin: 2rem 0;
-`;
-
-const StyledLink = styled.a`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 `;
 
 const MyRecipeIcon = styled.img`
@@ -163,12 +229,19 @@ const MyRecipeTitle = styled.h4`
 
 const MyRecipeCount = styled.h4`
   margin-top: 0.4rem;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   color: #4f3d21;
 `;
 
 const UploadRecipeButton = styled.div`
   margin-top: 1.8rem;
   width: 14rem;
+`;
+
+const LinkBtn = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;

@@ -13,7 +13,7 @@ const SearchBar = () => {
     e
   ) => {
     if (e.key === "Enter") {
-      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
+      router.push(`/recipes/search?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -21,7 +21,7 @@ const SearchBar = () => {
     <SearchBarDiv>
       <div>
         <Image
-          src="/images/searchIcon.png"
+          src="/images/searchIcon.svg"
           width={18}
           height={18}
           alt="searchIcon"
@@ -50,6 +50,7 @@ const SearchBarDiv = styled.div`
   border-radius: 0.8rem;
 
   &:focus-within {
+    border: 0.1rem solid #fbd26a;
     box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
   }
 

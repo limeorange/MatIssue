@@ -1,0 +1,88 @@
+import styled from "styled-components";
+import ScrapCardItem from "./ScrapCardItem";
+import NonRecipe from "../../UI/NonRecipe";
+import { useEffect, useState } from "react";
+
+type MemoItemProps = {
+  created_at: string;
+  recipe_id: string;
+  recipe_like: number;
+  recipe_thumbnail: string;
+  recipe_title: string;
+  recipe_view: number;
+  user_id: string;
+  user_nickname: string;
+};
+
+type ScrapItemProps = {
+  scrapData: MemoItemProps;
+  memo: string;
+};
+
+/** 스크랩 리스트 컴포넌트 */
+const ScrapCardList: React.FC = () => {
+  const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
+
+  // localStorage is not defined 에러 해결
+  // 페이지가 client에 마운트될 때까지 기다렸다가 localStorage에 접근
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const existingMemo = localStorage.getItem("scrapMemo");
+      const parsedMemo = existingMemo ? JSON.parse(existingMemo) : [];
+      setParsedMemo(parsedMemo);
+    }
+  }, []);
+
+  return (
+    <ScrapListContainer>
+      <ScrapTitleH2>나의 스크랩</ScrapTitleH2>
+      {parsedMemo.length === 0 ? (
+        <NonRecipeMsg />
+      ) : (
+        <ScrapListGrid>
+          {parsedMemo.map((item: ScrapItemProps, index: number) => {
+            const recipeData = item["scrapData"];
+            const memoText = item["memo"];
+            return (
+              <ScrapCardItem
+                key={index}
+                recipeData={recipeData}
+                memoText={memoText}
+                setParsedMemo={setParsedMemo}
+              ></ScrapCardItem>
+            );
+          })}
+        </ScrapListGrid>
+      )}
+    </ScrapListContainer>
+  );
+};
+
+/** 스크랩 리스트 전체 감싸는 Div */
+const ScrapListContainer = styled.div`
+  width: 100%;
+`;
+
+/** 스크랩 제목 H2 */
+const ScrapTitleH2 = styled.h2`
+  font-size: 18px;
+  letter-spacing: 0.01em;
+  margin: 0 0.5rem 0 1.9rem;
+  font-weight: 600;
+  color: #4f3d21;
+  margin-bottom: 1.5rem;
+`;
+
+/** 레시피 스크랩 grid Div */
+const ScrapListGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 1.5rem;
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
+`;
+
+/** 레시피가 없을 경우 띄워주는 안내 그림 */
+const NonRecipeMsg = styled(NonRecipe)``;
+
+export default ScrapCardList;

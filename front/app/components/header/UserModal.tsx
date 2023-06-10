@@ -11,6 +11,7 @@ import Cookies from "js-cookie";
 
 const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const setIsLoggedIn = useSetRecoilState(loginState);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -22,11 +23,13 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
       .post(`users/logout`)
       .then((res) => {
         Cookies.remove("session_id");
-        queryClient.invalidateQueries(["currentUser"]);
+        setIsLoggedIn(false);
+        queryClient.removeQueries(["currentUser"]);
+        queryClient.removeQueries(["currentUserRecipes"]);
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error(err.response.data.detail);
+        toast.error("로그아웃에 실패하였습니다.");
       })
       .finally(() => {
         setIsLoading(false);
@@ -58,6 +61,20 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
         >
           알림
         </UserModalItem>
+        <UserModalItem
+          onClick={() => {
+            router.push("/add-recipe");
+          }}
+        >
+          글쓰기
+        </UserModalItem>
+        <UserModalItem
+          onClick={() => {
+            router.push("/my-page/scrap");
+          }}
+        >
+          스크랩
+        </UserModalItem>
         <UnderLine />
         <UserModalItem onClick={logoutHandler}>로그아웃</UserModalItem>
       </UserModalList>
@@ -69,7 +86,7 @@ export default UserModal;
 
 const UserModalContainer = styled.div<{ visible: boolean }>`
   position: absolute;
-  z-index: 9;
+  z-index: 90;
   top: 4.3rem;
   right: 0;
   width: 13.4rem;

@@ -103,6 +103,7 @@ const PaginationButtonBox = styled.div`
 
   &: hover {
     background-color: #e0e0e0;
+    cursor: pointer;
   }
 `;
 
@@ -130,6 +131,7 @@ const PaginationPrevButtonBox = styled.div`
 
   &: hover {
     background-color: #e6bb4e;
+    cursor: pointer;
   }
 `;
 
@@ -148,5 +150,6 @@ const PaginationNextButtonBox = styled.div`
 
   &: hover {
     background-color: #e6bb4e;
+    cursor: pointer;
   }
 `;

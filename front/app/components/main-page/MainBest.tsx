@@ -1,9 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import RecipeCard from "../recipe-card/RecipeCard";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+import { useQuery } from "@tanstack/react-query";
+import { getRecipesByPopularity } from "@/app/api/recipe";
+
+import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
+import NonRecipeCrying from "../UI/NonRecipeCrying";
+
 import {
   StyledContentsArea,
   ListingRecipeContainer,
@@ -12,211 +19,34 @@ import {
   StyledTitle,
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
-import { RecipeData } from "@/app/types";
+import { Recipe } from "@/app/types";
+import NonDataCrying from "../UI/NonDataCrying";
 
-const DUMMY_DATA: RecipeData[] = [
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1234,
-    view: "15,324",
-    id: "ex1",
-    timestamp: 1,
-    servings: 1,
-    duration: 10,
-    difficulty: 1,
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "혼자 알기 아까운 후토마끼 레시피",
-    author: "킹갓제너럴팀장윤수",
-    likes: 1112,
-    view: "15,324",
-    id: "ex2",
-    timestamp: 2,
-    servings: 2,
-    duration: 20,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "전여자친구가 해주던 그 맛의 유부초밥",
-    author: "영앤리치톨엔인텔리",
-    likes: 1134,
-    view: "15,324",
-    id: "ex3",
-    timestamp: 3,
-    servings: 3,
-    duration: 30,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "자취생을 위한 초간단 계란 초밥",
-    author: "브라우니물어",
-    likes: 1435,
-    view: "15,324",
-    id: "ex4",
-    timestamp: 4,
-    servings: 4,
-    duration: 60,
-    difficulty: 1,
-  },
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1144,
-    view: "15,324",
-    id: "ex1",
-    timestamp: 5,
-    servings: 5,
-    duration: 60,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "혼자 알기 아까운 후토마끼 레시피",
-    author: "킹갓제너럴팀장윤수",
-    likes: 1518,
-    view: "15,324",
-    id: "ex2",
-    timestamp: 6,
-    servings: 4,
-    duration: 20,
-    difficulty: 1,
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "전여자친구가 해주던 그 맛의 유부초밥",
-    author: "영앤리치톨엔인텔리",
-    likes: 2324,
-    view: "15,324",
-    id: "ex3",
-    timestamp: 8,
-    servings: 3,
-    duration: 30,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "자취생을 위한 초간단 계란 초밥",
-    author: "브라우니물어",
-    likes: 3324,
-    view: "15,324",
-    id: "ex4",
-    timestamp: 11,
-    servings: 2,
-    duration: 10,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1888,
-    view: "15,324",
-    id: "ex1",
-    timestamp: 9,
-    servings: 1,
-    duration: 60,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "혼자 알기 아까운 후토마끼 레시피",
-    author: "킹갓제너럴팀장윤수",
-    likes: 1999,
-    view: "15,324",
-    id: "ex2",
-    timestamp: 10,
-    servings: 3,
-    duration: 30,
-    difficulty: 1,
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "전여자친구가 해주던 그 맛의 유부초밥",
-    author: "영앤리치톨엔인텔리",
-    likes: 4324,
-    view: "15,324",
-    id: "ex3",
-    timestamp: 14,
-    servings: 2,
-    duration: 20,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "자취생을 위한 초간단 계란 초밥",
-    author: "브라우니물어",
-    likes: 1098,
-    view: "15,324",
-    id: "ex4",
-    timestamp: 12,
-    servings: 5,
-    duration: 60,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi1.png",
-    title: "기가 막히는 초밥 만들기",
-    author: "목동최고미남정훈",
-    likes: 1987,
-    view: "15,324",
-    id: "ex1",
-    timestamp: 13,
-    servings: 4,
-    duration: 10,
-    difficulty: 1,
-  },
-  {
-    image: "/images/sushi2.png",
-    title: "혼자 알기 아까운 후토마끼 레시피",
-    author: "킹갓제너럴팀장윤수",
-    likes: 1324,
-    view: "15,324",
-    id: "ex2",
-    timestamp: 16,
-    servings: 1,
-    duration: 30,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi3.png",
-    title: "전여자친구가 해주던 그 맛의 유부초밥",
-    author: "영앤리치톨엔인텔리",
-    likes: 2343,
-    view: "15,324",
-    id: "ex3",
-    timestamp: 15,
-    servings: 2,
-    duration: 20,
-    difficulty: 2,
-  },
-  {
-    image: "/images/sushi4.png",
-    title: "자취생을 위한 초간단 계란 초밥",
-    author: "브라우니물어",
-    likes: 500,
-    view: "15,324",
-    id: "ex4",
-    timestamp: 17,
-    servings: 3,
-    duration: 60,
-    difficulty: 1,
-  },
-];
+const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
+  /*  베스트 레시피 데이터를 리액트쿼리를 사용해서 캐시로 관리
+  초기값은 서버에서 받아온 데이터를 넣고, 클라이언트에서 데이터를 업데이트하면 리패치함 */
+  const { data: bestRecipes, isError } = useQuery<Recipe[]>(
+    ["bestRecipes"],
+    () => getRecipesByPopularity(),
+    {
+      refetchOnWindowFocus: false, // 우리 페이지 focus할때마다 리패치 여부
+      retry: 0, // 데이터 패치 실패할때 재시도 횟수
+      initialData: initialBestRecipes, // 데이터 초기값 지정 (page.tsx 에서 패치해온 값)
+    }
+  );
 
-const MainBest = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const bestRecipes = DUMMY_DATA;
+  const [filter, setFilter] = useState<"일간" | "주간" | "월간">("일간");
+  const [filteredBestRecipes, setFilteredBestRecipes] =
+    useState<Recipe[]>(bestRecipes);
 
   const contentsPerPage = 8;
-  const totalPage = bestRecipes.length / contentsPerPage;
+  const totalRecipes = bestRecipes?.length;
+  const totalPage = totalRecipes / contentsPerPage;
+  const currentDate = dayjs();
+  dayjs.extend(isBetween);
 
+  // 페이지네이션 버튼 핸들러
   const leftBtnHandler = () => {
     if (currentPage === 1) {
       return;
@@ -231,9 +61,46 @@ const MainBest = () => {
     setCurrentPage(currentPage + 1);
   };
 
+  // 일간, 주간 ,월간 필터링 useEffect 훅
+  useEffect(() => {
+    if (filter === "일간") {
+      const startOfDay = currentDate.startOf("day");
+      const endOfDay = currentDate.endOf("day");
+
+      const dailyBestPosts = bestRecipes?.filter((recipe: Recipe) => {
+        const postDate = dayjs(recipe.created_at);
+        return postDate.isBetween(startOfDay, endOfDay);
+      });
+
+      setFilteredBestRecipes(dailyBestPosts);
+    }
+    if (filter === "주간") {
+      const startOfWeek = currentDate.startOf("week");
+      const endOfWeek = currentDate.endOf("week");
+
+      const weeklyBestPosts = bestRecipes.filter((recipe: Recipe) => {
+        const postDate = dayjs(recipe.created_at);
+        return postDate.isBetween(startOfWeek, endOfWeek);
+      });
+
+      setFilteredBestRecipes(weeklyBestPosts);
+    }
+    if (filter === "월간") {
+      const startOfMonth = currentDate.startOf("month");
+      const endOfMonth = currentDate.endOf("month");
+
+      const monthlyBestPosts = bestRecipes.filter((recipe: Recipe) => {
+        const postDate = dayjs(recipe.created_at);
+        return postDate.isBetween(startOfMonth, endOfMonth);
+      });
+
+      setFilteredBestRecipes(monthlyBestPosts);
+    }
+  }, [filter]);
+
   return (
     <StyledContainer>
-      <LeftSlideBtn onClick={leftBtnHandler}>
+      <LeftSlideBtn onClick={leftBtnHandler} currentPage={currentPage}>
         <Image
           src="/images/main/leftSlideBtn.png"
           alt="left_slice_btn"
@@ -241,29 +108,61 @@ const MainBest = () => {
           height={122}
         />
       </LeftSlideBtn>
+
       <StyledContentsArea>
         <StyledBestTitleBox>
           <StyledTitle>베스트 레시피</StyledTitle>
           <StyledList>
-            <li onClick={() => {}}>일간</li>
-            <li>|</li>
-            <li onClick={() => {}}>월간</li>
-            <li>|</li>
-            <li onClick={() => {}}>주간</li>
+            <StyledItem
+              id="day"
+              onClick={() => {
+                setFilter("일간");
+              }}
+              clicked={filter === "일간"}
+            >
+              일간
+            </StyledItem>
+            <StyledItem clicked={false}>|</StyledItem>
+            <StyledItem
+              id="week"
+              onClick={() => {
+                setFilter("주간");
+              }}
+              clicked={filter === "주간"}
+            >
+              주간
+            </StyledItem>
+            <StyledItem clicked={false}>|</StyledItem>
+            <StyledItem
+              id="month"
+              onClick={() => {
+                setFilter("월간");
+              }}
+              clicked={filter === "월간"}
+            >
+              월간
+            </StyledItem>
           </StyledList>
         </StyledBestTitleBox>
-        <ListingRecipeContainer contentsPerPage={contentsPerPage}>
-          {bestRecipes
-            .slice(
+        {totalRecipes === 0 && <NonRecipeCrying />}
+        {isError && <NonDataCrying />}
+        <ListingRecipeContainer>
+          {filteredBestRecipes
+            ?.slice(
               contentsPerPage * (currentPage - 1),
               contentsPerPage * currentPage
             )
-            .map((data, index) => (
-              <RecipeCard key={index} data={data} />
+            .map((item: Recipe) => (
+              <MainRecipeCard key={item.recipe_id} recipe={item} />
             ))}
         </ListingRecipeContainer>
       </StyledContentsArea>
-      <RightSlideBtn onClick={rightBtnHandler}>
+
+      <RightSlideBtn
+        onClick={rightBtnHandler}
+        currentPage={currentPage}
+        totalPage={totalPage}
+      >
         <Image
           src="/images/main/rightSlideBtn.png"
           alt="right_slice_btn"
@@ -282,15 +181,15 @@ const StyledBestTitleBox = styled(StyledTitleBox)`
   flex-direction: row;
 `;
 
-const LeftSlideBtn = styled.button`
+const LeftSlideBtn = styled.button<{ currentPage: number }>`
   display: none;
 
   @media (min-width: 768px) {
-    display: block;
+    ${(props) => (props.currentPage === 1 ? "display:none;" : "display:block")}
     position: absolute;
     width: 3rem;
     height: 9rem;
-    left: -5rem;
+    left: -3rem;
     transition: transform 0.3s;
     &:hover {
       transform: scale(130%, 130%);
@@ -298,18 +197,25 @@ const LeftSlideBtn = styled.button`
   }
 `;
 
-const RightSlideBtn = styled.button`
+const RightSlideBtn = styled.button<{ currentPage: number; totalPage: number }>`
   display: none;
 
   @media (min-width: 768px) {
-    display: block;
+    ${(props) =>
+      props.currentPage > props.totalPage ? "display:none;" : "display:block"}
     position: absolute;
     width: 3rem;
     height: 9rem;
-    right: -5rem;
+    right: -3rem;
     transition: transform 0.3s;
     &:hover {
       transform: scale(130%, 130%);
     }
   }
+`;
+
+const StyledItem = styled.li<{ clicked: boolean }>`
+  cursor: pointer;
+  font-weight: ${(props) => (props.clicked ? "600" : "400")};
+  color: ${(props) => (props.clicked ? "#4F3D21" : "#ddd")};
 `;
