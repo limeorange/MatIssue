@@ -165,11 +165,3 @@ const ImageContainer = styled.div`
   transition: opacity 0.3s ease;
   opacity: 1;
 `;
-
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 1rem;
-`;
