@@ -26,6 +26,7 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
         setIsLoggedIn(false);
         queryClient.removeQueries(["currentUser"]);
         queryClient.removeQueries(["currentUserRecipes"]);
+        router.refresh();
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
