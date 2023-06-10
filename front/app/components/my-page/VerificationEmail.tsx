@@ -1,3 +1,5 @@
+"use client";
+
 import { User } from "../../types/index";
 import { axiosBase } from "@/app/api/axios";
 import Button from "../UI/Button";
@@ -14,39 +16,31 @@ import {
   WrapperInfo,
 } from "@/app/styles/my-page/modify-user-info.style";
 
-const VerificationEmail = ({ currentUser }: { currentUser: User }) => {
-  const [userData, setUserData] = useState<any>();
+const VerificationEmail = ({
+  email,
+  handleChangeInput,
+}: {
+  email: string;
+  handleChangeInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [code, setCode] = useState("");
-  const [email, setEmail] = useState({
-    email: userData?.email,
-  });
-
-  // useEffect(() => {
-  //   setEmail({ email: userData?.email });
-  // }, [userData]);
-
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEmail({ ...email, [name]: value });
-    setCode(e.target.value);
-  };
+  // const [email, setEmail] = useState({
+  //   email: userData?.email,
+  // });
 
   const handleVerificationButton = async () => {
     try {
-      const response = await axiosBase.post("email/email-verification", {
-        email: email.email,
-        code,
-      });
-      console.log("delete 후 response : ", response);
-
+      const response = await axiosBase.post(
+        `email/email-verification?email=${email}`
+      );
       if (response.status === 200) {
         alert(
           "인증 코드가 이메일로 발송되었습니다. 이메일을 확인하여 인증코드를 입력해주세요."
         );
         setIsButtonClicked(true);
       } else {
-        alert("인증코드 전송을 실패하였습니다. 다시 시도해 주세요.");
+        alert("인증코드 전송을 실패하였습니다. 이메일을 다시 확인해 주세요.");
       }
     } catch (error) {
       console.error(error);
@@ -56,12 +50,11 @@ const VerificationEmail = ({ currentUser }: { currentUser: User }) => {
 
   const handleConfirmCode = async () => {
     try {
-      const response = await axiosBase.post("/email/email-verification-check", {
-        email,
-        code,
-      });
+      const response = await axiosBase.post(
+        `/email/email-verification-check?email=${email}&code=${code}`
+      );
 
-      if (response.data.verified) {
+      if (!response.data.verified) {
         alert("Email successfully updated!");
       } else {
         alert("Invalid verification code.");
@@ -78,16 +71,14 @@ const VerificationEmail = ({ currentUser }: { currentUser: User }) => {
 
   return (
     <>
-      {" "}
       <Wrapper>
         <Title>이메일 *</Title>
         <IputAndDescription>
           <InputBox
             type="email"
             name="email"
-            value={currentUser?.email}
+            value={email}
             required
-            // readOnly={isButtonClicked}
             onChange={handleChangeInput}
           />
           <EmailDescription>
