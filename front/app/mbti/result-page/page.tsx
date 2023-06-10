@@ -38,17 +38,17 @@ const ResultPage = () => {
       ],
       text: "- 타인의 감정을 생각하지 않고, 직설적으로 말할 때가 있어요.",
       text2: "변화를 추구하는 오마카세 스시",
-      img: "/images/ENTJ.png",
+      img: "/images/mbti/ENTJ.png",
     },
     ESTJ: {
       per: "4.56%",
       rank: "11",
       talk: [
-        "- 어딜 가든 일 잘한다고 인정 받고,\n논리정연하게 말도 잘해요.\n- 자기 객관화가 잘 되어 있어 본인에 대해 잘 알아요.\n- 계획 없이 이러어지는 건 없어요,\n본인이 짠 계획을 추진하는 능력이 있어요.\n- 맺고 끊는 게 확실해요.\n어떤 일을 시작하면 깔끔하게 끝맺음을 잘해요.",
+        "- 어딜 가든 일 잘한다고 인정 받고,\n논리정연하게 말도 잘해요.\n- 자기 객관화가 잘 되어 있어 본인에 대해 잘 알아요.\n- 계획 없이 이루어지는 건 없어요.\n본인이 짠 계획을 추진하는 능력이 있어요.\n- 맺고 끊는 게 확실해요.\n어떤 일을 시작하면 깔끔하게 끝맺음을 잘해요.",
       ],
       text: "- 원리원칙에 근거해 사고하다 보니\n융통성이 부족할 때가 가끔 있어요.",
       text2: "실용적이고 간편하게 먹을 수 있는 샌드위치",
-      img: "/images/ESTJ.png",
+      img: "/images/mbti/ESTJ.png",
     },
     ENTP: {
       per: "5.04%",
@@ -58,7 +58,7 @@ const ResultPage = () => {
       ],
       text: "- 어떤 일을 마무리 짓기 전에 다른 관심사가 생겨\n매듭 짓지 못할 때가 많아요.",
       text2: "빈틈 없이 다채로운 맛의 타코",
-      img: "/images/ENTP.png",
+      img: "/images/mbti/ENTP.png",
     },
     ESTP: {
       per: "2.94%",
@@ -68,7 +68,7 @@ const ResultPage = () => {
       ],
       text: "- 때론 자존심을 굽히지 않고,\n자기 고집대로 밀고 나갈 때가 있어요.",
       text2: "어디서나 존재감 확실한 고수",
-      img: "/images/ESTP.png",
+      img: "/images/mbti/ESTP.png",
     },
     ENFJ: {
       per: "6.09%",
@@ -78,7 +78,7 @@ const ResultPage = () => {
       ],
       text: "- 기분이 안좋아도 좋다고 말할 때가 있어요.\n이럴 땐 감정에 솔직하지 못해서 속상해요.",
       text2: "다양한 재료가 조화롭게 어우러진 비빔밥",
-      img: "/images/ENFJ.png",
+      img: "/images/mbti/ENFJ.png",
     },
     ESFJ: {
       per: "8.35%",
@@ -88,7 +88,7 @@ const ResultPage = () => {
       ],
       text: "- 항상 남들을 먼저 생각하다보니 그만큼 눈치도 많이 봐요.",
       text2: "언제나 친근한 맛의 파스타",
-      img: "/images/ESFJ.png",
+      img: "/images/mbti/ESFJ.png",
     },
     ENFP: {
       per: "12.60%",
@@ -98,7 +98,7 @@ const ResultPage = () => {
       ],
       text: "- 감정기복이 있어요.\n하루에도 기분이 오르락 내리락할 때가 많죠.",
       text2: "다양한 맛이 느껴지는 트로피카나 스무디",
-      img: "/images/ENFP.png",
+      img: "/images/mbti/ENFP.png",
     },
     ESFP: {
       per: "6.36%",
@@ -108,7 +108,7 @@ const ResultPage = () => {
       ],
       text: "- 계획 없이 충동적으로 행동할 때가 많아요.",
       text2: "파티의 분위기를 살리는 피자",
-      img: "/images/ESFP.png",
+      img: "/images/mbti/ESFP.png",
     },
     INTJ: {
       per: "3.75%",
@@ -118,7 +118,7 @@ const ResultPage = () => {
       ],
       text: "- 가끔 인간미 없다는 소리를 듣고, 가면을 쓰고 사회생활을 하기도 해요.",
       text2: "세심한 레시피로 만들어진 머핀",
-      img: "/images/INTJ.png",
+      img: "/images/mbti/INTJ.png",
     },
     ISTJ: {
       per: "4.28%",
@@ -128,7 +128,7 @@ const ResultPage = () => {
       ],
       text: "- 기존의 방식을 고수하는 성향이 있어 융통성 없다는 소리를 들을 때도 있어요.",
       text2: "전통적이고 신뢰할 수 있는 맛의 카레",
-      img: "/images/ISTJ.png",
+      img: "/images/mbti/ISTJ.png",
     },
     INTP: {
       per: "6.28%",
@@ -138,7 +138,7 @@ const ResultPage = () => {
       ],
       text: "- 공감능력이 부족해 사회성이 없다는 소리를 종종 듣기도 해요.",
       text2: "독특하고 창의적인 맛의 케이크",
-      img: "/images/INTP.png",
+      img: "/images/mbti/INTP.png",
     },
     ISTP: {
       per: "3.11%",
@@ -148,7 +148,7 @@ const ResultPage = () => {
       ],
       text: "- 뭐든 쉽게 질리는 탓에\n한 가지 일을 끈기있게 하는 건 어려워요.",
       text2: "간단하고 즉흥적인 라면",
-      img: "/images/ISTP.png",
+      img: "/images/mbti/ISTP.png",
     },
     INFJ: {
       per: "6.25%",
@@ -158,7 +158,7 @@ const ResultPage = () => {
       ],
       text: "- 생각이 너무 많다보니 굳이 하지 않아도 될 생각까지 해요.",
       text2: "복잡하고 깊은 맛의 와인",
-      img: "/images/INFJ.png",
+      img: "/images/mbti/INFJ.png",
     },
     ISFJ: {
       per: "7.66%",
@@ -168,7 +168,7 @@ const ResultPage = () => {
       ],
       text: "- 항상 주변 상황에 예민하고 걱정이 많아요.",
       text2: "가슴을 따뜻하게 하는 치킨 스프",
-      img: "/images/ISFJ.png",
+      img: "/images/mbti/ISFJ.png",
     },
     INFP: {
       per: "13.39%",
@@ -178,7 +178,7 @@ const ResultPage = () => {
       ],
       text: "- 사소한 일에 쉽게 우울해지는 유리 멘탈이에요.",
       text2: "겉보기와는 다른 독특한 맛의 과일 타르트",
-      img: "/images/INFP.png",
+      img: "/images/mbti/INFP.png",
     },
     ISFP: {
       per: "6.61%",
@@ -188,7 +188,7 @@ const ResultPage = () => {
       ],
       text: "누워있는 걸 너무 좋아하다 보니 늘어질 땐 한없이 게을러요.",
       text2: "하루를 여유롭게, 아메리카노",
-      img: "/images/ISFP.png",
+      img: "/images/mbti/ISFP.png",
     },
   };
 
