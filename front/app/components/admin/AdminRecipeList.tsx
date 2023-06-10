@@ -17,7 +17,7 @@ const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
 
   return (
     <>
-      <PanelList>
+      {/* <PanelList>
         <PanelListHeader>
           <input
             type="checkbox"
@@ -76,7 +76,7 @@ const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
             setPage={setPage}
           />
         </PagenationBox>
-      </PagenationContainer>
+      </PagenationContainer> */}
     </>
   );
 };
