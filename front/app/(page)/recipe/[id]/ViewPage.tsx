@@ -22,6 +22,8 @@ import WriterProfile from "@/app/components/recipe-view/sticky-sidebar/WriterPro
 import { axiosBase } from "@/app/api/axios";
 import toast from "react-hot-toast";
 import getCurrentUser from "@/app/api/user";
+import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
+import { useRouter } from "next/navigation";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -94,6 +96,12 @@ const RecipeDetail = (props: RecipeDataProps) => {
     comments,
   } = recipe;
 
+  // 댓글 개수
+  const commentCount =
+    Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
+
+  const router = useRouter();
+
   // 좋아요 버튼, 카운트 상태 관리
   const [isLiked, setIsLiked] = useState(
     loggedInUserId !== undefined && recipe_like.includes(loggedInUserId)
@@ -107,9 +115,8 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 스크랩 저장 상태 관리
   const [isSaved, setIsSaved] = useState(false);
 
-  // 댓글 개수
-  const commentCount =
-    Array.isArray(comments) && comments.length > 0 ? comments.length : 0;
+  // 스크롤에 의한 컨텐츠 이동 Hook
+  const isHeaderVisible = useMovingContentByScrolling();
 
   /** 좋아요 버튼 클릭 핸들러 */
   const heartClickHandler = async () => {
@@ -168,6 +175,18 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 작성자 프로필 */}
         <WriterProfile user_nickname={user_nickname} />
+        {user_id === loggedInUserId && (
+          <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
+            <EditButton
+              onClick={() => {
+                router.push(`/edit-recipe/${recipe_id}`);
+              }}
+            >
+              수정
+            </EditButton>
+            <DeleteButton>삭제</DeleteButton>
+          </WriterButtonDiv>
+        )}
 
         {/* 요리 대표 이미지 */}
         <ImageWrapperDiv>
@@ -187,13 +206,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
               <AuthorSpan>by {user_nickname}</AuthorSpan>
               <AuthorSpan>&nbsp;• {created_at.slice(0, 10)}</AuthorSpan>
             </div>
-
-            {user_id === loggedInUserId && (
-              <div className="flex gap-[0.8rem]">
-                <EditButton>수정</EditButton>
-                <DeleteButton>삭제</DeleteButton>
-              </div>
-            )}
           </TitleContainerDiv>
           <DescriptionDiv>{recipe_description}</DescriptionDiv>
         </div>
@@ -370,6 +382,19 @@ const CommentIconDiv = styled.div`
   margin-left: 0.7rem;
   margin-top: 0.4rem;
   margin-right: 0.4rem;
+`;
+
+/** 게시글 수정, 삭제 버튼 Div */
+const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
+  display: flex;
+  gap: 0.8rem;
+  position: fixed;
+  right: 14.7rem;
+  top: 55.1rem;
+
+  transform: ${(props) =>
+    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+  transition: transform 0.3s ease-in-out;
 `;
 
 export default RecipeDetail;
