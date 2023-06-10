@@ -18,6 +18,11 @@ type MemoItemProps = {
   user_nickname: string;
 };
 
+type ScrapItemProps = {
+  scrapData: MemoItemProps;
+  memo: string;
+};
+
 const ProfileCard = () => {
   // 캐시에 저장된 현재 유저정보를 가져옴
   const { data: currentUser } = useQuery<User>(["currentUser"]);
@@ -27,7 +32,7 @@ const ProfileCard = () => {
     "currentUserRecipes",
   ]);
 
-  const [parsedMemo, setParsedMemo] = useState<MemoItemProps[]>([]);
+  const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
 
   // 나의 스크랩 개수 추출을 위한 parsedMemo 정의
   useEffect(() => {
