@@ -26,6 +26,7 @@ import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling
 import { useRouter } from "next/navigation";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
+import KakaoShareButton from "@/app/utils/kakaoShare";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -137,7 +138,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
         await axiosBase.patch(`/recipes/${recipe_id}/like`, recipeUpdated);
         setIsLiked(false);
         setCount(count - 1);
-        toast.success("좋아요가 취소되었습니다ㅠ.ㅠ");
+        toast.error("좋아요가 취소되었습니다ㅠ.ㅠ");
       }
       // 좋아요를 처음 누른 경우
       else if (loggedInUserId !== undefined) {
@@ -188,6 +189,17 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
+  /** url 복사하는 함수 */
+  const copyToClipboard = async () => {
+    const currentPageUrl = window.location.href;
+    try {
+      await navigator.clipboard.writeText(currentPageUrl);
+      toast.success("URL이 복사 되었습니다!");
+    } catch (err: any) {
+      toast.error("URL 복사에 실패했습니다.", err);
+    }
+  };
+
   return (
     <>
       <ContainerDiv>
@@ -210,7 +222,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
         </div>
 
         {/* 작성자 프로필 */}
-        <WriterProfile user_nickname={user_nickname} />
+        <WriterProfile
+          user_nickname={user_nickname}
+          user_fan={user_fan}
+          user_subscription={user_subscription}
+        />
         {user_id === loggedInUserId && (
           <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
             <EditButton
@@ -303,6 +319,18 @@ const RecipeDetail = (props: RecipeDataProps) => {
               />
             )}
           </div>
+          {/* 링크, 카카오 공유하기 */}
+          <ShareButtonDiv>
+            <div onClick={copyToClipboard}>
+              <Image
+                src="/images/link.png"
+                alt="링크 공유 아이콘"
+                width={60}
+                height={50}
+              />
+            </div>
+            <KakaoShareButton />
+          </ShareButtonDiv>
         </div>
 
         {/* 댓글 */}
@@ -369,7 +397,7 @@ const ImageWrapperDiv = styled.div`
   max-width: 65rem;
   height: 35rem;
   position: relative;
-  margin-top: 3.5rem;
+  margin-top: 1rem;
 `;
 
 /** 요리 주제 소개 담은 Div */
@@ -434,6 +462,29 @@ const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
   transform: ${(props) =>
     props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
   transition: transform 0.3s ease-in-out;
+`;
+
+/** 링크 공유하기 버튼 Div */
+const ShareButtonDiv = styled.div`
+  width: 100%;
+  max-width: 13rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+
+  & div {
+    cursor: pointer;
+    border-radius: 100%;
+    box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
 `;
 
 export default RecipeDetail;
