@@ -66,11 +66,11 @@ const StickySideBar = () => {
   );
 };
 
+/** 목차 사이드바 전체 감싸는 Div */
 const SidebarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
-  top: 20rem;
+  top: 17rem;
   left: 20rem;
-
   transform: ${(props) =>
     props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
   transition: transform 0.3s ease-in-out;
