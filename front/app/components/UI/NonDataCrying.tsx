@@ -7,7 +7,10 @@ const NonDataCrying = () => {
     <>
       <NoRecipeIconBox>
         <div>
-          <NoRcipeIcon src={"/images/error/cryingIcon.png"} alt="에러 아이콘" />
+          <NoRecipeIcon
+            src={"/images/error/cryingIcon.png"}
+            alt="에러 아이콘"
+          />
         </div>
       </NoRecipeIconBox>
     </>
@@ -25,7 +28,7 @@ const NoRecipeIconBox = styled.div`
   margin: 0 auto;
 `;
 
-const NoRcipeIcon = styled.img`
+const NoRecipeIcon = styled.img`
   padding: 6rem;
   height: 100%;
   max-height: 28rem;

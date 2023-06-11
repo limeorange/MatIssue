@@ -1,11 +1,4 @@
-import {
-  getAllRecipes,
-  getRecipesByLastest,
-  getRecipesByPopularity,
-  getRecipesBySingle,
-  getRecipesByVegetarian,
-} from "../api/recipe";
-import { Recipe } from "../types";
+import { getRecipesByPopularity } from "../api/recipe";
 import MainPageClient from "./MainClient";
 
 const Home = async () => {

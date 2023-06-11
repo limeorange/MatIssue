@@ -1,3 +1,5 @@
+"use client";
+
 import {
   RecipeContainer,
   StyledSubTitle,
@@ -11,7 +13,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllRecipes } from "@/app/api/recipe";
-import NotFound from "@/app/not-found";
 import shuffleRecipes from "@/app/utils/shuffleRecipes";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
