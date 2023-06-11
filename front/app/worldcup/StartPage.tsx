@@ -24,7 +24,7 @@ const StartPage = () => {
       </StartPageMessage>
       <ImageBox isAnimateOut={isAnimateOut}>
         <Image
-          src={"/images/worldcupIcon3.png"}
+          src={"/images/worldcup/worldcupIcon3.png"}
           alt="월드컵 캐릭터 이미지"
           width={400}
           height={200}
