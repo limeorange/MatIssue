@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
@@ -20,10 +21,13 @@ type Recipe = {
 
 const WorldcupGame: React.FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const num = searchParams.get("stage");
+
   const [foods, setFoods] = useState<Recipe[]>([]);
   const [displays, setDisplays] = useState<Recipe[]>([]);
   const [winners, setWinners] = useState<Recipe[]>([]);
-  const [stage, setStage] = useState(16);
+  const [stage, setStage] = useState(num ? parseInt(num) : 16);
   const [selectedCount, setSelectedCount] = useState(0);
   const [isAnimateOut, setIsAnimateOut] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +37,7 @@ const WorldcupGame: React.FC = () => {
       try {
         const recipes = await getAllRecipes();
         recipes.sort(() => Math.random() - 0.5);
-        const selectedRecipes = recipes.slice(0, 16);
+        const selectedRecipes = recipes.slice(0, num);
         setFoods(selectedRecipes);
         setDisplays([selectedRecipes[0], selectedRecipes[1]]);
         setIsLoading(false);
@@ -44,7 +48,7 @@ const WorldcupGame: React.FC = () => {
     };
 
     fetchRecipes();
-  }, []);
+  }, [num]);
 
   const clickHandler = (food: Recipe) => () => {
     if (stage !== 1) {

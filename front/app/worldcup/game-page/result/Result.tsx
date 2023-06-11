@@ -191,7 +191,7 @@ const WorldcupCard = styled.div`
   align-items: center;
   justify-content: center;
   margin: 3rem auto;
-  border-radius: 10px;
+  border-radius: 1.5rem;
   width: 100%;
   max-width: 40rem;
   height: 100%;
