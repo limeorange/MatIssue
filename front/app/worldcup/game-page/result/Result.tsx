@@ -1,11 +1,15 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { getRecipeById } from "@/app/api/recipe";
 import Logo from "@/app/components/header/Logo";
 import { useSearchParams } from "next/navigation";
+import Button from "@/app/components/UI/Button";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import { toast } from "react-hot-toast";
+import KakaoShareButton from "@/app/utils/kakaoShare";
 import Link from "next/link";
 
 type StyledComponentProps = {
@@ -19,12 +23,23 @@ type Recipe = {
 };
 
 const ResultPage: React.FC = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get("winnerId");
 
   const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [isAnimateOut, setIsAnimateOut] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Url 복사하는 함수
+  const copyToClipboard = async () => {
+    const currentPageUrl = window.location.href;
+    try {
+      await navigator.clipboard.writeText(currentPageUrl);
+      toast.success("Url이 복사 되었습니다!");
+    } catch (err: any) {
+      toast.error("Url 복사에 실패했습니다.", err);
+    }
+  };
 
   useEffect(() => {
     if (id) {
@@ -43,26 +58,55 @@ const ResultPage: React.FC = () => {
   return (
     <WorldcupLayout>
       <Logo />
-      <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
+      <GameHeader>레시피 이상형 월드컵!</GameHeader>
       <GameProgress>
         우승 레시피입니다! <br /> 클릭시 해당 레시피로 이동!
       </GameProgress>
-      <Link href={`/recipe/${recipe.recipe_id}`} passHref>
-        <CardLink>
-          <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
-          <ImageWrapper>
-            <ImageContainer>
-              <Image
-                src={recipe.recipe_thumbnail}
-                alt={recipe.recipe_title}
-                layout="fill"
-                objectFit="cover"
-                style={{ borderRadius: "1.5rem" }}
-              />
-            </ImageContainer>
-          </ImageWrapper>
-        </CardLink>
-      </Link>
+      <WorldcupCard>
+        <Link href={`/recipe/${recipe.recipe_id}`} passHref>
+          <CardLink>
+            <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+            <ImageWrapper>
+              <ImageContainer>
+                <Image
+                  src={recipe.recipe_thumbnail}
+                  alt={recipe.recipe_title}
+                  layout="fill"
+                  objectFit="cover"
+                  style={{ borderRadius: "1.5rem" }}
+                />
+              </ImageContainer>
+            </ImageWrapper>
+          </CardLink>
+        </Link>
+        <ShareText>테스트 공유하기</ShareText>
+        <ShareButtonBox>
+          <div onClick={copyToClipboard}>
+            <Image
+              src="/images/link.png"
+              alt="링크 공유 아이콘"
+              width={60}
+              height={50}
+            />
+          </div>
+          <KakaoShareButton />
+        </ShareButtonBox>
+      </WorldcupCard>
+      <RestartButtonBox>
+        <Button
+          onClick={() => {
+            router.push("/worldcup");
+          }}
+        >
+          <Image
+            src="/images/reload.png"
+            alt="뒤로가기 아이콘"
+            width={30}
+            height={30}
+          />
+          월드컵 다시하기
+        </Button>
+      </RestartButtonBox>
     </WorldcupLayout>
   );
 };
@@ -74,19 +118,12 @@ const WorldcupLayout = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3em;
-
-  @keyframes slideUp {
-    0% {
-      transform: translateY(10%);
-      opacity: 0;
-    }
-
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
+  margin: auto;
+  width: 100%;
+  max-width: 50rem;
+  heigth: 100vh;
+  padding: 1.5rem 0rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
@@ -98,12 +135,6 @@ const GameHeader = styled.p<StyledComponentProps>`
   & span {
     font-size: 40px;
   }
-
-  animation: ${(props) =>
-    props.isAnimateOut
-      ? "slideOut 1.3s ease-in-out"
-      : "slideUp 1s ease-in-out"};
-  animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
 
 const GameProgress = styled.div`
@@ -131,13 +162,29 @@ const GameProgress = styled.div`
 `;
 
 const RecipeTitleBox = styled.div`
-  font-size: 15px;
+  font-size: 30px;
   color: #4f3d21;
   white-space: pre-line;
   text-align: center;
   transform-origin: center;
   transition: all 0.3s ease;
   opacity: 1;
+`;
+
+const WorldcupCard = styled.div`
+  font-family: "Dongle-Bold";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 3rem auto;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 40rem;
+  height: 100%;
+  max-height: 100%;
+  padding: 1.5rem 0rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 const CardLink = styled.div`
@@ -164,4 +211,58 @@ const ImageContainer = styled.div`
   position: relative;
   transition: opacity 0.3s ease;
   opacity: 1;
+`;
+
+const ShareText = styled.p`
+  font-family: "Dongle-Bold";
+  font-size: 30px;
+  color: #5c8984;
+`;
+
+const ShareButtonBox = styled.div`
+  width: 100%;
+  max-width: 20rem;
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem 2rem 2rem;
+
+  & div {
+    cursor: pointer;
+    border-radius: 100%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
+`;
+
+const RestartButtonBox = styled.div`
+  width: 100%;
+  max-width: 20rem;
+  gap: 1rem;
+  display: flex;
+
+  & Button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    height: 5rem;
+    font-size: 15px;
+    background-color: #fbd26a;
+    text-align: center;
+    gap: 0.5rem;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
 `;

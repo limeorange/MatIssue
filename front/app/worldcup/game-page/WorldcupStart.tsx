@@ -78,7 +78,7 @@ const WorldcupGame: React.FC = () => {
   return (
     <WorldcupLayout>
       <Logo />
-      <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
+      <GameHeader>레시피 이상형 월드컵!</GameHeader>
       <GameProgress>
         {stage === 2
           ? "결승전"
@@ -163,12 +163,6 @@ const GameHeader = styled.p<StyledComponentProps>`
   & span {
     font-size: 40px;
   }
-
-  animation: ${(props) =>
-    props.isAnimateOut
-      ? "slideOut 1.3s ease-in-out"
-      : "slideUp 1s ease-in-out"};
-  animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
 
 const GameProgress = styled.div`
