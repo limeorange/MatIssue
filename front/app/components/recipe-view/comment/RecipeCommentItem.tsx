@@ -7,18 +7,10 @@ import CommentModal from "./CommentModal";
 import { axiosBase } from "@/app/api/axios";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { Comments } from "@/app/types";
 
 /** 요리 댓글 단일 Props */
-type RecipeCommentProps = {
-  comment_author: string;
-  comment_text: string;
-  comment_id: string;
-  comment_like: number;
-  created_at: string;
-  updated_at: string;
-  comment_nickname: string;
-  comment_profile_img: string;
-};
+type RecipeCommentProps = Comments;
 
 /** 요리 댓글 단일 컴포넌트 */
 const RecipeComment: React.FC<RecipeCommentProps> = ({
