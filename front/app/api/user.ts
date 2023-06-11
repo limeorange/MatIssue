@@ -30,3 +30,12 @@ export async function getFollowStatus(user_id: string) {
     console.log("error", error);
   }
 }
+
+export const getAllUsers = async (page: number, per_page: number) => {
+  try {
+    const response = await axiosBase.get("users", { data: { page, per_page } });
+    return response.data;
+  } catch (err: any) {
+    return null;
+  }
+};

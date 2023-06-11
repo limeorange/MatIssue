@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
 
@@ -9,11 +9,13 @@ const AdminSearchBar = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
+  const pathname = usePathname();
+
   const searchSubmitHandler: React.KeyboardEventHandler<HTMLInputElement> = (
     e
   ) => {
     if (e.key === "Enter") {
-      router.push(`/recipes/search?query=${encodeURIComponent(searchQuery)}`);
+      router.push(`${pathname}?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 

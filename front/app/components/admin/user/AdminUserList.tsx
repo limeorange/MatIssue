@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import styled from "styled-components";
-import AdminPagination from "./AdminPagenation";
+import AdminPagination from "../AdminPagenation";
 import { useEffect, useState } from "react";
-import { Recipe } from "@/app/types";
+import { User } from "@/app/types";
+import AdminUserItem from "./AdminUserItem";
 
-const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
-  const limit = 12;
+const AdminUserList = ({ users }: { users: User[] }) => {
+  const limit = 10;
   const [page, setPage] = useState<number>(1);
   const offset = (page - 1) * limit;
 
@@ -17,7 +18,7 @@ const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
 
   return (
     <>
-      {/* <PanelList>
+      <PanelList>
         <PanelListHeader>
           <input
             type="checkbox"
@@ -27,56 +28,28 @@ const AmdinRecipeList = ({ RECIPE_DATA }: { RECIPE_DATA: Recipe[] }) => {
               width: "1.8rem",
             }}
           />
-          <ShortSpan>글번호</ShortSpan>
-          <LongSpan>제목</LongSpan>
-          <ShortSpan>작성자</ShortSpan>
-          <MediumSpan>작성일</MediumSpan>
+          <ShortSpan>아이디</ShortSpan>
+          <ShortSpan>닉네임</ShortSpan>
+          <LongSpan>이메일</LongSpan>
+          <MediumSpan>생성일</MediumSpan>
           <ShortSpan>권한</ShortSpan>
         </PanelListHeader>
-        {RECIPE_DATA?.slice(offset, offset + limit).map((user, index) => {
-          return (
-            <PanelListItem key={index}>
-              <input
-                type="checkbox"
-                style={{
-                  padding: "1rem",
-                  marginRight: "1rem",
-                  width: "1.8rem",
-                }}
-              />
-              <ShortSpan>{user.user_id}</ShortSpan>
-              <LongSpan>{user.username}</LongSpan>
-              <ShortSpan>{user.email}</ShortSpan>
-              <MediumSpan>2023-04-03</MediumSpan>
-              <ShortSpan>{user.authority}</ShortSpan>
-              <Image
-                src="/images/admin/editIcon.png"
-                width={16}
-                height={16}
-                alt="edit_icon"
-                style={{ boxSizing: "content-box", padding: "1rem" }}
-              />
-              <Image
-                src="/images/admin/deleteIcon.png"
-                width={16}
-                height={16}
-                alt="delete_icon"
-                style={{ boxSizing: "content-box", padding: "1rem" }}
-              />
-            </PanelListItem>
-          );
-        })}
+        {users
+          ?.slice(offset, offset + limit)
+          .map((item: User, index: number) => (
+            <AdminUserItem key={index} user={item} index={index} />
+          ))}
       </PanelList>
       <PagenationContainer>
         <PagenationBox>
           <AdminPagination
-            total={RECIPE_DATA?.length}
+            total={users?.length}
             limit={limit}
             page={page}
             setPage={setPage}
           />
         </PagenationBox>
-      </PagenationContainer> */}
+      </PagenationContainer>
     </>
   );
 };
@@ -133,4 +106,4 @@ const PagenationBox = styled.div`
   font-size: 16px;
 `;
 
-export default AmdinRecipeList;
+export default AdminUserList;
