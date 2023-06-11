@@ -1,5 +1,6 @@
 import Header from "../components/header/Header";
 import { getCurrentUserSS } from "../action/getCurrentUser";
+import Footer from "../components/footer/Footer";
 
 export default async function Layout({
   children,
@@ -12,6 +13,7 @@ export default async function Layout({
     <>
       <Header initialCurrentUser={initialCurrentUser} />
       <main>{children}</main>
+      <Footer />
     </>
   );
 }
