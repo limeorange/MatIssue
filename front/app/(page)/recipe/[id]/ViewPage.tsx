@@ -121,6 +121,13 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 삭제 확인 모달 상태 관리
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
 
+  // 팔로우 취소 모달 상태 관리
+  // const [followDeleteConfirmModal, setFollowDeleteConfirmModal] =
+  //   useState(false);
+
+  // 팔로우 여부 상태관리
+  // const [isFollowing, setIsFollowing] = useState(false);
+
   // 스크롤에 의한 컨텐츠 이동 Hook
   const isHeaderVisible = useMovingContentByScrolling();
 
@@ -170,16 +177,17 @@ const RecipeDetail = (props: RecipeDataProps) => {
     setDeleteConfirmModal(true);
   };
 
+  /** 삭제 확인 모달 : 취소 클릭 핸들러 */
   const confirmModalCloseHandler = () => {
     setDeleteConfirmModal(false);
   };
 
-  /** 삭제 확인 모달 핸들러 */
+  /** 삭제 확인 모달 : 삭제 클릭 핸들러 */
   const deleteConfirmHandler = async () => {
     try {
       await axiosBase.delete(`recipes/${recipe_id}`);
       toast.success("게시글이 삭제되었습니다!");
-      router.back();
+      router.push("/recipes/category/newest?category=newest");
       client.invalidateQueries(["currentUserRecipes"]);
     } catch (error) {
       console.log("게시글 삭제 실패와 관련한 오류는..🧐", error);
@@ -200,9 +208,31 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
+  /** 팔로우 취소 모달 : 확인 클릭 핸들러 */
+  // const followDeleteConfirmHandler = async () => {
+  //   try {
+  //     await axiosBase.post(`/users/subscription/${user_id}`, false);
+  //     toast.success("팔로우가 취소되었습니다!");
+  //   } catch (error) {
+  //     console.log("팔로우 취소 실패와 관련한 오류는..🧐", error);
+  //     toast.error("팔로우 취소에 실패했습니다 ㅠ.ㅠ");
+  //   } finally {
+  //     // 팔로우 -> 팔로잉으로 변경
+  //     setIsFollowing(false);
+  //     // 모달창 닫기
+  //     setFollowDeleteConfirmModal(false);
+  //   }
+  // };
+
+  // /** 팔로우 취소 모달 : 취소 클릭 핸들러 */
+  // const followConfirmModalCloseHandler = () => {
+  //   setFollowDeleteConfirmModal(false);
+  // };
+
   return (
     <>
       <ContainerDiv>
+        {/* 게시글 삭제 확인 모달 */}
         {deleteConfirmModal && (
           <StyledConfirmModal
             icon={<AlertImage src="/images/alert.png" alt="alert" />}
@@ -211,6 +241,16 @@ const RecipeDetail = (props: RecipeDataProps) => {
             onCancel={confirmModalCloseHandler}
           />
         )}
+
+        {/* 팔로우 취소 확인 모달 */}
+        {/* {followDeleteConfirmModal && (
+          <StyledConfirmModal
+            icon={<AlertImage src="/images/alert.png" alt="alert" />}
+            message="팔로우를 취소하시겠습니까?"
+            onConfirm={followDeleteConfirmHandler}
+            onCancel={followConfirmModalCloseHandler}
+          />
+        )} */}
 
         {/* 스크롤 상태 진행바 */}
         <ProgressBar />
@@ -226,6 +266,8 @@ const RecipeDetail = (props: RecipeDataProps) => {
           user_nickname={user_nickname}
           user_fan={user_fan}
           user_subscription={user_subscription}
+          user_id={user_id}
+          loggedInUserId={loggedInUserId}
         />
         {user_id === loggedInUserId && (
           <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
