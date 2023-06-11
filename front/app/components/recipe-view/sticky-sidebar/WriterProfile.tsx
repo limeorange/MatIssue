@@ -60,6 +60,8 @@ const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
   top: 16.5rem;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 2rem;
+  background-color: #ffffff;
+  z-index: 30;
 
   transform: ${(props) =>
     props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
