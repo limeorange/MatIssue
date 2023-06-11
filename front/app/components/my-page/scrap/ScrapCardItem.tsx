@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 type MemoItemProps = {
   created_at: string;
   recipe_id: string;
-  recipe_like: number;
+  recipe_like: string[];
   recipe_thumbnail: string;
   recipe_title: string;
   recipe_view: number;
@@ -26,7 +26,7 @@ type ScrapCardProps = {
   recipeData: {
     created_at: string;
     recipe_id: string;
-    recipe_like: number;
+    recipe_like: string[];
     recipe_thumbnail: string;
     recipe_title: string;
     recipe_view: number;
@@ -129,7 +129,7 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
                     style={{ objectFit: "cover", cursor: "pointer" }}
                   />
                 </IconDiv>
-                <LikesCount>{recipe_like}</LikesCount>
+                <LikesCount>{recipe_like.length}</LikesCount>
               </LikesWrapperButton>
             </NicknameLikeDiv>
           </RecipeDescriptionDiv>
