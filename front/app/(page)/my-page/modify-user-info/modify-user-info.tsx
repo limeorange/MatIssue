@@ -175,7 +175,11 @@ const ModifyUserInfo: React.FC = () => {
 
   //이미지 삭제
   const handleDeleteImage = () => {
-    setPreviewImage(null);
+    setPreviewImage("");
+    setSelectedFile(null);
+    setUserData((prev: any) => {
+      return { ...prev, img: "" };
+    });
   };
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
