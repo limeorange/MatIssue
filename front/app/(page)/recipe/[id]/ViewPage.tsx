@@ -26,7 +26,7 @@ import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling
 import { useRouter } from "next/navigation";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
-import KakaoShareButton from "@/app/utils/kakaoShare";
+import RecipeKakaoShareButton from "@/app/utils/recipeKakaoShare";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -371,7 +371,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
                 height={50}
               />
             </div>
-            <KakaoShareButton />
+            <RecipeKakaoShareButton />
           </ShareButtonDiv>
         </div>
 
