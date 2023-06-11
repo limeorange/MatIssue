@@ -27,10 +27,24 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  middleware: [
-    {
-      handler: middleware,
-      matcher: ["/my-page/:path*", "/edit-recipe", "/add-recipe", "/admin"],
-    },
-  ],
+  async rewrites() {
+    return [
+      {
+        source: "/my-page/:path*",
+        destination: "/auth/login",
+      },
+      {
+        source: "/edit-recipe",
+        destination: "/auth/login",
+      },
+      {
+        source: "/add-recipe",
+        destination: "/auth/login",
+      },
+      {
+        source: "/admin",
+        destination: "/auth/login",
+      },
+    ];
+  },
 };
