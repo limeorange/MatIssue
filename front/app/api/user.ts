@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { axiosBase } from "../api/axios";
 
-export default async function getCurrentUser() {
+export async function getCurrentUser() {
   const session_id = Cookies.get("session_id");
 
   if (session_id) {
@@ -17,4 +17,16 @@ export default async function getCurrentUser() {
   }
 
   return null;
+}
+
+export async function getFollowStatus(user_id: string) {
+  try {
+    const response = await axiosBase.get(
+      `/users/subscription/status/${user_id}`
+    );
+    const followStatus = response.data["is_subscribed"];
+    return followStatus;
+  } catch (error) {
+    console.log("error", error);
+  }
 }
