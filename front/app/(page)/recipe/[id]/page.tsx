@@ -1,7 +1,6 @@
 import { axiosBase } from "@/app/api/axios";
 import RecipeDetail from "./ViewPage";
 import { getRecipeById } from "@/app/api/recipe";
-import commentsData from "@/data/commentDummy.json";
 
 /** 레시피 조회 페이지 컴포넌트 */
 const ViewPage = async ({ params }: { params: { id: string } }) => {
