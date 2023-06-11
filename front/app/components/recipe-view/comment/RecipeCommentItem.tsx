@@ -5,20 +5,13 @@ import { useState } from "react";
 import styled, { css } from "styled-components";
 import CommentModal from "./CommentModal";
 import { axiosBase } from "@/app/api/axios";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { Comments, User } from "@/app/types";
+import getCurrentUser from "@/app/api/user";
 
 /** 요리 댓글 단일 Props */
-type RecipeCommentProps = {
-  comment_author: string;
-  comment_text: string;
-  comment_id: string;
-  comment_like: number;
-  created_at: string;
-  updated_at: string;
-  comment_nickname: string;
-  comment_profile_img: string;
-};
+type RecipeCommentProps = Comments;
 
 /** 요리 댓글 단일 컴포넌트 */
 const RecipeComment: React.FC<RecipeCommentProps> = ({
@@ -26,6 +19,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   comment_text,
   comment_id,
   comment_like,
+  comment_parent,
   created_at,
   updated_at,
   comment_nickname,
@@ -48,9 +42,19 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   const userCreatedAt = new Date(created_at).getTime() - userTimezoneOffset;
   const koreanCreatedAt = new Date(userCreatedAt).toLocaleString("ko-KR");
 
+  // 캐시에 저장된 현재 유저정보를 가져옴
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
+  const loggedInUserId: string | undefined = currentUser?.user_id;
+
   // 좋아요 버튼, 카운트 상태 관리
-  const [isCommentLiked, setIsCommentLiked] = useState(false);
-  const [commentLikesCount, setcommentLikesCount] = useState(comment_like);
+  const [isCommentLiked, setIsCommentLiked] = useState(
+    loggedInUserId !== undefined && comment_like.includes(loggedInUserId)
+  );
+  const [commentLikesCount, setcommentLikesCount] = useState(
+    comment_like.length
+  );
   const countText = commentLikesCount.toLocaleString();
 
   /** 댓글창 클릭시 상태 업데이트 핸들러 */
@@ -76,7 +80,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   /** 수정 댓글 제출 핸들러 */
   const commentSaveHandler = async () => {
     try {
-      const response = await axiosBase.patch(`/recipes/comment/${comment_id}`, {
+      await axiosBase.patch(`/recipes/comment/${comment_id}`, {
         comment_text: editedCommentText,
       });
       toast.success("댓글 수정이 완료되었습니다");
@@ -84,9 +88,10 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
     } catch (error) {
       console.log("댓글 수정 실패와 관련한 오류는...🧐", error);
       toast.error("댓글 수정에 실패했습니다 ㅠ.ㅠ");
+    } finally {
+      // 수정 완료 후 상태 업데이트
+      setIsEditing(false);
     }
-    // 수정 완료 후 상태 업데이트
-    setIsEditing(false);
   };
 
   /** 취소 버튼 핸들러 */
@@ -98,7 +103,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   /** 삭제 버튼 핸들러 */
   const commentDeleteHandler = async () => {
     try {
-      const response = await axiosBase.delete(`/recipes/comment/${comment_id}`);
+      await axiosBase.delete(`/recipes/comment/${comment_id}`);
       toast.success("댓글 삭제가 완료되었습니다");
       client.invalidateQueries(["currentRecipe"]);
     } catch (error) {
@@ -108,12 +113,48 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   };
 
   /** 좋아요 버튼 클릭 핸들러 */
-  const heartClickHandler = () => {
-    setIsCommentLiked(!isCommentLiked);
-    if (isCommentLiked) {
-      setcommentLikesCount(commentLikesCount - 1);
-    } else {
-      setcommentLikesCount(commentLikesCount + 1);
+  // const heartClickHandler = () => {
+  //   setIsCommentLiked(!isCommentLiked);
+  //   if (isCommentLiked) {
+  //     setcommentLikesCount(commentLikesCount - 1);
+  //   } else {
+  //     setcommentLikesCount(commentLikesCount + 1);
+  //   }
+  // };
+
+  const heartClickHandler = async () => {
+    try {
+      // 이미 좋아요를 누른 경우 해당 user_id를 배열에서 삭제 (좋아요 취소)
+      if (
+        loggedInUserId !== undefined &&
+        comment_like.includes(loggedInUserId)
+      ) {
+        const commentLikesUpdated: string[] = comment_like.filter(
+          (id) => id !== loggedInUserId
+        );
+        await axiosBase.patch(
+          `/recipes/comment/${comment_id}/like`,
+          commentLikesUpdated
+        );
+        setIsCommentLiked(false);
+        setcommentLikesCount(commentLikesCount - 1);
+        toast.success("좋아요가 취소되었습니다ㅠ.ㅠ");
+      }
+      // 좋아요를 처음 누른 경우
+      else if (loggedInUserId !== undefined) {
+        comment_like.push(loggedInUserId);
+        await axiosBase.patch(
+          `/recipes/comment/${comment_id}/like`,
+          comment_like
+        );
+        setIsCommentLiked(true);
+        setcommentLikesCount(commentLikesCount + 1);
+        toast.success("맛이슈와 함께라면 언제든 좋아요!");
+      }
+      client.invalidateQueries(["currentRecipe"]);
+    } catch (error) {
+      console.log("좋아요 요청 실패와 관련한 오류는..🧐", error);
+      toast.error("좋아요 요청에 실패했습니다 ㅠ.ㅠ");
     }
   };
 

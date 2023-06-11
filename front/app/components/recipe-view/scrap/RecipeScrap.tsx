@@ -51,11 +51,12 @@ const ScrapWrapperButton = styled.button`
   display: flex;
   width: 12rem;
   height: 5.5rem;
-  border: 0.17rem solid #c8c8c8;
   border-radius: 1.5rem;
   justify-content: center;
   align-items: center;
   margin-top: 1rem;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
 `;
 
 /** 스크랩 아이콘 Div */

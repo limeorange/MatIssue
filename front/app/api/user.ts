@@ -19,6 +19,28 @@ export default async function getCurrentUser() {
   return null;
 }
 
+export async function getFollowStatus(user_id: string) {
+  try {
+    const response = await axiosBase.get(
+      `/users/subscription/status/${user_id}`
+    );
+    const followStatus = response.data["is_subscribed"];
+    return followStatus;
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
+export async function getUserFans(user_id: string) {
+  try {
+    const response = await axiosBase.get(`/users/${user_id}/fans`);
+    const fansList = response.data["people"];
+    return fansList;
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
 export const getAllUsers = async (page: number, per_page: number) => {
   try {
     const response = await axiosBase.get("users", { data: { page, per_page } });

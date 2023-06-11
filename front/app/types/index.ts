@@ -49,7 +49,7 @@ export type Recipe = {
 export type Comments = {
   comment_author: string;
   comment_text: string;
-  comment_like: number;
+  comment_like: string[];
   comment_id: string;
   created_at: string;
   comment_parent: string;
