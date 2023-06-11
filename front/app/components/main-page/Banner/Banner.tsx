@@ -11,7 +11,7 @@ const Banner = () => {
       <BannerWrapper>
         <Link href="/mbti">
           <Image
-            src="/images/banner/banner.svg"
+            src="/images/banner/banner1.svg"
             width={1100}
             height={400}
             alt="banner"
