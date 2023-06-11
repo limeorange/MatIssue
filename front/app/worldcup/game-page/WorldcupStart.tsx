@@ -22,7 +22,7 @@ type Recipe = {
 const WorldcupGame: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const num = searchParams.get("stage");
+  const num = searchParams?.get("stage");
 
   const [foods, setFoods] = useState<Recipe[]>([]);
   const [displays, setDisplays] = useState<Recipe[]>([]);

@@ -113,7 +113,7 @@ const ProfileButton = styled.div`
     transition: all 0.3s;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: flex;
   }
 `;

@@ -38,7 +38,7 @@ const SearchBar = () => {
 };
 
 const SearchBarDiv = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
   padding: 0.8rem 1.6rem;
   height: 4rem;
@@ -54,7 +54,8 @@ const SearchBarDiv = styled.div`
     box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
+    display: flex;
     position: absolute;
     width: 36rem;
     top: 50%;

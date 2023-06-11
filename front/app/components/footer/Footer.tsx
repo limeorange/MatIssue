@@ -43,15 +43,28 @@ const FooterWrapper = styled.div`
   gap: 0.8rem;
   max-width: 120rem;
   width: 100%;
-  padding: 4rem;
+  padding: 2rem;
   margin: 0 auto;
-  font-size: 12px;
+  font-size: 10px;
+
+  @media (min-width: 1024px) {
+    font-size: 12px;
+    padding: 4rem;
+  }
 `;
 
 const FooterTextBox = styled.div`
-  font-size: 16px;
+  font-size: 12px;
+
+  @media (min-width: 1024px) {
+    font-size: 16px;
+  }
 `;
 
 const FooterAllRightsReserved = styled.div`
-  font-size: 14px;
+  font-size: 10px;
+
+  @media (min-width: 1024px) {
+    font-size: 14px;
+  }
 `;

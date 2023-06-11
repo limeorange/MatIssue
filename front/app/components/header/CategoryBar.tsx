@@ -84,11 +84,7 @@ const CategoryUl = styled.ul`
 `;
 
 const CategoryLi = styled.li`
-  position: relative;
-  font-size: 13px;
-  padding: 0.3rem 0.6rem;
-  background-color: #fbd26a;
-  border-radius: 0.5rem;
+  display: none;
 
   @media (min-width: 1024px) {
     display: flex;
