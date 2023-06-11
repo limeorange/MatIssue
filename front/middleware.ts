@@ -21,16 +21,30 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL("/auth/login", request.url));
   }
 
-  if (request.url.includes("/admin") && !request.cookies.get("session_id")) {
-    return NextResponse.rewrite(new URL("/auth/login", request.url));
-  }
+  // if (request.url.includes("/admin") && !request.cookies.get("session_id")) {
+  //   return NextResponse.rewrite(new URL("/auth/login", request.url));
+  // }
 }
 
 export const config = {
-  middleware: [
-    {
-      handler: middleware,
-      matcher: ["/my-page/:path*", "/edit-recipe", "/add-recipe", "/admin"],
-    },
-  ],
+  async rewrites() {
+    return [
+      {
+        source: "/my-page/:path*",
+        destination: "/auth/login",
+      },
+      {
+        source: "/edit-recipe/:path*",
+        destination: "/auth/login",
+      },
+      {
+        source: "/add-recipe/:path*",
+        destination: "/auth/login",
+      },
+      // {
+      //   source: "/admin/:path*",
+      //   destination: "/auth/login",
+      // },
+    ];
+  },
 };

@@ -1,6 +1,6 @@
+"use client";
+
 import { getRecipesBySingle } from "@/app/api/recipe";
-import Loading from "@/app/loading";
-import NotFound from "@/app/not-found";
 import {
   StyledContainer,
   StyledContentsArea,
@@ -22,7 +22,7 @@ const MainAlone = () => {
     data: singleRecipes,
     isLoading,
     isError,
-  } = useQuery(["signleRecipes"], () => getRecipesBySingle(), {
+  } = useQuery<Recipe[]>(["singleRecipes"], () => getRecipesBySingle(), {
     retry: 0,
     initialData: [],
   });

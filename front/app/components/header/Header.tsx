@@ -49,7 +49,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
         <TopNav>
           <Logo />
           <SearchBar />
-          {isLoading ? null : <UserMenu currentUser={currentUser} />}
+          {isLoading ? null : <UserMenu />}
         </TopNav>
         <CategoryBar />
       </NavArea>

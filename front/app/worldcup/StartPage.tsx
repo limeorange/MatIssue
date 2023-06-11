@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import Image from "next/image";
-
 import Button from "@/app/components/UI/Button";
 import Logo from "@/app/components/header/Logo";
 
@@ -14,6 +13,10 @@ type StyledComponentProps = {
 const StartPage = () => {
   const [isAnimateOut, setIsAnimateOut] = useState(false);
   const router = useRouter();
+
+  const startGame = (stage: number) => {
+    router.push(`/worldcup/game-page?stage=${stage}`);
+  };
 
   return (
     <WorldcupLayout>
@@ -38,10 +41,43 @@ const StartPage = () => {
           isHoverColor={false}
           onClick={() => {
             setIsAnimateOut(true);
-            router.push("/worldcup/game-page");
+            startGame(64);
           }}
         >
-          월드컵 시작하기
+          64강 시작
+        </Button>
+        <Button
+          isBgColor={false}
+          isBorderColor={true}
+          isHoverColor={true}
+          onClick={() => {
+            setIsAnimateOut(true);
+            startGame(32);
+          }}
+        >
+          32강 시작
+        </Button>
+        <Button
+          isBgColor={true}
+          isBorderColor={false}
+          isHoverColor={false}
+          onClick={() => {
+            setIsAnimateOut(true);
+            startGame(16);
+          }}
+        >
+          16강 시작
+        </Button>
+        <Button
+          isBgColor={false}
+          isBorderColor={true}
+          isHoverColor={true}
+          onClick={() => {
+            setIsAnimateOut(true);
+            startGame(8);
+          }}
+        >
+          8강 시작
         </Button>
       </ButtonBox>
     </WorldcupLayout>
@@ -114,8 +150,9 @@ const ButtonBox = styled.div<StyledComponentProps>`
   margin-top: 1rem;
 
   & Button {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    margin-right: 1rem;
 
     &:hover {
       transform: translateY(-3px);

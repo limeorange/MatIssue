@@ -10,7 +10,7 @@ import Image from "next/image";
 import UserModal from "./UserModal";
 import { User } from "@/app/types";
 
-const UserMenu = ({ currentUser }: { currentUser: User }) => {
+const UserMenu = () => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const isLoggedIn = useRecoilValue(loginState);
   const router = useRouter();
