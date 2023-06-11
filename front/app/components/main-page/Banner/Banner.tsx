@@ -1,12 +1,23 @@
+"use client";
+
 import Image from "next/image";
 import styled from "styled-components";
 import BannerSearchBar from "./BannerSearchBar";
+import Link from "next/link";
 
 const Banner = () => {
   return (
     <BannerContainer>
       <BannerWrapper>
-        <SearchArea>
+        <Link href="/mbti">
+          <Image
+            src="/images/banner/banner1.svg"
+            width={1100}
+            height={400}
+            alt="banner"
+          />
+        </Link>
+        {/* <SearchArea>
           <SearchTextContainer>
             <SearchTextWrapper>
               대한민국 No.1 레시피 커뮤니티 맛이슈에서
@@ -21,7 +32,7 @@ const Banner = () => {
           <ImageWrapper>
             <Image src="/images/banner/bannerImage1.png" alt="banner" fill />
           </ImageWrapper>
-        </ImageArea>
+        </ImageArea> */}
       </BannerWrapper>
     </BannerContainer>
   );
