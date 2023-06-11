@@ -45,7 +45,7 @@ const LoginClient = () => {
         const sessionId = res.data.session_id;
         Cookies.set("session_id", sessionId);
         setIsLoggedIn(true);
-        router.replace("/");
+        router.back();
         toast.success("로그인 되었습니다.");
       })
       .catch((err) => {
