@@ -319,8 +319,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     updateRecipe(recipe_id, recipeData)
       .then((res) => {
         console.log(res);
-        toast.success("레시피가 수정이 되었습니다!");
-        router.push("recipes/category/newest?category=newest");
+        toast.success("레시피가 수정되었습니다!");
+        router.push(`/recipe/${recipe_id}`);
       })
       .catch((err) => {
         toast.error(err.response.data.detail);
