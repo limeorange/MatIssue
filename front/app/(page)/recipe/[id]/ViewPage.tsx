@@ -295,7 +295,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
-        <div className="flex gap-[1rem] justify-center">
+        <div className="flex gap-[1.5rem] justify-center">
           {/* 좋아요 */}
           <RecipeUserLikes
             isLiked={isLiked}
@@ -347,7 +347,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
             </CommentIconDiv>
             <SubtitleH2>{commentCount}</SubtitleH2>
           </div>
-          <div className="mb-[30px]">
+          <div className="mb-[1rem]">
             <RecipeComments comments={comments} />
           </div>
           <RecipeCommentInput recipe_id={recipe_id} />
