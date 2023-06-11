@@ -24,6 +24,13 @@ type ResultData = {
   };
 };
 
+type CompatibilityData = {
+  [key: string]: {
+    compatible: string;
+    incompatible: string;
+  };
+};
+
 const resultData: ResultData = {
   ENTJ: {
     per: "2.73%",
@@ -203,6 +210,73 @@ const resultData: ResultData = {
   },
 };
 
+const compatibilityData: CompatibilityData = {
+  ESFJ: {
+    compatible: "INTP",
+    incompatible: "INTJ",
+  },
+  ESTJ: {
+    compatible: "INFP",
+    incompatible: "INFJ",
+  },
+  ISFJ: {
+    compatible: "ENTP",
+    incompatible: "ENTJ",
+  },
+  ESTP: {
+    compatible: "INFJ",
+    incompatible: "INFP",
+  },
+  ESFP: {
+    compatible: "INTJ",
+    incompatible: "INTP",
+  },
+  ISTJ: {
+    compatible: "ENFP",
+    incompatible: "ENFJ",
+  },
+  ENFJ: {
+    compatible: "ISTP",
+    incompatible: "ISTJ",
+  },
+  ISFP: {
+    compatible: "ENTJ",
+    incompatible: "ENTP",
+  },
+  ISTP: {
+    compatible: "ENFJ",
+    incompatible: "ENFP",
+  },
+  ENTJ: {
+    compatible: "ISFP",
+    incompatible: "ISFJ",
+  },
+  INFJ: {
+    compatible: "ESTP",
+    incompatible: "ESTJ",
+  },
+  ENFP: {
+    compatible: "ISTJ",
+    incompatible: "ISTP",
+  },
+  ENTP: {
+    compatible: "ISFJ",
+    incompatible: "ISFP",
+  },
+  INTJ: {
+    compatible: "ESFP",
+    incompatible: "ESFJ",
+  },
+  INFP: {
+    compatible: "ESTJ",
+    incompatible: "ESTP",
+  },
+  INTP: {
+    compatible: "ESFJ",
+    incompatible: "ESFP",
+  },
+};
+
 const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
   const [recipeData, setRecipeData] = useState([...recipes]);
   const [MBTI, setMBTI] = useRecoilState(MBTIState);
@@ -307,6 +381,38 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
               레시피 보러 가기
             </Button>
           </ButtonBox>
+          <DivBar>-</DivBar>
+          <MBTICompatibility>
+            <CompatibilityText style={{ color: "#9AC5F4" }}>
+              💙찰떡 궁합💙
+              <CompatibilityResult>
+                <Image
+                  src={resultData[compatibilityData[MBTI]?.compatible]?.img}
+                  alt="찰떡 궁합 MBTI 이미지"
+                  width={100}
+                  height={100}
+                />
+                {`${resultData[compatibilityData[MBTI]?.compatible]?.food}, ${
+                  compatibilityData[MBTI]?.compatible
+                }`}
+              </CompatibilityResult>
+            </CompatibilityText>
+
+            <CompatibilityText style={{ color: "#EA906C" }}>
+              💔환장 궁합💔
+              <CompatibilityResult>
+                <Image
+                  src={resultData[compatibilityData[MBTI]?.incompatible]?.img}
+                  alt="환장 궁합 MBTI 이미지"
+                  width={100}
+                  height={100}
+                />
+                {`${resultData[compatibilityData[MBTI]?.incompatible]?.food}, ${
+                  compatibilityData[MBTI]?.incompatible
+                }`}
+              </CompatibilityResult>
+            </CompatibilityText>
+          </MBTICompatibility>
           <DivBar>-</DivBar>
           <ShareText>테스트 공유하기</ShareText>
           <ShareButtonBox>
@@ -509,4 +615,26 @@ const ButtonBox = styled.div`
       transform: translateY(-3px);
     }
   }
+`;
+
+const MBTICompatibility = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 2rem 0;
+  font-family: "Dongle-Bold";
+  gap: 4rem;
+`;
+
+const CompatibilityText = styled.p`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 30px;
+`;
+
+const CompatibilityResult = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
