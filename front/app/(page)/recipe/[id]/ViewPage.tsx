@@ -366,6 +366,19 @@ const ContainerDiv = styled.div`
   gap: 2.5rem;
 `;
 
+/** 게시글 수정, 삭제 버튼 Div */
+const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
+  display: flex;
+  gap: 0.8rem;
+  position: fixed;
+  right: 14.7rem;
+  top: 50.4rem;
+
+  transform: ${(props) =>
+    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+  transition: transform 0.3s ease-in-out;
+`;
+
 /** 수정 Button */
 const EditButton = styled.button`
   width: 6.7rem;
@@ -375,6 +388,11 @@ const EditButton = styled.button`
   font-weight: 500;
   font-size: 16.5px;
   color: #4f3d21;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #fbd26a;
+  }
 `;
 
 /** 삭제 Button */
@@ -386,6 +404,13 @@ const DeleteButton = styled.button`
   font-weight: 500;
   font-size: 16.5px;
   color: #4f3d21;
+  transition: background-color;
+
+  &:hover {
+    background-color: #a17c43;
+    border: 2px solid #a17c43;
+    color: #ffffff;
+  }
 `;
 
 /** 삭제 컨펌 모달창 */
@@ -449,19 +474,6 @@ const CommentIconDiv = styled.div`
   margin-left: 0.7rem;
   margin-top: 0.4rem;
   margin-right: 0.4rem;
-`;
-
-/** 게시글 수정, 삭제 버튼 Div */
-const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
-  display: flex;
-  gap: 0.8rem;
-  position: fixed;
-  right: 14.7rem;
-  top: 55.1rem;
-
-  transform: ${(props) =>
-    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
-  transition: transform 0.3s ease-in-out;
 `;
 
 /** 링크 공유하기 버튼 Div */
