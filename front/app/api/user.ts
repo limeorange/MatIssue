@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { axiosBase } from "../api/axios";
 
 export default async function getCurrentUser() {
-  const session_id = Cookies.get("session_id");
+  const session_id = Cookies.get("session-id");
 
   if (session_id) {
     try {
