@@ -28,7 +28,7 @@ const LogoWrapper = styled.div`
   min-width: 10.5rem;
   height: 3.5rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     width: 12rem;
     height: 4rem;
   }
