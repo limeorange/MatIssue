@@ -9,6 +9,12 @@ import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getAllRecipes } from "@/app/api/recipe";
+import NotFound from "@/app/not-found";
+import shuffleRecipes from "@/app/utils/shuffleRecipes";
+import LoadingRecipe from "../UI/LoadingRecipe";
+import NonDataCrying from "../UI/NonDataCrying";
 
 const Ingredient = [
   {
@@ -48,7 +54,16 @@ const Ingredient = [
   },
 ];
 
-const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
+const MainFridge = () => {
+  const {
+    data: recipes,
+    isLoading,
+    isError,
+  } = useQuery<Recipe[]>(["recipes"], () => getAllRecipes(), {
+    retry: 0,
+    initialData: [],
+  });
+
   const [selectedIngredient, setSelectedIngredient] = useState<string>("계란");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
 
@@ -60,9 +75,9 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
       )
     );
 
-    const randomSelection = filteredRecipes.sort(() => 0.5 - Math.random());
+    const shuffledRecipes = shuffleRecipes(filteredRecipes);
 
-    setFilteredRecipes(randomSelection);
+    setFilteredRecipes(shuffledRecipes);
   }, [selectedIngredient, recipes]);
 
   /**  재료 선택 핸들러 */
@@ -72,6 +87,14 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
     e.preventDefault();
     setSelectedIngredient(e.currentTarget.id);
   };
+
+  if (isLoading) {
+    return <LoadingRecipe />;
+  }
+
+  if (isError) {
+    return <NonDataCrying />;
+  }
 
   return (
     <MainFridgeContainer>
@@ -101,7 +124,7 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
         <div>레시피가 없어요 ㅠㅠ</div>
       ) : (
         <RecipeContainer>
-          {filteredRecipes.slice(0, 3).map((item: Recipe) => (
+          {filteredRecipes?.slice(0, 3).map((item: Recipe) => (
             <LargeRecipeCard key={item.recipe_id} recipe={item} />
           ))}
         </RecipeContainer>

@@ -10,13 +10,29 @@ import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
 import { useState } from "react";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { getRecipesByVegetarian } from "@/app/api/recipe";
+import shuffleRecipes from "@/app/utils/shuffleRecipes";
+import LoadingRecipe from "../UI/LoadingRecipe";
+import NonDataCrying from "../UI/NonDataCrying";
 
-const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
+const MainVegan = () => {
+  const {
+    data: vegetarianRecipes,
+    isLoading,
+    isError,
+  } = useQuery<Recipe[]>(
+    ["vegetarianRecipes"],
+    () => getRecipesByVegetarian(),
+    { retry: 0, initialData: [] }
+  );
+
   const [slide, setSlide] = useState<number>(1);
-  const totalRecipesNumber = vegetarianRecipes.length;
+  const totalRecipesNumber = vegetarianRecipes?.length;
   const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
 
-  console.log(slide);
+  const shuffledRecipes = shuffleRecipes(vegetarianRecipes);
+
   const leftBtnHandler = () => {
     if (slide < 2) {
       return;
@@ -31,6 +47,14 @@ const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
     setSlide(slide + 1);
   };
 
+  if (isLoading) {
+    return <LoadingRecipe />;
+  }
+
+  if (isError) {
+    return <NonDataCrying />;
+  }
+
   return (
     <MainVegunContainer>
       <MainVegunArea>
@@ -42,7 +66,7 @@ const MainVegan = ({ vegetarianRecipes }: { vegetarianRecipes: Recipe[] }) => {
         </VegunTitleBox>
         <RecipeSliderContainer>
           <VegunRecipeContainer slide={slide}>
-            {vegetarianRecipes.slice(0, totalSlide * 3).map((item: Recipe) => (
+            {shuffledRecipes.slice(0, totalSlide * 3).map((item: Recipe) => (
               <LargeRecipeCard key={item.recipe_id} recipe={item} />
             ))}
           </VegunRecipeContainer>
