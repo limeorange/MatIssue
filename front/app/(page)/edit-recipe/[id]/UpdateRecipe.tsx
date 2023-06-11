@@ -222,6 +222,76 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     setState({ ...state, cookingTips: e.target.value });
   };
 
+  // 유효성 검사
+  const validateForm = () => {
+    // 카테고리 검사
+    if (state.selectedCategory === "") {
+      toast.error("카테고리를 선택해주세요.");
+      return false;
+    }
+
+    // 섬네일 이미지 검사
+    if (state.selectedImage === "") {
+      toast.error("섬네일 이미지를 선택해주세요.");
+      return false;
+    }
+
+    // 레시피 제목 검사
+    if (state.recipeTitle === "") {
+      toast.error("레시피 제목을 입력해주세요.");
+      return false;
+    }
+
+    // 요리 소개 검사
+    if (state.cookingIntro === "") {
+      toast.error("요리 소개를 입력해주세요.");
+      return false;
+    }
+
+    // 재료 유효성 검사
+    const hasEmptyIngredient = state.ingredients.some(
+      (ingredient) => ingredient.ingredient === ""
+    );
+    if (hasEmptyIngredient) {
+      toast.error("재료를 입력해주세요.");
+      return false;
+    }
+
+    // 양 유효성 검사
+    const hasEmptyQuantity = state.ingredients.some(
+      (ingredient) => ingredient.quantity === ""
+    );
+    if (hasEmptyQuantity) {
+      toast.error("재료의 양을 입력해주세요.");
+      return false;
+    }
+
+    // 요리 과정 유효성 검사
+    const hasEmptyStepDetail = state.steps.some(
+      (step) => step.stepDetail === ""
+    );
+    if (hasEmptyStepDetail) {
+      toast.error("요리 과정을 입력해주세요.");
+      return false;
+    }
+
+    // 요리 과정 사진 유효성 검사
+    const hasEmptyStepImage = state.stepImages.length === 0;
+
+    if (hasEmptyStepImage) {
+      toast.error("요리 과정의 이미지를 추가해주세요.");
+      return false;
+    }
+
+    // 요리 팁 검사
+    if (state.cookingTips === "") {
+      toast.error("요리 팁을 입력해주세요.");
+      return false;
+    }
+
+    return true;
+  };
+
   // 저장 핸들러
   const handleUpdate = async () => {
     const recipeData = {
@@ -249,68 +319,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       recipe_tip: state.cookingTips,
     };
 
-    // 카테고리 검사
-    if (state.selectedCategory === "") {
-      toast.error("카테고리를 선택해주세요.");
-      return;
-    }
-
-    // 섬네일 이미지 검사
-    if (state.selectedImage === "") {
-      toast.error("섬네일 이미지를 선택해주세요.");
-      return;
-    }
-
-    // 레시피 제목 검사
-    if (state.recipeTitle === "") {
-      toast.error("레시피 제목을 입력해주세요.");
-      return;
-    }
-
-    // 요리 소개 검사
-    if (state.cookingIntro === "") {
-      toast.error("요리 소개를 입력해주세요.");
-      return;
-    }
-
-    // 재료 유효성 검사
-    const hasEmptyIngredient = state.ingredients.some(
-      (ingredient) => ingredient.ingredient === ""
-    );
-    if (hasEmptyIngredient) {
-      toast.error("재료를 입력해주세요.");
-      return;
-    }
-
-    // 양 유효성 검사
-    const hasEmptyQuantity = state.ingredients.some(
-      (ingredient) => ingredient.quantity === ""
-    );
-    if (hasEmptyQuantity) {
-      toast.error("재료의 양을 입력해주세요.");
-      return;
-    }
-
-    // 요리 과정 유효성 검사
-    const hasEmptyStepDetail = state.steps.some(
-      (step) => step.stepDetail === ""
-    );
-    if (hasEmptyStepDetail) {
-      toast.error("요리 과정을 입력해주세요.");
-      return;
-    }
-
-    // 요리 과정 사진 유효성 검사
-    const hasEmptyStepImage = state.stepImages.length === 0;
-
-    if (hasEmptyStepImage) {
-      toast.error("요리 과정의 이미지를 추가해주세요.");
-      return;
-    }
-
-    // 요리 팁 검사
-    if (state.cookingTips === "") {
-      toast.error("요리 팁을 입력해주세요.");
+    if (!validateForm()) {
       return;
     }
 
@@ -319,8 +328,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     updateRecipe(recipe_id, recipeData)
       .then((res) => {
         console.log(res);
-        toast.success("레시피가 수정이 되었습니다!");
-        router.push("recipes/category/newest?category=newest");
+        toast.success("레시피가 수정되었습니다!");
+        router.push(`/recipe/${recipe_id}`);
       })
       .catch((err) => {
         toast.error(err.response.data.detail);
