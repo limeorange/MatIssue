@@ -4,9 +4,15 @@ import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling
 
 type WriterProfileProps = {
   user_nickname: string;
+  user_fan: number;
+  user_subscription: number;
 };
 
-const WriterProfile: React.FC<WriterProfileProps> = ({ user_nickname }) => {
+const WriterProfile: React.FC<WriterProfileProps> = ({
+  user_nickname,
+  user_fan,
+  user_subscription,
+}) => {
   const isHeaderVisible = useMovingContentByScrolling();
 
   return (
@@ -31,10 +37,10 @@ const WriterProfile: React.FC<WriterProfileProps> = ({ user_nickname }) => {
           {/* 팔로잉, 팔로워 */}
           <FollowDiv>
             <span>팔로워</span>
-            <BoldSpan>99</BoldSpan>
+            <BoldSpan>{user_fan}</BoldSpan>
             <span>|</span>
             <span>팔로잉</span>
-            <BoldSpan>50</BoldSpan>
+            <BoldSpan>{user_subscription}</BoldSpan>
           </FollowDiv>
           <FollowButton>팔로우</FollowButton>
         </ProfileContentsDiv>
@@ -49,9 +55,9 @@ const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
   flex-direction: column;
   position: fixed;
   width: 18.5rem;
-  height: 33rem;
+  height: 32rem;
   right: 12.5rem;
-  top: 20.15rem;
+  top: 16.5rem;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 2rem;
 
@@ -83,9 +89,8 @@ const ProfileContentsDiv = styled.div`
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImageDiv = styled.div`
-  width: 13rem;
-  height: 13rem;
-  margin-right: 0.6rem;
+  width: 12rem;
+  height: 12rem;
   margin-bottom: 1.3rem;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 50%;
