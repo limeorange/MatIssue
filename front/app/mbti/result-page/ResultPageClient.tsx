@@ -24,6 +24,13 @@ type ResultData = {
   };
 };
 
+type CompatibilityData = {
+  [key: string]: {
+    compatible: string;
+    incompatible: string;
+  };
+};
+
 const resultData: ResultData = {
   ENTJ: {
     per: "2.73%",
@@ -161,7 +168,7 @@ const resultData: ResultData = {
     per: "6.25%",
     rank: "8",
     talk: [
-      "- 겉모습은 잔잔해보이지만 안에서는 항상 끝도 없는 생각들이 휘몰아쳐요.\n- 세심하고 사려깊은 마음씨로 주변인들에게 맞춤형 배려를 잘해요.\n- 미래 계획하는 거 좋아하고 근거 없이 얘기하는 건 싫어요.ㅜ- 인간의 존재 의미, 본질에 대한 심오하고 싶은 생각도 많이 하는 편이에요.\n- 언뜻 보면 외향인 같은데 혼자만의 시간이 굉장히 중요해요.",
+      "- 겉모습은 잔잔해보이지만 안에서는 항상\n끝도 없는 생각들이 휘몰아쳐요.\n- 세심하고 사려깊은 마음씨로\n주변인들에게 맞춤형 배려를 잘해요.\n- 미래 계획하는 거 좋아하고 근거 없이 얘기하는 건 싫어요.\n- 인간의 존재 의미, 본질에 대한 심오하고\n깊은 생각도 많이 하는 편이에요.\n- 언뜻 보면 외향인 같은데 혼자만의 시간이 굉장히 중요해요.",
     ],
     text: "- 생각이 너무 많다보니 굳이 하지 않아도 될 생각까지 해요.",
     text2: "복잡하고 깊은 맛의 와인",
@@ -200,6 +207,73 @@ const resultData: ResultData = {
     text2: "하루를 여유롭게, 아메리카노",
     img: "/images/mbti/ISFP.png",
     food: "아메리카노",
+  },
+};
+
+const compatibilityData: CompatibilityData = {
+  ESFJ: {
+    compatible: "INTP",
+    incompatible: "INTJ",
+  },
+  ESTJ: {
+    compatible: "INFP",
+    incompatible: "INFJ",
+  },
+  ISFJ: {
+    compatible: "ENTP",
+    incompatible: "ENTJ",
+  },
+  ESTP: {
+    compatible: "INFJ",
+    incompatible: "INFP",
+  },
+  ESFP: {
+    compatible: "INTJ",
+    incompatible: "INTP",
+  },
+  ISTJ: {
+    compatible: "ENFP",
+    incompatible: "ENFJ",
+  },
+  ENFJ: {
+    compatible: "ISTP",
+    incompatible: "ISTJ",
+  },
+  ISFP: {
+    compatible: "ENTJ",
+    incompatible: "ENTP",
+  },
+  ISTP: {
+    compatible: "ENFJ",
+    incompatible: "ENFP",
+  },
+  ENTJ: {
+    compatible: "ISFP",
+    incompatible: "ISFJ",
+  },
+  INFJ: {
+    compatible: "ESTP",
+    incompatible: "ESTJ",
+  },
+  ENFP: {
+    compatible: "ISTJ",
+    incompatible: "ISTP",
+  },
+  ENTP: {
+    compatible: "ISFJ",
+    incompatible: "ISFP",
+  },
+  INTJ: {
+    compatible: "ESFP",
+    incompatible: "ESFJ",
+  },
+  INFP: {
+    compatible: "ESTJ",
+    incompatible: "ESTP",
+  },
+  INTP: {
+    compatible: "ESFJ",
+    incompatible: "ESFP",
   },
 };
 
@@ -308,6 +382,38 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
             </Button>
           </ButtonBox>
           <DivBar>-</DivBar>
+          <MBTICompatibility>
+            <CompatibilityText style={{ color: "#9AC5F4" }}>
+              💙찰떡 궁합💙
+              <CompatibilityResult>
+                <Image
+                  src={resultData[compatibilityData[MBTI]?.compatible]?.img}
+                  alt="찰떡 궁합 MBTI 이미지"
+                  width={100}
+                  height={100}
+                />
+                {`${resultData[compatibilityData[MBTI]?.compatible]?.food}, ${
+                  compatibilityData[MBTI]?.compatible
+                }`}
+              </CompatibilityResult>
+            </CompatibilityText>
+
+            <CompatibilityText style={{ color: "#EA906C" }}>
+              💔환장 궁합💔
+              <CompatibilityResult>
+                <Image
+                  src={resultData[compatibilityData[MBTI]?.incompatible]?.img}
+                  alt="환장 궁합 MBTI 이미지"
+                  width={100}
+                  height={100}
+                />
+                {`${resultData[compatibilityData[MBTI]?.incompatible]?.food}, ${
+                  compatibilityData[MBTI]?.incompatible
+                }`}
+              </CompatibilityResult>
+            </CompatibilityText>
+          </MBTICompatibility>
+          <DivBar>-</DivBar>
           <ShareText>테스트 공유하기</ShareText>
           <ShareButtonBox>
             <div onClick={copyToClipboard}>
@@ -382,6 +488,10 @@ const MBTIResultText = styled.div`
   font-family: "Dongle-Bold";
   font-size: 40px;
   color: #4f3d21;
+
+  @media (min-width: 375px) {
+    font-size: 30px;
+  }
 `;
 
 const MBTIResult = styled.div`
@@ -509,4 +619,26 @@ const ButtonBox = styled.div`
       transform: translateY(-3px);
     }
   }
+`;
+
+const MBTICompatibility = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 2rem 0;
+  font-family: "Dongle-Bold";
+  gap: 4rem;
+`;
+
+const CompatibilityText = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 30px;
+`;
+
+const CompatibilityResult = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
