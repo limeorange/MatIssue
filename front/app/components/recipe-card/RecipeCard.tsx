@@ -41,7 +41,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   height={11}
                 />
               </RecipeRankImg>
-              <p>{recipe.recipe_like.toLocaleString()}</p>
+              <p>{recipe.recipe_like.length.toLocaleString()}</p>
             </RecipeRankItem>
             {/* <RecipeRankItem>
               <RecipeRankImg>
