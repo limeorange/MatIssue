@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
@@ -20,10 +21,13 @@ type Recipe = {
 
 const WorldcupGame: React.FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const num = searchParams?.get("stage");
+
   const [foods, setFoods] = useState<Recipe[]>([]);
   const [displays, setDisplays] = useState<Recipe[]>([]);
   const [winners, setWinners] = useState<Recipe[]>([]);
-  const [stage, setStage] = useState(16);
+  const [stage, setStage] = useState(num ? parseInt(num) : 16);
   const [selectedCount, setSelectedCount] = useState(0);
   const [isAnimateOut, setIsAnimateOut] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +37,7 @@ const WorldcupGame: React.FC = () => {
       try {
         const recipes = await getAllRecipes();
         recipes.sort(() => Math.random() - 0.5);
-        const selectedRecipes = recipes.slice(0, 16);
+        const selectedRecipes = recipes.slice(0, num);
         setFoods(selectedRecipes);
         setDisplays([selectedRecipes[0], selectedRecipes[1]]);
         setIsLoading(false);
@@ -44,7 +48,7 @@ const WorldcupGame: React.FC = () => {
     };
 
     fetchRecipes();
-  }, []);
+  }, [num]);
 
   const clickHandler = (food: Recipe) => () => {
     if (stage !== 1) {
@@ -85,14 +89,35 @@ const WorldcupGame: React.FC = () => {
           : `${stage}강 (${selectedCount + 1}/${stage / 2})`}
       </GameProgress>
       <CardContainer>
-        {displays.map((recipe) =>
+        {displays.map((recipe, index) =>
           stage === 1 && displays.length === 1 ? (
-            <Link
-              href={`/recipes/${recipe.recipe_id}`}
-              key={recipe.recipe_id}
-              passHref
-            >
-              <Card onClick={clickHandler(recipe)}>
+            <>
+              {index !== 0 && <VS>VS</VS>}
+              <Link
+                href={`/recipes/${recipe.recipe_id}`}
+                key={recipe.recipe_id}
+                passHref
+              >
+                <Card onClick={clickHandler(recipe)}>
+                  <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+                  <ImageWrapper>
+                    <ImageContainer>
+                      <Image
+                        src={recipe.recipe_thumbnail}
+                        alt={recipe.recipe_title}
+                        layout="fill"
+                        objectFit="cover"
+                        style={{ borderRadius: "1.5rem" }}
+                      />
+                    </ImageContainer>
+                  </ImageWrapper>
+                </Card>
+              </Link>
+            </>
+          ) : (
+            <>
+              {index !== 0 && <VS>VS</VS>}
+              <Card onClick={clickHandler(recipe)} key={recipe.recipe_id}>
                 <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
                 <ImageWrapper>
                   <ImageContainer>
@@ -106,22 +131,7 @@ const WorldcupGame: React.FC = () => {
                   </ImageContainer>
                 </ImageWrapper>
               </Card>
-            </Link>
-          ) : (
-            <Card onClick={clickHandler(recipe)} key={recipe.recipe_id}>
-              <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
-              <ImageWrapper>
-                <ImageContainer>
-                  <Image
-                    src={recipe.recipe_thumbnail}
-                    alt={recipe.recipe_title}
-                    layout="fill"
-                    objectFit="cover"
-                    style={{ borderRadius: "1.5rem" }}
-                  />
-                </ImageContainer>
-              </ImageWrapper>
-            </Card>
+            </>
           )
         )}
       </CardContainer>
@@ -168,7 +178,7 @@ const GameHeader = styled.p<StyledComponentProps>`
 const GameProgress = styled.div`
   font-size: 50px;
   color: #4f3d21;
-  margin-bottom: 5rem;
+  margin-bottom: 2rem;
   font-family: "Dongle-Bold";
   transform-origin: center;
   transition: all 0.5s ease;
@@ -190,7 +200,33 @@ const GameProgress = styled.div`
 
 const CardContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const VS = styled.div`
+  font-size: 50px;
+  color: #4f3d21;
+  font-family: "Dongle-Bold";
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 3rem;
+  transform-origin: center;
+  transition: all 0.5s ease;
+  opacity: 1;
+
+  &.grow {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  &.normal {
+    transform: scale(1);
+    opacity: 1;
+  }
+  &.shrink {
+    transform: scale(0.1);
+    opacity: 0;
+  }
 `;
 
 const Card = styled.div`
@@ -198,7 +234,6 @@ const Card = styled.div`
   border: none;
   box-sizing: border-box;
   cursor: pointer;
-  margin-right: 2rem;
   position: relative;
   transition: transform 0.3s ease;
   cursor: pointer;
@@ -209,8 +244,9 @@ const Card = styled.div`
 `;
 
 const RecipeTitleBox = styled.div`
-  font-size: 15px;
+  font-size: 20px;
   color: #4f3d21;
+  margin-bottom: 1rem;
   white-space: pre-line;
   text-align: center;
   transform-origin: center;
@@ -226,7 +262,7 @@ const ImageWrapper = styled.div`
   width: 32.5rem;
   height: 32.5rem;
   overflow: hidden;
-  border: 0.2rem solid #fbd26a;
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 1.5rem;
   position: relative;
   transition: transform 0.3s ease;

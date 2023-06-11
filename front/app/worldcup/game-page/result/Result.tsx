@@ -9,8 +9,8 @@ import { useSearchParams } from "next/navigation";
 import Button from "@/app/components/UI/Button";
 import LoadingModal from "@/app/components/UI/LoadingModal";
 import { toast } from "react-hot-toast";
-import KakaoShareButton from "@/app/utils/kakaoShare";
 import Link from "next/link";
+import WorldcupKakaoShareButton from "@/app/utils/worldcupKakaoShare";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -25,10 +25,11 @@ type Recipe = {
 const ResultPage: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = searchParams.get("winnerId");
+  const id = searchParams?.get("winnerId");
 
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [animation, setAnimation] = useState("opacity-0");
 
   // Url 복사하는 함수
   const copyToClipboard = async () => {
@@ -40,6 +41,10 @@ const ResultPage: React.FC = () => {
       toast.error("Url 복사에 실패했습니다.", err);
     }
   };
+
+  useEffect(() => {
+    setAnimation("opacity-1");
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -56,58 +61,60 @@ const ResultPage: React.FC = () => {
   }
 
   return (
-    <WorldcupLayout>
-      <Logo />
-      <GameHeader>레시피 이상형 월드컵!</GameHeader>
-      <GameProgress>
-        우승 레시피입니다! <br /> 클릭시 해당 레시피로 이동!
-      </GameProgress>
-      <WorldcupCard>
-        <Link href={`/recipe/${recipe.recipe_id}`} passHref>
-          <CardLink>
-            <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
-            <ImageWrapper>
-              <ImageContainer>
-                <Image
-                  src={recipe.recipe_thumbnail}
-                  alt={recipe.recipe_title}
-                  layout="fill"
-                  objectFit="cover"
-                  style={{ borderRadius: "1.5rem" }}
-                />
-              </ImageContainer>
-            </ImageWrapper>
-          </CardLink>
-        </Link>
-        <ShareText>테스트 공유하기</ShareText>
-        <ShareButtonBox>
-          <div onClick={copyToClipboard}>
+    <>
+      <WorldcupLayout className={animation}>
+        <Logo />
+        <GameHeader>레시피 이상형 월드컵!</GameHeader>
+        <GameProgress>
+          우승 레시피입니다! <br /> 클릭시 해당 레시피로 이동!
+        </GameProgress>
+        <WorldcupCard>
+          <Link href={`/recipe/${recipe.recipe_id}`} passHref>
+            <CardLink>
+              <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+              <ImageWrapper>
+                <ImageContainer>
+                  <Image
+                    src={recipe.recipe_thumbnail}
+                    alt={recipe.recipe_title}
+                    layout="fill"
+                    objectFit="cover"
+                    style={{ borderRadius: "1.5rem" }}
+                  />
+                </ImageContainer>
+              </ImageWrapper>
+            </CardLink>
+          </Link>
+          <ShareText>테스트 공유하기</ShareText>
+          <ShareButtonBox>
+            <div onClick={copyToClipboard}>
+              <Image
+                src="/images/link.png"
+                alt="링크 공유 아이콘"
+                width={60}
+                height={50}
+              />
+            </div>
+            <WorldcupKakaoShareButton />
+          </ShareButtonBox>
+        </WorldcupCard>
+        <RestartButtonBox>
+          <Button
+            onClick={() => {
+              router.push("/worldcup");
+            }}
+          >
             <Image
-              src="/images/link.png"
-              alt="링크 공유 아이콘"
-              width={60}
-              height={50}
+              src="/images/reload.png"
+              alt="뒤로가기 아이콘"
+              width={30}
+              height={30}
             />
-          </div>
-          <KakaoShareButton />
-        </ShareButtonBox>
-      </WorldcupCard>
-      <RestartButtonBox>
-        <Button
-          onClick={() => {
-            router.push("/worldcup");
-          }}
-        >
-          <Image
-            src="/images/reload.png"
-            alt="뒤로가기 아이콘"
-            width={30}
-            height={30}
-          />
-          월드컵 다시하기
-        </Button>
-      </RestartButtonBox>
-    </WorldcupLayout>
+            월드컵 다시하기
+          </Button>
+        </RestartButtonBox>
+      </WorldcupLayout>
+    </>
   );
 };
 
@@ -124,6 +131,12 @@ const WorldcupLayout = styled.div`
   heigth: 100vh;
   padding: 1.5rem 0rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  opacity: 0;
+  transition: opacity 1s;
+  &.opacity-1 {
+    opacity: 1;
+  }
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
@@ -178,7 +191,7 @@ const WorldcupCard = styled.div`
   align-items: center;
   justify-content: center;
   margin: 3rem auto;
-  border-radius: 10px;
+  border-radius: 1.5rem;
   width: 100%;
   max-width: 40rem;
   height: 100%;
@@ -198,7 +211,7 @@ const ImageWrapper = styled.div`
   width: 32.5rem;
   height: 32.5rem;
   overflow: hidden;
-  border: 0.2rem solid #fbd26a;
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 1.5rem;
   position: relative;
   transition: transform 0.3s ease;
@@ -216,6 +229,7 @@ const ImageContainer = styled.div`
 const ShareText = styled.p`
   font-family: "Dongle-Bold";
   font-size: 30px;
+  margin-top: 2rem;
   color: #5c8984;
 `;
 

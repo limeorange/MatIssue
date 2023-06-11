@@ -10,7 +10,7 @@ import Image from "next/image";
 import UserModal from "./UserModal";
 import { User } from "@/app/types";
 
-const UserMenu = ({ currentUser }: { currentUser: User }) => {
+const UserMenu = () => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const isLoggedIn = useRecoilValue(loginState);
   const router = useRouter();
@@ -113,7 +113,7 @@ const ProfileButton = styled.div`
     transition: all 0.3s;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: flex;
   }
 `;

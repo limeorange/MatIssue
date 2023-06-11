@@ -11,11 +11,12 @@ import CategoryBar from "./CategoryBar";
 import { User } from "@/app/types";
 import Cookies from "js-cookie";
 import getCurrentUser from "@/app/api/user";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
-import { usePathname } from "next/navigation";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
+import HamburgerBtn from "./mobile/HamburgerBtn";
+import SearchBtn from "./mobile/SearchBtn";
 
 const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   const setIsLoggedIn = useSetRecoilState(loginState);
@@ -40,16 +41,20 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   }, [currentUser]);
 
   if (isError) {
-    Cookies.remove("session_id");
+    Cookies.remove("session-id");
   }
 
   return (
     <HeaderDiv isHeaderVisible={isHeaderVisible}>
       <NavArea>
         <TopNav>
-          <Logo />
+          <HamburgerBtn />
+          <LogoWrapper>
+            <Logo />
+          </LogoWrapper>
           <SearchBar />
-          {isLoading ? null : <UserMenu currentUser={currentUser} />}
+          {isLoading ? null : <UserMenu />}
+          <SearchBtn />
         </TopNav>
         <CategoryBar />
       </NavArea>
@@ -59,13 +64,11 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
 };
 
 const HeaderDiv = styled.div<{ isHeaderVisible: boolean }>`
-  position: relative;
-  @media (min-width: 1024px) {
-    position: fixed;
-    width: 100%;
-    background-color: #ffffff;
-    z-index: 60;
-    font-size: 16px;
+  position: fixed;
+  width: 100%;
+  background-color: #ffffff;
+  z-index: 999;
+  font-size: 16px;
   }
 
   transform: ${(props) =>
@@ -99,6 +102,15 @@ const UnderLine = styled.div`
   @media (min-width: 1024px) {
     display: block;
     border-bottom: 0.1rem solid rgb(200, 200, 200);
+  }
+`;
+
+const LogoWrapper = styled.div`
+  @media (max-width: 768px) {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 `;
 

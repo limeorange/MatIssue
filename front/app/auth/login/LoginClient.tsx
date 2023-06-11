@@ -43,9 +43,9 @@ const LoginClient = () => {
       .post("users/login", data)
       .then((res) => {
         const sessionId = res.data.session_id;
-        Cookies.set("session_id", sessionId);
+        Cookies.set("session-id", sessionId);
         setIsLoggedIn(true);
-        router.replace("/");
+        router.back();
         toast.success("로그인 되었습니다.");
       })
       .catch((err) => {

@@ -1,3 +1,6 @@
+"use client";
+
+import { getRecipesBySingle } from "@/app/api/recipe";
 import {
   StyledContainer,
   StyledContentsArea,
@@ -6,15 +9,38 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
+import shuffleRecipes from "@/app/utils/shuffleRecipes";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
+import LoadingRecipe from "../UI/LoadingRecipe";
+import NonDataCrying from "../UI/NonDataCrying";
 
-const MainAlone = ({ singleRecipes }: { singleRecipes: Recipe[] }) => {
+const MainAlone = () => {
+  const {
+    data: singleRecipes,
+    isLoading,
+    isError,
+  } = useQuery<Recipe[]>(["singleRecipes"], () => getRecipesBySingle(), {
+    retry: 0,
+    initialData: [],
+  });
+
   const router = useRouter();
 
   if (singleRecipes?.length < 5) {
     return null;
+  }
+
+  const shuffledRecipes = shuffleRecipes(singleRecipes);
+
+  if (isLoading) {
+    return <LoadingRecipe />;
+  }
+
+  if (isError) {
+    return <NonDataCrying />;
   }
 
   return (
@@ -29,63 +55,63 @@ const MainAlone = ({ singleRecipes }: { singleRecipes: Recipe[] }) => {
         <RecipeContainer>
           <RecipeImageWrapperBase
             onClick={() =>
-              router.push(`/recipe/${singleRecipes?.[0].recipe_id}`)
+              router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
               <Image
-                src={singleRecipes?.[0].recipe_thumbnail}
+                src={shuffledRecipes?.[0].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{singleRecipes?.[0].recipe_title}</TitleOnImage>
+            <TitleOnImage>{shuffledRecipes?.[0].recipe_title}</TitleOnImage>
           </RecipeImageWrapperBase>
           <RecipeImageWrapper2
             onClick={() =>
-              router.push(`/recipe/${singleRecipes?.[0].recipe_id}`)
+              router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
               <Image
-                src={singleRecipes?.[1].recipe_thumbnail}
+                src={shuffledRecipes?.[1].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{singleRecipes?.[1].recipe_title}</TitleOnImage>
+            <TitleOnImage>{shuffledRecipes?.[1].recipe_title}</TitleOnImage>
           </RecipeImageWrapper2>
           <RecipeImageWrapper3
             onClick={() =>
-              router.push(`/recipe/${singleRecipes?.[0].recipe_id}`)
+              router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
               <Image
-                src={singleRecipes?.[2].recipe_thumbnail}
+                src={shuffledRecipes?.[2].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{singleRecipes?.[2].recipe_title}</TitleOnImage>
+            <TitleOnImage>{shuffledRecipes?.[2].recipe_title}</TitleOnImage>
           </RecipeImageWrapper3>
           <RecipeImageWrapper4
             onClick={() =>
-              router.push(`/recipe/${singleRecipes?.[0].recipe_id}`)
+              router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
             }
           >
             <SquareImageWrapper>
               <Image
-                src={singleRecipes?.[3].recipe_thumbnail}
+                src={shuffledRecipes?.[3].recipe_thumbnail}
                 alt="ingredient"
                 fill
                 style={{ objectFit: "cover" }}
               />
             </SquareImageWrapper>
-            <TitleOnImage>{singleRecipes?.[3].recipe_title}</TitleOnImage>
+            <TitleOnImage>{shuffledRecipes?.[3].recipe_title}</TitleOnImage>
           </RecipeImageWrapper4>
         </RecipeContainer>
       </StyledContentsArea>

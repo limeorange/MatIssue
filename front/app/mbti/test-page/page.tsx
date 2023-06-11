@@ -381,6 +381,10 @@ const AnswerButtonContainer = styled.div`
       transform: translateY(0px);
     }
   }
+
+  @media (min-width: 375px) {
+    max-width: 30rem;
+  }
 `;
 
 const ProgressSection = styled.div`

@@ -6,30 +6,39 @@ import MainFridge from "../components/main-page/MainFridge";
 import MainAlone from "../components/main-page/MainAlone";
 import MainVegan from "../components/main-page/MainVegan";
 import MainNewest from "../components/main-page/MainNewest";
-import MainWrapper from "../components/main-page/MainWrapper";
 import { Recipe } from "../types";
+import styled from "styled-components";
 
-type MainPageClientProps = {
-  recipes: Recipe[];
-  bestRecipes: Recipe[];
-  newestRecipes: Recipe[];
-  singleRecipes: Recipe[];
-  vegetarianRecipes: Recipe[];
-};
-
-const MainPageClient = (props: MainPageClientProps) => {
+const MainPageClient = ({ bestRecipes }: { bestRecipes: Recipe[] }) => {
   return (
     <>
       <Banner />
       <MainWrapper>
-        <MainBest initialBestRecipes={props.bestRecipes} />
-        <MainFridge recipes={props.recipes} />
-        <MainAlone singleRecipes={props.singleRecipes} />
-        <MainVegan vegetarianRecipes={props.vegetarianRecipes} />
-        <MainNewest newestRecipes={props.newestRecipes} />
+        <MainBest initialBestRecipes={bestRecipes} />
+        <MainFridge />
+        <MainAlone />
+        <MainVegan />
+        <MainNewest />
       </MainWrapper>
     </>
   );
 };
 
 export default MainPageClient;
+
+const MainWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  position: relative;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 0;
+  color: rgb(75, 75, 75);
+
+  @media (min-width: 768px) {
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+`;

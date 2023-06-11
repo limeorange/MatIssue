@@ -4,6 +4,7 @@ import StyledComponentsRegistry from "./libs/registry";
 import "./globals.css";
 import Recoil from "./context/RecoilContext";
 import ReactQuery from "./context/ReactQueryContext";
+import Script from "next/script";
 
 export const metadata = {
   title: "맛이슈",
@@ -34,8 +35,8 @@ export default async function RootLayout({
           <Recoil>
             <ReactQuery>{children}</ReactQuery>
           </Recoil>
-          <script src={"https://developers.kakao.com/sdk/js/kakao.js"} async />
         </body>
+        <Script src="https://developers.kakao.com/sdk/js/kakao.js" async />
       </StyledComponentsRegistry>
     </html>
   );

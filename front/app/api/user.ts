@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import { axiosBase } from "../api/axios";
 
 export default async function getCurrentUser() {
-  const session_id = Cookies.get("session_id");
+  const session_id = Cookies.get("session-id");
 
   if (session_id) {
     try {
@@ -18,3 +18,12 @@ export default async function getCurrentUser() {
 
   return null;
 }
+
+export const getAllUsers = async (page: number, per_page: number) => {
+  try {
+    const response = await axiosBase.get("users", { data: { page, per_page } });
+    return response.data;
+  } catch (err: any) {
+    return null;
+  }
+};
