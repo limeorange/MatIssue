@@ -1,7 +1,6 @@
 "use client";
 
 import styled from "styled-components";
-import Link from "next/link";
 import Button from "../../../components/UI/Button";
 import React, { useEffect, useState } from "react";
 import ConfirmModal from "../../../components/UI/ConfirmModal";
@@ -21,22 +20,21 @@ import {
   WrapperInfo,
   Wrapper,
   Title,
-  InputBox,
   ProfileImageWrapper,
   InputFile,
-  IputAndDescription,
   StyledImage,
   DeleteImage,
   InputDateBox,
   UserModifyButton,
   SpaceDiv,
-  ShowIconBox,
   AccountDeletion,
   AlertImage,
-  ConfirmCodeInput,
-  SendingCodeButton,
-  EmailDescription,
   StyledChangePassword,
+  InputBoxNickName,
+  EmailWrapper,
+  EmailContainer,
+  ContentSection,
+  FlexBox,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 type LabelForFileProps = {
@@ -67,13 +65,6 @@ const ModifyUserInfo: React.FC = () => {
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
-
-  // TODO: password 주석 시작
-  // const [password, setPassword] = useState({
-  //   password: "",
-  //   confirmPassword: "",
-  // });
-  // TODO: password 주석 끝
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -108,38 +99,16 @@ const ModifyUserInfo: React.FC = () => {
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("form 태그 제출");
-
-    // TODO: 아래 if문 제거 시작
-    // if (
-    //   password.password === password.confirmPassword && // 비밀번호와 비밀번호 확인이 같은지
-    //   password.password.length >= 8 && // 비밀번호가 8자리 이상인지
-    //   password.password.search(/[0-9]/g) !== -1 && // 숫자가 포함되어 있는지
-    //   password.password.search(/[a-z]/gi) !== -1 && // 영문 대소문자가 포함되어 있는지
-    //   password.password.search(/[~!@#$%^&*()_+|<>?:{}]/gi) !== -1 && // 특수문자가 포함되어 있는지
-    //   password.password !== "" && // 비밀번호가 공백인지
-    //   password.confirmPassword !== "" // 비밀번호 확인이 공백인지
-    // ) {
-    //   // handleFormSubmit이 실행되면 uploadProfileImage 함수가 실행이 되고
-    //   // uploadProfileImage 함수 내에 이미지를 aws 업로드에 성공하면 setUserData로 img 상태를 변경해주면
-    //   // useEffect가 실행되면서 modifyUser 함수가 실행된다. => 회원정보 변경
-    //   uploadProfileImage();
-    // } else {
-    //   alert(
-    //     "비빌번호를 확인해주세요. 8자리 이상, 대소문자, 숫자, 특수문자가 포함되어어 있어야 합니다."
-    //   );
-    // }
-    // TODO: 아래 if문 제거 끝
-
-    // TODO: 주석 해제
+    console.log("userData 확인: ", userData);
     uploadProfileImage();
   };
 
   // modifyUserInfo 해당 객체를 회원정보 수정 api에 넣어서 PUT 요청
   // 변경에 성공하면 alert창 띄우고 my-page로 이동
+  // 회원정보수정
   async function modifyUser() {
     const modifyUserInfo = {
       ...userData,
-      // password: password.password, // TODO: 주석처리
     };
 
     try {
@@ -211,16 +180,14 @@ const ModifyUserInfo: React.FC = () => {
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // if (name === "password" || name === "confirmPassword") {
-    //   setPassword({ ...password, [name]: value });
-    //   return;
-    // }
-
-    // 유저데이타
     setUserData((prev: any) => {
       return { ...prev, [name]: value };
     });
+  };
+
+  //비밀번호 변경 페이지 라우터
+  const ChangePasswordClick = () => {
+    router.push("/my-page/modify-user-info/change-password");
   };
 
   return (
@@ -228,10 +195,9 @@ const ModifyUserInfo: React.FC = () => {
       <Container>
         <Header>회원정보수정</Header>
         <Divider />
-        <Link href="/my-page/modify-user-info/change-password">
-          <StyledChangePassword>비밀번호 변경</StyledChangePassword>
-        </Link>
-
+        <StyledChangePassword onClick={ChangePasswordClick}>
+          비밀번호 변경
+        </StyledChangePassword>
         <Wrapper>
           <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
           {isModalOpen && (
@@ -243,61 +209,53 @@ const ModifyUserInfo: React.FC = () => {
             />
           )}
         </Wrapper>
-        {/* 어떤 양식을 서버로 전송하기 위해서는 폼 태그를 많이 사용, form 태그은 submit 버튼을 이용해서 서버로 데이터를 전송 */}
-        {/* 그래서 submit button까지 form 태그로 감싸줘야 한다. */}
-        {/* submit 버튼을 클릭하면 handleFormSubmit 해당 함수가 실행  */}
-        {/* form 태그에서 압력값에 접근하기 위해서는 name을 사용! */}
         <form onSubmit={handleFormSubmit}>
           <WrapperInfo>
-            <VerificationEmail
-              email={userData?.email}
-              handleChangeInput={handleChangeInput}
-            />
-
             <Wrapper>
-              <Title>별명 *</Title>
-              <InputBox
-                type="text"
-                name="username"
-                value={userData?.username}
-                required
-                onChange={handleChangeInput}
+              <VerificationEmail
+                userData={userData}
+                handleChangeInput={handleChangeInput}
               />
             </Wrapper>
-            <Wrapper>
-              <Title>생년월일</Title>
 
-              <InputDateBox
-                type="date"
-                name="birth_date"
-                value={userData?.birth_date}
-                required
-                onChange={handleChangeInput}
-              />
+            <Wrapper>
+              <EmailContainer>
+                <EmailWrapper>
+                  <Title>별명 *</Title>
+                  <ContentSection>
+                    <FlexBox>
+                      <InputBoxNickName
+                        type="text"
+                        name="username"
+                        value={userData?.username}
+                        required
+                        onChange={handleChangeInput}
+                      />
+                    </FlexBox>
+                  </ContentSection>
+                </EmailWrapper>
+              </EmailContainer>
+            </Wrapper>
+            <Wrapper>
+              <EmailContainer>
+                <EmailWrapper>
+                  {" "}
+                  <Title>생년월일</Title>
+                  <ContentSection>
+                    <FlexBox>
+                      <InputDateBox
+                        type="date"
+                        name="birth_date"
+                        value={userData?.birth_date}
+                        required
+                        onChange={handleChangeInput}
+                      />
+                    </FlexBox>
+                  </ContentSection>
+                </EmailWrapper>
+              </EmailContainer>
             </Wrapper>
             <SpaceDiv />
-            {/* TODO: 비밀번호 입력칸 주석 시작 */}
-            {/* <Wrapper>
-              <Title>비밀번호 </Title>
-              <InputBox
-                type="password"
-                name="password"
-                id="password"
-                value={password.password}
-                onChange={handleChangeInput}
-              />
-            </Wrapper>
-            <Wrapper>
-              <Title>비밀번호 확인</Title>
-              <InputBox
-                type="password"
-                name="confirmPassword"
-                id="confirmPassword"
-                value={password.confirmPassword}
-                onChange={handleChangeInput}
-              />
-            </Wrapper> */}
-            {/* TODO: 비밀번호 입력칸 주석 끝 */}
           </WrapperInfo>
 
           <ProfileImageWrapper>
@@ -347,6 +305,7 @@ const LabelForFile = styled.label<LabelForFileProps>`
   position: relative;
   width: 19.8rem;
   height: 19.8rem;
+  margin-left: 4.1rem;
   border-radius: 0.8rem;
   background-color: #fff9ea;
   display: flex;

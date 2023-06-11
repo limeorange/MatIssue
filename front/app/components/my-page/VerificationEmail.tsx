@@ -8,28 +8,34 @@ import { toast } from "react-hot-toast";
 import {
   Title,
   InputBox,
-  IputAndDescription,
   EmailDescription,
   Wrapper,
+  EmailWrapper,
+  EmailContainer,
+  FlexBox,
+  ContentSection,
+  InputBoxCode,
+  CodeDescription,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 const VerificationEmail = ({
-  email,
+  userData,
   handleChangeInput,
 }: {
-  email: string;
+  userData: any;
   handleChangeInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const [isButtonClicked, setIsButtonClicked] = useState(false);
-  const [code, setCode] = useState("");
-  // const [email, setEmail] = useState({
-  //   email: userData?.email,
-  // });
+  const [isEdit, setIsEdit] = useState(false);
+
+  const handleIsEdit = () => {
+    setIsEdit(!isEdit);
+  };
 
   const handleVerificationButton = async () => {
     try {
       const response = await axiosBase.post(
-        `email/email-verification?email=${email}`
+        `email/email-verification?email=${userData.email}`
       );
       if (response.status === 200) {
         toast.success(
@@ -42,105 +48,99 @@ const VerificationEmail = ({
         );
       }
     } catch (error) {
+      ``;
       console.error(error);
       toast.error("서버 에러가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
-  const handleInputCode = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCode(e.target.value);
-  };
-
   return (
-    <>
-      <Wrapper>
+    <EmailContainer>
+      <EmailWrapper>
         <Title>이메일 *</Title>
-        <IputAndDescription>
-          <ReadOnlyEmail>{email}</ReadOnlyEmail>
-          <InputBox
-            type="email"
-            name="email"
-            value={email}
-            required
-            onChange={handleChangeInput}
-          />
-          <EmailDescription>
-            변경 할 이메일을 입력 후 인증 코드 전송 버튼을 클릭하세요.
-          </EmailDescription>
-        </IputAndDescription>
-      </Wrapper>
-      <SendingCodeButton>
-        <Button
-          type="button"
-          isBgColor={true}
-          fullWidth={true}
-          fullHeight={true}
-          isBorderColor={false}
-          isHoverColor={false}
-          isSmallFont={true}
-          onClick={handleVerificationButton}
-        >
-          이메일 수정
-        </Button>
-      </SendingCodeButton>
-
-      {isButtonClicked && (
-        <>
-          <Wrapper>
-            <Title>인증코드 *</Title>
-            <IputAndDescription>
-              <InputBox type="text" value={code} onChange={handleInputCode} />
-
+        <ContentSection>
+          <FlexBox>
+            <InputBox
+              type="email"
+              name="email"
+              value={userData?.email}
+              required
+              onChange={handleChangeInput}
+              readOnly={!isEdit}
+              isEdit={isEdit}
+            />
+            {isEdit && (
               <EmailDescription>
-                인증코드를 입력 후 인증 코드 확인 버튼을 클릭하세요.
+                변경 할 이메일을 입력 후 회원 정보 수정 버튼을 클릭하세요.
               </EmailDescription>
-            </IputAndDescription>
-          </Wrapper>
-          <SendingCodeButton>
-            <Button
-              type="button"
-              isBgColor={true}
-              fullWidth={true}
-              fullHeight={true}
-              isBorderColor={false}
-              isHoverColor={false}
-              isSmallFont={true}
-              onClick={handleVerificationButton}
-            >
-              인증 코드 전송
-            </Button>
-          </SendingCodeButton>
-        </>
+            )}
+          </FlexBox>
+
+          {!isEdit && (
+            <SendingCodeButton>
+              <Button
+                type="button"
+                isBgColor={true}
+                fullWidth={true}
+                fullHeight={true}
+                isBorderColor={false}
+                isHoverColor={false}
+                isSmallFont={true}
+                onClick={handleIsEdit}
+              >
+                수정하기
+              </Button>
+            </SendingCodeButton>
+          )}
+          {isEdit && (
+            <SendingCodeButton>
+              <Button
+                type="button"
+                isBgColor={true}
+                fullWidth={true}
+                fullHeight={true}
+                isBorderColor={false}
+                isHoverColor={false}
+                isSmallFont={true}
+                onClick={handleVerificationButton}
+              >
+                인증코드 발송
+              </Button>
+            </SendingCodeButton>
+          )}
+        </ContentSection>
+      </EmailWrapper>
+      {isButtonClicked && (
+        <Wrapper>
+          <EmailContainer>
+            <EmailWrapper>
+              <Title>인증코드 *</Title>
+              <ContentSection>
+                <FlexBox>
+                  <InputBoxCode
+                    type="text"
+                    name="email_code"
+                    value={userData?.email_code}
+                    onChange={handleChangeInput}
+                  />
+
+                  <CodeDescription>
+                    인증코드를 입력 후 인증코드 발송 버튼을 클릭하세요.
+                  </CodeDescription>
+                </FlexBox>
+              </ContentSection>
+            </EmailWrapper>
+          </EmailContainer>
+        </Wrapper>
       )}
-    </>
+    </EmailContainer>
   );
 };
 
 export default VerificationEmail;
 
 const SendingCodeButton = styled.div`
-  position: absolute;
-  right: 23.9rem;
-  top: 7.25rem;
-  width: 10rem;
+  width: 11rem;
   height: 4rem;
-`;
-
-const VerifyCodeButton = styled.div`
-  position: absolute;
-  right: 23.9rem;
-  top: 21.7rem;
-  width: 10rem;
-  height: 4rem;
-`;
-
-const ReadOnlyEmail = styled.div`
-  width: 40rem;
-  height: 4.8rem;
-  font-size: 16px;
-  padding: 0 1.6rem;
-  &:focus {
-    outline: 0.3rem solid #fbd26a;
-    border: none;
-  }
+  margin-left: 2rem;
 `;
