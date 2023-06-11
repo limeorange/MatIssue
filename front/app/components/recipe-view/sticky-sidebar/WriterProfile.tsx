@@ -18,7 +18,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
   return (
     <>
       <ProfileContainerDiv isHeaderVisible={isHeaderVisible}>
-        <ProfileHeaderDiv>오늘의 요리사</ProfileHeaderDiv>
+        <ProfileHeaderDiv>오늘의 쉐프</ProfileHeaderDiv>
         <ProfileContentsDiv>
           {/* 프로필 사진 */}
           <ProfileImageDiv>
