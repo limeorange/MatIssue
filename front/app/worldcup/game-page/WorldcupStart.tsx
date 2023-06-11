@@ -136,7 +136,10 @@ const WorldcupLayout = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3em;
+  margin: auto;
+  width: 100%;
+  max-width: 50rem;
+  height: 100vh;
 
   @keyframes slideUp {
     0% {
