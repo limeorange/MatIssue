@@ -167,11 +167,11 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 const ScrapContainerDiv = styled.div`
   position: fixed;
   top: 45%;
-  left: 59%;
+  left: 54.3%;
   display: flex;
   justify-content: center;
   width: 33rem;
-  height: 36.5rem;
+  height: 34.5rem;
   background: #ffffff;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
@@ -204,7 +204,7 @@ const ScrapTitleSpan = styled.span`
 /** 메모 입력칸 전체 감싸는 Div */
 const MemoContainerDiv = styled.div`
   width: 29.5rem;
-  height: 21.5rem;
+  height: 19.5rem;
   font-size: 15.5px;
   cursor: pointer;
 `;
