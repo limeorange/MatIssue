@@ -5,9 +5,9 @@ import { Filter } from "../listings/ListingRecipe";
 import styled from "styled-components";
 
 type FilterTagProps = {
-  search: string | null;
+  search: string | null | undefined;
   filter: Filter;
-  category: string | null;
+  category: string | null | undefined;
   onRemove: (tagType: string) => void;
 };
 

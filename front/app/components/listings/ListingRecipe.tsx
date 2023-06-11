@@ -202,7 +202,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
       );
       urlParams.set("sortMethod", "date");
     } else if (sortMethod === "likes") {
-      result.sort((a, b) => b.recipe_like - a.recipe_like);
+      result.sort((a, b) => b.recipe_like.length - a.recipe_like.length);
       urlParams.set("sortMethod", "likes");
     } else {
       urlParams.delete("sortMethod");
