@@ -24,11 +24,11 @@ const StartPage = () => {
       </StartPageMessage>
       <ImageBox isAnimateOut={isAnimateOut}>
         <Image
-          src={"/images/worldcupIcon3.png"}
+          src={"/images/worldcup/worldcupIcon3.png"}
           alt="월드컵 캐릭터 이미지"
           width={400}
           height={200}
-          style={{ marginRight: "2rem", marginTop: "5rem" }}
+          style={{ marginRight: "2rem" }}
         />
       </ImageBox>
       <ButtonBox isAnimateOut={isAnimateOut}>
@@ -55,7 +55,10 @@ const WorldcupLayout = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3em;
+  margin: auto;
+  width: 100%;
+  max-width: 50rem;
+  height: 100vh;
 
   @keyframes slideUp {
     0% {
