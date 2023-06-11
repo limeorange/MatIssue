@@ -168,7 +168,7 @@ const resultData: ResultData = {
     per: "6.25%",
     rank: "8",
     talk: [
-      "- 겉모습은 잔잔해보이지만 안에서는 항상 끝도 없는 생각들이 휘몰아쳐요.\n- 세심하고 사려깊은 마음씨로 주변인들에게 맞춤형 배려를 잘해요.\n- 미래 계획하는 거 좋아하고 근거 없이 얘기하는 건 싫어요.ㅜ- 인간의 존재 의미, 본질에 대한 심오하고 싶은 생각도 많이 하는 편이에요.\n- 언뜻 보면 외향인 같은데 혼자만의 시간이 굉장히 중요해요.",
+      "- 겉모습은 잔잔해보이지만 안에서는 항상\n끝도 없는 생각들이 휘몰아쳐요.\n- 세심하고 사려깊은 마음씨로\n주변인들에게 맞춤형 배려를 잘해요.\n- 미래 계획하는 거 좋아하고 근거 없이 얘기하는 건 싫어요.\n- 인간의 존재 의미, 본질에 대한 심오하고\n깊은 생각도 많이 하는 편이에요.\n- 언뜻 보면 외향인 같은데 혼자만의 시간이 굉장히 중요해요.",
     ],
     text: "- 생각이 너무 많다보니 굳이 하지 않아도 될 생각까지 해요.",
     text2: "복잡하고 깊은 맛의 와인",
@@ -488,6 +488,10 @@ const MBTIResultText = styled.div`
   font-family: "Dongle-Bold";
   font-size: 40px;
   color: #4f3d21;
+
+  @media (min-width: 375px) {
+    font-size: 30px;
+  }
 `;
 
 const MBTIResult = styled.div`
@@ -626,7 +630,7 @@ const MBTICompatibility = styled.div`
   gap: 4rem;
 `;
 
-const CompatibilityText = styled.p`
+const CompatibilityText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
