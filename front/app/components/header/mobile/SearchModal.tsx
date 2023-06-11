@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 type SearchModalProps = {
@@ -15,6 +15,7 @@ const SearchModal = (props: SearchModalProps) => {
   const [scrollPosition, setScrollPosition] = useState<number>(0);
 
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const searchSubmitHandler: React.KeyboardEventHandler<HTMLInputElement> = (
     e
@@ -31,6 +32,12 @@ const SearchModal = (props: SearchModalProps) => {
   };
 
   useEffect(() => {
+    if (props.isModal && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [props.isModal]);
+
+  useEffect(() => {
     if (props.isModal) {
       setScrollPosition(window.pageYOffset);
       document.body.style.overflow = "hidden";
@@ -43,22 +50,27 @@ const SearchModal = (props: SearchModalProps) => {
     <>
       <Backdrop isModal={props.isModal} onClick={closeModalHandler} />
       <ModalContainer isModal={props.isModal}>
-        <SearchBarDiv>
-          <div>
-            <Image
-              src="/images/searchIcon.svg"
-              width={18}
-              height={18}
-              alt="searchIcon"
+        <SearchBarWrapper>
+          <SearchBarDiv>
+            <div>
+              <Image
+                src="/images/searchIcon.svg"
+                width={18}
+                height={18}
+                alt="searchIcon"
+              />
+            </div>
+            <SearchBarInput
+              onKeyUp={searchSubmitHandler}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchQuery(e.target.value)
+              }
+              ref={inputRef}
             />
-          </div>
-          <SearchBarInput
-            onKeyUp={searchSubmitHandler}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSearchQuery(e.target.value)
-            }
-          />
-        </SearchBarDiv>
+          </SearchBarDiv>
+
+          <CancelBtn onClick={closeModalHandler}>취소</CancelBtn>
+        </SearchBarWrapper>
       </ModalContainer>
     </>
   );
@@ -100,12 +112,18 @@ const ModalContainer = styled.div<{ isModal: boolean }>`
   transition: all 0.3s ease-in-out;
 `;
 
+const SearchBarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+`;
+
 const SearchBarDiv = styled.div`
   display: flex;
   align-items: center;
   padding: 0.8rem 1.6rem;
   gap: 1.6rem;
-  max-width: 36rem;
+  width: 100%;
 
   border: 0.1rem solid rgb(200, 200, 200);
   border-radius: 0.8rem;
@@ -118,11 +136,18 @@ const SearchBarDiv = styled.div`
 
 const SearchBarInput = styled.input`
   width: 100%;
-  height: 4rem;
+  height: 2.8rem;
   border: none;
   font-size: 16px;
   font-weight: 400;
   &:focus {
     outline: none;
   }
+`;
+
+const CancelBtn = styled.div`
+  width: 5rem;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
 `;

@@ -40,7 +40,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
             height={18}
             alt="profile"
           />
-          장윤수님
+          ynnsuis님
         </ProfileWrapper>
         <MenuList>
           <MenuItem onClick={() => router.push("my-page")}>마이페이지</MenuItem>
@@ -57,6 +57,34 @@ const MobileUserModal = (props: MobileUserModalProps) => {
             글쓰기
           </MenuItem>
         </MenuList>
+        <CategoryList>
+          <MenuItem
+            onClick={() => router.push("/recipes/category/best?category=best")}
+          >
+            베스트 레시피
+          </MenuItem>
+          <MenuItem
+            onClick={() =>
+              router.push("/recipes/category/newest?category=newest")
+            }
+          >
+            최신 레시피
+          </MenuItem>
+          <MenuItem
+            onClick={() =>
+              router.push("/recipes/category/honmuk?category=honmuk")
+            }
+          >
+            혼먹 레시피
+          </MenuItem>
+          <MenuItem
+            onClick={() =>
+              router.push("/recipes/category/vegetarian?category=vegetarian")
+            }
+          >
+            비건 레시핀
+          </MenuItem>
+        </CategoryList>
       </ModalContainer>
     </>
   );
@@ -89,8 +117,8 @@ const ModalContainer = styled.div<{ isModal: boolean }>`
   height: 100vh;
   background-color: white;
   padding: 2rem;
-  gap: 2rem;
-  font-size: 16px;
+  gap: 1rem;
+  font-size: 14px;
 
   transform: translateX(${(props) => (props.isModal ? "0" : "-100%")});
   opacity: ${(props) => (props.isModal ? "1" : "0")};
@@ -102,15 +130,25 @@ const ProfileWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 1rem 0;
+  padding: 0.8rem 0;
   border-bottom: 1px solid #ccc;
 `;
 
 const MenuList = styled.ul`
   display: flex;
   flex-direction: column;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
 `;
 
 const MenuItem = styled.li`
-  padding: 0.8rem 0;
+  padding: 0.8rem;
+`;
+
+const CategoryList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+  font-size: 16px;
+  font-weight: 500;
 `;
