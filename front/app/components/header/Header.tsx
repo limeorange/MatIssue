@@ -41,7 +41,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   }, [currentUser]);
 
   if (isError) {
-    Cookies.remove("session_id");
+    Cookies.remove("session-id");
   }
 
   return (
