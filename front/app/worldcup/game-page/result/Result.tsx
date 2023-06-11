@@ -211,7 +211,7 @@ const ImageWrapper = styled.div`
   width: 32.5rem;
   height: 32.5rem;
   overflow: hidden;
-  border: 0.2rem solid #fbd26a;
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 1.5rem;
   position: relative;
   transition: transform 0.3s ease;
@@ -229,6 +229,7 @@ const ImageContainer = styled.div`
 const ShareText = styled.p`
   font-family: "Dongle-Bold";
   font-size: 30px;
+  margin-top: 2rem;
   color: #5c8984;
 `;
 
