@@ -11,6 +11,7 @@ type PaginationProps = {
 const AdminPagination = (props: PaginationProps) => {
   const { total, limit, page, setPage } = props;
   const numPages = Math.ceil(total / limit);
+
   return (
     <PagenationBox>
       {/* 좌측 이동 버튼 */}

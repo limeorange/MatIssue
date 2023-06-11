@@ -25,7 +25,7 @@ type Recipe = {
 const ResultPage: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = searchParams.get("winnerId");
+  const id = searchParams?.get("winnerId");
 
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(true);

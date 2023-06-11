@@ -1,7 +1,7 @@
-import AdminClient from "./AdminClient";
+import AdminClient from "./layout";
 
 const AdminPage = () => {
-  return <AdminClient />;
+  return <div>헬로</div>;
 };
 
 export default AdminPage;
