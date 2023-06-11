@@ -14,16 +14,33 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL("/auth/login", request.url));
   }
 
-  if (
-    request.url.includes("/edit-recipe") &&
-    !request.cookies.get("session_id")
-  ) {
-    return NextResponse.rewrite(new URL("/auth/login", request.url));
-  }
+  // if (
+  //   request.url.includes("/edit-recipe") &&
+  //   !request.cookies.get("session_id")
+  // ) {
+  //   return NextResponse.rewrite(new URL("/auth/login", request.url));
+  // }
 
   // if (request.url.includes("/admin") && !request.cookies.get("session_id")) {
   //   return NextResponse.rewrite(new URL("/auth/login", request.url));
   // }
 }
 
-export const config = {};
+export const config = {
+  async rewrites() {
+    return [
+      {
+        source: "/my-page/:path*",
+        destination: "/auth/login",
+      },
+      // {
+      //   source: "/edit-recipe/:path*",
+      //   destination: "/auth/login",
+      // },
+      {
+        source: "/add-recipe/:path*",
+        destination: "/auth/login",
+      },
+    ];
+  },
+};
