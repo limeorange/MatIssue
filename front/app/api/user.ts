@@ -1,8 +1,8 @@
 import Cookies from "js-cookie";
 import { axiosBase } from "../api/axios";
 
-export async function getCurrentUser() {
-  const session_id = Cookies.get("session_id");
+export default async function getCurrentUser() {
+  const session_id = Cookies.get("session-id");
 
   if (session_id) {
     try {
@@ -26,6 +26,16 @@ export async function getFollowStatus(user_id: string) {
     );
     const followStatus = response.data["is_subscribed"];
     return followStatus;
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
+export async function getUserFans(user_id: string) {
+  try {
+    const response = await axiosBase.get(`/users/${user_id}/fans`);
+    const fansList = response.data["people"];
+    return fansList;
   } catch (error) {
     console.log("error", error);
   }
