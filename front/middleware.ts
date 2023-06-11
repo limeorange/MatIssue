@@ -26,21 +26,4 @@ export function middleware(request: NextRequest) {
   // }
 }
 
-export const config = {
-  async rewrites() {
-    return [
-      {
-        source: "/my-page/:path*",
-        destination: "/auth/login",
-      },
-      // {
-      //   source: "/edit-recipe/:path*",
-      //   destination: "/auth/login",
-      // },
-      {
-        source: "/add-recipe/:path*",
-        destination: "/auth/login",
-      },
-    ];
-  },
-};
+export const config = {};
