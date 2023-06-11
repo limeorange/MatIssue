@@ -21,9 +21,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL("/auth/login", request.url));
   }
 
-  if (request.url.includes("/admin") && !request.cookies.get("session_id")) {
-    return NextResponse.rewrite(new URL("/auth/login", request.url));
-  }
+  // if (request.url.includes("/admin") && !request.cookies.get("session_id")) {
+  //   return NextResponse.rewrite(new URL("/auth/login", request.url));
+  // }
 }
 
 export const config = {
@@ -34,17 +34,17 @@ export const config = {
         destination: "/auth/login",
       },
       {
-        source: "/edit-recipe",
+        source: "/edit-recipe/:path*",
         destination: "/auth/login",
       },
       {
-        source: "/add-recipe",
+        source: "/add-recipe/:path*",
         destination: "/auth/login",
       },
-      {
-        source: "/admin",
-        destination: "/auth/login",
-      },
+      // {
+      //   source: "/admin/:path*",
+      //   destination: "/auth/login",
+      // },
     ];
   },
 };
