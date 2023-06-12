@@ -54,10 +54,6 @@ const MainVegan = () => {
     return <LoadingRecipe />;
   }
 
-  if (isError) {
-    return <NonDataCrying />;
-  }
-
   return (
     <MainVegunContainer>
       <MainVegunArea>
@@ -67,13 +63,18 @@ const MainVegan = () => {
             건강과 환경을 생각하는 채식 레시피로 맛있는 변화를 경험하세요
           </StyledSubTitle>
         </VegunTitleBox>
-        <RecipeSliderContainer>
-          <VegunRecipeContainer slide={slide}>
-            {shuffledRecipes.slice(0, totalSlide * 3).map((item: Recipe) => (
-              <LargeRecipeCard key={item.recipe_id} recipe={item} />
-            ))}
-          </VegunRecipeContainer>
-        </RecipeSliderContainer>
+        {isError ? (
+          <NonDataCrying />
+        ) : (
+          <RecipeSliderContainer>
+            <VegunRecipeContainer slide={slide}>
+              {shuffledRecipes.slice(0, totalSlide * 3).map((item: Recipe) => (
+                <LargeRecipeCard key={item.recipe_id} recipe={item} />
+              ))}
+            </VegunRecipeContainer>
+          </RecipeSliderContainer>
+        )}
+
         <LeftSlideBtn onClick={leftBtnHandler} slide={slide}>
           <Image
             src="/images/main/GreenLeftSlideBtn.png"

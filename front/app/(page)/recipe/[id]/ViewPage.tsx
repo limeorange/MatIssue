@@ -76,9 +76,10 @@ const RecipeDetail = (props: RecipeDataProps) => {
     recipe_tip,
     recipe_video,
 
-    // 레시피 작성자 아이디, 작성된 시각
+    // 레시피 작성자 아이디, 이미지, 작성된 시각
     user_id,
     created_at,
+    user_img,
 
     // 요리 재료
     recipe_ingredients,
@@ -208,6 +209,13 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
+  /** 비로그인 유저가 댓글창 클릭 시 핸들러 */
+  const notLoggedInTryHandler = () => {
+    if (loggedInUserId === undefined) {
+      toast.error("로그인을 진행해주세요!");
+    }
+  };
+
   /** 팔로우 취소 모달 : 확인 클릭 핸들러 */
   // const followDeleteConfirmHandler = async () => {
   //   try {
@@ -268,6 +276,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
           user_subscription={user_subscription}
           user_id={user_id}
           loggedInUserId={loggedInUserId}
+          user_img={user_img}
         />
         {user_id === loggedInUserId && (
           <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
@@ -339,14 +348,16 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         <div className="flex gap-[1.5rem] justify-center">
           {/* 좋아요 */}
-          <RecipeUserLikes
-            isLiked={isLiked}
-            countText={countText}
-            heartClickHandler={heartClickHandler}
-          />
+          <div onClick={notLoggedInTryHandler}>
+            <RecipeUserLikes
+              isLiked={isLiked}
+              countText={countText}
+              heartClickHandler={heartClickHandler}
+            />
+          </div>
 
           {/* 스크랩 */}
-          <div id="heading6">
+          <div id="heading6" onClick={notLoggedInTryHandler}>
             <RecipeScrap
               isSaved={isSaved}
               setIsSaved={setIsSaved}
@@ -392,7 +403,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <div className="mb-[1rem]">
             <RecipeComments comments={comments} />
           </div>
-          <RecipeCommentInput recipe_id={recipe_id} />
+          <div onClick={notLoggedInTryHandler}>
+            <RecipeCommentInput recipe_id={recipe_id} />
+          </div>
         </div>
       </ContainerDiv>
     </>
