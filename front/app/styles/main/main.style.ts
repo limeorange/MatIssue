@@ -1,7 +1,10 @@
 import styled from "styled-components";
 
 export const StyledContainer = styled.div`
-  display: none;
+  display: flex;
+  width: 100%;
+  padding: 1.5rem;
+  background-color: white;
 
   @media (min-width: 1024px) {
     display: flex;
@@ -16,38 +19,60 @@ export const StyledContainer = styled.div`
 export const StyledContentsArea = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   justify-content: center;
   width: 100%;
   max-width: 110rem;
   margin: 0 auto;
+
+  @media (min-width: 1024px) {
+    gap: 2rem;
+  }
 `;
 
 export const StyledTitleBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.6rem 0 0 0;
+  padding: 0.8rem 0 0 0;
   align-items: center;
+
+  @media (min-width: 1024px) {
+    padding: 1.6rem 0 0 0;
+  }
 `;
 
 export const StyledTitle = styled.h2`
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 500;
+
+  @media (min-width: 1024px) {
+    font-size: 22px;
+  }
 `;
 
 export const StyledSubTitle = styled.h3`
-  font-size: 16px;
+  font-size: 14px;
   color: #666;
+
+  @media (min-width: 1024px) {
+    font-size: 16px;
+  }
 `;
 
 export const StyledList = styled.ul`
   display: flex;
   gap: 0.5rem;
-  font-size: 16px;
+  font-size: 14px;
+
+  @media (min-width: 1024px) {
+    font-size: 16px;
+  }
 `;
 
 export const ListingRecipeContainer = styled.div`
+  display: none;
+
   @media (min-width: 768px) {
     display: grid;
     grid-template-columns: repeat(3, auto);

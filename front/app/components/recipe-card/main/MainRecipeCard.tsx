@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Image from "next/legacy/image";
 import { Recipe } from "@/app/types";
 
-const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
+const MainRecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
 
   const handleRecipeClick = () => {
@@ -41,7 +41,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   height={11}
                 />
               </RecipeRankImg>
-              <p>{recipe.recipe_like.toLocaleString()}</p>
+              <p>{recipe.recipe_like.length.toLocaleString()}</p>
             </RecipeRankItem>
             {/* <RecipeRankItem>
               <RecipeRankImg>
@@ -61,26 +61,28 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   );
 };
 
-export default RecipeCard;
+export default MainRecipeCard;
 
 // styled-components
 const RecipeCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   margin: auto;
-  width: 100%;
-  max-width: 26rem;
+  width: 20rem;
 
   &: hover {
     cursor: pointer;
+  }
+
+  @media (min-width: 1024px) {
+    width: 26rem;
   }
 `;
 
 const RecipeImg = styled.div`
   width: 100%;
-  height: 19rem;
+  height: 14.8rem;
   border-radius: 0.8rem;
   flex-shrink: 0;
   overflow: hidden;
@@ -90,27 +92,39 @@ const RecipeImg = styled.div`
       transform: scale(1.1);
     }
   }
-`;
 
-const RecipeInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 0.5rem;
+  @media (min-width: 1024px) {
+    height: 19rem;
+  }
 `;
 
 const RecipeTitle = styled.div`
-  width: 100%;
+  width: 20rem;
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 2rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 
   & p {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  @media (min-width: 1024px) {
+    width: 26rem;
+    margin-top: 1rem;
+  }
+`;
+
+const RecipeInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    margin-top: 0.5rem;
   }
 `;
 
