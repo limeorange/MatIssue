@@ -19,7 +19,7 @@ export const getAllRecipes = async () => {
     }
     return response.data;
   } catch (err: any) {
-    console.log(err.response.data.detail);
+    console.log(err?.response?.data?.detail);
   }
 };
 
@@ -34,7 +34,7 @@ export const getRecipesByParams = async (searchParams: any) => {
     }
     return response.data;
   } catch (err: any) {
-    console.log(err.response.data.detail);
+    console.log(err?.response?.data?.detail);
   }
 };
 
@@ -49,7 +49,7 @@ export const getRecipesByCategory = async (category: string) => {
     }
     return response.data;
   } catch (err: any) {
-    console.log(err.response.data.detail);
+    console.log(err?.response?.data?.detail);
   }
 };
 
@@ -62,7 +62,7 @@ export const getRecipesByPopularity = async () => {
     }
     return response.data;
   } catch (err: any) {
-    console.log(err.response.data.detail);
+    console.log(err?.response?.data?.detail);
   }
 };
 
@@ -75,7 +75,7 @@ export const getRecipesByLastest = async () => {
     }
     return response.data;
   } catch (err: any) {
-    console.log(err.response.data.detail);
+    console.log(err?.respons?.data?.detail);
   }
 };
 
@@ -88,7 +88,7 @@ export const getRecipesBySingle = async () => {
     }
     return response.data;
   } catch (err: any) {
-    console.log(err.response.data.detail);
+    console.log(err?.response?.data?.detail);
   }
 };
 
@@ -101,7 +101,7 @@ export const getRecipesByVegetarian = async () => {
     }
     return response.data;
   } catch (err: any) {
-    console.log(err.response.data.detail);
+    console.log(err?.response?.data?.detail);
   }
 };
 
