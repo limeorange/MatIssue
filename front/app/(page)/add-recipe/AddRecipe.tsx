@@ -115,8 +115,14 @@ const RecipeForm = () => {
     index: number
   ) => {
     const newIngredients = [...state.ingredients];
-    newIngredients[index].ingredient = e.target.value;
-    setState({ ...state, ingredients: newIngredients });
+    const ingredientName = e.target.value.slice(0, 12); // 12자로 제한
+
+    if (e.target.value.length > 12) {
+      toast.error("재료명은 최대 12자까지 입력 가능합니다.");
+    } else {
+      newIngredients[index].ingredient = ingredientName;
+      setState({ ...state, ingredients: newIngredients });
+    }
   };
 
   // 재료의 양 변경 핸들러
@@ -125,8 +131,14 @@ const RecipeForm = () => {
     index: number
   ) => {
     const newIngredients = [...state.ingredients];
-    newIngredients[index].quantity = e.target.value;
-    setState({ ...state, ingredients: newIngredients });
+    const ingredientQuantity = e.target.value.slice(0, 7); // 7자로 제한
+
+    if (e.target.value.length > 7) {
+      toast.error("재료의 양은 최대 7자까지 입력 가능합니다.");
+    } else {
+      newIngredients[index].quantity = ingredientQuantity;
+      setState({ ...state, ingredients: newIngredients });
+    }
   };
 
   // 재료와 양 추가 핸들러
@@ -497,6 +509,11 @@ const FormWrapper = styled.form`
   align-items: flex-start;
   margin: 5rem auto 0;
   // background-color: rgba(1, 1, 1, 0.2);
+
+  @media (max-width: 375px) {
+    width: 100%;
+    padding: 2rem;
+  }
 `;
 
 const Title = styled.h2`
@@ -515,7 +532,11 @@ const MainSection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 2rem;
+
+  @media (max-width: 375px) {
+    flex-direction: column;
+    gap: 2rem;
+  }
 `;
 
 const ImageContainer = styled.div`

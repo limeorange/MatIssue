@@ -36,12 +36,20 @@ const ThumbnailUpload = ({
 
   return (
     <ImageSection>
-      <Label>썸네일 등록</Label>
-      {selectedImage ? (
-        <Image src={selectedImage} alt="thumbnail" onClick={handleImageClick} />
-      ) : (
-        <EmptyBox onClick={handleImageClick} />
-      )}
+      <LabelContainer>
+        <Label>썸네일 등록</Label>
+      </LabelContainer>
+      <ImageContainer>
+        {selectedImage ? (
+          <Image
+            src={selectedImage}
+            alt="thumbnail"
+            onClick={handleImageClick}
+          />
+        ) : (
+          <EmptyBox onClick={handleImageClick} />
+        )}
+      </ImageContainer>
       <FileInput
         ref={fileInputRef}
         type="file"
@@ -65,12 +73,37 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
+
+  @media (max-width: 375px) {
+    margin-bottom: 2rem;
+  }
 `;
 
 const ImageSection = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+
+  @media (max-width: 375px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+
+  @media (max-width: 375px) {
+    margin-bottom: 1rem;
+  }
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `;
 
 const Image = styled.img`
