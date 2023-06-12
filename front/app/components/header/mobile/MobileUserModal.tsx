@@ -113,12 +113,12 @@ const ModalContainer = styled.div<{ isModal: boolean }>`
   z-index: 10000;
   left: 0;
   top: 0;
-  width: 25rem;
+  width: 28rem;
   height: 100vh;
   background-color: white;
   padding: 2rem;
   gap: 1rem;
-  font-size: 14px;
+  font-size: 16px;
 
   transform: translateX(${(props) => (props.isModal ? "0" : "-100%")});
   opacity: ${(props) => (props.isModal ? "1" : "0")};

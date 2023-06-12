@@ -21,6 +21,8 @@ import {
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
 import NonDataCrying from "../UI/NonDataCrying";
+import { useRouter } from "next/navigation";
+import MainMobileListingRecipe from "../recipe-card/main/MainMobileListingRecipe";
 
 const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   /*  베스트 레시피 데이터를 리액트쿼리를 사용해서 캐시로 관리
@@ -36,15 +38,18 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   );
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [filter, setFilter] = useState<"일간" | "주간" | "월간">("일간");
+  const [filter, setFilter] = useState<"일간" | "주간" | "월간">("월간");
   const [filteredBestRecipes, setFilteredBestRecipes] =
     useState<Recipe[]>(bestRecipes);
 
+  const router = useRouter();
   const contentsPerPage = 8;
   const totalRecipes = bestRecipes?.length;
-  const totalPage = totalRecipes / contentsPerPage;
+  const totalPage = Math.ceil(totalRecipes / contentsPerPage);
   const currentDate = dayjs();
   dayjs.extend(isBetween);
+
+  console.log(currentPage, totalPage);
 
   // 페이지네이션 버튼 핸들러
   const leftBtnHandler = () => {
@@ -114,13 +119,13 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
           <StyledTitle>베스트 레시피</StyledTitle>
           <StyledList>
             <StyledItem
-              id="day"
+              id="month"
               onClick={() => {
-                setFilter("일간");
+                setFilter("월간");
               }}
-              clicked={filter === "일간"}
+              clicked={filter === "월간"}
             >
-              일간
+              월간
             </StyledItem>
             <StyledItem clicked={false}>|</StyledItem>
             <StyledItem
@@ -134,13 +139,13 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
             </StyledItem>
             <StyledItem clicked={false}>|</StyledItem>
             <StyledItem
-              id="month"
+              id="day"
               onClick={() => {
-                setFilter("월간");
+                setFilter("일간");
               }}
-              clicked={filter === "월간"}
+              clicked={filter === "일간"}
             >
-              월간
+              일간
             </StyledItem>
           </StyledList>
         </StyledBestTitleBox>
@@ -156,8 +161,11 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
               <MainRecipeCard key={item.recipe_id} recipe={item} />
             ))}
         </ListingRecipeContainer>
+        <MainMobileListingRecipe
+          recipes={filteredBestRecipes}
+          url="/recipes/category/best?category=best"
+        />
       </StyledContentsArea>
-
       <RightSlideBtn
         onClick={rightBtnHandler}
         currentPage={currentPage}
@@ -185,7 +193,7 @@ const LeftSlideBtn = styled.button<{ currentPage: number }>`
   display: none;
 
   @media (min-width: 768px) {
-    ${(props) => (props.currentPage === 1 ? "display:none;" : "display:block")}
+    ${(props) => (props.currentPage === 1 ? "display:none;" : "display:block;")}
     position: absolute;
     width: 3rem;
     height: 9rem;
@@ -202,7 +210,7 @@ const RightSlideBtn = styled.button<{ currentPage: number; totalPage: number }>`
 
   @media (min-width: 768px) {
     ${(props) =>
-      props.currentPage > props.totalPage ? "display:none;" : "display:block"}
+      props.currentPage > props.totalPage ? "display:none;" : "display:block;"}
     position: absolute;
     width: 3rem;
     height: 9rem;
@@ -218,4 +226,39 @@ const StyledItem = styled.li<{ clicked: boolean }>`
   cursor: pointer;
   font-weight: ${(props) => (props.clicked ? "600" : "400")};
   color: ${(props) => (props.clicked ? "#4F3D21" : "#ddd")};
+`;
+
+const MobileListingRecipe = styled.div`
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+  align-items: center;
+  width: 100%;
+
+  > div {
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+`;
+
+const MoreViewBtnWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  padding: 0 2rem;
+  gap: 0.4rem;
+
+  img {
+    box-sizing: content-box;
+    width: 1.6rem;
+    height: 1.6rem;
+    background-color: #fbd26a;
+    border-radius: 5rem;
+    padding: 1rem;
+  }
 `;

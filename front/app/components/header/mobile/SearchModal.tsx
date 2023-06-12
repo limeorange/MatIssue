@@ -100,7 +100,6 @@ const ModalContainer = styled.div<{ isModal: boolean }>`
   left: 0;
   top: 0;
   width: 100%;
-  height: 40rem;
   background-color: white;
   padding: 2rem;
   gap: 2rem;
