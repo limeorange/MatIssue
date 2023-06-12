@@ -48,7 +48,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
     <HeaderDiv isHeaderVisible={isHeaderVisible}>
       <NavArea>
         <TopNav>
-          <HamburgerBtn />
+          <HamburgerBtn initialCurrentUser={currentUser} />
           <LogoWrapper>
             <Logo />
           </LogoWrapper>
