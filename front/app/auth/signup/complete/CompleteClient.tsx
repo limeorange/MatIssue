@@ -29,10 +29,14 @@ const CompleteClient = () => {
 };
 
 const MessageWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 37rem;
   padding: 4rem;
   background-color: #white;
   border-radius: 1.5rem;
@@ -47,7 +51,7 @@ const StyledTitleBox = styled.div`
 
 const StyledTitle = styled.div`
   text-align: center;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 500;
   margin-bottom: 2rem;
 `;

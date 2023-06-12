@@ -60,7 +60,6 @@ const FilterModalContainer = styled.div`
   font-size: 16px;
   font-weight: 400;
   color: #4f3d21;
-  margin-left: -1.3rem;
 `;
 
 const FilterModalUl = styled.ul`

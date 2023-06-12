@@ -4,13 +4,18 @@ import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
 import MobileUserModal from "./MobileUserModal";
+import { User } from "@/app/types";
 
-const HamburgerBtn = () => {
+const HamburgerBtn = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   const [isModal, setIsModal] = useState<boolean>(false);
 
   return (
     <>
-      <MobileUserModal isModal={isModal} setIsModal={setIsModal} />
+      <MobileUserModal
+        initialCurrentUser={initialCurrentUser}
+        isModal={isModal}
+        setIsModal={setIsModal}
+      />
       <HamburgerButton
         onClick={() => {
           setIsModal(true);

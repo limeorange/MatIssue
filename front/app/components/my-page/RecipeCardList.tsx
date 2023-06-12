@@ -149,14 +149,25 @@ const RecipeCardWrapper = styled.div`
 const StyledRecipeCard = styled(RecipeCard)``;
 
 const DeleteButtonImage = styled.img`
-  position: absolute;
-  top: 21rem;
-  right: 0.5rem;
-  width: 1.8rem;
-  height: 1.8rem;
-  transition: transform 0.1s ease-in-out;
-  &:hover {
-    transform: scale(1.2);
+position: absolute;
+box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+top: 0.7rem;
+right: 0.7rem;
+width: 1.5rem;
+    height: 1.5rem;
+    transition: transform 0.1s ease-in-out;
+    &:hover {
+      transform: scale(1.2);
+    }
+  @media (min-width: 1024px) {
+    top: 25rem;
+    right: 0.7rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    
+    
+    
   }
 `;
 

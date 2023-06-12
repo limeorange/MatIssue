@@ -16,6 +16,7 @@ export const AuthContainer = styled.div`
   margin-right: auto;
   width: 100%;
   max-width: 40rem;
+
   color: #4f3d21;
 `;
 
@@ -32,7 +33,7 @@ export const AuthFormWrapper = styled.div`
   padding-bottom: 3.2rem;
   box-shadow: 0 0.1rem 0.3rem 0 rgb(0 0 0 / 0.1);
   border-radius: 1.5rem;
-  min-height: 80vh;
+  min-height: 100vh;
 
   form {
     display: flex;

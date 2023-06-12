@@ -48,7 +48,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
     <HeaderDiv isHeaderVisible={isHeaderVisible}>
       <NavArea>
         <TopNav>
-          <HamburgerBtn />
+          <HamburgerBtn initialCurrentUser={currentUser} />
           <LogoWrapper>
             <Logo />
           </LogoWrapper>
@@ -103,7 +103,7 @@ const UnderLine = styled.div`
 `;
 
 const LogoWrapper = styled.div`
-  @media (max-width: 768px) {
+  @media (max-width: 1023.9px) {
     position: fixed;
     left: 50%;
     top: 50%;

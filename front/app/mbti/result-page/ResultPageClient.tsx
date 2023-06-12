@@ -458,7 +458,7 @@ const PageWrapper = styled.div`
   width: 100%;
   max-width: 50rem;
   heigth: 100vh;
-  padding: 1.5rem 0rem;
+  padding: 2rem 1.5rem 0 1.5rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
   opacity: 0;
@@ -467,14 +467,14 @@ const PageWrapper = styled.div`
     opacity: 1;
   }
 
-  @media (max-width: 768px) {
-    padding: 2rem 1.5rem 0 1.5rem;
+  @media (min-width: 768px) {
+    padding: 1.5rem 0rem;
   }
 `;
 
 const PageTitle = styled.p`
   font-family: "Dongle-Bold";
-  font-size: 80px;
+  font-size: 70px;
   color: #fbd26a;
   margin-bottom: -3rem;
 
@@ -482,8 +482,8 @@ const PageTitle = styled.p`
     font-size: 40px;
   }
 
-  @media (max-width: 375px) {
-    font-size: 70px;
+  @media (min-width: 768px) {
+    font-size: 80px;
   }
 `;
 
@@ -494,11 +494,11 @@ const MBTIimage = styled.div`
 
 const MBTIResultText = styled.div`
   font-family: "Dongle-Bold";
-  font-size: 40px;
+  font-size: 32px;
   color: #4f3d21;
 
-  @media (max-width: 375px) {
-    font-size: 32px;
+  @media (min-width: 768px) {
+    font-size: 40px;
   }
 `;
 
@@ -550,14 +550,14 @@ const TextTitle = styled.div`
 `;
 
 const Text = styled.div`
-  font-size: 25px;
+  font-size: 22px;
   font-family: "Dongle-Bold";
   color: grey;
   text-align: center;
   white-space: pre-line;
 
-  @media (max-width: 375px) {
-    font-size: 22px;
+  @media (min-width: 768px) {
+    font-size: 25px;
   }
 `;
 

@@ -45,8 +45,7 @@ const CategoryModalContainer = styled.div<{ visible: boolean }>`
   }
 
   @media (min-width: 1024px) {
-    top: 4rem;
-    width: 13.4rem;
+    top: 5rem;
     padding: 0.3rem 0;
     font-size: 16px;
     font-weight: 400;

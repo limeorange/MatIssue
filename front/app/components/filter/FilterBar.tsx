@@ -45,7 +45,7 @@ const FilterBar = (props: FilterBarProps) => {
   }, [newServings, newDuration, newDifficulty, setFilter]);
 
   return (
-    <FilterContainer>
+    <FilterBarContainer>
       <FilterBarLi onClick={() => setIsServingsModal(!isServingsModal)}>
         {isServingsModal && (
           <FilterModal
@@ -102,26 +102,29 @@ const FilterBar = (props: FilterBarProps) => {
         </div>
         {newDifficulty.name}
       </FilterBarLi>
-    </FilterContainer>
+    </FilterBarContainer>
   );
 };
 
-const FilterContainer = styled.div`
+const FilterBarContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.8rem 1.6rem;
-  width: 31rem;
   height: 4rem;
-  color: #ababab;
+  font-size: 14px;
+  margin: 0 auto;
   border: 0.1rem solid rgb(200, 200, 200);
   border-radius: 10rem;
-  font-size: 15px;
+  color: grey;
+
+  @media (min-width: 768px) {
+    width: 36rem;
+    font-size: 16px;
+  }
 `;
 
 const FilterBarLine = styled.div`
   width: 0;
-  height: 3rem;
+  height: 100%;
   border-right: solid #d9d9d9 0.1rem;
 `;
 
@@ -129,6 +132,7 @@ const FilterBarLi = styled.li`
   display: flex;
   position: relative;
   align-items: center;
+  justify-content: center;
   gap: 1.2rem;
   border-bottom: 0.4rem solid #ffffff;
   padding: 1.3rem 1.3rem 0.9rem 1.3rem;

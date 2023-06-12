@@ -66,8 +66,9 @@ const ProfileCard = () => {
           <NotificationDot />
         </LinkBtn>
 
+      <ProfileBox>
         <ImageAndNickName>
-          {" "}
+          
           <RoundImage>
             <ProfileImage
               src={currentUser?.img || "images/dongs-logo.png"}
@@ -76,6 +77,19 @@ const ProfileCard = () => {
           </RoundImage>
           <NickName>{currentUser?.username}</NickName>
         </ImageAndNickName>
+        <ProfileBigBox>
+        <FollowAndFollowing>
+          <FollowerDiv>
+            <Follower>팔로워</Follower>
+        <FollowerCount>99</FollowerCount>
+        </FollowerDiv>
+        <FollowDivider />
+          <FollowingDiv>
+            <Following>팔로잉</Following>
+        <FollowingCount>50</FollowingCount>
+        </FollowingDiv>
+        </FollowAndFollowing>
+        
 
         <LinkBtn
           onClick={() => {
@@ -95,35 +109,40 @@ const ProfileCard = () => {
           </ModifyUserDiv>
         </LinkBtn>
         <Divider />
-        <div className="flex gap-[1.5rem]">
-          {/* 나의 레시피 버튼 */}
-          <LinkBtn
-            onClick={() => {
-              router.push("/my-page");
-            }}
-          >
-            <MyRecipeIcon
-              src="/images/my-page/my_recipe.svg"
-              alt="레시피 아이콘"
-            />
-            <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-            <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
-          </LinkBtn>
 
-          {/* 나의 스크랩 버튼 */}
-          <LinkBtn
-            onClick={() => {
-              router.push("/my-page/scrap");
-            }}
-          >
-            <MyRecipeIcon
-              src="/images/recipe-view/scrap_full.svg"
-              alt="스크랩 아이콘"
-            />
-            <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
-          </LinkBtn>
-        </div>
+        {/* 나의 레시피 버튼 */}
+        <ButtonWrapper>
+        <LinkBtn
+          onClick={() => {
+            router.push("/my-page");
+          }}
+        >
+          <MyRecipeIcon
+            src="/images/my-page/my_recipe.svg"
+            alt="레시피 아이콘"
+          />
+          <MyRecipeTitle>My 레시피</MyRecipeTitle>
+          <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
+        </LinkBtn>
+
+        {/* 나의 스크랩 버튼 */}
+        <LinkBtn
+          onClick={() => {
+            router.push("/my-page/scrap");
+          }}
+        >
+          <MyRecipeIcon
+            src="/images/recipe-view/scrap_full.svg"
+            alt="스크랩 아이콘"
+          />
+          <MyRecipeTitle>My 스크랩</MyRecipeTitle>
+          <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
+        </LinkBtn>
+        </ButtonWrapper>
+        </ProfileBigBox>
+        </ProfileBox>
+        
+        
         <LinkBtn
           onClick={() => {
             router.push("/add-recipe");
@@ -149,7 +168,7 @@ const ProfileCard = () => {
 export default ProfileCard;
 
 const ProfileContainer = styled.div`
-  height: 30.3rem;
+  height: 23.7rem;
   border-bottom: 0.1rem solid rgb(200, 200, 200);
 
   @media (min-width: 1024px) {
@@ -157,7 +176,7 @@ const ProfileContainer = styled.div`
     border-radius: 2.3rem;
     box-shadow: rgba(63, 71, 77, 0.06) 0px 0.2rem 0.4rem 0px;
     border-radius: 2.3rem;
-    height: 47rem;
+    height: 49.5rem;
     margin-right: 4rem;
     margin-top: 4.1rem;
   }
@@ -165,7 +184,7 @@ const ProfileContainer = styled.div`
 
 const ProfileWrapper = styled.div`
   width: 100%;
-  padding: 2.5rem 0 1.5rem;
+  padding: 2.9rem 0 1.5rem;
 
   @media (min-width: 1024px) {
     position: relative;
@@ -207,18 +226,16 @@ const ImageAndNickName = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 3.2rem;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: 0.5rem;
   @media (min-width: 1024px) {
-    flex-direction: column;
-    margin-bottom: 0rem;
     gap: 0;
   }
 `;
 
 const RoundImage = styled.div`
-  width: 9rem;
-  height: 9rem;
+  width: 8.7rem;
+  height: 8.7rem;
   border-radius: 50%;
   overflow: hidden;
   @media (min-width: 1024px) {
@@ -234,8 +251,56 @@ const ProfileImage = styled.img`
   background-color: #fff9ea;
 `;
 
+const FollowAndFollowing = styled.div`
+display: flex;
+padding: 0 0.5rem 0.5rem;
+margin-bottom: 0.8rem;
+`;
+
+const FollowerDiv = styled.div`
+display: flex;
+gap: 0.4rem;
+`;
+
+const Follower = styled.h4`
+  font-size: 14px;
+  font-weight: 550;
+  color: #4f3d21;
+  `;
+
+  const FollowerCount = styled.h4`
+  font-size: 14px;
+  font-weight: 500;
+  color: #4f3d21;
+  `;
+
+  const FollowDivider = styled.div`
+  border-left: 1px solid black;
+  height: 2.5em;
+  display: inline-block;
+  margin: 0.2rem 0.8rem 0;
+  color: #4f3d21;
+  `;
+
+const FollowingDiv = styled.div`
+display: flex;
+gap: 0.4rem;
+`;
+
+  const Following = styled.h4`
+  font-size: 14px;
+  font-weight: 550;
+  color: #4f3d21;
+  `;
+
+  const FollowingCount = styled.h4`
+  font-size: 14px;
+  font-weight: 500;
+  color: #4f3d21;
+  `;
+
 const NickName = styled.h1`
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 600;
   margin-bottom: 2rem;
   color: #4f3d21;
@@ -270,17 +335,19 @@ const MyRecipeIcon = styled.img`
 `;
 
 const MyRecipeTitle = styled.h4`
-  margin-top: 0.4rem;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 550;
   color: #4f3d21;
 `;
 
 const MyRecipeCount = styled.h4`
-  margin-top: 0.4rem;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   color: #4f3d21;
+  @media (min-width: 1024px) {
+    font-size: 18px;
+    font-weight: 600;
+  }
 `;
 
 const UploadRecipeButton = styled.div`
@@ -293,8 +360,46 @@ const UploadRecipeButton = styled.div`
 `;
 
 const LinkBtn = styled.div`
+  display: flex;
+  align-items: center;
   cursor: pointer;
+    flex-direction: column;
+  
+  
+`;
+
+const ButtonWrapper = styled.div`
+display: flex;
+justify-content: center;
+gap: 1.8rem;
+margin-bottom: 2rem;
+  @media (min-width: 1024px) {
+margin:0;
+  }
+  `;
+
+  const ProfileBox = styled.div`
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  align-items: end;
+  margin-bottom: 0.5rem;
+  @media (min-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 0;
+  }
+  `;
+
+  const ProfileBigBox = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 0.1rem;
+
+
+@media (min-width: 1024px) {  
   align-items: center;
-`;
+}
+  `;
+  
