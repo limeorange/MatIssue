@@ -79,13 +79,13 @@ export default IngredientSection;
 const IngredientContainer = styled.div`
   display: flex;
   flex-direction: column;
-
   justify-content: flex-start;
   align-items: flex-start;
-  margin-top: 7.2rem;
+  margin-top: 2rem;
 
   @media (min-width: 1024px) {
     flex-direction: row;
+    margin-top: 7.2rem;
   }
 `;
 

@@ -388,7 +388,6 @@ const RecipeForm = () => {
         videoLink={state.videoLink}
         handleVideoLinkChange={handleVideoLinkChange}
       />
-
       <IngredientSection
         ingredients={state.ingredients}
         handleIngredientChange={handleIngredientChange}
