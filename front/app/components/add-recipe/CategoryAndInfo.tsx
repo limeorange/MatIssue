@@ -107,6 +107,10 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
+
+  @media (max-width: 375px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const Select = styled.select`
@@ -146,6 +150,11 @@ const LabelWithInfo = styled.div`
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
+
+  @media (max-width: 375px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Info = styled.div`
