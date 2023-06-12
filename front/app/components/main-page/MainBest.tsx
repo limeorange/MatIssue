@@ -8,7 +8,6 @@ import isBetween from "dayjs/plugin/isBetween";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipesByPopularity } from "@/app/api/recipe";
 
-import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
 import NonRecipeCrying from "../UI/NonRecipeCrying";
 
 import {
@@ -23,6 +22,7 @@ import { Recipe } from "@/app/types";
 import NonDataCrying from "../UI/NonDataCrying";
 import { useRouter } from "next/navigation";
 import MainMobileListingRecipe from "../recipe-card/main/MainMobileListingRecipe";
+import RecipeCard from "../recipe-card/RecipeCard";
 
 const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   /*  베스트 레시피 데이터를 리액트쿼리를 사용해서 캐시로 관리
@@ -158,7 +158,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
                   contentsPerPage * currentPage
                 )
                 .map((item: Recipe) => (
-                  <MainRecipeCard key={item.recipe_id} recipe={item} />
+                  <RecipeCard key={item.recipe_id} recipe={item} />
                 ))}
             </ListingRecipeContainer>
             <MainMobileListingRecipe
@@ -194,7 +194,7 @@ const StyledBestTitleBox = styled(StyledTitleBox)`
 const LeftSlideBtn = styled.button<{ currentPage: number }>`
   display: none;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     ${(props) => (props.currentPage === 1 ? "display:none;" : "display:block;")}
     position: absolute;
     width: 3rem;
@@ -210,7 +210,7 @@ const LeftSlideBtn = styled.button<{ currentPage: number }>`
 const RightSlideBtn = styled.button<{ currentPage: number; totalPage: number }>`
   display: none;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     ${(props) =>
       props.currentPage > props.totalPage ? "display:none;" : "display:block;"}
     position: absolute;
