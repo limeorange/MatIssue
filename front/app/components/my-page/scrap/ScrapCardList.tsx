@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 type MemoItemProps = {
   created_at: string;
   recipe_id: string;
-  recipe_like: number;
+  recipe_like: string[];
   recipe_thumbnail: string;
   recipe_title: string;
   recipe_view: number;
