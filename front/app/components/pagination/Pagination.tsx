@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
@@ -12,21 +12,25 @@ type PaginationProps = {
 };
 
 const Pagination = (props: PaginationProps) => {
-  const [startPage, setStartPage] = useState(1);
-  const [endPage, setEndPage] = useState(10);
   const [pageInput, setPageInput] = useState("");
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const totalPages = Math.ceil(props.totalRecipes / props.recipesPerPage);
+  const pagesToShow = windowWidth <= 480 ? 5 : 10;
 
   // 이전 버튼 로직
   const handlePrevClick = () => {
     if (props.currentPage > 1) {
       props.paginate(props.currentPage - 1);
-    }
-
-    if (startPage > 1) {
-      setStartPage(startPage - 10);
-      setEndPage(endPage - 10);
     }
   };
 
@@ -34,11 +38,6 @@ const Pagination = (props: PaginationProps) => {
   const handleNextClick = () => {
     if (props.currentPage < totalPages) {
       props.paginate(props.currentPage + 1);
-    }
-
-    if (endPage < totalPages) {
-      setStartPage(startPage + 10);
-      setEndPage(endPage + 10);
     }
   };
 
@@ -62,6 +61,16 @@ const Pagination = (props: PaginationProps) => {
     }
   };
 
+  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const startIndex =
+    props.currentPage - Math.floor(pagesToShow / 2) > 0
+      ? props.currentPage - Math.floor(pagesToShow / 2)
+      : 0;
+  const endIndex =
+    startIndex + pagesToShow < totalPages
+      ? startIndex + pagesToShow
+      : totalPages;
+
   return (
     <>
       <PaginationWrapper>
@@ -76,23 +85,21 @@ const Pagination = (props: PaginationProps) => {
               />
             </PaginationPrevButton>
           </PaginationPrevButtonBox>
-          {Array.from({ length: 10 }, (_, i) => startPage + i)
-            .filter((pageNumber) => pageNumber <= totalPages)
-            .map((number) => (
-              <PaginationLi key={number}>
-                <PaginationButtonBox
+          {pageNumbers.slice(startIndex, endIndex).map((number) => (
+            <PaginationLi key={number}>
+              <PaginationButtonBox
+                onClick={() => props.paginate(number)}
+                className={props.currentPage === number ? "active" : ""}
+              >
+                <PaginationButton
                   onClick={() => props.paginate(number)}
                   className={props.currentPage === number ? "active" : ""}
                 >
-                  <PaginationButton
-                    onClick={() => props.paginate(number)}
-                    className={props.currentPage === number ? "active" : ""}
-                  >
-                    {number}
-                  </PaginationButton>
-                </PaginationButtonBox>
-              </PaginationLi>
-            ))}
+                  {number}
+                </PaginationButton>
+              </PaginationButtonBox>
+            </PaginationLi>
+          ))}
           <PaginationNextButtonBox onClick={handleNextClick}>
             <PaginationNextButton onClick={handleNextClick}>
               <Image

@@ -292,6 +292,10 @@ const PageWrapper = styled.div`
   &.opacity-1 {
     opacity: 1;
   }
+
+  @media (max-width: 768px) {
+    padding: 0 2rem 0 2rem;
+  }
 `;
 
 const PageTitle = styled.p`
@@ -381,10 +385,6 @@ const AnswerButtonContainer = styled.div`
       transform: translateY(0px);
     }
   }
-
-  @media (min-width: 375px) {
-    max-width: 30rem;
-  }
 `;
 
 const ProgressSection = styled.div`
@@ -409,6 +409,10 @@ const BackButton = styled.button`
 
   &:hover {
     background-color: #f8b551;
+  }
+
+  @media (max-width: 768px) {
+    width: 10%;
   }
 `;
 

@@ -97,15 +97,27 @@ const FilterTagBox = styled.div`
   justify-content: center;
   margin: 2rem 0;
   gap: 1.6rem;
+  flex-wrap: wrap;
 
   & p {
     color: #4f3d21;
+    width: 100%;
+    text-align: center;
   }
 
   & span {
     background-color: #fbd26a;
     border-radius: 10rem;
     padding: 0.5rem 1.5rem;
+
+    @media (max-width: 425px) {
+      border-radius: 0.5rem;
+      padding: 0 0.9rem 0 0.9rem;
+  }
+
+  @media (max-width: 425px) {
+    font-size: 14px;
+    gap: 0.5rem;
   }
 `;
 
@@ -113,9 +125,13 @@ const RemoveButton = styled.button`
   margin-left: 0.5rem;
   color: #b89b6f;
   border-radius: 0.5rem;
-  font-size: 1.3rem;
+  font-size: 13px;
 
   &:hover {
     color: #9f783a;
+  }
+
+  @media (max-width: 425px) {
+    font-size: 15px;
   }
 `;
