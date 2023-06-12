@@ -30,6 +30,7 @@ export const StyledChangePassword = styled.div`
   font-size: 14px;
   text-decoration: underline;
   color: #201ce0;
+  cursor: pointer;
 `;
 
 export const AccountDeletion = styled.div`
