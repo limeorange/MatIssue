@@ -29,18 +29,20 @@ const RecipeStep = ({
           <StepDotDiv isLastStep={isLastStep}></StepDotDiv>
         </StepNavigationDiv>
 
-        {/* 요리 과정 사진 */}
-        <ImageWrapperDiv>
-          <Image
-            src={stepImage}
-            alt={`step${stepNumber}`}
-            fill
-            style={{ objectFit: "cover", borderRadius: 20 }}
-          />
-        </ImageWrapperDiv>
+        <StepContentDiv>
+          {/* 요리 과정 사진 */}
+          <ImageWrapperDiv>
+            <Image
+              src={stepImage}
+              alt={`step${stepNumber}`}
+              fill
+              style={{ objectFit: "cover", borderRadius: 20 }}
+            />
+          </ImageWrapperDiv>
 
-        {/* 요리 과정 설명 */}
-        <StepDescriptionDiv>{stepDescription}</StepDescriptionDiv>
+          {/* 요리 과정 설명 */}
+          <StepDescriptionDiv>{stepDescription}</StepDescriptionDiv>
+        </StepContentDiv>
       </ContainerDiv>
     </>
   );
@@ -49,6 +51,7 @@ const RecipeStep = ({
 /** 전체 감싸는 Div */
 const ContainerDiv = styled.div`
   display: flex;
+  gap: 1.5rem;
 `;
 
 /** 요리 단계 네이게이션 디자인 Div */
@@ -62,7 +65,7 @@ const StepNavigationDiv = styled.div`
 const RoundedStepDiv = styled.div`
   display: flex;
   background-color: #fbe2a1;
-  height: 3.5rem;
+  min-height: 3.5rem;
   width: 3.5rem;
   border-radius: 10rem;
   align-items: center;
@@ -80,7 +83,7 @@ const StepDotDiv = styled.div<{ isLastStep: boolean }>`
   border-right-width: 0.25rem;
   border-right-color: #ababab;
   border-right-style: dotted;
-  height: 30rem;
+  height: 100%;
   width: 1.9rem;
   margin-top: 0.3rem;
 
@@ -97,16 +100,25 @@ const ImageWrapperDiv = styled.div`
   width: 29rem;
   height: 29rem;
   position: relative;
-  margin-top: 3.5rem;
-  margin-left: 1.2rem;
 `;
 
 /** 요리 과정 설명 Div */
 const StepDescriptionDiv = styled.div`
-  padding-top: 4.5rem;
-  padding-left: 1.8rem;
   width: 30rem;
   font-size: 16px;
+`;
+
+/** 요리 사진, 과정 묶는 Div */
+const StepContentDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 3.5rem;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
 export default RecipeStep;

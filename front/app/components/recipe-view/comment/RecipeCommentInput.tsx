@@ -81,6 +81,7 @@ const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
   border-radius: 1rem;
   padding-top: 1.2rem;
   padding-bottom: 1.2rem;
+  margin-bottom: 2rem;
 
   align-items: center;
 
@@ -96,6 +97,10 @@ const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
       border-color: #fbd26a;
       color: #fbd26a;
     `}
+
+  @media (min-width: 1024px) {
+    margin-bottom: 10rem;
+  }
 `;
 
 /** 댓글 입력 텍스트 */

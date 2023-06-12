@@ -36,10 +36,19 @@ const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipe_video }) => {
 
 /** 비디오 감싸는 Div */
 const VideoContainerDiv = styled.div`
-  width: 48rem;
-  height: 27rem;
-  border-radius: 1.5rem;
+  width: calc(100vw - 3rem);
+  height: calc((100vw - 3rem) * (27 / 48));
+  max-width: 48rem;
+  max-height: 27rem;
+  border-radius: 1rem;
   overflow: hidden;
+
+  @media (min-width: 1024px) {
+    width: 48rem;
+    height: 27rem;
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
 `;
 
 /** 유튜브 영상 Iframe */

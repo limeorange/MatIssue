@@ -13,7 +13,7 @@ import ScrapModal from "@/app/components/recipe-view/scrap/ScrapModal";
 import StickyProgressBar from "@/app/components/recipe-view/sticky-sidebar/StickyProgressBar";
 import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySideBar";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRecipeById } from "@/app/api/recipe";
@@ -278,36 +278,35 @@ const RecipeDetail = (props: RecipeDataProps) => {
           loggedInUserId={loggedInUserId}
           user_img={user_img}
         />
-        {user_id === loggedInUserId && (
-          <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
-            <EditButton
-              onClick={() => {
-                router.push(`/edit-recipe/${recipe_id}`);
-              }}
-            >
-              수정
-            </EditButton>
-            <DeleteButton onClick={recipeDeleteHandler}>삭제</DeleteButton>
-          </WriterButtonDiv>
-        )}
 
         {/* 요리 대표 이미지 */}
-        <ImageWrapperDiv>
-          <Image
-            src={recipe_thumbnail}
-            alt="요리 대표 사진"
-            fill
-            style={{ objectFit: "cover", borderRadius: 20 }}
-          />
-        </ImageWrapperDiv>
+        <RecipeImg>
+          <Img src={recipe_thumbnail} alt="요리 대표 사진" />
+        </RecipeImg>
 
         {/* 요리 제목, 작성자, 작성 시간, 간단 소개글 */}
         <div>
           <TitleContainerDiv>
-            <div className="flex items-center">
-              <TitleH3>{recipe_title}</TitleH3>
-              <AuthorSpan>by {user_nickname}</AuthorSpan>
-              <AuthorSpan>&nbsp;• {created_at.slice(0, 10)}</AuthorSpan>
+            <TitleH3>{recipe_title}</TitleH3>
+            <div className="flex justify-between items-center">
+              <div>
+                <AuthorSpan>by {user_nickname}</AuthorSpan>
+                <AuthorSpan>&nbsp;• {created_at.slice(0, 10)}</AuthorSpan>
+              </div>
+              {user_id === loggedInUserId && (
+                <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
+                  <EditButton
+                    onClick={() => {
+                      router.push(`/edit-recipe/${recipe_id}`);
+                    }}
+                  >
+                    수정
+                  </EditButton>
+                  <DeleteButton onClick={recipeDeleteHandler}>
+                    삭제
+                  </DeleteButton>
+                </WriterButtonDiv>
+              )}
             </div>
           </TitleContainerDiv>
           <DescriptionDiv>{recipe_description}</DescriptionDiv>
@@ -346,31 +345,33 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
-        <div className="flex gap-[1.5rem] justify-center">
-          {/* 좋아요 */}
-          <div onClick={notLoggedInTryHandler}>
-            <RecipeUserLikes
-              isLiked={isLiked}
-              countText={countText}
-              heartClickHandler={heartClickHandler}
-            />
-          </div>
-
-          {/* 스크랩 */}
-          <div id="heading6" onClick={notLoggedInTryHandler}>
-            <RecipeScrap
-              isSaved={isSaved}
-              setIsSaved={setIsSaved}
-              isBooked={isBooked}
-              scrapClickHandler={scrapClickHandler}
-            />
-            {isBooked && (
-              <ScrapModal
-                setIsSaved={setIsSaved}
-                modalCloseHandler={modalCloseHandler}
-                recipe={recipe}
+        <div className="flex flex-col gap-[1.5rem] py-[3.5rem] justify-center items-center">
+          <div className="flex gap-[1.5rem]">
+            {/* 좋아요 */}
+            <div onClick={notLoggedInTryHandler}>
+              <RecipeUserLikes
+                isLiked={isLiked}
+                countText={countText}
+                heartClickHandler={heartClickHandler}
               />
-            )}
+            </div>
+
+            {/* 스크랩 */}
+            <div id="heading6" onClick={notLoggedInTryHandler}>
+              <RecipeScrap
+                isSaved={isSaved}
+                setIsSaved={setIsSaved}
+                isBooked={isBooked}
+                scrapClickHandler={scrapClickHandler}
+              />
+              {isBooked && (
+                <ScrapModal
+                  setIsSaved={setIsSaved}
+                  modalCloseHandler={modalCloseHandler}
+                  recipe={recipe}
+                />
+              )}
+            </div>
           </div>
           {/* 링크, 카카오 공유하기 */}
           <ShareButtonDiv>
@@ -388,8 +389,8 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 댓글 */}
         <div>
-          <div className="flex">
-            <SubtitleH2>댓글</SubtitleH2>
+          <SubtitleH2>
+            댓글
             <CommentIconDiv>
               <Image
                 src="/images/recipe-view/comment.svg"
@@ -398,11 +399,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
                 height={22}
               ></Image>
             </CommentIconDiv>
-            <SubtitleH2>{commentCount}</SubtitleH2>
-          </div>
-          <div className="mb-[1rem]">
-            <RecipeComments comments={comments} />
-          </div>
+            {commentCount}
+          </SubtitleH2>
+          <RecipeComments comments={comments} />
           <div onClick={notLoggedInTryHandler}>
             <RecipeCommentInput recipe_id={recipe_id} />
           </div>
@@ -416,48 +415,62 @@ const RecipeDetail = (props: RecipeDataProps) => {
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 67rem;
+  // gap: 2.5rem;
+  padding: 0 1.5rem;
+  max-width: 67rem;
+  width: 100%;
   margin: 0 auto;
-  gap: 2.5rem;
+  // justify-content: top;
+  justify-content: flex-start;
+  // align-items: flex-start;
+
+  @media (min-width: 1024px) {
+    margin-top: 1.5rem;
+    padding: 0;
+  }
 `;
 
 /** 게시글 수정, 삭제 버튼 Div */
 const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
   display: flex;
-  gap: 0.8rem;
-  position: fixed;
-  right: 14.7rem;
-  top: 50.4rem;
 
-  transform: ${(props) =>
-    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
-  transition: transform 0.3s ease-in-out;
+  @media (min-width: 1024px) {
+    position: fixed;
+    right: 14.7rem;
+    top: 50.4rem;
+
+    transform: ${(props) =>
+      props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+    transition: transform 0.3s ease-in-out;
+  }
 `;
 
 /** 수정 Button */
 const EditButton = styled.button`
-  width: 6.7rem;
-  height: 3.7rem;
-  border-radius: 1rem;
-  background: #fbe2a1;
+  padding: 0.5rem 1.3rem;
   font-weight: 500;
-  font-size: 16.5px;
+  font-size: 15px;
   color: #4f3d21;
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
+    font-size: 16.5px;
     background-color: #fbd26a;
+  }
+
+  @media (min-width: 1024px) {
+    width: 6.7rem;
+    height: 3.7rem;
+    border-radius: 1rem;
+    background: #fbe2a1;
   }
 `;
 
 /** 삭제 Button */
 const DeleteButton = styled.button`
-  width: 6.7rem;
-  height: 3.7rem;
-  border-radius: 1rem;
-  border: 2px solid #fbe2a1;
+  padding: 0.5rem 1.3rem;
   font-weight: 500;
-  font-size: 16.5px;
+  font-size: 15px;
   color: #4f3d21;
   transition: background-color;
 
@@ -466,6 +479,15 @@ const DeleteButton = styled.button`
     border: 2px solid #a17c43;
     color: #ffffff;
   }
+
+  @media (min-width: 1024px) {
+    width: 6.7rem;
+    height: 3.7rem;
+    border-radius: 1rem;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    border: 2px solid #fbe2a1;
+  }
 `;
 
 /** 삭제 컨펌 모달창 */
@@ -473,34 +495,79 @@ const StyledConfirmModal = styled(ConfirmModal)``;
 
 /** 이미지 감싸는 Div */
 const ImageWrapperDiv = styled.div`
-  width: 100%;
-  max-width: 65rem;
-  height: 35rem;
+  // width: 100%;
+  // max-width: 65rem;
+  // height: 20rem;
+  // position: relative;
+  // margin: 1.4rem 0;
+
+  // @media (min-width: 1024px) {
+  //   max-width: 65rem;
+  //   height: 35rem;
+  // }
+
   position: relative;
-  margin-top: 1rem;
+  padding-top: 70%;
+`;
+
+const RecipeImg = styled.div`
+  position: relative;
+  padding-top: 55%;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  margin: 1.3rem 0;
+`;
+
+const Img = styled.img`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  object-fit: cover;
+  border-radius: 0.8rem;
+`;
+
+/** 이미지 스타일 */
+const ResponsiveImage = styled(Image)`
+  width: 100%;
+  height: auto;
+  overflow: hidden;
 `;
 
 /** 요리 주제 소개 담은 Div */
 const TitleContainerDiv = styled.div`
-  width: 100%;
-  max-width: 65rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    width: 100%;
+    max-width: 65rem;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
 `;
 
 /** 레시피 전체 제목 H3 */
 const TitleH3 = styled.h3`
+  font-size: 20px;
   font-weight: 600;
-  font-size: 2.2rem;
-  margin-right: 1rem;
+
+  @media (min-width: 1024px) {
+    margin-right: 1rem;
+    font-size: 22px;
+  }
 `;
 
 /** 작성자 Span */
 const AuthorSpan = styled.span`
   color: #6f6f6f;
   font-size: 1.4rem;
+
+  @media (min-width: 1024px) {
+  }
 `;
 
 /** 요리 간단 소개 Div */
@@ -508,15 +575,24 @@ const DescriptionDiv = styled.div`
   margin-top: 1.5rem;
   max-width: 65rem;
   width: 100%;
-  font-size: 1.62rem;
+  font-size: 16px;
 `;
 
 /** 레시피 소제목 H2 */
 const SubtitleH2 = styled.h2`
-  font-size: 2rem;
+  display: flex;
+  font-size: 18px;
   color: #b08038;
   font-weight: 500;
+  margin-top: 2.5rem;
   margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    font-size: 2rem;
+    color: #b08038;
+    font-weight: 500;
+    margin-top: 0rem;
+  }
 `;
 
 /** 요리팁 Div */
@@ -526,9 +602,10 @@ const RecipeTipDiv = styled.div`
 
 /** 댓글 아이콘 Div */
 const CommentIconDiv = styled.div`
-  margin-left: 0.7rem;
-  margin-top: 0.4rem;
-  margin-right: 0.4rem;
+  margin-left: 0.5rem;
+  // margin-top: 0.4rem;
+  margin-right: 0.2rem;
+  // margin-bottom: 0.2rem;
 `;
 
 /** 링크 공유하기 버튼 Div */

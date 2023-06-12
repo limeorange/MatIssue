@@ -68,10 +68,16 @@ const IngredientList: React.FC<IngredientListProps> = ({
 
 /** 재료 목록 전체 감싸는 Div */
 const ContainerDiv = styled.div`
-  width: 40rem;
+  width: 100%;
+  height: 100%;
   border: 1rem solid #fff6df;
   border-radius: 2rem;
-  padding: 2rem;
+  padding: 1.7rem;
+
+  @media (min-width: 1024px) {
+    width: 40rem;
+    padding: 2rem;
+  }
 `;
 
 /** 재료 목록 리스트 Ul */
@@ -121,6 +127,12 @@ const IngredientCountDiv = styled.div<{ isChecked: boolean }>`
 const CheckboxWrapperDiv = styled.div`
   position: relative;
   margin-bottom: 0.7rem;
+  margin-right: 1rem;
+
+  @media (min-width: 1024px) {
+    position: relative;
+    margin-bottom: 0.7rem;
+  }
 `;
 
 /** 체크박스 Input */
