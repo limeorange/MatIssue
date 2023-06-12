@@ -57,7 +57,7 @@ const FilterTag = (props: FilterTagProps) => {
     }
     if (filter.duration > -1) {
       if (filter.duration === 61) {
-        newTagList.push({ tag: `#1시간++`, type: "duration" });
+        newTagList.push({ tag: `#1시간 이상`, type: "duration" });
       } else {
         newTagList.push({ tag: `#${filter.duration}분`, type: "duration" });
       }
@@ -101,6 +101,7 @@ const FilterTagBox = styled.div`
   justify-content: center;
   gap: 0.8rem;
   overflow-x: auto;
+  padding-bottom: 1rem;
 
   & p {
     color: #4f3d21;
@@ -108,18 +109,26 @@ const FilterTagBox = styled.div`
   }
 
   & span {
-    background-color: #FBE2A1;
+    background-color: #fbe2a1;
     border-radius: 10rem;
     padding: 0.2rem 0.9rem;
     flex-shrink: 0;
 
     @media (min-width: 1024px) {
-    padding: 0.5rem 1.5rem;
+      padding: 0.5rem 1.5rem;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 10px;
+    background: #217af4;
+
+    border-radius: 10px;
   }
 
   @media (min-width: 768px) {
-  font-size: 16px;
-  gap: 1.6rem;
+    font-size: 16px;
+    gap: 1.6rem;
   }
 `;
 
@@ -129,7 +138,7 @@ const Text = styled.p`
   color: #4f3d21;
 
   @media (min-width: 1024px) {
-    margin: 2rem auto;
+    margin-top: 2rem;
   }
 `;
 

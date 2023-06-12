@@ -279,11 +279,17 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
         <PageHeaderContainer>
           {currentRecipes.length > 0 && (
             <p>
-              총
-              <span style={{ color: "#F8B551" }}>
-                {filteredRecipes.length}개
+              총&nbsp;
+              <span
+                style={{
+                  color: "#F8B551",
+                  fontWeight: "bold",
+                  fontSize: "17px",
+                }}
+              >
+                {filteredRecipes.length}
               </span>
-              의 레시피가 있습니다.
+              개의 레시피가 있습니다.
             </p>
           )}
           <SortButtonContainer>
@@ -388,6 +394,7 @@ const PageHeaderContainer = styled.div`
 
 const SortButtonContainer = styled.div`
   display: flex;
+  gap: 0.75rem;
 
   @media (min-width: 1024px) {
     padding: 0 1.5rem;
@@ -395,7 +402,7 @@ const SortButtonContainer = styled.div`
 `;
 
 const SortButton = styled.button<{ selected: boolean }>`
-  padding: 0.5rem;
+  padding: 0.5rem 0 0.5rem 0.5rem;
   font-size: 15.5px;
   color: ${(props) => (props.selected ? "#fbd26a" : "normal")};
   font-weight: ${(props) => (props.selected ? "bold" : "normal")};
