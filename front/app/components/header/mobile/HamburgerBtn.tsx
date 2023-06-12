@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
 import MobileUserModal from "./MobileUserModal";
+import { User } from "@/app/types";
 
 const HamburgerBtn = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   const [isModal, setIsModal] = useState<boolean>(false);
