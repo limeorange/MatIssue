@@ -52,31 +52,58 @@ export const WrapperInfo = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   margin-top: -4rem;
 `;
 
 export const Wrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 57rem;
-  margin-top: 7rem;
+  width: 100%;
+  margin-top: 6rem;
 `;
 
-export const Title = styled.h4`
+export const Title = styled.div`
   font-size: 17px;
-  margin: 0.5rem 7.5rem 0 0.2rem;
   cursor: pointer;
   color: #4f3d21;
+  padding-top: 1rem;
 `;
 
-export const InputBox = styled.input`
+export const InputBox = styled.input<{ isEdit?: boolean }>`
   width: 40rem;
   height: 4.8rem;
   border: 0.1rem solid #d2d2d2;
   border-radius: 0.8rem;
   font-size: 16px;
   padding: 0 1.6rem;
+  margin-left: 2.5rem;
+  &:focus {
+    ${(props) => (props.isEdit ? "outline: 0.3rem solid #fbd26a" : "")};
+    border: none;
+  }
+`;
+
+export const InputBoxNickName = styled.input`
+  width: 40rem;
+  height: 4.8rem;
+  border: 0.1rem solid #d2d2d2;
+  border-radius: 0.8rem;
+  font-size: 16px;
+  padding: 0 1.6rem;
+  margin-left: 4rem;
+  &:focus {
+    outline: 0.3rem solid #fbd26a;
+    border: none;
+  }
+`;
+
+export const InputBoxCode = styled.input`
+  width: 40rem;
+  height: 4.8rem;
+  border: 0.1rem solid #d2d2d2;
+  border-radius: 0.8rem;
+  font-size: 16px;
+  padding: 0 1.6rem;
+  margin-left: 1rem;
   &:focus {
     outline: 0.3rem solid #fbd26a;
     border: none;
@@ -114,32 +141,20 @@ export const InputFile = styled.input`
   display: none;
 `;
 
-// export const LabelForFile = styled.label<LabelForFileProps>`
-//   position: relative;
-//   width: 19.8rem;
-//   height: 19.8rem;
-//   border-radius: 0.8rem;
-//   background-color: #fff9ea;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   cursor: pointer;
-//   background-image: ${(props) =>
-//     props.backgroundImageUrl
-//       ? `url("/images/${props.backgroundImageUrl}")`
-//       : "none"};
-//   background-repeat: no-repeat;
-//   background-size: cover;
-//   background-position: center;
-// `;
-
 export const IputAndDescription = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
 export const EmailDescription = styled.p`
-  padding: 0.5rem 0 0 1rem;
+  padding: 0.5rem 0 0 3.48rem;
+  font-size: 14px;
+  font-weight: 400;
+  color: #a17c43;
+`;
+
+export const CodeDescription = styled.p`
+  padding: 0.5rem 0 0 2rem;
   font-size: 14px;
   font-weight: 400;
   color: #a17c43;
@@ -165,6 +180,7 @@ export const InputDateBox = styled.input`
   border: 0.1rem solid #d2d2d2;
   border-radius: 0.8rem;
   padding: 0 1.6rem;
+  margin-left: 2.3rem;
   background: url(/images/calendar.png) no-repeat right 1.6rem center / 2rem
     auto;
   font-size: 15px;
@@ -186,7 +202,7 @@ export const InputDateBox = styled.input`
 `;
 
 export const UserModifyButton = styled.div`
-  margin: 6rem 0 0 17rem;
+  margin: 6rem 0 0 13.4rem;
   width: 23rem;
 `;
 
@@ -206,4 +222,24 @@ export const ShowIconBox = styled.div`
   top: 1.1rem;
   right: 1.1rem;
   cursor: pointer;
+`;
+
+//새로 만든 이메일 스타일, 위에 정리하기
+export const ContentSection = styled.div`
+  display: flex;
+  margin-left: 5rem;
+`;
+
+export const FlexBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const EmailContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const EmailWrapper = styled.div`
+  display: flex;
 `;

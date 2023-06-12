@@ -66,13 +66,17 @@ const ProfileCard = () => {
           <NotificationDot />
         </LinkBtn>
 
-        <RoundImage>
-          <ProfileImage
-            src={currentUser?.img || "images/dongs-logo.png"}
-            alt="profile-image"
-          />
-        </RoundImage>
-        <NickName>{currentUser?.username}</NickName>
+        <ImageAndNickName>
+          {" "}
+          <RoundImage>
+            <ProfileImage
+              src={currentUser?.img || "images/dongs-logo.png"}
+              alt="profile-image"
+            />
+          </RoundImage>
+          <NickName>{currentUser?.username}</NickName>
+        </ImageAndNickName>
+
         <LinkBtn
           onClick={() => {
             router.push("/my-page/modify-user-info");
@@ -145,49 +149,82 @@ const ProfileCard = () => {
 export default ProfileCard;
 
 const ProfileContainer = styled.div`
-  border: 0.1rem solid rgb(200, 200, 200);
-  border-radius: 2.3rem;
-  box-shadow: rgba(63, 71, 77, 0.06) 0px 0.2rem 0.4rem 0px;
-  border-radius: 2.3rem;
-  height: 47rem;
-  margin-right: 4rem;
-  margin-top: 4.1rem;
+  height: 30.3rem;
+  border-bottom: 0.1rem solid rgb(200, 200, 200);
+
+  @media (min-width: 1024px) {
+    border: 0.1rem solid rgb(200, 200, 200);
+    border-radius: 2.3rem;
+    box-shadow: rgba(63, 71, 77, 0.06) 0px 0.2rem 0.4rem 0px;
+    border-radius: 2.3rem;
+    height: 47rem;
+    margin-right: 4rem;
+    margin-top: 4.1rem;
+  }
 `;
 
 const ProfileWrapper = styled.div`
-  position: relative;
-  padding: 3rem 2.5rem 1.8rem;
-  width: 26.8rem;
-  height: 47.8rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  padding: 2.5rem 0 1.5rem;
+
+  @media (min-width: 1024px) {
+    position: relative;
+    padding: 3rem 2.5rem 1.8rem;
+    width: 26.8rem;
+    height: 47.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const NotificationIcon = styled.img`
-  position: absolute;
-  top: 2rem;
-  right: 2.1rem;
-  width: 1.95rem;
-  height: 2.2rem;
-  color: #4f3d21;
+  display: none;
+  @media (min-width: 1024px) {
+    position: absolute;
+    top: 2rem;
+    right: 2.1rem;
+    width: 1.95rem;
+    height: 2.2rem;
+    color: #4f3d21;
+  }
 `;
 
 const NotificationDot = styled.div`
-  position: absolute;
-  top: 2.265rem;
-  right: 2.265rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: #fe642e;
-  border-radius: 50%;
+  display: none;
+  @media (min-width: 1024px) {
+    position: absolute;
+    top: 2.265rem;
+    right: 2.265rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #fe642e;
+    border-radius: 50%;
+  }
+`;
+
+const ImageAndNickName = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3.2rem;
+  gap: 1.5rem;
+  @media (min-width: 1024px) {
+    flex-direction: column;
+    margin-bottom: 0rem;
+    gap: 0;
+  }
 `;
 
 const RoundImage = styled.div`
-  width: 12rem;
-  height: 12rem;
+  width: 9rem;
+  height: 9rem;
   border-radius: 50%;
   overflow: hidden;
+  @media (min-width: 1024px) {
+    width: 12rem;
+    height: 12rem;
+  }
 `;
 
 const ProfileImage = styled.img`
@@ -198,21 +235,33 @@ const ProfileImage = styled.img`
 `;
 
 const NickName = styled.h1`
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 600;
-  margin: 1rem;
+  margin-bottom: 2rem;
   color: #4f3d21;
+  @media (min-width: 1024px) {
+    font-size: 26px;
+    margin: 1rem;
+  }
 `;
 
 const ModifyUserDiv = styled.div`
-  width: 12rem;
+  display: none;
+  @media (min-width: 1024px) {
+    display: flex;
+    width: 12rem;
+  }
 `;
 
 const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: #ccc;
-  margin: 2rem 0;
+  display: none;
+  @media (min-width: 1024px) {
+    display: flex;
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    margin: 2rem 0;
+  }
 `;
 
 const MyRecipeIcon = styled.img`
@@ -235,8 +284,12 @@ const MyRecipeCount = styled.h4`
 `;
 
 const UploadRecipeButton = styled.div`
-  margin-top: 1.8rem;
-  width: 14rem;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    margin-top: 1.8rem;
+    width: 14rem;
+  }
 `;
 
 const LinkBtn = styled.div`
