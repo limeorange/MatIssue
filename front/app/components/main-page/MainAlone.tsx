@@ -44,7 +44,7 @@ const MainAlone = () => {
   }
 
   return (
-    <StyledContainer>
+    <MainAloneContainer>
       <StyledContentsArea>
         <StyledTitleBox>
           <StyledTitle>혼먹 자취생 레시피</StyledTitle>
@@ -115,11 +115,19 @@ const MainAlone = () => {
           </RecipeImageWrapper4>
         </RecipeContainer>
       </StyledContentsArea>
-    </StyledContainer>
+    </MainAloneContainer>
   );
 };
 
 export default MainAlone;
+
+const MainAloneContainer = styled(StyledContainer)`
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: block;
+  }
+`;
 
 const RecipeContainer = styled.div`
   max-width: 120rem;
