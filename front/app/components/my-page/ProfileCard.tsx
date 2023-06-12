@@ -164,13 +164,18 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfileWrapper = styled.div`
-  position: relative;
-  padding: 3rem 2.5rem 1.8rem;
-  width: 26.8rem;
-  height: 47.8rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  padding: 2.5rem 0 1.5rem;
+
+  @media (min-width: 1024px) {
+    position: relative;
+    padding: 3rem 2.5rem 1.8rem;
+    width: 26.8rem;
+    height: 47.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const NotificationIcon = styled.img`
@@ -202,16 +207,24 @@ const ImageAndNickName = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 3.2rem;
+  gap: 1.5rem;
   @media (min-width: 1024px) {
     flex-direction: column;
+    margin-bottom: 0rem;
+    gap: 0;
   }
 `;
 
 const RoundImage = styled.div`
-  width: 12rem;
-  height: 12rem;
+  width: 9rem;
+  height: 9rem;
   border-radius: 50%;
   overflow: hidden;
+  @media (min-width: 1024px) {
+    width: 12rem;
+    height: 12rem;
+  }
 `;
 
 const ProfileImage = styled.img`
@@ -222,10 +235,14 @@ const ProfileImage = styled.img`
 `;
 
 const NickName = styled.h1`
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 600;
-  margin: 1rem;
+  margin-bottom: 2rem;
   color: #4f3d21;
+  @media (min-width: 1024px) {
+    font-size: 26px;
+    margin: 1rem;
+  }
 `;
 
 const ModifyUserDiv = styled.div`
@@ -267,6 +284,8 @@ const MyRecipeCount = styled.h4`
 `;
 
 const UploadRecipeButton = styled.div`
+  width: 100%;
+
   @media (min-width: 1024px) {
     margin-top: 1.8rem;
     width: 14rem;

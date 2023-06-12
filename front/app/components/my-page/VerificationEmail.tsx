@@ -71,7 +71,7 @@ const VerificationEmail = ({
             />
             {isEdit && (
               <EmailDescription>
-                변경 할 이메일을 입력 후 회원 정보 수정 버튼을 클릭하세요.
+                변경 할 이메일을 입력 후 인증코드 발송 버튼을 클릭하세요.
               </EmailDescription>
             )}
           </FlexBox>
@@ -125,7 +125,7 @@ const VerificationEmail = ({
                   />
 
                   <CodeDescription>
-                    인증코드를 입력 후 인증코드 발송 버튼을 클릭하세요.
+                    인증코드를 입력 후 회원 정보 수정 버튼을 클릭하세요.
                   </CodeDescription>
                 </FlexBox>
               </ContentSection>

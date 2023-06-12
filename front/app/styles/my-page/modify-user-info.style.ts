@@ -77,7 +77,7 @@ export const InputBox = styled.input<{ isEdit?: boolean }>`
   padding: 0 1.6rem;
   margin-left: 2.5rem;
   &:focus {
-    ${(props) => (props.isEdit ? "outline: 0.3rem solid #fbd26a;" : "")};
+    ${(props) => (props.isEdit ? "outline: 0.3rem solid #fbd26a" : "")};
     border: none;
   }
 `;
