@@ -509,11 +509,6 @@ const FormWrapper = styled.form`
   align-items: flex-start;
   margin: 5rem auto 0;
   // background-color: rgba(1, 1, 1, 0.2);
-
-  @media (max-width: 375px) {
-    width: 100%;
-    padding: 2rem;
-  }
 `;
 
 const Title = styled.h2`
@@ -532,11 +527,7 @@ const MainSection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
-  @media (max-width: 375px) {
-    flex-direction: column;
-    gap: 2rem;
-  }
+  margin-top: 2rem;
 `;
 
 const ImageContainer = styled.div`
