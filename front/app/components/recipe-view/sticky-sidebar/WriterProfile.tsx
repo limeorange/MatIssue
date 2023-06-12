@@ -14,6 +14,7 @@ type WriterProfileProps = {
   user_subscription: number;
   user_id: string;
   loggedInUserId: string | undefined;
+  user_img: string;
 };
 
 /** 작성자 프로필 컴포넌트 */
@@ -23,12 +24,13 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
   user_subscription,
   user_id,
   loggedInUserId,
+  user_img,
 }) => {
   const isHeaderVisible = useMovingContentByScrolling();
   const [isFollowing, setIsFollowing] = useState(false);
   const [fanscount, setFansCount] = useState(user_fan);
 
-  // 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
+  // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
   useEffect(() => {
     if (loggedInUserId !== undefined) {
       const fetchFollowStatus = async () => {
@@ -172,7 +174,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
           {/* 프로필 사진 */}
           <ProfileImageDiv>
             <Image
-              src="/images/recipe-view/limeorange.PNG"
+              src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
               alt="게시글 작성자 프로필 사진"
               width={130}
               height={130}

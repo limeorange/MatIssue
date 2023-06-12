@@ -41,6 +41,7 @@ export type Recipe = {
   created_at: string;
   user_fan: number;
   user_subscription: number;
+  user_img: string;
 
   // 댓글 관련 Data Type 정의
   comments: Comments[];
