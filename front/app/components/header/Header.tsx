@@ -98,11 +98,8 @@ const TopNav = styled.div`
 `;
 
 const UnderLine = styled.div`
-  display: none;
-  @media (min-width: 1024px) {
-    display: block;
-    border-bottom: 0.1rem solid rgb(200, 200, 200);
-  }
+  display: block;
+  border-bottom: 0.1rem solid rgb(200, 200, 200);
 `;
 
 const LogoWrapper = styled.div`

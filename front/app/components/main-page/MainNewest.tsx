@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllRecipes } from "@/app/api/recipe";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
+import MainMobileListingRecipe from "../recipe-card/main/MainMobileListingRecipe";
 
 const MainNewest = () => {
   const {
@@ -54,6 +55,10 @@ const MainNewest = () => {
               <MainRecipeCard key={index} recipe={item} />
             ))}
         </ListingRecipeContainer>
+        <MainMobileListingRecipe
+          recipes={recipes}
+          url="/recipes/category/newest?category=newest"
+        />
       </StyledContentsArea>
     </StyledContainer>
   );

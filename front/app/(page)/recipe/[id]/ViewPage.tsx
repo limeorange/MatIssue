@@ -26,6 +26,7 @@ import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling
 import { useRouter } from "next/navigation";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
+import RecipeKakaoShareButton from "@/app/utils/recipeKakaoShare";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -120,6 +121,13 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 삭제 확인 모달 상태 관리
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
 
+  // 팔로우 취소 모달 상태 관리
+  // const [followDeleteConfirmModal, setFollowDeleteConfirmModal] =
+  //   useState(false);
+
+  // 팔로우 여부 상태관리
+  // const [isFollowing, setIsFollowing] = useState(false);
+
   // 스크롤에 의한 컨텐츠 이동 Hook
   const isHeaderVisible = useMovingContentByScrolling();
 
@@ -137,7 +145,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
         await axiosBase.patch(`/recipes/${recipe_id}/like`, recipeUpdated);
         setIsLiked(false);
         setCount(count - 1);
-        toast.success("좋아요가 취소되었습니다ㅠ.ㅠ");
+        toast.error("좋아요가 취소되었습니다ㅠ.ㅠ");
       }
       // 좋아요를 처음 누른 경우
       else if (loggedInUserId !== undefined) {
@@ -169,16 +177,17 @@ const RecipeDetail = (props: RecipeDataProps) => {
     setDeleteConfirmModal(true);
   };
 
+  /** 삭제 확인 모달 : 취소 클릭 핸들러 */
   const confirmModalCloseHandler = () => {
     setDeleteConfirmModal(false);
   };
 
-  /** 삭제 확인 모달 핸들러 */
+  /** 삭제 확인 모달 : 삭제 클릭 핸들러 */
   const deleteConfirmHandler = async () => {
     try {
       await axiosBase.delete(`recipes/${recipe_id}`);
       toast.success("게시글이 삭제되었습니다!");
-      router.back();
+      router.push("/recipes/category/newest?category=newest");
       client.invalidateQueries(["currentUserRecipes"]);
     } catch (error) {
       console.log("게시글 삭제 실패와 관련한 오류는..🧐", error);
@@ -188,9 +197,42 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
+  /** url 복사하는 함수 */
+  const copyToClipboard = async () => {
+    const currentPageUrl = window.location.href;
+    try {
+      await navigator.clipboard.writeText(currentPageUrl);
+      toast.success("URL이 복사 되었습니다!");
+    } catch (err: any) {
+      toast.error("URL 복사에 실패했습니다.", err);
+    }
+  };
+
+  /** 팔로우 취소 모달 : 확인 클릭 핸들러 */
+  // const followDeleteConfirmHandler = async () => {
+  //   try {
+  //     await axiosBase.post(`/users/subscription/${user_id}`, false);
+  //     toast.success("팔로우가 취소되었습니다!");
+  //   } catch (error) {
+  //     console.log("팔로우 취소 실패와 관련한 오류는..🧐", error);
+  //     toast.error("팔로우 취소에 실패했습니다 ㅠ.ㅠ");
+  //   } finally {
+  //     // 팔로우 -> 팔로잉으로 변경
+  //     setIsFollowing(false);
+  //     // 모달창 닫기
+  //     setFollowDeleteConfirmModal(false);
+  //   }
+  // };
+
+  // /** 팔로우 취소 모달 : 취소 클릭 핸들러 */
+  // const followConfirmModalCloseHandler = () => {
+  //   setFollowDeleteConfirmModal(false);
+  // };
+
   return (
     <>
       <ContainerDiv>
+        {/* 게시글 삭제 확인 모달 */}
         {deleteConfirmModal && (
           <StyledConfirmModal
             icon={<AlertImage src="/images/alert.png" alt="alert" />}
@@ -199,6 +241,16 @@ const RecipeDetail = (props: RecipeDataProps) => {
             onCancel={confirmModalCloseHandler}
           />
         )}
+
+        {/* 팔로우 취소 확인 모달 */}
+        {/* {followDeleteConfirmModal && (
+          <StyledConfirmModal
+            icon={<AlertImage src="/images/alert.png" alt="alert" />}
+            message="팔로우를 취소하시겠습니까?"
+            onConfirm={followDeleteConfirmHandler}
+            onCancel={followConfirmModalCloseHandler}
+          />
+        )} */}
 
         {/* 스크롤 상태 진행바 */}
         <ProgressBar />
@@ -210,7 +262,13 @@ const RecipeDetail = (props: RecipeDataProps) => {
         </div>
 
         {/* 작성자 프로필 */}
-        <WriterProfile user_nickname={user_nickname} />
+        <WriterProfile
+          user_nickname={user_nickname}
+          user_fan={user_fan}
+          user_subscription={user_subscription}
+          user_id={user_id}
+          loggedInUserId={loggedInUserId}
+        />
         {user_id === loggedInUserId && (
           <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
             <EditButton
@@ -279,7 +337,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
-        <div className="flex gap-[1rem] justify-center">
+        <div className="flex gap-[1.5rem] justify-center">
           {/* 좋아요 */}
           <RecipeUserLikes
             isLiked={isLiked}
@@ -303,6 +361,18 @@ const RecipeDetail = (props: RecipeDataProps) => {
               />
             )}
           </div>
+          {/* 링크, 카카오 공유하기 */}
+          <ShareButtonDiv>
+            <div onClick={copyToClipboard}>
+              <Image
+                src="/images/link.png"
+                alt="링크 공유 아이콘"
+                width={60}
+                height={50}
+              />
+            </div>
+            <RecipeKakaoShareButton />
+          </ShareButtonDiv>
         </div>
 
         {/* 댓글 */}
@@ -319,7 +389,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
             </CommentIconDiv>
             <SubtitleH2>{commentCount}</SubtitleH2>
           </div>
-          <div className="mb-[30px]">
+          <div className="mb-[1rem]">
             <RecipeComments comments={comments} />
           </div>
           <RecipeCommentInput recipe_id={recipe_id} />
@@ -338,6 +408,19 @@ const ContainerDiv = styled.div`
   gap: 2.5rem;
 `;
 
+/** 게시글 수정, 삭제 버튼 Div */
+const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
+  display: flex;
+  gap: 0.8rem;
+  position: fixed;
+  right: 14.7rem;
+  top: 50.4rem;
+
+  transform: ${(props) =>
+    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+  transition: transform 0.3s ease-in-out;
+`;
+
 /** 수정 Button */
 const EditButton = styled.button`
   width: 6.7rem;
@@ -347,6 +430,11 @@ const EditButton = styled.button`
   font-weight: 500;
   font-size: 16.5px;
   color: #4f3d21;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: #fbd26a;
+  }
 `;
 
 /** 삭제 Button */
@@ -358,6 +446,13 @@ const DeleteButton = styled.button`
   font-weight: 500;
   font-size: 16.5px;
   color: #4f3d21;
+  transition: background-color;
+
+  &:hover {
+    background-color: #a17c43;
+    border: 2px solid #a17c43;
+    color: #ffffff;
+  }
 `;
 
 /** 삭제 컨펌 모달창 */
@@ -369,7 +464,7 @@ const ImageWrapperDiv = styled.div`
   max-width: 65rem;
   height: 35rem;
   position: relative;
-  margin-top: 3.5rem;
+  margin-top: 1rem;
 `;
 
 /** 요리 주제 소개 담은 Div */
@@ -423,17 +518,27 @@ const CommentIconDiv = styled.div`
   margin-right: 0.4rem;
 `;
 
-/** 게시글 수정, 삭제 버튼 Div */
-const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
+/** 링크 공유하기 버튼 Div */
+const ShareButtonDiv = styled.div`
+  width: 100%;
+  max-width: 13rem;
   display: flex;
-  gap: 0.8rem;
-  position: fixed;
-  right: 14.7rem;
-  top: 55.1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
 
-  transform: ${(props) =>
-    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
-  transition: transform 0.3s ease-in-out;
+  & div {
+    cursor: pointer;
+    border-radius: 100%;
+    box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
 `;
 
 export default RecipeDetail;
