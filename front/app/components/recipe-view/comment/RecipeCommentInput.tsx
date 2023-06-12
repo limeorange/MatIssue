@@ -81,6 +81,7 @@ const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
   border-radius: 1rem;
   padding-top: 1.2rem;
   padding-bottom: 1.2rem;
+  margin-bottom: 10rem;
 
   align-items: center;
 
