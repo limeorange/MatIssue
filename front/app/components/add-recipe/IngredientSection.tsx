@@ -32,17 +32,9 @@ const IngredientSection = ({
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        marginTop: "7.2rem",
-      }}
-    >
+    <IngredientContainer>
       <Label>재료 등록</Label>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <IngredientBox>
         {ingredients.map((_, index) => (
           <IngredientRow key={index}>
             <IngredientInput
@@ -77,16 +69,32 @@ const IngredientSection = ({
         >
           + 재료 추가하기
         </AddIngredientButton>
-      </div>
-    </div>
+      </IngredientBox>
+    </IngredientContainer>
   );
 };
 
 export default IngredientSection;
 
+const IngredientContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 2rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    margin-top: 7.2rem;
+  }
+`;
+
+const IngredientBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Label = styled.label`
-  width: 9.8rem;
-  height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 600;
@@ -95,10 +103,17 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
+
+  margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    width: 9.8rem;
+    height: 2.1rem;
+  }
 `;
 
 const IngredientInput = styled.input`
-  width: 27.5rem;
+  width: calc(60% - 0.6rem);
   height: 3.6rem;
   margin-right: 1.2rem;
   border: 1px solid #c4c4c4;
@@ -111,10 +126,14 @@ const IngredientInput = styled.input`
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
+
+  @media (min-width: 1024px) {
+    width: 27.5rem;
+  }
 `;
 
 const QuantityInput = styled.input`
-  width: 12.5rem;
+  width: calc(40% - 0.6rem);
   height: 3.6rem;
   border: 1px solid #c4c4c4;
   box-sizing: border-box;
@@ -125,6 +144,10 @@ const QuantityInput = styled.input`
     border: 0.1rem solid #fbd26a;
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
+  }
+
+  @media (min-width: 1024px) {
+    width: 12.5rem;
   }
 `;
 

@@ -32,7 +32,7 @@ const CategoryAndInfo = ({
   difficulties,
 }: Props): FunctionComponentElement<Props> => {
   return (
-    <>
+    <InfoSectionContainer>
       <InfoSection>
         <LabelWithInfo>
           <Label>카테고리</Label>
@@ -90,11 +90,20 @@ const CategoryAndInfo = ({
           </Info>
         </LabelWithInfo>
       </InfoSection>
-    </>
+    </InfoSectionContainer>
   );
 };
 
 export default CategoryAndInfo;
+
+const InfoSectionContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  @media (min-width: 1024px) {
+    flex-direction: column;
+  }
+`;
 
 const Label = styled.label`
   width: 8.8rem;
@@ -107,6 +116,11 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
+  margin-left: 0.5rem;
+
+  @media (min-width: 1024px) {
+    margin-left: 0;
+  }
 `;
 
 const Select = styled.select`
@@ -132,6 +146,9 @@ const Select = styled.select`
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
+
+  @media (min-width: 1024px) {
+  }
 `;
 
 const InfoSection = styled.div`
@@ -139,13 +156,18 @@ const InfoSection = styled.div`
   flex-direction: column;
   align-items: flex-start;
   margin-top: 2rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
 const LabelWithInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
+  @media (min-width: 1024px) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 `;
 
 const Info = styled.div`
