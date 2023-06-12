@@ -112,8 +112,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
         else {
           try {
             const response = await axiosBase.post(
-              `/users/subscription/${user_id}`,
-              true
+              `/users/subscription/${user_id}?subscribe=true`
             );
             toast.success("팔로우가 완료되었습니다!");
             console.log("팔로우 요청 성공!", response);
@@ -133,7 +132,9 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
   /** 팔로우 취소 모달 : 확인 클릭 핸들러 */
   const deleteConfirmHandler = async () => {
     try {
-      const res = await axiosBase.post(`/users/subscription/${user_id}`, false);
+      const res = await axiosBase.post(
+        `/users/subscription/${user_id}?subscribe=false`
+      );
       console.log("삭제 요청에 대한 응답은...", res);
 
       // 팔로우 삭제 되었는지 확인용
@@ -216,21 +217,25 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
 
 /** 프로필 박스 전체 감싸는 Div */
 const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  width: 18.5rem;
-  height: 32rem;
-  right: 12.5rem;
-  top: 16.5rem;
-  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
-  border-radius: 2rem;
-  background-color: #ffffff;
-  z-index: 30;
+  display: none;
 
-  transform: ${(props) =>
-    props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
-  transition: transform 0.3s ease-in-out;
+  @media (min-width: 1200px) {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    width: 18.5rem;
+    height: 32rem;
+    right: 12.5rem;
+    top: 16.5rem;
+    box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
+    border-radius: 2rem;
+    background-color: #ffffff;
+    z-index: 30;
+
+    transform: ${(props) =>
+      props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
+    transition: transform 0.3s ease-in-out;
+  }
 `;
 
 /** 프로필 헤더 박스 Div */
