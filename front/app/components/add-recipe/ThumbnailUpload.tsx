@@ -55,39 +55,59 @@ const ThumbnailUpload = ({
 export default ThumbnailUpload;
 
 const Label = styled.label`
-  width: 9.8rem;
-  height: 2.1rem;
+  margin-bottom: 2rem;
+  margin-top: 3rem;
+  display: block;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
   color: #4f3d21;
-  margin-right: 3rem;
-  padding-top: 0.5rem;
+
+  @media (min-width: 1024px) {
+    width: 9.8rem;
+    height: 2.1rem;
+    margin-top: 0;
+    margin-right: 3rem;
+    padding-top: 0.5rem;
+  }
 `;
 
 const ImageSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+  }
 `;
 
 const Image = styled.img`
-  cursor: pointer;
-  object-fit: cover;
-  width: 28rem;
-  height: 21rem;
+  width: 100%;
   border-radius: 1.5rem;
+
+  @media (min-width: 1024px) {
+    cursor: pointer;
+    object-fit: cover;
+    width: 28rem;
+    height: 21rem;
+  }
 `;
 
 const EmptyBox = styled.div`
-  width: 28rem;
+  width: 100%;
   height: 21rem;
+  border-radius: 1.5rem;
   background: #f6f5f5 url("/images/cameraIcon.png") no-repeat center;
   background-size: auto;
-  border-radius: 1.5rem;
-  cursor: pointer;
+
+  @media (min-width: 1024px) {
+    width: 28rem;
+    cursor: pointer;
+  }
 `;
 
 const FileInput = styled.input`
