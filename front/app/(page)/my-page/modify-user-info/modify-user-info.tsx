@@ -190,16 +190,20 @@ const ModifyUserInfo: React.FC = () => {
   };
 
   //비밀번호 변경 페이지 라우터
-  const ChangePasswordClick = () => {
-    router.push("/my-page/modify-user-info/change-password");
-  };
+  // const ChangePasswordClick = () => {
+  //   router.push("/my-page/modify-user-info/change-password");
+  // };
 
   return (
     <>
       <Container>
         <Header>회원정보수정</Header>
         <Divider />
-        <StyledChangePassword onClick={ChangePasswordClick}>
+        <StyledChangePassword
+          onClick={() =>
+            router.push("/my-page/modify-user-info/change-password")
+          }
+        >
           비밀번호 변경
         </StyledChangePassword>
         <Wrapper>

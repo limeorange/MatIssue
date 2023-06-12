@@ -95,35 +95,35 @@ const ProfileCard = () => {
           </ModifyUserDiv>
         </LinkBtn>
         <Divider />
-        <div className="flex gap-[1.5rem]">
-          {/* 나의 레시피 버튼 */}
-          <LinkBtn
-            onClick={() => {
-              router.push("/my-page");
-            }}
-          >
-            <MyRecipeIcon
-              src="/images/my-page/my_recipe.svg"
-              alt="레시피 아이콘"
-            />
-            <MyRecipeTitle>나의 레시피</MyRecipeTitle>
-            <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
-          </LinkBtn>
 
-          {/* 나의 스크랩 버튼 */}
-          <LinkBtn
-            onClick={() => {
-              router.push("/my-page/scrap");
-            }}
-          >
-            <MyRecipeIcon
-              src="/images/recipe-view/scrap_full.svg"
-              alt="스크랩 아이콘"
-            />
-            <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
-            <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
-          </LinkBtn>
-        </div>
+        {/* 나의 레시피 버튼 */}
+        <LinkBtn
+          onClick={() => {
+            router.push("/my-page");
+          }}
+        >
+          <MyRecipeIcon
+            src="/images/my-page/my_recipe.svg"
+            alt="레시피 아이콘"
+          />
+          <MyRecipeTitle>나의 레시피</MyRecipeTitle>
+          <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
+        </LinkBtn>
+
+        {/* 나의 스크랩 버튼 */}
+        <LinkBtn
+          onClick={() => {
+            router.push("/my-page/scrap");
+          }}
+        >
+          <MyRecipeIcon
+            src="/images/recipe-view/scrap_full.svg"
+            alt="스크랩 아이콘"
+          />
+          <MyRecipeTitle>나의 스크랩</MyRecipeTitle>
+          <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
+        </LinkBtn>
+
         <LinkBtn
           onClick={() => {
             router.push("/add-recipe");
@@ -293,8 +293,10 @@ const UploadRecipeButton = styled.div`
 `;
 
 const LinkBtn = styled.div`
-  cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  @media (min-width: 1024px) {
+    cursor: pointer;
+    flex-direction: column;
+  }
 `;

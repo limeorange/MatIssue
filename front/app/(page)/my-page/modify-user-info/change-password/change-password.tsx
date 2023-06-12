@@ -22,9 +22,9 @@ const ChangePassword = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleChangePassword = () => {
-    setIsModalOpen(true);
-  };
+  // const handleChangePassword = () => {
+  //   setIsModalOpen(true);
+  // };
 
   const handleConfirm = () => {
     setIsModalOpen(false);
@@ -111,7 +111,7 @@ const ChangePassword = () => {
                 fullWidth={true}
                 isBorderColor={false}
                 isHoverColor={false}
-                onClick={handleChangePassword}
+                // onClick={handleChangePassword}
               >
                 비밀번호 변경
               </Button>
