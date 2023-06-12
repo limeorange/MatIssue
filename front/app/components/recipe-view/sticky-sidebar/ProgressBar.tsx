@@ -63,6 +63,7 @@ const ProgressBar = () => {
 const ProgressBarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
   left: 0;
+  top: 13.1rem;
   width: 100%;
   height: 1rem;
   background-color: #f2f2f2;
