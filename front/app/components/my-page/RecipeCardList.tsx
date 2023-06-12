@@ -104,26 +104,41 @@ export default RecipeCards;
 
 const RecipeListContainer = styled.div`
   width: 100%;
+  margin-top: 1.8rem;
+  @media (min-width: 1024px) {
+  }
 `;
 
 const RecipeHeading = styled.span`
-  font-size: 18px;
+  font-size: 15px;
   letter-spacing: 0.01em;
-  margin: 0 0.5rem 0 1.9rem;
+  margin: 0 0.3rem 0 1rem;
   font-weight: 600;
   color: #4f3d21;
+  @media (min-width: 1024px) {
+    font-size: 18px;
+    margin: 0 0.5rem 0 1.9rem;
+  }
 `;
 
 const RecipeHeadingCount = styled.span`
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
   color: #545454;
+  @media (min-width: 1024px) {
+    font-size: 17px;
+  }
 `;
 
 const RecipeList = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1.5rem;
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 1.5rem;
+  }
 `;
 
 const RecipeCardWrapper = styled.div`
@@ -136,7 +151,7 @@ const StyledRecipeCard = styled(RecipeCard)``;
 const DeleteButtonImage = styled.img`
   position: absolute;
   top: 21rem;
-  right: 1.5rem;
+  right: 0.5rem;
   width: 1.8rem;
   height: 1.8rem;
   transition: transform 0.1s ease-in-out;

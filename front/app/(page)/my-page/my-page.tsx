@@ -37,13 +37,20 @@ const MyPage = ({
 export default MyPage;
 
 const Container = styled.div`
-  width: 100%;
-  max-width: 120rem;
+  flex-direction: column;
+  width:100%;
+  padding: 0 1.5rem;
+  @media (min-width: 1024px) {
+    
+    max-width: 120rem;
   margin: 0 auto;
 `;
 
 const Wrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  padding-top: 5rem;
+  margin: 0 auto;
+  @media (min-width: 1024px) {
+    display: flex;
+    justify-content: flex-start;
+    padding-top: 5rem;
+  }
 `;

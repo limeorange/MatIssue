@@ -148,8 +148,14 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     index: number
   ) => {
     const newIngredients = [...state.ingredients];
-    newIngredients[index].ingredient = e.target.value;
-    setState({ ...state, ingredients: newIngredients });
+    const ingredientName = e.target.value.slice(0, 12); // 12자로 제한
+
+    if (e.target.value.length > 12) {
+      toast.error("재료명은 최대 12자까지 입력 가능합니다.");
+    } else {
+      newIngredients[index].ingredient = ingredientName;
+      setState({ ...state, ingredients: newIngredients });
+    }
   };
 
   // 재료의 양 변경 핸들러
@@ -158,8 +164,14 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     index: number
   ) => {
     const newIngredients = [...state.ingredients];
-    newIngredients[index].quantity = e.target.value;
-    setState({ ...state, ingredients: newIngredients });
+    const ingredientQuantity = e.target.value.slice(0, 7); // 7자로 제한
+
+    if (e.target.value.length > 7) {
+      toast.error("재료의 양은 최대 7자까지 입력 가능합니다.");
+    } else {
+      newIngredients[index].quantity = ingredientQuantity;
+      setState({ ...state, ingredients: newIngredients });
+    }
   };
 
   // 재료와 양 추가 핸들러

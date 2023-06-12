@@ -8,7 +8,7 @@ import {
 import styled from "styled-components";
 import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
-import { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipesByVegetarian } from "@/app/api/recipe";
@@ -24,14 +24,17 @@ const MainVegan = () => {
   } = useQuery<Recipe[]>(
     ["vegetarianRecipes"],
     () => getRecipesByVegetarian(),
-    { retry: 0, initialData: [] }
+    { refetchOnWindowFocus: false, retry: 0, initialData: [] }
   );
 
   const [slide, setSlide] = useState<number>(1);
   const totalRecipesNumber = vegetarianRecipes?.length;
   const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
 
-  const shuffledRecipes = shuffleRecipes(vegetarianRecipes);
+  const shuffledRecipes = useMemo(
+    () => shuffleRecipes(vegetarianRecipes),
+    [vegetarianRecipes]
+  );
 
   const leftBtnHandler = () => {
     if (slide < 2) {
@@ -51,10 +54,6 @@ const MainVegan = () => {
     return <LoadingRecipe />;
   }
 
-  if (isError) {
-    return <NonDataCrying />;
-  }
-
   return (
     <MainVegunContainer>
       <MainVegunArea>
@@ -64,13 +63,18 @@ const MainVegan = () => {
             건강과 환경을 생각하는 채식 레시피로 맛있는 변화를 경험하세요
           </StyledSubTitle>
         </VegunTitleBox>
-        <RecipeSliderContainer>
-          <VegunRecipeContainer slide={slide}>
-            {shuffledRecipes.slice(0, totalSlide * 3).map((item: Recipe) => (
-              <LargeRecipeCard key={item.recipe_id} recipe={item} />
-            ))}
-          </VegunRecipeContainer>
-        </RecipeSliderContainer>
+        {isError ? (
+          <NonDataCrying />
+        ) : (
+          <RecipeSliderContainer>
+            <VegunRecipeContainer slide={slide}>
+              {shuffledRecipes.slice(0, totalSlide * 3).map((item: Recipe) => (
+                <LargeRecipeCard key={item.recipe_id} recipe={item} />
+              ))}
+            </VegunRecipeContainer>
+          </RecipeSliderContainer>
+        )}
+
         <LeftSlideBtn onClick={leftBtnHandler} slide={slide}>
           <Image
             src="/images/main/GreenLeftSlideBtn.png"
