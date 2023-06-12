@@ -145,22 +145,28 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
             </StyledItem>
           </StyledList>
         </StyledBestTitleBox>
-        {totalRecipes === 0 && <NonRecipeCrying />}
-        {isError && <NonDataCrying />}
-        <ListingRecipeContainer>
-          {filteredBestRecipes
-            ?.slice(
-              contentsPerPage * (currentPage - 1),
-              contentsPerPage * currentPage
-            )
-            .map((item: Recipe) => (
-              <MainRecipeCard key={item.recipe_id} recipe={item} />
-            ))}
-        </ListingRecipeContainer>
-        <MainMobileListingRecipe
-          recipes={filteredBestRecipes}
-          url="/recipes/category/best?category=best"
-        />
+        {isError ? (
+          <NonDataCrying />
+        ) : totalRecipes === 0 && !isError ? (
+          <NonRecipeCrying />
+        ) : (
+          <>
+            <ListingRecipeContainer>
+              {filteredBestRecipes
+                ?.slice(
+                  contentsPerPage * (currentPage - 1),
+                  contentsPerPage * currentPage
+                )
+                .map((item: Recipe) => (
+                  <MainRecipeCard key={item.recipe_id} recipe={item} />
+                ))}
+            </ListingRecipeContainer>
+            <MainMobileListingRecipe
+              recipes={filteredBestRecipes}
+              url="/recipes/category/best?category=best"
+            />
+          </>
+        )}
       </StyledContentsArea>
       <RightSlideBtn
         onClick={rightBtnHandler}

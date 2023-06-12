@@ -16,6 +16,7 @@ import { getAllRecipes } from "@/app/api/recipe";
 import shuffleRecipes from "@/app/utils/shuffleRecipes";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
+import NonRecipeCrying from "../UI/NonRecipeCrying";
 
 const Ingredient = [
   {
@@ -93,10 +94,6 @@ const MainFridge = () => {
     return <LoadingRecipe />;
   }
 
-  if (isError) {
-    return <NonDataCrying />;
-  }
-
   return (
     <MainFridgeContainer>
       <FridgedTitleBox>
@@ -121,8 +118,10 @@ const MainFridge = () => {
           </IngredientButton>
         ))}
       </IngredientSelectBox>
-      {filteredRecipes?.length === 0 ? (
-        <div>레시피가 없어요 ㅠㅠ</div>
+      {isError ? (
+        <NonDataCrying />
+      ) : filteredRecipes.length === 0 && !isError ? (
+        <NonRecipeCrying />
       ) : (
         <RecipeContainer>
           {filteredRecipes?.slice(0, 3).map((item: Recipe) => (
