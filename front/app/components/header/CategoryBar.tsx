@@ -89,6 +89,7 @@ const CategoryLi = styled.li`
   @media (min-width: 1024px) {
     display: flex;
     font-size: 16px;
+    position: relative;
 
     background-color: white;
     border-radius: 0;
