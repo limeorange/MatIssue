@@ -277,7 +277,15 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
           onRemove={removeTag}
         />
         <PageHeaderContainer>
-          <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
+          {currentRecipes.length > 0 && (
+            <p>
+              총
+              <span style={{ color: "#F8B551" }}>
+                {filteredRecipes.length}개
+              </span>
+              의 레시피가 있습니다.
+            </p>
+          )}
           <SortButtonContainer>
             {category !== "best" &&
               category !== "newest" &&
@@ -360,43 +368,50 @@ const PageHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin: 1rem 0.5rem;
+  align-items: center;
+  text-align: center;
 
   & p {
-    font-size: 1.55rem;
-    margin-left: 1rem;
+    font-size: 15.5px;
+
+    @media (min-width: 1024px) {
+      padding: 0 1.5rem;
+    }
   }
 
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  @media (min-width: 1024px) {
+    align-items: left;
+    margin-top: 0;
   }
 `;
 
 const SortButtonContainer = styled.div`
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
 
-  @media (max-width: 1024px) {
-    width: 100%;
-    margin-top: 1rem;
+  @media (min-width: 1024px) {
+    padding: 0 1.5rem;
   }
 `;
 
 const SortButton = styled.button<{ selected: boolean }>`
-  padding: 0.5rem 2.5rem;
-  font-size: 1.55rem;
-  border-radius: 10rem;
-  margin: 0.5rem;
-  background-color: ${(props) => (props.selected ? "#fbd26a" : "transparent")};
+  padding: 0.5rem;
+  font-size: 15.5px;
+  color: ${(props) => (props.selected ? "#fbd26a" : "normal")};
+  font-weight: ${(props) => (props.selected ? "bold" : "normal")};
 
-  &:hover {
-    background-color: #fbd26a;
+  @media (min-width: 768px) {
+    margin: 0.5rem;
+    padding: 0.5rem 2.5rem;
+
+    border-radius: 10rem;
+    background-color: ${(props) =>
+      props.selected ? "#fbd26a" : "transparent"};
+
+    &:hover {
+      background-color: #fbd26a;
+    }
   }
 `;
 
-const FilterBarBox = styled.div`
-  margin: 0 auto;
-`;
+const FilterBarBox = styled.div``;
