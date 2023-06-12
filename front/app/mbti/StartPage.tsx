@@ -75,6 +75,7 @@ const StratPageWrapper = styled.div`
   width: 100%;
   max-width: 50rem;
   height: 100vh;
+  padding: 0 1.5rem;
 
   @keyframes slideUp {
     0% {
@@ -88,8 +89,8 @@ const StratPageWrapper = styled.div`
     }
   }
 
-  @media (max-width: 768px) {
-    padding: 0 2rem 0 2rem;
+  @media (min-width: 1024px) {
+    padding: 0;
   }
 `;
 
