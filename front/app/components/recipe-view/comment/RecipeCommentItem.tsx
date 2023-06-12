@@ -112,20 +112,22 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
     }
   };
 
+  /** 비로그인 유저가 댓글창 클릭 시 핸들러 */
+  const notLoggedInTryHandler = () => {
+    if (loggedInUserId === undefined) {
+      toast.error("로그인을 진행해주세요!");
+    }
+  };
+
   /** 좋아요 버튼 클릭 핸들러 */
-  // const heartClickHandler = () => {
-  //   setIsCommentLiked(!isCommentLiked);
-  //   if (isCommentLiked) {
-  //     setcommentLikesCount(commentLikesCount - 1);
-  //   } else {
-  //     setcommentLikesCount(commentLikesCount + 1);
-  //   }
-  // };
 
   const heartClickHandler = async () => {
     try {
+      if (loggedInUserId === undefined) {
+        toast.error("로그인을 진행해주세요!");
+      }
       // 이미 좋아요를 누른 경우 해당 user_id를 배열에서 삭제 (좋아요 취소)
-      if (
+      else if (
         loggedInUserId !== undefined &&
         comment_like.includes(loggedInUserId)
       ) {
