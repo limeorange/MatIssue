@@ -87,6 +87,10 @@ const StratPageWrapper = styled.div`
       opacity: 1;
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 0 2rem 0 2rem;
+  }
 `;
 
 const StartPageTitle = styled.p<StyledComponentProps>`

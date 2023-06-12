@@ -337,15 +337,23 @@ const MainWrapper = styled.div`
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
-  padding: 2%;
+  padding: 1.5rem 1.5rem;
 `;
 
 const RecipeListWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 27rem);
-  row-gap: 3rem;
-  column-gap: 2rem;
+  row-gap: 1.5rem;
+  column-gap: 1.5rem;
   justify-content: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 `;
 
 const PageHeaderContainer = styled.div`
@@ -358,14 +366,30 @@ const PageHeaderContainer = styled.div`
     font-size: 1.55rem;
     margin-left: 1rem;
   }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 `;
 
-const SortButtonContainer = styled.div``;
+const SortButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+    margin-top: 1rem;
+  }
+`;
 
 const SortButton = styled.button<{ selected: boolean }>`
   padding: 0.5rem 2.5rem;
   font-size: 1.55rem;
   border-radius: 10rem;
+  margin: 0.5rem;
   background-color: ${(props) => (props.selected ? "#fbd26a" : "transparent")};
 
   &:hover {
