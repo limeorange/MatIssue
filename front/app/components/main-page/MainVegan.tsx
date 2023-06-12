@@ -8,7 +8,7 @@ import {
 import styled from "styled-components";
 import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
-import { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipesByVegetarian } from "@/app/api/recipe";
@@ -24,14 +24,17 @@ const MainVegan = () => {
   } = useQuery<Recipe[]>(
     ["vegetarianRecipes"],
     () => getRecipesByVegetarian(),
-    { retry: 0, initialData: [] }
+    { refetchOnWindowFocus: false, retry: 0, initialData: [] }
   );
 
   const [slide, setSlide] = useState<number>(1);
   const totalRecipesNumber = vegetarianRecipes?.length;
   const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
 
-  const shuffledRecipes = shuffleRecipes(vegetarianRecipes);
+  const shuffledRecipes = useMemo(
+    () => shuffleRecipes(vegetarianRecipes),
+    [vegetarianRecipes]
+  );
 
   const leftBtnHandler = () => {
     if (slide < 2) {
