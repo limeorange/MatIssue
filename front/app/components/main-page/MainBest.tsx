@@ -42,14 +42,11 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   const [filteredBestRecipes, setFilteredBestRecipes] =
     useState<Recipe[]>(bestRecipes);
 
-  const router = useRouter();
   const contentsPerPage = 8;
-  const totalRecipes = bestRecipes?.length;
+  const totalRecipes = bestRecipes ? bestRecipes?.length : 0;
   const totalPage = Math.ceil(totalRecipes / contentsPerPage);
   const currentDate = dayjs();
   dayjs.extend(isBetween);
-
-  console.log(currentPage, totalPage);
 
   // 페이지네이션 버튼 핸들러
   const leftBtnHandler = () => {
@@ -83,7 +80,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
       const startOfWeek = currentDate.startOf("week");
       const endOfWeek = currentDate.endOf("week");
 
-      const weeklyBestPosts = bestRecipes.filter((recipe: Recipe) => {
+      const weeklyBestPosts = bestRecipes?.filter((recipe: Recipe) => {
         const postDate = dayjs(recipe.created_at);
         return postDate.isBetween(startOfWeek, endOfWeek);
       });
@@ -94,7 +91,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
       const startOfMonth = currentDate.startOf("month");
       const endOfMonth = currentDate.endOf("month");
 
-      const monthlyBestPosts = bestRecipes.filter((recipe: Recipe) => {
+      const monthlyBestPosts = bestRecipes?.filter((recipe: Recipe) => {
         const postDate = dayjs(recipe.created_at);
         return postDate.isBetween(startOfMonth, endOfMonth);
       });
@@ -113,7 +110,6 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
           height={122}
         />
       </LeftSlideBtn>
-
       <StyledContentsArea>
         <StyledBestTitleBox>
           <StyledTitle>베스트 레시피</StyledTitle>
@@ -226,39 +222,4 @@ const StyledItem = styled.li<{ clicked: boolean }>`
   cursor: pointer;
   font-weight: ${(props) => (props.clicked ? "600" : "400")};
   color: ${(props) => (props.clicked ? "#4F3D21" : "#ddd")};
-`;
-
-const MobileListingRecipe = styled.div`
-  display: flex;
-  overflow-x: auto;
-  gap: 1.5rem;
-  align-items: center;
-  width: 100%;
-
-  > div {
-    flex-shrink: 0;
-  }
-
-  @media (min-width: 1024px) {
-    display: none;
-  }
-`;
-
-const MoreViewBtnWrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 14px;
-  padding: 0 2rem;
-  gap: 0.4rem;
-
-  img {
-    box-sizing: content-box;
-    width: 1.6rem;
-    height: 1.6rem;
-    background-color: #fbd26a;
-    border-radius: 5rem;
-    padding: 1rem;
-  }
 `;
