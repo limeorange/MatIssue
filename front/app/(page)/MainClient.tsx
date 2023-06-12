@@ -6,9 +6,11 @@ import MainFridge from "../components/main-page/MainFridge";
 import MainAlone from "../components/main-page/MainAlone";
 import MainVegan from "../components/main-page/MainVegan";
 import MainNewest from "../components/main-page/MainNewest";
-import { Recipe } from "../types";
-import styled from "styled-components";
 
+import styled from "styled-components";
+import { Recipe } from "../types";
+
+// 메인화면에서 가장 위에 보이는 bestRecipes만 서버사이드 렌더링
 const MainPageClient = ({ bestRecipes }: { bestRecipes: Recipe[] }) => {
   return (
     <>

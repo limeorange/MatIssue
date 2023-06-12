@@ -183,7 +183,7 @@ const ModalContainer = styled.div<{ isModal: boolean }>`
   z-index: 10000;
   left: 0;
   top: 0;
-  width: 28rem;
+  width: 30rem;
   height: 100vh;
   background-color: white;
   padding: 2rem;
