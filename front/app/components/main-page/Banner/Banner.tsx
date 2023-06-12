@@ -41,8 +41,9 @@ const Banner = () => {
 export default Banner;
 
 const BannerContainer = styled.div`
-  display: none;
-  color: rgb(75, 75, 75);
+  display: block;
+  width: 100%;
+
   @media (min-width: 1024px) {
     display: block;
     min-width: 102.4rem;
@@ -60,7 +61,11 @@ const BannerWrapper = styled.div`
   max-width: 120rem;
   height: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0;
+
+  @media (min-width: 1024px) {
+    padding: 0 2rem;
+  }
 `;
 
 const SearchArea = styled.div`

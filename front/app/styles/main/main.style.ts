@@ -73,16 +73,9 @@ export const StyledList = styled.ul`
 export const ListingRecipeContainer = styled.div`
   display: none;
 
-  @media (min-width: 768px) {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    row-gap: 3rem;
-    column-gap: 2rem;
-  }
-
   @media (min-width: 1024px) {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     row-gap: 3rem;
     column-gap: 2rem;
   }

@@ -116,7 +116,7 @@ const StyledNewestTitleBox = styled(StyledTitleBox)`
 const LeftSlideBtn = styled.button<{ currentPage: number }>`
   display: none;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     ${(props) => (props.currentPage === 1 ? "display:none;" : "display:block;")}
     position: absolute;
     width: 3rem;
@@ -132,7 +132,7 @@ const LeftSlideBtn = styled.button<{ currentPage: number }>`
 const RightSlideBtn = styled.button<{ currentPage: number; totalPage: number }>`
   display: none;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     ${(props) =>
       props.currentPage > props.totalPage ? "display:none;" : "display:block;"}
     position: absolute;
