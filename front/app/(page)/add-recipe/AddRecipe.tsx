@@ -352,7 +352,6 @@ const RecipeForm = () => {
             handleThumbnailChange={handleThumbnailChange}
           />
         </ImageContainer>
-
         <CategoryAndInfo
           selectedCategory={state.selectedCategory}
           handleCategoryChange={handleCategoryChange}
@@ -566,7 +565,7 @@ const RecipeTitle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 5rem;
+  margin-top: 2rem;
 
   @media (min-width: 1024px) {
     flex-direction: row;
