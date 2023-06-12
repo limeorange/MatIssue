@@ -286,15 +286,18 @@ const PageWrapper = styled.div`
   width: 100%;
   max-width: 50rem;
   margin: 0 auto;
+  padding: 0 1.5rem;
+
   height: 100vh;
   opacity: 0;
   transition: opacity 1s;
+
   &.opacity-1 {
     opacity: 1;
   }
 
-  @media (max-width: 768px) {
-    padding: 0 2rem 0 2rem;
+  @media (min-width: 1024px) {
+    padding: 0;
   }
 `;
 
@@ -362,6 +365,7 @@ const AnswerButtonContainer = styled.div`
     transform: scale(1);
     opacity: 1;
   }
+
   &.shrink {
     transform: scale(0.1);
     opacity: 0;
@@ -402,7 +406,7 @@ const BackButton = styled.button`
   background-color: #fbd26a;
   color: white;
   border-radius: 10rem;
-  width: 5%;
+  width: 10%;
   margin-right: 1rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   transition: all 0.3s ease;
@@ -411,8 +415,8 @@ const BackButton = styled.button`
     background-color: #f8b551;
   }
 
-  @media (max-width: 768px) {
-    width: 10%;
+  @media (min-width: 768px) {
+    width: 5%;
   }
 `;
 
