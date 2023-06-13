@@ -6,7 +6,10 @@ const NonRecipePage = () => {
   return (
     <>
       <NoRecipeIconBox>
-        <NoRcipeIcon src={"/images/norecipe.png"} alt="요리사 로고" />
+        <NoRcipeIcon
+          src={"/images/my-page/레시피 안내 문구.svg"}
+          alt="요리사 로고"
+        />
       </NoRecipeIconBox>
     </>
   );
@@ -20,6 +23,7 @@ const NoRecipeIconBox = styled.div`
   align-items: center;
   width: 100%;
   max-width: 60rem;
+  margin-top: 10rem;
 `;
 
 const NoRcipeIcon = styled.img`
