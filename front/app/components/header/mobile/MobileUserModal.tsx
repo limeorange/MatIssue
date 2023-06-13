@@ -53,7 +53,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
     axiosBase
       .post(`users/logout`)
       .then((res) => {
-        Cookies.remove("session_id");
+        Cookies.remove("session-id");
         setIsLoggedIn(false);
         queryClient.removeQueries(["currentUser"]);
         queryClient.removeQueries(["currentUserRecipes"]);
