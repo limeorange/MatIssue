@@ -1,27 +1,28 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import Cookies from "js-cookie";
 
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import UserMenu from "./UserMenu";
 import CategoryBar from "./CategoryBar";
-
-import { User } from "@/app/types";
-import Cookies from "js-cookie";
-import getCurrentUser from "@/app/api/user";
-import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
-import { loginState } from "@/app/store/authAtom";
-import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import HamburgerBtn from "./mobile/HamburgerBtn";
 import SearchBtn from "./mobile/SearchBtn";
+
+import getCurrentUser from "@/app/api/user";
+import { loginState } from "@/app/store/authAtom";
+import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
+import { User } from "@/app/types";
 
 const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   const setIsLoggedIn = useSetRecoilState(loginState);
   const isHeaderVisible = useMovingContentByScrolling();
 
+  // 로그인된 유저정보를 받아옴
   const {
     data: currentUser,
     isLoading,
@@ -32,22 +33,22 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
     initialData: initialCurrentUser,
   });
 
-  console.log(currentUser);
-
+  // 유저정보가 있으면 login state을 true로 변경
   useEffect(() => {
     if (currentUser) {
       setIsLoggedIn(true);
     }
   }, [currentUser]);
 
+  // 유저정보 패치에 에러가 있으면 쿠키의 세션아이디 삭제
   if (isError) {
     Cookies.remove("session-id");
   }
 
   return (
-    <HeaderDiv isHeaderVisible={isHeaderVisible}>
-      <NavArea>
-        <TopNav>
+    <HeaderWrapper isHeaderVisible={isHeaderVisible}>
+      <HeaderContainer>
+        <TopNavBar>
           <HamburgerBtn initialCurrentUser={currentUser} />
           <LogoWrapper>
             <Logo />
@@ -55,15 +56,15 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
           <SearchBar />
           {isLoading ? null : <UserMenu currentUser={currentUser} />}
           <SearchBtn />
-        </TopNav>
+        </TopNavBar>
         <CategoryBar />
-      </NavArea>
+      </HeaderContainer>
       <UnderLine />
-    </HeaderDiv>
+    </HeaderWrapper>
   );
 };
 
-const HeaderDiv = styled.div<{ isHeaderVisible: boolean }>`
+const HeaderWrapper = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
   width: 100%;
   background-color: #ffffff;
@@ -76,14 +77,14 @@ const HeaderDiv = styled.div<{ isHeaderVisible: boolean }>`
   transition: transform 0.3s ease-in-out;
 `;
 
-const NavArea = styled.div`
+const HeaderContainer = styled.div`
   padding: 0 2rem;
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
 `;
 
-const TopNav = styled.div`
+const TopNavBar = styled.div`
   position: relative;
   display: flex;
   height: 7rem;
