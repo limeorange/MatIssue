@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { axiosBase } from "@/app/api/axios";
@@ -19,7 +19,6 @@ import {
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
 import Cookies from "js-cookie";
-import { useQueryClient } from "@tanstack/react-query";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
 
@@ -42,9 +41,9 @@ const LoginClient = () => {
     axiosBase
       .post("users/login", data)
       .then((res) => {
+        setIsLoggedIn(true);
         const sessionId = res.data.session_id;
         Cookies.set("session-id", sessionId);
-        setIsLoggedIn(true);
         router.back();
         toast.success("로그인 되었습니다.");
       })

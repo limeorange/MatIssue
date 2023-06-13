@@ -32,11 +32,11 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
     initialData: initialCurrentUser,
   });
 
+  console.log(currentUser);
+
   useEffect(() => {
     if (currentUser) {
       setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
     }
   }, [currentUser]);
 
@@ -53,7 +53,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
             <Logo />
           </LogoWrapper>
           <SearchBar />
-          {isLoading ? null : <UserMenu />}
+          {isLoading ? null : <UserMenu currentUser={currentUser} />}
           <SearchBtn />
         </TopNav>
         <CategoryBar />
