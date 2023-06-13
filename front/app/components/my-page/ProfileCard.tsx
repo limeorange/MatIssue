@@ -1,7 +1,6 @@
 "use client";
 
 import styled from "styled-components";
-import Link from "next/link";
 import Button from "../../components/UI/Button";
 import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
@@ -66,83 +65,80 @@ const ProfileCard = () => {
           <NotificationDot />
         </LinkBtn>
 
-      <ProfileBox>
-        <ImageAndNickName>
-          
-          <RoundImage>
-            <ProfileImage
-              src={currentUser?.img || "images/dongs-logo.png"}
-              alt="profile-image"
-            />
-          </RoundImage>
-          <NickName>{currentUser?.username}</NickName>
-        </ImageAndNickName>
-        <ProfileBigBox>
-        <FollowAndFollowing>
-          <FollowerDiv>
-            <Follower>팔로워</Follower>
-        <FollowerCount>99</FollowerCount>
-        </FollowerDiv>
-        <FollowDivider />
-          <FollowingDiv>
-            <Following>팔로잉</Following>
-        <FollowingCount>50</FollowingCount>
-        </FollowingDiv>
-        </FollowAndFollowing>
-        
+        <ProfileBox>
+          <ImageAndNickName>
+            <RoundImage>
+              <ProfileImage
+                src={currentUser?.img || "images/dongs-logo.png"}
+                alt="profile-image"
+              />
+            </RoundImage>
+            <NickName>{currentUser?.username}</NickName>
+          </ImageAndNickName>
+          <ProfileBigBox>
+            <FollowAndFollowing>
+              <FollowerDiv>
+                <Follower>팔로워</Follower>
+                <FollowerCount>99</FollowerCount>
+              </FollowerDiv>
+              <FollowDivider />
+              <FollowingDiv>
+                <Following>팔로잉</Following>
+                <FollowingCount>50</FollowingCount>
+              </FollowingDiv>
+            </FollowAndFollowing>
 
-        <LinkBtn
-          onClick={() => {
-            router.push("/my-page/modify-user-info");
-          }}
-        >
-          <ModifyUserDiv>
-            <Button
-              isBorderColor={true}
-              fullWidth={true}
-              fullHeight={true}
-              isMediumFont={true}
-              isHoverColor={true}
+            <LinkBtn
+              onClick={() => {
+                router.push("/my-page/modify-user-info");
+              }}
             >
-              회원정보수정
-            </Button>
-          </ModifyUserDiv>
-        </LinkBtn>
-        <Divider />
+              <ModifyUserDiv>
+                <Button
+                  isBorderColor={true}
+                  fullWidth={true}
+                  fullHeight={true}
+                  isMediumFont={true}
+                  isHoverColor={true}
+                >
+                  회원정보수정
+                </Button>
+              </ModifyUserDiv>
+            </LinkBtn>
+            <Divider />
 
-        {/* 나의 레시피 버튼 */}
-        <ButtonWrapper>
-        <LinkBtn
-          onClick={() => {
-            router.push("/my-page");
-          }}
-        >
-          <MyRecipeIcon
-            src="/images/my-page/my_recipe.svg"
-            alt="레시피 아이콘"
-          />
-          <MyRecipeTitle>My 레시피</MyRecipeTitle>
-          <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
-        </LinkBtn>
+            {/* 나의 레시피 버튼 */}
+            <ButtonWrapper>
+              <LinkBtn
+                onClick={() => {
+                  router.push("/my-page");
+                }}
+              >
+                <MyRecipeIcon
+                  src="/images/my-page/my_recipe.svg"
+                  alt="레시피 아이콘"
+                />
+                <MyRecipeTitle>My 레시피</MyRecipeTitle>
+                <MyRecipeCount>{currentUserRecipes?.length}</MyRecipeCount>
+              </LinkBtn>
 
-        {/* 나의 스크랩 버튼 */}
-        <LinkBtn
-          onClick={() => {
-            router.push("/my-page/scrap");
-          }}
-        >
-          <MyRecipeIcon
-            src="/images/recipe-view/scrap_full.svg"
-            alt="스크랩 아이콘"
-          />
-          <MyRecipeTitle>My 스크랩</MyRecipeTitle>
-          <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
-        </LinkBtn>
-        </ButtonWrapper>
-        </ProfileBigBox>
+              {/* 나의 스크랩 버튼 */}
+              <LinkBtn
+                onClick={() => {
+                  router.push("/my-page/scrap");
+                }}
+              >
+                <MyRecipeIcon
+                  src="/images/recipe-view/scrap_full.svg"
+                  alt="스크랩 아이콘"
+                />
+                <MyRecipeTitle>My 스크랩</MyRecipeTitle>
+                <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
+              </LinkBtn>
+            </ButtonWrapper>
+          </ProfileBigBox>
         </ProfileBox>
-        
-        
+
         <LinkBtn
           onClick={() => {
             router.push("/add-recipe");
@@ -252,52 +248,52 @@ const ProfileImage = styled.img`
 `;
 
 const FollowAndFollowing = styled.div`
-display: flex;
-padding: 0 0.5rem 0.5rem;
-margin-bottom: 0.8rem;
+  display: flex;
+  padding: 0 0.5rem 0.5rem;
+  margin-bottom: 0.8rem;
 `;
 
 const FollowerDiv = styled.div`
-display: flex;
-gap: 0.4rem;
+  display: flex;
+  gap: 0.4rem;
 `;
 
 const Follower = styled.h4`
   font-size: 14px;
   font-weight: 550;
   color: #4f3d21;
-  `;
+`;
 
-  const FollowerCount = styled.h4`
+const FollowerCount = styled.h4`
   font-size: 14px;
   font-weight: 500;
   color: #4f3d21;
-  `;
+`;
 
-  const FollowDivider = styled.div`
+const FollowDivider = styled.div`
   border-left: 1px solid black;
   height: 2.5em;
   display: inline-block;
   margin: 0.2rem 0.8rem 0;
   color: #4f3d21;
-  `;
-
-const FollowingDiv = styled.div`
-display: flex;
-gap: 0.4rem;
 `;
 
-  const Following = styled.h4`
+const FollowingDiv = styled.div`
+  display: flex;
+  gap: 0.4rem;
+`;
+
+const Following = styled.h4`
   font-size: 14px;
   font-weight: 550;
   color: #4f3d21;
-  `;
+`;
 
-  const FollowingCount = styled.h4`
+const FollowingCount = styled.h4`
   font-size: 14px;
   font-weight: 500;
   color: #4f3d21;
-  `;
+`;
 
 const NickName = styled.h1`
   font-size: 17px;
@@ -363,22 +359,20 @@ const LinkBtn = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-    flex-direction: column;
-  
-  
+  flex-direction: column;
 `;
 
 const ButtonWrapper = styled.div`
-display: flex;
-justify-content: center;
-gap: 1.8rem;
-margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.8rem;
+  margin-bottom: 2rem;
   @media (min-width: 1024px) {
-margin:0;
+    margin: 0;
   }
-  `;
+`;
 
-  const ProfileBox = styled.div`
+const ProfileBox = styled.div`
   display: flex;
   gap: 2.5rem;
   justify-content: center;
@@ -390,16 +384,14 @@ margin:0;
     gap: 0;
     margin-bottom: 0;
   }
-  `;
+`;
 
-  const ProfileBigBox = styled.div`
+const ProfileBigBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
 
-
-@media (min-width: 1024px) {  
-  align-items: center;
-}
-  `;
-  
+  @media (min-width: 1024px) {
+    align-items: center;
+  }
+`;
