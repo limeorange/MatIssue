@@ -179,8 +179,8 @@ const ScrapContainerDiv = styled.div`
   cursor: pointer;
 
   @media (min-width: 1024px) {
-    top: 45%;
-    left: 54.3%;
+    top: 39.1%;
+    left: 56.2%;
   }
 `;
 
