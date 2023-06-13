@@ -48,7 +48,7 @@ const MobileCategory = () => {
           >
             <IconWrapper>
               <Image
-                src="/images/main/category/japanese.svg"
+                src="/images/main/category/japanese.png"
                 alt="japanese_food"
                 width={50}
                 height={50}
@@ -79,7 +79,7 @@ const MobileCategory = () => {
             <IconWrapper>
               <Image
                 src="/images/main/category/best.svg"
-                alt="korea_food"
+                alt="best"
                 width={50}
                 height={50}
               />
@@ -94,7 +94,7 @@ const MobileCategory = () => {
             <IconWrapper>
               <Image
                 src="/images/main/category/newest.svg"
-                alt="western_food"
+                alt="newest"
                 width={50}
                 height={50}
               />
@@ -109,7 +109,7 @@ const MobileCategory = () => {
             <IconWrapper>
               <Image
                 src="/images/main/category/alone.svg"
-                alt="japanese_food"
+                alt="honmuk"
                 width={50}
                 height={50}
               />
@@ -124,7 +124,7 @@ const MobileCategory = () => {
             <IconWrapper>
               <Image
                 src="/images/main/category/vegetarian.svg"
-                alt="chinese_food"
+                alt="vegetarian"
                 width={50}
                 height={50}
               />
