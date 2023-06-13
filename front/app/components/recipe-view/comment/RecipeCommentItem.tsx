@@ -9,6 +9,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Comments, User } from "@/app/types";
 import getCurrentUser from "@/app/api/user";
+import LoginConfirmModal from "../../UI/LoginConfirmModal";
+import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
+import { useRouter } from "next/navigation";
 
 /** 요리 댓글 단일 Props */
 type RecipeCommentProps = Comments;
@@ -27,12 +30,18 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
 }) => {
   // 수정 버튼 눌렀을 때 textarea로 변경하기 위한 상태 관리
   const [isEditing, setIsEditing] = useState(false);
+
   // 수정 완료 후 댓글 내용 상태 관리
   const [editedCommentText, setEditedCommentText] = useState(comment_text);
+
   // 모달창 상태 관리
   const [isModal, setIsModal] = useState<boolean>(false);
+
   // 작성 중일 경우 테두리 효과 주기 위한 상태 관리
   const [isCommenting, setIsCommenting] = useState(false);
+
+  // 로그인 유도 모달 상태 관리
+  const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
   // 현재의 QueryClient 인스턴스인 client를 사용하여 React Query 기능을 활용
   const client = useQueryClient();
@@ -41,6 +50,9 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   const userTimezoneOffset = new Date().getTimezoneOffset() * 60000;
   const userCreatedAt = new Date(created_at).getTime() - userTimezoneOffset;
   const koreanCreatedAt = new Date(userCreatedAt).toLocaleString("ko-KR");
+
+  /** 로그인 유도 모달창 */
+  const StyledLoginConfirmModal = styled(LoginConfirmModal)``;
 
   // 캐시에 저장된 현재 유저정보를 가져옴
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
@@ -112,19 +124,12 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
     }
   };
 
-  /** 비로그인 유저가 댓글창 클릭 시 핸들러 */
-  const notLoggedInTryHandler = () => {
-    if (loggedInUserId === undefined) {
-      toast.error("로그인을 진행해주세요!");
-    }
-  };
-
   /** 좋아요 버튼 클릭 핸들러 */
-
   const heartClickHandler = async () => {
     try {
+      // 비회원의 경우 로그인 유도 모달창 띄워줌
       if (loggedInUserId === undefined) {
-        toast.error("로그인을 진행해주세요!");
+        setLoginConfirmModal(!loginConfirmModal);
       }
       // 이미 좋아요를 누른 경우 해당 user_id를 배열에서 삭제 (좋아요 취소)
       else if (
@@ -160,9 +165,30 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
     }
   };
 
+  /** 로그인 유도 모달 : 취소 클릭 핸들러 */
+  const loginModalCloseHandler = () => {
+    setLoginConfirmModal(false);
+  };
+
+  /** 로그인 유도 모달 : 로그인 클릭 핸들러 */
+  const router = useRouter();
+  const loginMoveHandler = () => {
+    router.push("auth/login");
+  };
+
   return (
     <>
       <CommentContainer>
+        {/* 비회원 로그인 유도 모달 */}
+        {loginConfirmModal && loggedInUserId === undefined && (
+          <StyledLoginConfirmModal
+            icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
+            message="로그인이 필요합니다. 로그인 하시겠습니까?"
+            onConfirm={loginMoveHandler}
+            onCancel={loginModalCloseHandler}
+          />
+        )}
+
         <ProfileImageDiv>
           <Image
             src={comment_profile_img}
@@ -212,13 +238,16 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
                     commentDeleteHandler={commentDeleteHandler}
                   />
                 )}
-                <Image
-                  src={"/images/recipe-view/threedots.svg"}
-                  alt="댓글 수정, 삭제바"
-                  width={15}
-                  height={15}
-                  onClick={() => setIsModal(true)}
-                />
+                {loggedInUserId !== undefined &&
+                  loggedInUserId === comment_author && (
+                    <Image
+                      src={"/images/recipe-view/threedots.svg"}
+                      alt="댓글 수정, 삭제바"
+                      width={15}
+                      height={15}
+                      onClick={() => setIsModal(true)}
+                    />
+                  )}
               </ThreeDotsImageDiv>
             </div>
           </AuthorDotsDiv>
@@ -251,7 +280,12 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
 
 const AuthorTimeDiv = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+
+  @media (min-width: 1024px) {
+    align-items: center;
+    flex-direction: row;
+  }
 `;
 
 /** 수정, 삭제 버튼 감싸는 Div */
@@ -349,15 +383,23 @@ const CommentContentsDiv = styled.div`
 
 /** 작성자 닉네임 Span */
 const AuthorNameSpan = styled.span`
-  font-size: 16px;
+  font-size: 14.8px;
   color: #6f6f6f;
   font-weight: 500;
   margin-right: 0.8rem;
+
+  @media (min-width: 1024px) {
+    font-size: 16px;
+  }
 `;
 
 const CreatedTimeSpan = styled.span`
-  font-size: 14px;
+  font-size: 11px;
   color: #afafaf;
+
+  @media (min-width: 1024px) {
+    font-size: 14px;
+  }
 `;
 
 /** 프로필 이미지 감싸는 Div */
@@ -380,14 +422,21 @@ const AuthorDotsDiv = styled.div`
 
 /** 댓글 수정, 삭제 아이콘 감싸는 Div */
 const ThreeDotsImageDiv = styled.div`
+  display: flex;
   cursor: pointer;
+  width: 2.5rem;
+  height: 2.5rem;
 `;
 
 /** 댓글 내용 Div */
 const CommentText = styled.div`
-  font-size: 15.5px;
+  font-size: 14.5px;
   color: #6f6f6f;
   width: 100%;
+
+  @media (min-width: 1024px) {
+    font-size: 15.5px;
+  }
 `;
 
 /** 좋아요 아이콘과 카운트 묶는 Button */
