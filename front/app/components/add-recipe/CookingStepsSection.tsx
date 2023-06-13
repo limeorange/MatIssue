@@ -51,44 +51,46 @@ const CookingStepsSection = ({
         <div key={index}>
           <StepWrapper>
             <StepLabel>Step {index + 1}</StepLabel>
-            <StepTextArea
-              value={step.stepDetail}
-              onChange={(e) => handleStepDetailChange(e, index)}
-              placeholder="단계별 요리 방법을 입력해주세요."
-            />
-            <ImageUploadBox imgExists={Boolean(stepImages[index])}>
-              <FileInput
-                id={`step-image-input-${index}`}
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleImageChange(e, index)}
+            <StepContentsContainer>
+              <StepTextArea
+                value={step.stepDetail}
+                onChange={(e) => handleStepDetailChange(e, index)}
+                placeholder="단계별 요리 방법을 입력해주세요."
               />
-              {stepImages[index] && (
-                <ImageWrapper
-                  onClick={() =>
-                    document
-                      .getElementById(`step-image-input-${index}`)
-                      ?.click()
-                  }
-                >
-                  <ImageContainer>
-                    <Image
-                      src={stepImages[index]}
-                      alt="step"
-                      layout="fill"
-                      objectFit="cover"
-                      style={{ borderRadius: "1.5rem" }}
-                    />
-                  </ImageContainer>
-                </ImageWrapper>
+              <ImageUploadBox imgExists={Boolean(stepImages[index])}>
+                <FileInput
+                  id={`step-image-input-${index}`}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageChange(e, index)}
+                />
+                {stepImages[index] && (
+                  <ImageWrapper
+                    onClick={() =>
+                      document
+                        .getElementById(`step-image-input-${index}`)
+                        ?.click()
+                    }
+                  >
+                    <ImageContainer>
+                      <Image
+                        src={stepImages[index]}
+                        alt="step"
+                        layout="fill"
+                        objectFit="cover"
+                        style={{ borderRadius: "1.5rem" }}
+                      />
+                    </ImageContainer>
+                  </ImageWrapper>
+                )}
+              </ImageUploadBox>
+              {steps.length !== 1 && (
+                <RemoveStepButton
+                  type="button"
+                  onClick={() => handleRemoveStep(index)}
+                ></RemoveStepButton>
               )}
-            </ImageUploadBox>
-            {steps.length !== 1 && (
-              <RemoveStepButton
-                type="button"
-                onClick={() => handleRemoveStep(index)}
-              ></RemoveStepButton>
-            )}
+            </StepContentsContainer>
           </StepWrapper>
         </div>
       ))}
@@ -163,6 +165,16 @@ const StepLabel = styled(Label)`
   margin-right: -2rem;
 `;
 
+const StepContentsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
+`;
+
 const ImageUploadBox = styled.div<{ imgExists: boolean }>`
   width: 100%;
   height: 18.6rem;
@@ -178,12 +190,14 @@ const ImageUploadBox = styled.div<{ imgExists: boolean }>`
   position: relative;
   cursor: pointer;
   margin-top: 1rem;
+  margin-bottom: 1rem;
 
   @media (min-width: 1024px) {
     width: 19.9rem;
     height: 16rem;
     margin-left: 2rem;
     margin-top: 0;
+    margin-bottom: 0;
   }
 `;
 
