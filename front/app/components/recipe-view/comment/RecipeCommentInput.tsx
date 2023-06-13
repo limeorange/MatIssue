@@ -99,7 +99,7 @@ const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
     `}
 
   @media (min-width: 1024px) {
-    margin-bottom: 10rem;
+    margin-bottom: 16rem;
   }
 `;
 
