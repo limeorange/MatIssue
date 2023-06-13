@@ -20,7 +20,7 @@ const MobileRecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <ImgWrapper>
             <Image
               fill
-              objectFit="cover"
+              style={{ objectFit: "cover" }}
               src={recipe.recipe_thumbnail}
               alt="게시물 썸네일 이미지"
             />

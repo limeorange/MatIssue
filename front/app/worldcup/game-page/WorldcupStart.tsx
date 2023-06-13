@@ -84,9 +84,15 @@ const WorldcupGame: React.FC = () => {
       <Logo />
       <GameHeader>레시피 이상형 월드컵!</GameHeader>
       <GameProgress>
-        {stage === 2
-          ? "결승전"
-          : `${stage}강 (${selectedCount + 1}/${stage / 2})`}
+        {stage === 2 ? (
+          "결승전"
+        ) : (
+          <>
+            {`${stage}강 (`}
+            <span style={{ color: "#fbd26a" }}>{selectedCount + 1}</span>
+            {`/${stage / 2})`}
+          </>
+        )}
       </GameProgress>
       <CardContainer>
         {displays.map((recipe, index) =>

@@ -9,6 +9,7 @@ import MainNewest from "../components/main-page/MainNewest";
 
 import styled from "styled-components";
 import { Recipe } from "../types";
+import MobileCategory from "../components/main-page/mobile/MobileCategory";
 
 // 메인화면에서 가장 위에 보이는 bestRecipes만 서버사이드 렌더링
 const MainPageClient = ({ bestRecipes }: { bestRecipes: Recipe[] }) => {
@@ -16,6 +17,7 @@ const MainPageClient = ({ bestRecipes }: { bestRecipes: Recipe[] }) => {
     <>
       <Banner />
       <MainWrapper>
+        <MobileCategory />
         <MainBest initialBestRecipes={bestRecipes} />
         <MainFridge />
         <MainAlone />
@@ -31,7 +33,6 @@ export default MainPageClient;
 const MainWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 
   position: relative;
   align-items: center;
