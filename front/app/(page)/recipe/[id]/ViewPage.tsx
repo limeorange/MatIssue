@@ -27,6 +27,8 @@ import { useRouter } from "next/navigation";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
 import ShareModal from "@/app/components/recipe-view/likes-share/ShareModal";
+import MiniWriterProfile from "@/app/components/recipe-view/sticky-sidebar/MiniWriterProfile";
+import LoginConfirmModal from "@/app/components/UI/LoginConfirmModal";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -125,8 +127,14 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 공유 모달 상태 관리
   const [isShareModal, setIsShareModal] = useState(false);
 
+  // 프로필 모달 상태 관리
+  const [isProfileModal, setIsProfileModal] = useState(false);
+
   // 스크롤에 의한 컨텐츠 이동 Hook
   const isHeaderVisible = useMovingContentByScrolling();
+
+  // 로그인 유도 모달 상태 관리
+  const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
   /** 좋아요 버튼 클릭 핸들러 */
   const heartClickHandler = async () => {
@@ -194,16 +202,29 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
-  /** 비로그인 유저가 댓글창 클릭 시 핸들러 */
-  const notLoggedInTryHandler = () => {
-    if (loggedInUserId === undefined) {
-      toast.error("로그인을 진행해주세요!");
-    }
-  };
-
   /** 공유하기 버튼 클릭 핸들러 */
   const shareButtonClickHandler = () => {
     setIsShareModal(!isShareModal);
+  };
+
+  /** 모바일 프로필 이미지 클릭 핸들러 */
+  const mobileProfileClickHandler = () => {
+    setIsProfileModal(!isProfileModal);
+  };
+
+  /** 로그인 유도 모달 핸들러 */
+  const loginConfirmModalHandler = () => {
+    setLoginConfirmModal(!loginConfirmModal);
+  };
+
+  /** 로그인 유도 모달 : 취소 클릭 핸들러 */
+  const loginModalCloseHandler = () => {
+    setLoginConfirmModal(false);
+  };
+
+  /** 로그인 유도 모달 : 로그인 클릭 핸들러 */
+  const loginMoveHandler = () => {
+    router.push("auth/login");
   };
 
   return (
@@ -212,10 +233,20 @@ const RecipeDetail = (props: RecipeDataProps) => {
         {/* 게시글 삭제 확인 모달 */}
         {deleteConfirmModal && (
           <StyledConfirmModal
-            icon={<AlertImage src="/images/alert.png" alt="alert" />}
+            icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
             message="레시피를 삭제하시겠습니까?"
             onConfirm={deleteConfirmHandler}
             onCancel={confirmModalCloseHandler}
+          />
+        )}
+
+        {/* 비회원 로그인 유도 모달 */}
+        {loginConfirmModal && loggedInUserId === undefined && (
+          <StyledLoginConfirmModal
+            icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
+            message="로그인이 필요합니다. 로그인 하시겠습니까?"
+            onConfirm={loginMoveHandler}
+            onCancel={loginModalCloseHandler}
           />
         )}
 
@@ -237,6 +268,30 @@ const RecipeDetail = (props: RecipeDataProps) => {
           loggedInUserId={loggedInUserId}
           user_img={user_img}
         />
+
+        {/* 모바일용 작성자 프로필 동그라미 */}
+        <div>
+          <ProfileImageDiv onClick={mobileProfileClickHandler}>
+            <Image
+              src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
+              alt="게시글 작성자 프로필 사진"
+              width={150}
+              height={150}
+              style={{ objectFit: "cover", cursor: "pointer" }}
+            />
+
+            {isProfileModal && (
+              <MiniWriterProfile
+                user_nickname={user_nickname}
+                user_fan={user_fan}
+                user_subscription={user_subscription}
+                user_id={user_id}
+                loggedInUserId={loggedInUserId}
+                user_img={user_img}
+              />
+            )}
+          </ProfileImageDiv>
+        </div>
 
         {/* 요리 대표 이미지 */}
         <RecipeImg>
@@ -306,7 +361,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         <div className="flex gap-[1.5rem] justify-center items-center mt-[3rem]">
           {/* 좋아요 */}
-          <div onClick={notLoggedInTryHandler}>
+          <div onClick={loginConfirmModalHandler}>
             <RecipeUserLikes
               isLiked={isLiked}
               countText={countText}
@@ -315,7 +370,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
           </div>
 
           {/* 스크랩 */}
-          <div id="heading6" onClick={notLoggedInTryHandler}>
+          <div id="heading6" onClick={loginConfirmModalHandler}>
             <RecipeScrap
               isSaved={isSaved}
               setIsSaved={setIsSaved}
@@ -323,7 +378,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
               scrapClickHandler={scrapClickHandler}
               recipe_id={recipe_id}
             />
-            {isBooked && (
+            {isBooked && loggedInUserId !== undefined && (
               <ScrapModal
                 setIsSaved={setIsSaved}
                 modalCloseHandler={modalCloseHandler}
@@ -363,7 +418,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
             {commentCount}
           </SubtitleH2>
           <RecipeComments comments={comments} />
-          <div onClick={notLoggedInTryHandler}>
+          <div onClick={loginConfirmModalHandler}>
             <RecipeCommentInput recipe_id={recipe_id} />
           </div>
         </div>
@@ -385,6 +440,25 @@ const ContainerDiv = styled.div`
   @media (min-width: 1024px) {
     margin-top: 1.5rem;
     padding: 0;
+  }
+`;
+
+/** 프로필 이미지 감싸는 Div */
+const ProfileImageDiv = styled.div`
+  position: fixed;
+  bottom: 2%;
+  right: 8%;
+  width: 6rem;
+  height: 6rem;
+  margin-bottom: 1.3rem;
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ffffff;
+  z-index: 1000;
+
+  @media (min-width: 1024px) {
+    display: none;
   }
 `;
 
@@ -454,6 +528,10 @@ const DeleteButton = styled.button`
 /** 삭제 컨펌 모달창 */
 const StyledConfirmModal = styled(ConfirmModal)``;
 
+/** 로그인 유도 모달창 */
+const StyledLoginConfirmModal = styled(LoginConfirmModal)``;
+
+/** 요리 대표 이미지 */
 const RecipeImg = styled.div`
   position: relative;
   padding-top: 55%;
@@ -461,7 +539,6 @@ const RecipeImg = styled.div`
   overflow: hidden;
   margin: 1.3rem 0;
 `;
-
 const Img = styled.img`
   position: absolute;
   width: 100%;
