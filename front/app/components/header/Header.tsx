@@ -40,10 +40,13 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
     }
   }, [currentUser]);
 
-  // 유저정보 패치에 에러가 있으면 쿠키의 세션아이디 삭제
-  if (isError) {
-    Cookies.remove("session-id");
-  }
+  // 유저정보 패치에 에러가 있으면 쿠키의 세션아이디 삭제 및 로그아웃
+  useEffect(() => {
+    if (isError) {
+      Cookies.remove("session-id");
+      setIsLoggedIn(false);
+    }
+  }, [isError]);
 
   return (
     <HeaderWrapper isHeaderVisible={isHeaderVisible}>

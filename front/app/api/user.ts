@@ -15,9 +15,10 @@ export default async function getCurrentUser() {
       Cookies.remove("session-id");
       return null;
     }
+  } else {
+    Cookies.remove("session-id");
+    return null;
   }
-
-  return null;
 }
 
 export async function getFollowStatus(user_id: string) {
