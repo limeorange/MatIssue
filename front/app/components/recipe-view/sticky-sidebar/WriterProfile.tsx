@@ -160,16 +160,16 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
 
   return (
     <>
+      {/* 팔로잉 -> 팔로우 삭제 모달 */}
+      {followDeleteConfirmModal && (
+        <StyledConfirmModal
+          icon={<AlertImage src="/images/alert.png" alt="alert" />}
+          message="팔로우를 취소하시겠습니까?"
+          onConfirm={deleteConfirmHandler}
+          onCancel={confirmModalCloseHandler}
+        />
+      )}
       <ProfileContainerDiv isHeaderVisible={isHeaderVisible}>
-        {/* 팔로잉 -> 팔로우 */}
-        {followDeleteConfirmModal && (
-          <StyledConfirmModal
-            icon={<AlertImage src="/images/alert.png" alt="alert" />}
-            message="팔로우를 취소하시겠습니까?"
-            onConfirm={deleteConfirmHandler}
-            onCancel={confirmModalCloseHandler}
-          />
-        )}
         <ProfileHeaderDiv>오늘의 쉐프</ProfileHeaderDiv>
         <ProfileContentsDiv>
           {/* 프로필 사진 */}
@@ -199,16 +199,6 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
           <FollowButton onClick={followButtonHandler}>
             {followButtonText}
           </FollowButton>
-
-          {/* 팔로잉 -> 팔로우 */}
-          {followDeleteConfirmModal && (
-            <StyledConfirmModal
-              icon={<AlertImage src="/images/alert.png" alt="alert" />}
-              message="팔로우를 취소하시겠습니까?"
-              onConfirm={deleteConfirmHandler}
-              onCancel={confirmModalCloseHandler}
-            />
-          )}
         </ProfileContentsDiv>
       </ProfileContainerDiv>
     </>
