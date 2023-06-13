@@ -8,7 +8,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "@/app/types";
 import Cookies from "js-cookie";
 import { axiosBase } from "@/app/api/axios";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
 import LoadingModal from "../../UI/LoadingModal";
 import { toast } from "react-hot-toast";
@@ -32,7 +32,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [scrollPosition, setScrollPosition] = useState<number>(0);
-  const setIsLoggedIn = useSetRecoilState<boolean>(loginState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState<boolean>(loginState);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -42,13 +42,18 @@ const MobileUserModal = (props: MobileUserModalProps) => {
     props.setIsModal(false);
   };
 
+  const routerHandler = (url: string) => {
+    closeModalHandler();
+    router.push(`${url}`);
+  };
+
   const logoutHandler = async () => {
     setIsLoading(true);
 
     axiosBase
       .post(`users/logout`)
       .then((res) => {
-        Cookies.remove("session_id");
+        Cookies.remove("session-id");
         setIsLoggedIn(false);
         queryClient.removeQueries(["currentUser"]);
         queryClient.removeQueries(["currentUserRecipes"]);
@@ -96,14 +101,14 @@ const MobileUserModal = (props: MobileUserModalProps) => {
           <AuthWraaper>
             <LoginButton
               onClick={() => {
-                router.push("/auth/login");
+                routerHandler("/auth/login");
               }}
             >
               로그인
             </LoginButton>
             <SignButton
               onClick={() => {
-                router.push("/auth/signup");
+                routerHandler("/auth/signup");
               }}
             >
               회원가입
@@ -112,49 +117,55 @@ const MobileUserModal = (props: MobileUserModalProps) => {
         )}
 
         <MenuList>
-          <MenuItem onClick={() => router.push("my-page")}>마이페이지</MenuItem>
-          <MenuItem onClick={() => router.push("my-page/modify-user-info")}>
+          <MenuItem onClick={() => routerHandler("my-page")}>
+            마이페이지
+          </MenuItem>
+          <MenuItem onClick={() => routerHandler("my-page/modify-user-info")}>
             회원정보수정
           </MenuItem>
-          <MenuItem onClick={() => router.push("my-page/scrap")}>
+          <MenuItem onClick={() => routerHandler("my-page/scrap")}>
             스크랩
           </MenuItem>
-          <MenuItem onClick={() => router.push("my-page/notification")}>
+          <MenuItem onClick={() => routerHandler("my-page/notification")}>
             알림
           </MenuItem>
-          <MenuItem onClick={() => router.push("my-page/add-recipe")}>
+          <MenuItem onClick={() => routerHandler("my-page/add-recipe")}>
             글쓰기
           </MenuItem>
         </MenuList>
         <CategoryList>
           <MenuItem
-            onClick={() => router.push("/recipes/category/best?category=best")}
+            onClick={() =>
+              routerHandler("/recipes/category/best?category=best")
+            }
           >
             베스트 레시피
           </MenuItem>
           <MenuItem
             onClick={() =>
-              router.push("/recipes/category/newest?category=newest")
+              routerHandler("/recipes/category/newest?category=newest")
             }
           >
             최신 레시피
           </MenuItem>
           <MenuItem
             onClick={() =>
-              router.push("/recipes/category/honmuk?category=honmuk")
+              routerHandler("/recipes/category/honmuk?category=honmuk")
             }
           >
             혼먹 레시피
           </MenuItem>
           <MenuItem
             onClick={() =>
-              router.push("/recipes/category/vegetarian?category=vegetarian")
+              routerHandler("/recipes/category/vegetarian?category=vegetarian")
             }
           >
             비건 레시피
           </MenuItem>
         </CategoryList>
-        <LogoutButton onClick={logoutHandler}>로그아웃</LogoutButton>
+        {isLoggedIn && (
+          <LogoutButton onClick={logoutHandler}>로그아웃</LogoutButton>
+        )}
       </ModalContainer>
     </>
   );
@@ -183,7 +194,7 @@ const ModalContainer = styled.div<{ isModal: boolean }>`
   z-index: 10000;
   left: 0;
   top: 0;
-  width: 30rem;
+  width: 25rem;
   height: 100vh;
   background-color: white;
   padding: 2rem;

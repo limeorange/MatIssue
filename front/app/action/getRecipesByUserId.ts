@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 export async function getRecipesByUserIdSS() {
   const cookieStore = cookies();
-  const session_id = cookieStore.get("session_id")?.value;
+  const session_id = cookieStore.get("session-id")?.value;
 
   if (session_id) {
     try {

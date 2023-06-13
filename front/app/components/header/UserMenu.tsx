@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
 import styled from "styled-components";
 import Image from "next/image";
@@ -10,7 +10,7 @@ import Image from "next/image";
 import UserModal from "./UserModal";
 import { User } from "@/app/types";
 
-const UserMenu = () => {
+const UserMenu = ({ currentUser }: { currentUser: User }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const isLoggedIn = useRecoilValue(loginState);
   const router = useRouter();
@@ -56,7 +56,10 @@ const UserMenu = () => {
               setIsUserModal(!isUserModal);
             }}
           >
-            <UserModal isUserModal={isUserModal} />
+            <UserModal
+              isUserModal={isUserModal}
+              setIsUserModal={setIsUserModal}
+            />
             <Image
               src={"/images/profileIcon.png"}
               width={32}

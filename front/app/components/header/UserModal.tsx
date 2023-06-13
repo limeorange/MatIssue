@@ -1,15 +1,21 @@
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { axiosBase } from "@/app/api/axios";
 import { useSetRecoilState } from "recoil";
+import { useQueryClient } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import { loginState } from "@/app/store/authAtom";
-import { useState } from "react";
-import LoadingModal from "../UI/LoadingModal";
-import { useQueryClient } from "@tanstack/react-query";
-import Cookies from "js-cookie";
 
-const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
+import LoadingModal from "../UI/LoadingModal";
+
+type UserModalProps = {
+  isUserModal: boolean;
+  setIsUserModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const UserModal = (props: UserModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const setIsLoggedIn = useSetRecoilState(loginState);
 
@@ -22,7 +28,7 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
     axiosBase
       .post(`users/logout`)
       .then((res) => {
-        Cookies.remove("session_id");
+        Cookies.remove("session-id");
         setIsLoggedIn(false);
         queryClient.removeQueries(["currentUser"]);
         queryClient.removeQueries(["currentUserRecipes"]);
@@ -37,41 +43,42 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
       });
   };
 
+  const routerHandler = (url: string) => {
+    props.setIsUserModal(false);
+    router.push(`${url}`);
+  };
+
   return (
-    <UserModalContainer visible={isUserModal}>
+    <UserModalContainer visible={props.isUserModal}>
       {isLoading && <LoadingModal />}
       <UserModalList>
-        <UserModalItem
-          onClick={() => {
-            router.push("/my-page");
-          }}
-        >
+        <UserModalItem onClick={() => routerHandler("/my-page")}>
           마이페이지
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/my-page/modify-user-info");
+            routerHandler("/my-page/modify-user-info");
           }}
         >
           회원정보 수정
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/my-page/notification");
+            routerHandler("/my-page/notification");
           }}
         >
           알림
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/add-recipe");
+            routerHandler("/add-recipe");
           }}
         >
           글쓰기
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/my-page/scrap");
+            routerHandler("/my-page/scrap");
           }}
         >
           스크랩

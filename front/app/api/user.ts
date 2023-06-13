@@ -12,6 +12,7 @@ export default async function getCurrentUser() {
       }
       return response.data;
     } catch (err: any) {
+      Cookies.remove("session-id");
       return null;
     }
   }
