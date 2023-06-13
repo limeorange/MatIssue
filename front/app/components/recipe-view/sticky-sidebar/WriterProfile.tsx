@@ -298,11 +298,6 @@ const FollowButton = styled.button`
 `;
 
 /** 팔로우 취소 컨펌 모달창 */
-const StyledConfirmModal = styled(ConfirmModal)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  inset: 0;
-`;
+const StyledConfirmModal = styled(ConfirmModal)``;
 
 export default WriterProfile;
