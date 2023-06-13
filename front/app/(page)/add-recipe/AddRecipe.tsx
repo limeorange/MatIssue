@@ -515,6 +515,7 @@ const TextArea = styled.textarea`
 const FormWrapper = styled.form`
   width: 100%;
   padding: 1.5rem;
+  margin-bottom: 2rem;
 
   @media (min-width: 1024px) {
     width: 70rem;
@@ -522,6 +523,8 @@ const FormWrapper = styled.form`
     // flex-direction: column;
     // align-items: flex-start;
     margin: 5rem auto 0;
+    margin-bottom: 16rem;
+
     padding: 0;
   }
 `;
@@ -564,7 +567,7 @@ const RecipeTitle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 2rem;
+  margin-top: 4rem;
 
   @media (min-width: 1024px) {
     flex-direction: row;

@@ -111,8 +111,6 @@ const Label = styled.label`
   margin-right: 3rem;
   padding-top: 0.5rem;
 
-  margin-bottom: 1rem;
-
   @media (min-width: 1024px) {
     width: 9.8rem;
     height: 2.1rem;
@@ -148,6 +146,8 @@ const TextArea = styled.textarea`
 `;
 
 const CookingStep = styled.div`
+  margin-top: 4rem;
+
   @media (min-width: 1024px) {
     display: flex;
     flex-direction: column;
