@@ -42,6 +42,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
   const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState<boolean>(loginState);
+  const [isShowAdditional, setIsShowAdditional] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -179,8 +180,49 @@ const MobileUserModal = (props: MobileUserModalProps) => {
           >
             채식 레시피
           </MenuItem>
+          <MenuItem onClick={() => setIsShowAdditional(!isShowAdditional)}>
+            <div>카테고리</div>
+            <IconWrapper>
+              <Image
+                src="/images/listIcon.png"
+                alt="list_icon"
+                width={16}
+                height={16}
+              />
+            </IconWrapper>
+          </MenuItem>
+          <AdditionalMenuWrapper isShow={isShowAdditional}>
+            <AdditionalCategoryItem
+              onClick={() =>
+                router.push("/recipes/category/한식?category=korean")
+              }
+            >
+              한식
+            </AdditionalCategoryItem>
+            <AdditionalCategoryItem
+              onClick={() =>
+                router.push("/recipes/category/양식?category=western")
+              }
+            >
+              양식
+            </AdditionalCategoryItem>
+            <AdditionalCategoryItem
+              onClick={() =>
+                router.push("/recipes/category/일식?category=japanese")
+              }
+            >
+              일식
+            </AdditionalCategoryItem>
+            <AdditionalCategoryItem
+              onClick={() =>
+                router.push("/recipes/category/중식?category=chinese")
+              }
+            >
+              중식
+            </AdditionalCategoryItem>
+          </AdditionalMenuWrapper>
         </CategoryList>
-        {isLoggedIn && (
+        {isLoggedIn && currentUser && (
           <LogoutButton onClick={logoutHandler}>로그아웃</LogoutButton>
         )}
       </ModalContainer>
@@ -263,12 +305,9 @@ const ProfileImgWrapper = styled.div`
 const MenuList = styled.ul`
   display: flex;
   flex-direction: column;
+
   padding-bottom: 1rem;
   border-bottom: 1px solid #ccc;
-`;
-
-const MenuItem = styled.li`
-  padding: 0.8rem;
 `;
 
 const CategoryList = styled.ul`
@@ -280,8 +319,32 @@ const CategoryList = styled.ul`
   border-bottom: 1px solid #ccc;
 `;
 
+const MenuItem = styled.li`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem;
+`;
+
+const AdditionalCategoryItem = styled.div`
+  padding: 0.6rem;
+  font-size: 14px;
+  font-weight: 400;
+`;
+
+const AdditionalMenuWrapper = styled.div<{ isShow: boolean }>`
+  display: ${(props) => (props.isShow ? "block" : "none")};
+  height: ${(props) => (props.isShow ? "auto" : "0")};
+  transition: height 0.3s ease 0s;
+`;
+
 const LogoutButton = styled.button`
   padding: 0.8rem;
   border-radius: 0.5rem;
   text-align: left;
+`;
+
+const IconWrapper = styled.div`
+  width: 1.6rem;
+  height: 0.8rem;
 `;
