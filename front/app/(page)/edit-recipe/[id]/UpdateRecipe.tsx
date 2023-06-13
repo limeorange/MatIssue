@@ -507,8 +507,7 @@ const TextArea = styled.textarea`
   height: 10rem;
   border: 0.1rem solid #d9d9d9;
   border-radius: 1.5rem;
-  padding-left: 1rem;
-  padding-top: 1rem;
+  padding: 1rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
