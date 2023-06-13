@@ -76,8 +76,8 @@ const ModalContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 48rem;
-  height: 20.2rem;
+  width: 45rem;
+  height: 20rem;
   background-color: white;
   padding: 2rem;
   border-radius: 1.3rem;
@@ -85,8 +85,8 @@ const ModalContent = styled.div`
 
 const ModalMessage = styled.p`
   margin-top: 1rem;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 19px;
+  font-weight: 600;
   color: #4f3d21;
 `;
 
