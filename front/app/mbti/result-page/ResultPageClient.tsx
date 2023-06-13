@@ -31,6 +31,7 @@ type CompatibilityData = {
   };
 };
 
+// MBTI 데이터
 const resultData: ResultData = {
   ENTJ: {
     per: "2.73%",
@@ -41,7 +42,7 @@ const resultData: ResultData = {
     text: "- 타인의 감정을 생각하지 않고,\n직설적으로 말할 때가 있어요.",
     text2: "변화를 추구하는 오마카세 스시",
     img: "/images/mbti/ENTJ.png",
-    food: "스시",
+    food: "초밥",
   },
   ESTJ: {
     per: "4.56%",
@@ -206,10 +207,11 @@ const resultData: ResultData = {
     text: "- 누워있는 걸 너무 좋아하다 보니 늘어질 땐 한없이 게을러요.",
     text2: "하루를 여유롭게, 아메리카노",
     img: "/images/mbti/ISFP.png",
-    food: "아메리카노",
+    food: "커피",
   },
 };
 
+// 궁합 데이터
 const compatibilityData: CompatibilityData = {
   ESFJ: {
     compatible: "INTP",

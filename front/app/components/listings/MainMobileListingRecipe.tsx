@@ -1,7 +1,7 @@
 import { Recipe } from "@/app/types";
 import styled from "styled-components";
 
-import MainRecipeCard from "./MainRecipeCard";
+import MobileRecipeCard from "../recipe-card/main/MobileRecipeCard";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -16,7 +16,7 @@ const MainMobileListingRecipe = (props: MainMobileListingRecipeProps) => {
   return (
     <MobileListingRecipe>
       {props.recipes?.slice(0, 20).map((item: Recipe) => (
-        <MainRecipeCard key={item.recipe_id} recipe={item} />
+        <MobileRecipeCard key={item.recipe_id} recipe={item} />
       ))}
       <MoreViewBtnWrapper
         onClick={() => {

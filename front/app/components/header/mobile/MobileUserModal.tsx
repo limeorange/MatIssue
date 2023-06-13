@@ -1,17 +1,24 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import styled from "styled-components";
 import Logo from "../Logo";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import getCurrentUser from "@/app/api/user";
+
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "@/app/types";
 import Cookies from "js-cookie";
 import { axiosBase } from "@/app/api/axios";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
-import LoadingModal from "../../UI/LoadingModal";
+
 import { toast } from "react-hot-toast";
+
+import getCurrentUser from "@/app/api/user";
+
+import LoadingModal from "../../UI/LoadingModal";
 
 type MobileUserModalProps = {
   isModal: boolean;
@@ -19,7 +26,9 @@ type MobileUserModalProps = {
   initialCurrentUser: User;
 };
 
+/** 모바일 전용 사이드 유저 모달 */
 const MobileUserModal = (props: MobileUserModalProps) => {
+  // 현재 로그인된 유저정보 가져옴
   const { data: currentUser } = useQuery<User>(
     ["currentUser"],
     () => getCurrentUser(),
@@ -30,25 +39,32 @@ const MobileUserModal = (props: MobileUserModalProps) => {
     }
   );
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [scrollPosition, setScrollPosition] = useState<number>(0);
-  const setIsLoggedIn = useSetRecoilState<boolean>(loginState);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState<boolean>(loginState);
   const queryClient = useQueryClient();
   const router = useRouter();
 
+  /** 모달 사라지면서 스크롤 가능하게 하는 핸들러 */
   const closeModalHandler = () => {
     document.body.style.overflow = "auto";
     window.scrollTo(0, scrollPosition);
     props.setIsModal(false);
   };
 
+  /** 모달 내 nav 클릭시 라우팅 및 모달 닫는 핸들러 */
+  const routerHandler = (url: string) => {
+    closeModalHandler();
+    router.push(`${url}`);
+  };
+
+  /** 로그아웃 핸들러 */
   const logoutHandler = async () => {
     setIsLoading(true);
-
     axiosBase
       .post(`users/logout`)
       .then((res) => {
-        Cookies.remove("session_id");
+        Cookies.remove("session-id");
         setIsLoggedIn(false);
         queryClient.removeQueries(["currentUser"]);
         queryClient.removeQueries(["currentUserRecipes"]);
@@ -57,13 +73,18 @@ const MobileUserModal = (props: MobileUserModalProps) => {
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error("로그아웃에 실패하였습니다.");
+        toast.error(
+          err.response.data.detail
+            ? err.response.data.detail
+            : "로그아웃에 실패하였습니다."
+        );
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
 
+  // 모달 여부에따라 스크롤 동작여부 설정
   useEffect(() => {
     if (props.isModal) {
       setScrollPosition(window.pageYOffset);
@@ -76,6 +97,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
   return (
     <>
       {isLoading && <LoadingModal />}
+
       <Backdrop isModal={props.isModal} onClick={closeModalHandler} />
       <ModalContainer isModal={props.isModal}>
         <Logo />
@@ -96,14 +118,14 @@ const MobileUserModal = (props: MobileUserModalProps) => {
           <AuthWraaper>
             <LoginButton
               onClick={() => {
-                router.push("/auth/login");
+                routerHandler("/auth/login");
               }}
             >
               로그인
             </LoginButton>
             <SignButton
               onClick={() => {
-                router.push("/auth/signup");
+                routerHandler("/auth/signup");
               }}
             >
               회원가입
@@ -112,49 +134,55 @@ const MobileUserModal = (props: MobileUserModalProps) => {
         )}
 
         <MenuList>
-          <MenuItem onClick={() => router.push("my-page")}>마이페이지</MenuItem>
-          <MenuItem onClick={() => router.push("my-page/modify-user-info")}>
+          <MenuItem onClick={() => routerHandler("my-page")}>
+            마이페이지
+          </MenuItem>
+          <MenuItem onClick={() => routerHandler("my-page/modify-user-info")}>
             회원정보수정
           </MenuItem>
-          <MenuItem onClick={() => router.push("my-page/scrap")}>
+          <MenuItem onClick={() => routerHandler("my-page/scrap")}>
             스크랩
           </MenuItem>
-          <MenuItem onClick={() => router.push("my-page/notification")}>
+          <MenuItem onClick={() => routerHandler("my-page/notification")}>
             알림
           </MenuItem>
-          <MenuItem onClick={() => router.push("my-page/add-recipe")}>
+          <MenuItem onClick={() => routerHandler("my-page/add-recipe")}>
             글쓰기
           </MenuItem>
         </MenuList>
         <CategoryList>
           <MenuItem
-            onClick={() => router.push("/recipes/category/best?category=best")}
+            onClick={() =>
+              routerHandler("/recipes/category/best?category=best")
+            }
           >
             베스트 레시피
           </MenuItem>
           <MenuItem
             onClick={() =>
-              router.push("/recipes/category/newest?category=newest")
+              routerHandler("/recipes/category/newest?category=newest")
             }
           >
             최신 레시피
           </MenuItem>
           <MenuItem
             onClick={() =>
-              router.push("/recipes/category/honmuk?category=honmuk")
+              routerHandler("/recipes/category/honmuk?category=honmuk")
             }
           >
             혼먹 레시피
           </MenuItem>
           <MenuItem
             onClick={() =>
-              router.push("/recipes/category/vegetarian?category=vegetarian")
+              routerHandler("/recipes/category/vegetarian?category=vegetarian")
             }
           >
             비건 레시피
           </MenuItem>
         </CategoryList>
-        <LogoutButton onClick={logoutHandler}>로그아웃</LogoutButton>
+        {isLoggedIn && (
+          <LogoutButton onClick={logoutHandler}>로그아웃</LogoutButton>
+        )}
       </ModalContainer>
     </>
   );
@@ -183,7 +211,7 @@ const ModalContainer = styled.div<{ isModal: boolean }>`
   z-index: 10000;
   left: 0;
   top: 0;
-  width: 30rem;
+  width: 25rem;
   height: 100vh;
   background-color: white;
   padding: 2rem;

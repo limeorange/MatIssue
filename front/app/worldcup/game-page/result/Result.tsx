@@ -129,7 +129,7 @@ const WorldcupLayout = styled.div`
   width: 100%;
   max-width: 50rem;
   heigth: 100vh;
-  padding: 1.5rem 0rem;
+  padding: 1.5rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
   opacity: 0;
@@ -137,10 +137,14 @@ const WorldcupLayout = styled.div`
   &.opacity-1 {
     opacity: 1;
   }
+
+  @media (min-width: 1024px) {
+    padding: 0;
+  }
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
-  font-size: 80px;
+  font-size: 60px;
   color: #fbd26a;
   font-family: "Dongle-Bold";
   margin-bottom: -3rem;
@@ -148,12 +152,17 @@ const GameHeader = styled.p<StyledComponentProps>`
   & span {
     font-size: 40px;
   }
+
+  @media (min-width: 1024px) {
+    font-size: 80px;
+  }
 `;
 
 const GameProgress = styled.div`
-  font-size: 50px;
+  font-size: 35px;
   color: #4f3d21;
   margin-bottom: 1rem;
+  margin-top: 2rem;
   font-family: "Dongle-Bold";
   transform-origin: center;
   transition: all 0.5s ease;
@@ -171,6 +180,11 @@ const GameProgress = styled.div`
   &.shrink {
     transform: scale(0.1);
     opacity: 0;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 50px;
+    margin-top: 0;
   }
 `;
 

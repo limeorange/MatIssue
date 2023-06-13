@@ -4,7 +4,7 @@ import { Recipe } from "@/app/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import styled, { css, keyframes } from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const [showImage, setShowImage] = useState(false);

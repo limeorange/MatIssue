@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { axiosBase } from "@/app/api/axios";
 import toast from "react-hot-toast";
@@ -19,9 +19,9 @@ import {
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
 import Cookies from "js-cookie";
-import { useQueryClient } from "@tanstack/react-query";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
+import styled from "styled-components";
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,15 +42,17 @@ const LoginClient = () => {
     axiosBase
       .post("users/login", data)
       .then((res) => {
+        setIsLoggedIn(true);
         const sessionId = res.data.session_id;
         Cookies.set("session-id", sessionId);
-        setIsLoggedIn(true);
         router.back();
         toast.success("로그인 되었습니다.");
       })
       .catch((err) => {
         toast.error(
-          "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
+          err.reponse.data.detail
+            ? err.reponse.data.detail
+            : "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
         );
       })
       .finally(() => {
@@ -58,12 +60,10 @@ const LoginClient = () => {
       });
   };
 
-  useEffect(() => {}, []);
-
   return (
     <AuthContainer>
       {isLoading && <LoadingModal />}
-      <AuthFormWrapper>
+      <LoginAuthContainer>
         <Logo />
         <form onSubmit={handleSubmit(onSubmit)}>
           <StyledInput
@@ -90,7 +90,6 @@ const LoginClient = () => {
             </Button>
           </div>
           <AuthNavBox>
-            <div>로그인 유지</div>
             <button
               type="button"
               onClick={() => {
@@ -107,9 +106,16 @@ const LoginClient = () => {
             회원가입하기
           </UnderLineLinkDiv>
         </AuthChangeBox>
-      </AuthFormWrapper>
+      </LoginAuthContainer>
     </AuthContainer>
   );
 };
 
 export default LoginClient;
+
+const LoginAuthContainer = styled(AuthFormWrapper)`
+  padding-top: 5rem;
+  @media (min-width: 1024px) {
+    padding-top: 13rem;
+  }
+`;

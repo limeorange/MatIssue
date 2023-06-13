@@ -489,8 +489,7 @@ const TextArea = styled.textarea`
   height: 10rem;
   border: 0.1rem solid #d9d9d9;
   border-radius: 1.5rem;
-  padding-left: 1rem;
-  padding-top: 1rem;
+  padding: 1rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
@@ -515,13 +514,16 @@ const TextArea = styled.textarea`
 const FormWrapper = styled.form`
   width: 100%;
   padding: 1.5rem;
+  margin-bottom: 2rem;
 
   @media (min-width: 1024px) {
     width: 70rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: flex-start;
     margin: 5rem auto 0;
+    margin-bottom: 16rem;
+
     padding: 0;
   }
 `;
@@ -564,7 +566,7 @@ const RecipeTitle = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 2rem;
+  margin-top: 4rem;
 
   @media (min-width: 1024px) {
     flex-direction: row;
@@ -588,10 +590,14 @@ const CookingIntro = styled.div`
 
 const CookingTips = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 4rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
 const TipsLabel = styled(Label)`
@@ -599,7 +605,11 @@ const TipsLabel = styled(Label)`
 `;
 
 const TipsTextArea = styled(TextArea)`
-  width: 62rem;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    width: 62rem;
+  }
 `;
 
 const ButtonContainer = styled.div`

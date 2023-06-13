@@ -1,28 +1,37 @@
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { axiosBase } from "@/app/api/axios";
 import { useSetRecoilState } from "recoil";
-import styled from "styled-components";
-import toast from "react-hot-toast";
-import { loginState } from "@/app/store/authAtom";
-import { useState } from "react";
-import LoadingModal from "../UI/LoadingModal";
 import { useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
+import styled from "styled-components";
 
-const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
+import toast from "react-hot-toast";
+import { loginState } from "@/app/store/authAtom";
+
+import LoadingModal from "../UI/LoadingModal";
+
+type UserModalProps = {
+  isUserModal: boolean;
+  setIsUserModal: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+/** 유저 메뉴 모달 컴포넌트 */
+const UserModal = (props: UserModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const setIsLoggedIn = useSetRecoilState(loginState);
 
   const router = useRouter();
   const queryClient = useQueryClient();
 
+  /** 로그아웃 핸들러 */
   const logoutHandler = async () => {
     setIsLoading(true);
 
     axiosBase
       .post(`users/logout`)
       .then((res) => {
-        Cookies.remove("session_id");
+        Cookies.remove("session-id");
         setIsLoggedIn(false);
         queryClient.removeQueries(["currentUser"]);
         queryClient.removeQueries(["currentUserRecipes"]);
@@ -30,48 +39,54 @@ const UserModal = ({ isUserModal }: { isUserModal: boolean }) => {
         toast.success("로그아웃 되었습니다.");
       })
       .catch((err) => {
-        toast.error("로그아웃에 실패하였습니다.");
+        toast.error(
+          err.response.data.detail
+            ? err.response.data.detail
+            : "로그아웃에 실패하였습니다."
+        );
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
 
+  /** 모달 메뉴 아이템 클릭시 라우트 핸들러 */
+  const routerHandler = (url: string) => {
+    props.setIsUserModal(false);
+    router.push(`${url}`);
+  };
+
   return (
-    <UserModalContainer visible={isUserModal}>
+    <UserModalContainer visible={props.isUserModal}>
       {isLoading && <LoadingModal />}
       <UserModalList>
-        <UserModalItem
-          onClick={() => {
-            router.push("/my-page");
-          }}
-        >
+        <UserModalItem onClick={() => routerHandler("/my-page")}>
           마이페이지
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/my-page/modify-user-info");
+            routerHandler("/my-page/modify-user-info");
           }}
         >
           회원정보 수정
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/my-page/notification");
+            routerHandler("/my-page/notification");
           }}
         >
           알림
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/add-recipe");
+            routerHandler("/add-recipe");
           }}
         >
           글쓰기
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            router.push("/my-page/scrap");
+            routerHandler("/my-page/scrap");
           }}
         >
           스크랩

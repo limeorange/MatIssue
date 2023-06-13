@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { Recipe } from "@/app/types";
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
@@ -16,7 +16,14 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
     <>
       <RecipeCardWrapper onClick={handleRecipeClick}>
         <RecipeImg>
-          <Img src={recipe.recipe_thumbnail} alt="게시물 썸네일 이미지" />
+          <ImgWrapper>
+            <Image
+              fill
+              objectFit="cover"
+              src={recipe.recipe_thumbnail}
+              alt="게시물 썸네일 이미지"
+            />
+          </ImgWrapper>
         </RecipeImg>
         <RecipeTitle>
           <p>{recipe.recipe_title}</p>
@@ -80,7 +87,7 @@ const RecipeImg = styled.div`
   overflow: hidden;
 `;
 
-const Img = styled.img`
+const ImgWrapper = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
