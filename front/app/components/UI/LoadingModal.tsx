@@ -33,7 +33,7 @@ const LoadingModal = () => {
 
 const BackdropWrapper = styled.div`
   position: fixed;
-  z-index: 90;
+  z-index: 10000;
   inset: 0px;
   background: #000000;
   opacity: 50%;
