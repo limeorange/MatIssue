@@ -102,8 +102,6 @@ const CookingStepsSection = ({
 export default CookingStepsSection;
 
 const Label = styled.label`
-  width: 9.8rem;
-  height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 600;
@@ -111,23 +109,24 @@ const Label = styled.label`
   line-height: 2.1rem;
   color: #4f3d21;
   margin-right: 3rem;
-  margin-bottom: 2rem;
   padding-top: 0.5rem;
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
+
+  margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    width: 9.8rem;
+    height: 2.1rem;
+    margin-bottom: 2rem;
   }
 `;
 
 const TextArea = styled.textarea`
   box-sizing: border-box;
-  width: 57.2rem;
+  width: 100%;
   height: 10rem;
   border: 0.1rem solid #d9d9d9;
   border-radius: 1.5rem;
-  padding-left: 1rem;
-  padding-top: 1rem;
+  padding: 1rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
@@ -142,14 +141,20 @@ const TextArea = styled.textarea`
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
+
+  @media (min-width: 1024px) {
+    width: 57.2rem;
+  }
 `;
 
 const CookingStep = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: 4.3rem;
+  @media (min-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 4.3rem;
+  }
 `;
 
 const StepLabel = styled(Label)`
@@ -177,15 +182,22 @@ const ImageUploadBox = styled.div<{ imgExists: boolean }>`
 
 const StepWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
-  align-items: center;
   margin-top: 2rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
 const StepTextArea = styled(TextArea)`
-  width: 35.6rem;
+  width: 100%;
   height: 16rem;
+
+  @media (min-width: 1024px) {
+    width: 35.6rem;
+  }
 `;
 
 const AddStepButton = styled.button`
@@ -209,6 +221,7 @@ const RemoveStepButton = styled.button`
   margin-left: 1.4rem;
   margin-top: 0.6rem;
   cursor: pointer;
+  align-self: center;
   background: url("/images/stepDeleteIcon.png") no-repeat center;
   background-size: contain;
 `;

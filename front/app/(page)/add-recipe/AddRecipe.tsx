@@ -518,9 +518,9 @@ const FormWrapper = styled.form`
 
   @media (min-width: 1024px) {
     width: 70rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: flex-start;
     margin: 5rem auto 0;
     padding: 0;
   }
@@ -588,10 +588,14 @@ const CookingIntro = styled.div`
 
 const CookingTips = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 4rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
 const TipsLabel = styled(Label)`
@@ -599,7 +603,11 @@ const TipsLabel = styled(Label)`
 `;
 
 const TipsTextArea = styled(TextArea)`
-  width: 62rem;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    width: 62rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
