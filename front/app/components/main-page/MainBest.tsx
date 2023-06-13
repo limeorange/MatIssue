@@ -20,7 +20,6 @@ import {
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
 import NonDataCrying from "../UI/NonDataCrying";
-import { useRouter } from "next/navigation";
 import MainMobileListingRecipe from "../recipe-card/main/MainMobileListingRecipe";
 import RecipeCard from "../recipe-card/RecipeCard";
 

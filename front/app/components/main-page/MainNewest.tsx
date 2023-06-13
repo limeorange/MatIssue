@@ -10,7 +10,6 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
-import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
 import { useQuery } from "@tanstack/react-query";
 import { getAllRecipes } from "@/app/api/recipe";
 import LoadingRecipe from "../UI/LoadingRecipe";
@@ -18,6 +17,7 @@ import NonDataCrying from "../UI/NonDataCrying";
 import MainMobileListingRecipe from "../recipe-card/main/MainMobileListingRecipe";
 import NonRecipeCrying from "../UI/NonRecipeCrying";
 import Image from "next/image";
+import RecipeCard from "../recipe-card/RecipeCard";
 
 const MainNewest = () => {
   const {
@@ -80,7 +80,7 @@ const MainNewest = () => {
                   contentsPerPage * currentPage
                 )
                 .map((item: Recipe, index: number) => (
-                  <MainRecipeCard key={index} recipe={item} />
+                  <RecipeCard key={index} recipe={item} />
                 ))}
             </ListingRecipeContainer>
             <MainMobileListingRecipe
