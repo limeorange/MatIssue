@@ -1,22 +1,25 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { loginState } from "@/app/store/authAtom";
+import { useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import Image from "next/image";
 
-import UserModal from "./UserModal";
+import { loginState } from "@/app/store/authAtom";
 import { User } from "@/app/types";
 
+import UserModal from "./UserModal";
+
+/** 유저 메뉴 컴포넌트  */
 const UserMenu = ({ currentUser }: { currentUser: User }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const isLoggedIn = useRecoilValue(loginState);
+
   const router = useRouter();
 
   return (
-    <UserMenuDiv>
+    <UserMenuContainer>
       {isLoggedIn ? (
         <>
           <IconButton
@@ -61,7 +64,7 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
               setIsUserModal={setIsUserModal}
             />
             <Image
-              src={"/images/profileIcon.png"}
+              src={currentUser ? currentUser.img : "/images/profileIcon.png"}
               width={32}
               height={32}
               objectFit="cover"
@@ -88,11 +91,11 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
           </LogoutButton>
         </>
       )}
-    </UserMenuDiv>
+    </UserMenuContainer>
   );
 };
 
-const UserMenuDiv = styled.div`
+const UserMenuContainer = styled.div`
   display: flex;
   position: relative;
   gap: 1.6rem;

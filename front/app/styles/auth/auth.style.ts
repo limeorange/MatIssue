@@ -90,7 +90,7 @@ export const ErrorMessageText = styled.span`
 
 export const AuthNavBox = styled.div`
   display: flex;
-  align-items: center;
+  align-items: end;
   justify-content: space-between;
   gap: 0.6rem;
   font-size: 14px;

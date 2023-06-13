@@ -1,14 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import styled from "styled-components";
+import Image from "next/image";
 
+/** 헤더 검색바 컴포넌트 */
 const SearchBar = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
+  /** 검색 핸들러 */
   const searchSubmitHandler: React.KeyboardEventHandler<HTMLInputElement> = (
     e
   ) => {
@@ -18,26 +20,24 @@ const SearchBar = () => {
   };
 
   return (
-    <SearchBarDiv>
-      <div>
-        <Image
-          src="/images/searchIcon.svg"
-          width={18}
-          height={18}
-          alt="searchIcon"
-        />
-      </div>
+    <SearchBarContainer>
+      <Image
+        src="/images/searchIcon.svg"
+        width={18}
+        height={18}
+        alt="searchIcon"
+      />
       <SearchBarInput
         onKeyUp={searchSubmitHandler}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setSearchQuery(e.target.value)
         }
       />
-    </SearchBarDiv>
+    </SearchBarContainer>
   );
 };
 
-const SearchBarDiv = styled.div`
+const SearchBarContainer = styled.div`
   display: none;
   align-items: center;
   padding: 0.8rem 1.6rem;

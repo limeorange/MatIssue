@@ -49,15 +49,15 @@ const LoginClient = () => {
       })
       .catch((err) => {
         toast.error(
-          "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
+          err.reponse.data.detail
+            ? err.reponse.data.detail
+            : "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
         );
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
-
-  useEffect(() => {}, []);
 
   return (
     <AuthContainer>
@@ -89,7 +89,6 @@ const LoginClient = () => {
             </Button>
           </div>
           <AuthNavBox>
-            <div>로그인 유지</div>
             <button
               type="button"
               onClick={() => {

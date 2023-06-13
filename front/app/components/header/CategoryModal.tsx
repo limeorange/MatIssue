@@ -1,28 +1,29 @@
 import Link from "next/link";
 import styled from "styled-components";
 
-const DUMMY_DATA = [
-  { id: 1, name: "양식", qeury: "western" },
-  { id: 2, name: "중식", qeury: "chinese" },
-  { id: 3, name: "일식", qeury: "japanese" },
-  { id: 4, name: "한식", qeury: "korean" },
+const CATEGORY_DATA = [
+  { name: "양식", qeury: "western" },
+  { name: "중식", qeury: "chinese" },
+  { name: "일식", qeury: "japanese" },
+  { name: "한식", qeury: "korean" },
 ];
 
+/** 헤더 카테고리 호버시 뜨는 카테고리바 모달 */
 const CategoryModal = ({ isModal }: { isModal: boolean }) => {
   return (
     <CategoryModalContainer visible={isModal}>
-      <CategoryModalUl>
-        {DUMMY_DATA.map((category) => (
-          <CategoryModalLi key={category.id}>
+      <CategoryModalList>
+        {CATEGORY_DATA.map((item, index) => (
+          <CategoryModalItem key={index}>
             <Link
-              href={`/recipes/category/${category.name}?category=${category.qeury}`}
+              href={`/recipes/category/${item.name}?category=${item.qeury}`}
               style={{ width: "100%" }}
             >
-              {category.name}
+              {item.name}
             </Link>
-          </CategoryModalLi>
+          </CategoryModalItem>
         ))}
-      </CategoryModalUl>
+      </CategoryModalList>
     </CategoryModalContainer>
   );
 };
@@ -56,12 +57,12 @@ const CategoryModalContainer = styled.div<{ visible: boolean }>`
   }
 `;
 
-const CategoryModalUl = styled.ul`
+const CategoryModalList = styled.ul`
   display: flex;
   flex-direction: column;
 `;
 
-const CategoryModalLi = styled.li`
+const CategoryModalItem = styled.li`
   display: flex;
   width: 100%;
   text-align: center;

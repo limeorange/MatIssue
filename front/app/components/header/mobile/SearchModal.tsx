@@ -10,6 +10,7 @@ type SearchModalProps = {
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+/** 모바일 전용 검색 모달 컴포넌트 */
 const SearchModal = (props: SearchModalProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrollPosition, setScrollPosition] = useState<number>(0);
@@ -17,6 +18,7 @@ const SearchModal = (props: SearchModalProps) => {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /** 검색 버튼 핸들러 */
   const searchSubmitHandler: React.KeyboardEventHandler<HTMLInputElement> = (
     e
   ) => {
@@ -25,18 +27,21 @@ const SearchModal = (props: SearchModalProps) => {
     }
   };
 
+  /** 모달 닫는 핸들러 */
   const closeModalHandler = () => {
     document.body.style.overflow = "auto";
     window.scrollTo(0, scrollPosition);
     props.setIsModal(false);
   };
 
+  /** 검색 모달 오픈시 인풋에 포커스 줘서 바로 키보드 띄우기 */
   useEffect(() => {
     if (props.isModal && inputRef.current) {
       inputRef.current.focus();
     }
   }, [props.isModal]);
 
+  /** 모달 오픈시 스크롤 기능 정지, 재개 기능 */
   useEffect(() => {
     if (props.isModal) {
       setScrollPosition(window.pageYOffset);
