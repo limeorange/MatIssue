@@ -10,7 +10,7 @@ type ConfirmModalProps = {
   showCancelButton?: boolean; // 추가: 취소 버튼을 보여줄지 여부를 결정하는 prop
 };
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({
+const FollowDeleteModal: React.FC<ConfirmModalProps> = ({
   icon,
   message,
   onCancel,
@@ -26,10 +26,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           <ConfirmButton>
             <Button
               type="button"
-              isBorderColor={true}
+              isBgColor={true}
               fullWidth={true}
               fullHeight={true}
-              isHoverColor={true}
+              isBorderColor={false}
+              isHoverColor={false}
               onClick={onConfirm}
             >
               확인
@@ -39,11 +40,10 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             <CancelButton>
               <Button
                 type="button"
-                isBgColor={true}
+                isBorderColor={true}
                 fullWidth={true}
                 fullHeight={true}
-                isBorderColor={false}
-                isHoverColor={false}
+                isHoverColor={true}
                 onClick={onCancel}
               >
                 취소
@@ -56,7 +56,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   );
 };
 
-export default ConfirmModal;
+export default FollowDeleteModal;
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -94,11 +94,11 @@ const ModalActions = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 2rem;
+  gap: 1rem;
 `;
 
 const ConfirmButton = styled.div`
   width: 7.5rem;
-  margin-right: 1.8rem;
 `;
 
 const CancelButton = styled.div`

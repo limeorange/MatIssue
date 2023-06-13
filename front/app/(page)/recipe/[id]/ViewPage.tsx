@@ -13,7 +13,7 @@ import ScrapModal from "@/app/components/recipe-view/scrap/ScrapModal";
 import StickyProgressBar from "@/app/components/recipe-view/sticky-sidebar/StickyProgressBar";
 import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySideBar";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRecipeById } from "@/app/api/recipe";
@@ -271,6 +271,16 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 모바일용 작성자 프로필 동그라미 */}
         <div>
+          {isProfileModal && (
+            <MiniWriterProfile
+              user_nickname={user_nickname}
+              user_fan={user_fan}
+              user_subscription={user_subscription}
+              user_id={user_id}
+              loggedInUserId={loggedInUserId}
+              user_img={user_img}
+            />
+          )}
           <ProfileImageDiv onClick={mobileProfileClickHandler}>
             <Image
               src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
@@ -279,17 +289,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
               height={150}
               style={{ objectFit: "cover", cursor: "pointer" }}
             />
-
-            {isProfileModal && (
-              <MiniWriterProfile
-                user_nickname={user_nickname}
-                user_fan={user_fan}
-                user_subscription={user_subscription}
-                user_id={user_id}
-                loggedInUserId={loggedInUserId}
-                user_img={user_img}
-              />
-            )}
           </ProfileImageDiv>
         </div>
 
@@ -656,4 +655,4 @@ const ShareIconDiv = styled.div`
   }
 `;
 
-export default RecipeDetail;
+export default React.memo(RecipeDetail);

@@ -5,8 +5,8 @@ import { getUserFans } from "@/app/api/user";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { axiosBase } from "@/app/api/axios";
-import ConfirmModal from "../../UI/ConfirmModal";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
+import FollowDeleteModal from "../../UI/FollowDeleteModal";
 
 type WriterProfileProps = {
   user_nickname: string;
@@ -26,7 +26,6 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
   loggedInUserId,
   user_img,
 }) => {
-  const isHeaderVisible = useMovingContentByScrolling();
   const [isFollowing, setIsFollowing] = useState(false);
   const [fanscount, setFansCount] = useState(user_fan);
 
@@ -160,16 +159,16 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
 
   return (
     <>
-      {/* 팔로잉 -> 팔로우 삭제 모달 */}
+      {/* 팔로우 취소 모달 */}
       {followDeleteConfirmModal && (
         <StyledConfirmModal
-          icon={<AlertImage src="/images/alert.png" alt="alert" />}
+          icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
           message="팔로우를 취소하시겠습니까?"
           onConfirm={deleteConfirmHandler}
           onCancel={confirmModalCloseHandler}
         />
       )}
-      <ProfileContainerDiv isHeaderVisible={isHeaderVisible}>
+      <ProfileContainerDiv>
         <ProfileHeaderDiv>오늘의 쉐프</ProfileHeaderDiv>
         <ProfileContentsDiv>
           {/* 프로필 사진 */}
@@ -206,7 +205,7 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
 };
 
 /** 프로필 박스 전체 감싸는 Div */
-const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
+const ProfileContainerDiv = styled.div`
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -219,9 +218,7 @@ const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
     background-color: #ffffff;
     z-index: 30;
 
-    transform: ${(props) =>
-      props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
-    transition: transform 0.3s ease-in-out;
+    
     }
 
   @media (min-width: 1024px) {
@@ -298,6 +295,6 @@ const FollowButton = styled.button`
 `;
 
 /** 팔로우 취소 컨펌 모달창 */
-const StyledConfirmModal = styled(ConfirmModal)``;
+const StyledConfirmModal = styled(FollowDeleteModal)``;
 
 export default MiniWriterProfile;
