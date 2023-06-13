@@ -461,8 +461,6 @@ export default UpdateRecipeForm;
 
 // 공통 스타일 적용
 const Label = styled.label`
-  width: 9.8rem;
-  height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 600;
@@ -471,11 +469,18 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
+
+  margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    width: 9.8rem;
+    height: 2.1rem;
+  }
 `;
 
 const Input = styled.input`
   box-sizing: border-box;
-  width: 57.2rem;
+  width: 100%;
   height: 3.6rem;
   border: 0.1rem solid #d9d9d9;
   border-radius: 1.5rem;
@@ -490,11 +495,15 @@ const Input = styled.input`
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
+
+  @media (min-width: 1024px) {
+    width: 57.2rem;
+  }
 `;
 
 const TextArea = styled.textarea`
   box-sizing: border-box;
-  width: 57.2rem;
+  width: 100%;
   height: 10rem;
   border: 0.1rem solid #d9d9d9;
   border-radius: 1.5rem;
@@ -514,20 +523,32 @@ const TextArea = styled.textarea`
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
+
+  @media (min-width: 1024px) {
+    width: 57.2rem;
+  }
 `;
 
 // 전체 폼 스타일링
 const FormWrapper = styled.form`
-  display: flex;
-  flex-direction: column;
-  width: 70rem;
-  align-items: flex-start;
-  margin: 5rem auto 0;
-  // background-color: rgba(1, 1, 1, 0.2);
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+
+  @media (min-width: 1024px) {
+    width: 70rem;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: flex-start;
+    margin: 5rem auto 0;
+    margin-bottom: 16rem;
+
+    padding: 0;
+  }
 `;
 
 const Title = styled.h2`
-  width: 15.8rem;
+  width: 16.8rem;
   height: 2.7rem;
   font-family: "Inter";
   font-style: normal;
@@ -539,41 +560,63 @@ const Title = styled.h2`
 `;
 
 const MainSection = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 2rem;
+  flex-direction: column;
+
+  @media (min-width: 1024px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }
 `;
 
 const ImageContainer = styled.div`
   display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  margin-right: 4.9rem;
+  justify-content: flex-start;
+
+  @media (min-width: 1024px) {
+    justify-content: center;
+    margin-top: 2rem;
+    margin-right: 4.9rem;
+  }
 `;
 
 const RecipeTitle = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: flex-start;
-  margin-top: 10rem;
+  margin-top: 4rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 10rem;
+  }
 `;
 
 const CookingIntro = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   margin-top: 2rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
 `;
 
 const CookingTips = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 4rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
 const TipsLabel = styled(Label)`
@@ -581,7 +624,11 @@ const TipsLabel = styled(Label)`
 `;
 
 const TipsTextArea = styled(TextArea)`
-  width: 62rem;
+  width: 100%;
+
+  @media (min-width: 1024px) {
+    width: 62rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
