@@ -2,10 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import { Recipe } from "@/app/types";
 
-const MainRecipeCard = ({ recipe }: { recipe: Recipe }) => {
+/** 메인 레시피 카드 */
+const MobileRecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
 
   const handleRecipeClick = () => {
@@ -16,8 +17,16 @@ const MainRecipeCard = ({ recipe }: { recipe: Recipe }) => {
     <>
       <RecipeCardWrapper onClick={handleRecipeClick}>
         <RecipeImg>
-          <Img src={recipe.recipe_thumbnail} alt="게시물 썸네일 이미지" />
+          <ImgWrapper>
+            <Image
+              fill
+              objectFit="cover"
+              src={recipe.recipe_thumbnail}
+              alt="게시물 썸네일 이미지"
+            />
+          </ImgWrapper>
         </RecipeImg>
+
         <RecipeTitle>
           <p>{recipe.recipe_title}</p>
         </RecipeTitle>
@@ -55,7 +64,7 @@ const MainRecipeCard = ({ recipe }: { recipe: Recipe }) => {
   );
 };
 
-export default MainRecipeCard;
+export default MobileRecipeCard;
 
 // styled-components
 const RecipeCardWrapper = styled.div`
@@ -78,7 +87,7 @@ const RecipeImg = styled.div`
   overflow: hidden;
 `;
 
-const Img = styled.img`
+const ImgWrapper = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
