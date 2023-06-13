@@ -164,8 +164,8 @@ const StepLabel = styled(Label)`
 `;
 
 const ImageUploadBox = styled.div<{ imgExists: boolean }>`
-  width: 19.9rem;
-  height: 16rem;
+  width: 100%;
+  height: 18.6rem;
   background: ${(props) =>
     props.imgExists
       ? "#f7f5f5"
@@ -175,12 +175,20 @@ const ImageUploadBox = styled.div<{ imgExists: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 2rem;
   position: relative;
   cursor: pointer;
+  margin-top: 1rem;
+
+  @media (min-width: 1024px) {
+    width: 19.9rem;
+    height: 16rem;
+    margin-left: 2rem;
+    margin-top: 0;
+  }
 `;
 
 const StepWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -201,6 +209,7 @@ const StepTextArea = styled(TextArea)`
 `;
 
 const AddStepButton = styled.button`
+  width: 100%;
   font-family: "Pretendard", sans-serif;
   font-style: normal;
   font-weight: 600;
@@ -218,12 +227,21 @@ const RemoveStepButton = styled.button`
   width: 2.5rem;
   height: 2.5rem;
   border: none;
-  margin-left: 1.4rem;
-  margin-top: 0.6rem;
+  margin-left: 0;
+  margin-top: 0.5rem;
   cursor: pointer;
   align-self: center;
   background: url("/images/stepDeleteIcon.png") no-repeat center;
   background-size: contain;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  @media (min-width: 1024px) {
+    position: relative;
+    margin-left: 1.4rem;
+    margin-top: 0.6rem;
+  }
 `;
 
 const FileInput = styled.input`
