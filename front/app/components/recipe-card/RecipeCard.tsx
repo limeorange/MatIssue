@@ -36,13 +36,15 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
             <RecipeRankItem>
               <RecipeRankImg>
                 <Image
-                  src="/images/like.png"
+                  src="/images/recipe-view/heart_full.svg"
                   alt="게시물 좋아요 이미지"
-                  width={13}
-                  height={11}
+                  width={30}
+                  height={26}
                 />
               </RecipeRankImg>
-              <p>{recipe.recipe_like.length.toLocaleString()}</p>
+              <HeartCount>
+                {recipe.recipe_like.length.toLocaleString()}
+              </HeartCount>
             </RecipeRankItem>
             {/* <RecipeRankItem>
               <RecipeRankImg>
@@ -145,7 +147,15 @@ const RecipeRankItem = styled.div`
 `;
 
 const RecipeRankImg = styled.div`
+  min-width: 1.6rem;
+  min-height: 1.4rem;
+  margin-right: 0.5rem;
+
   max-width: 1.3rem;
   max-height: 1.1rem;
-  margin-bottom: 0.3rem;
+`;
+
+const HeartCount = styled.span`
+  font-size: 14px;
+  margin-right: 0.2rem;
 `;
