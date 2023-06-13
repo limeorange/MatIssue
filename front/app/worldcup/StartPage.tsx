@@ -110,7 +110,7 @@ const WorldcupLayout = styled.div`
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
-  font-size: 80px;
+  font-size: 60px;
   color: #fbd26a;
   font-family: "Dongle-Bold";
   margin-bottom: -3rem;
@@ -124,6 +124,10 @@ const GameHeader = styled.p<StyledComponentProps>`
       ? "slideOut 1.3s ease-in-out"
       : "slideUp 1s ease-in-out"};
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
+
+  @media (min-width: 1024px) {
+    font-size: 80px;
+  }
 `;
 
 const StartPageMessage = styled.p<StyledComponentProps>`
@@ -148,11 +152,13 @@ const ImageBox = styled.div<StyledComponentProps>`
 
 const ButtonBox = styled.div<StyledComponentProps>`
   margin-top: 1rem;
+  display: flex;
+  justify-content: center;
 
   & Button {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    margin-right: 1rem;
+    margin-right: 0.2rem;
 
     &:hover {
       transform: translateY(-3px);
@@ -168,4 +174,10 @@ const ButtonBox = styled.div<StyledComponentProps>`
       ? "slideOut 1.3s ease-in-out"
       : "slideUp 1.5s ease-in-out"};
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.4s")};
+
+  @media (min-width: 1024px) {
+    & Button {
+      margin-right: 1rem;
+    }
+  }
 `;
