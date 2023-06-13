@@ -10,7 +10,6 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
-import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
 import { useQuery } from "@tanstack/react-query";
 import { getAllRecipes } from "@/app/api/recipe";
 import LoadingRecipe from "../UI/LoadingRecipe";
