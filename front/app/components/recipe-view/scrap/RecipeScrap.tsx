@@ -56,27 +56,42 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
 /** 스크랩 아이콘과 글자 묶는 Button */
 const ScrapWrapperButton = styled.button`
   display: flex;
-  width: 12rem;
-  height: 5.5rem;
+  width: 10rem;
+  height: 4.2rem;
   border-radius: 1.5rem;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
   background-color: #ffffff;
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+
+  @media (min-width: 1024px) {
+    width: 12rem;
+    height: 5.5rem;
+    margin-top: 1rem;
+  }
 `;
 
 /** 스크랩 아이콘 Div */
 const IconDiv = styled.div`
-  width: 3.2rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2rem;
   margin-right: 0.6rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+
+  @media (min-width: 1024px) {
+    width: 3.2rem;
+    height: 3rem;
+    margin-bottom: 0.3rem;
+  }
 `;
 
 /** 스크랩 글자 Span */
 const ScrapTitle = styled.span`
-  font-size: 18px;
+  font-size: 16px;
+
+  @media (min-width: 1024px) {
+    font-size: 18px;
+  }
 `;
 
 export default RecipeScrap;

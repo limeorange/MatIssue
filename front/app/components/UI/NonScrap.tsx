@@ -2,20 +2,20 @@
 
 import styled from "styled-components";
 
-const NonRecipePage = () => {
+const NonScrapPage = () => {
   return (
     <>
       <NoRecipeIconBox>
         <NoRcipeIcon
-          src={"/images/my-page/레시피 안내 문구.svg"}
-          alt="요리사 로고"
+          src={"/images/my-page/스크랩 안내 문구.svg"}
+          alt="요리사 스크랩 안내 로고"
         />
       </NoRecipeIconBox>
     </>
   );
 };
 
-export default NonRecipePage;
+export default NonScrapPage;
 
 const NoRecipeIconBox = styled.div`
   display: flex;

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import ScrapCardItem from "./ScrapCardItem";
 import NonRecipe from "../../UI/NonRecipe";
 import { useEffect, useState } from "react";
+import NonScrapPage from "../../UI/NonScrap";
 
 type MemoItemProps = {
   created_at: string;
@@ -38,7 +39,7 @@ const ScrapCardList: React.FC = () => {
       <ScrapTitleSpan>나의 스크랩</ScrapTitleSpan>
       <ScrapCountSpan>{parsedMemo.length}</ScrapCountSpan>
       {parsedMemo.length === 0 ? (
-        <NonRecipeMsg />
+        <NonScrapMsg />
       ) : (
         <ScrapListGrid>
           {parsedMemo.map((item: ScrapItemProps, index: number) => {
@@ -90,6 +91,6 @@ const ScrapListGrid = styled.div`
 `;
 
 /** 레시피가 없을 경우 띄워주는 안내 그림 */
-const NonRecipeMsg = styled(NonRecipe)``;
+const NonScrapMsg = styled(NonScrapPage)``;
 
 export default ScrapCardList;

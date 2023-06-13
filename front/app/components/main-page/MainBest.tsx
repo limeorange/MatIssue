@@ -226,5 +226,5 @@ const RightSlideBtn = styled.button<{ currentPage: number; totalPage: number }>`
 const StyledItem = styled.li<{ clicked: boolean }>`
   cursor: pointer;
   font-weight: ${(props) => (props.clicked ? "600" : "400")};
-  color: ${(props) => (props.clicked ? "#4F3D21" : "#ddd")};
+  color: ${(props) => (props.clicked ? "#4F3D21" : "#aaa")};
 `;

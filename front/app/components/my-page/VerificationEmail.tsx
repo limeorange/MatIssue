@@ -110,7 +110,7 @@ const VerificationEmail = ({
             )}
           </FlexBox>
       </EmailWrapper>
-      {true && (
+      {isButtonClicked && (
         <Wrapper>
           <EmailContainer>
             <EmailWrapper>

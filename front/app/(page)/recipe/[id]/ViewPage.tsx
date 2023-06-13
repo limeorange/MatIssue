@@ -7,13 +7,13 @@ import RecipeComments from "@/app/components/recipe-view/comment/RecipeCommentLi
 import RecipeInfo from "@/app/components/recipe-view/RecipeInfo";
 import RecipeScrap from "@/app/components/recipe-view/scrap/RecipeScrap";
 import RecipeSteps from "@/app/components/recipe-view/RecipeStepList";
-import RecipeUserLikes from "@/app/components/recipe-view/RecipeUserLikes";
+import RecipeUserLikes from "@/app/components/recipe-view/likes-share/RecipeUserLikes";
 import RecipeVideo from "@/app/components/recipe-view/RecipeVideo";
 import ScrapModal from "@/app/components/recipe-view/scrap/ScrapModal";
 import StickyProgressBar from "@/app/components/recipe-view/sticky-sidebar/StickyProgressBar";
 import StickySideBar from "@/app/components/recipe-view/sticky-sidebar/StickySideBar";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRecipeById } from "@/app/api/recipe";
@@ -26,7 +26,9 @@ import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling
 import { useRouter } from "next/navigation";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
-import RecipeKakaoShareButton from "@/app/utils/recipeKakaoShare";
+import ShareModal from "@/app/components/recipe-view/likes-share/ShareModal";
+import MiniWriterProfile from "@/app/components/recipe-view/sticky-sidebar/MiniWriterProfile";
+import LoginConfirmModal from "@/app/components/UI/LoginConfirmModal";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -122,8 +124,17 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 삭제 확인 모달 상태 관리
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
 
+  // 공유 모달 상태 관리
+  const [isShareModal, setIsShareModal] = useState(false);
+
+  // 프로필 모달 상태 관리
+  const [isProfileModal, setIsProfileModal] = useState(false);
+
   // 스크롤에 의한 컨텐츠 이동 Hook
   const isHeaderVisible = useMovingContentByScrolling();
+
+  // 로그인 유도 모달 상태 관리
+  const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
   /** 좋아요 버튼 클릭 핸들러 */
   const heartClickHandler = async () => {
@@ -191,22 +202,29 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   };
 
-  /** url 복사하는 함수 */
-  const copyToClipboard = async () => {
-    const currentPageUrl = window.location.href;
-    try {
-      await navigator.clipboard.writeText(currentPageUrl);
-      toast.success("URL이 복사 되었습니다!");
-    } catch (err: any) {
-      toast.error("URL 복사에 실패했습니다.", err);
-    }
+  /** 공유하기 버튼 클릭 핸들러 */
+  const shareButtonClickHandler = () => {
+    setIsShareModal(!isShareModal);
   };
 
-  /** 비로그인 유저가 댓글창 클릭 시 핸들러 */
-  const notLoggedInTryHandler = () => {
-    if (loggedInUserId === undefined) {
-      toast.error("로그인을 진행해주세요!");
-    }
+  /** 모바일 프로필 이미지 클릭 핸들러 */
+  const mobileProfileClickHandler = () => {
+    setIsProfileModal(!isProfileModal);
+  };
+
+  /** 로그인 유도 모달 핸들러 */
+  const loginConfirmModalHandler = () => {
+    setLoginConfirmModal(!loginConfirmModal);
+  };
+
+  /** 로그인 유도 모달 : 취소 클릭 핸들러 */
+  const loginModalCloseHandler = () => {
+    setLoginConfirmModal(false);
+  };
+
+  /** 로그인 유도 모달 : 로그인 클릭 핸들러 */
+  const loginMoveHandler = () => {
+    router.push("auth/login");
   };
 
   return (
@@ -215,10 +233,20 @@ const RecipeDetail = (props: RecipeDataProps) => {
         {/* 게시글 삭제 확인 모달 */}
         {deleteConfirmModal && (
           <StyledConfirmModal
-            icon={<AlertImage src="/images/alert.png" alt="alert" />}
+            icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
             message="레시피를 삭제하시겠습니까?"
             onConfirm={deleteConfirmHandler}
             onCancel={confirmModalCloseHandler}
+          />
+        )}
+
+        {/* 비회원 로그인 유도 모달 */}
+        {loginConfirmModal && loggedInUserId === undefined && (
+          <StyledLoginConfirmModal
+            icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
+            message="로그인이 필요합니다. 로그인 하시겠습니까?"
+            onConfirm={loginMoveHandler}
+            onCancel={loginModalCloseHandler}
           />
         )}
 
@@ -240,6 +268,30 @@ const RecipeDetail = (props: RecipeDataProps) => {
           loggedInUserId={loggedInUserId}
           user_img={user_img}
         />
+
+        {/* 모바일용 작성자 프로필 동그라미 */}
+        <div>
+          <ProfileImageDiv onClick={mobileProfileClickHandler}>
+            <Image
+              src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
+              alt="게시글 작성자 프로필 사진"
+              width={150}
+              height={150}
+              style={{ objectFit: "cover", cursor: "pointer" }}
+            />
+
+            {isProfileModal && (
+              <MiniWriterProfile
+                user_nickname={user_nickname}
+                user_fan={user_fan}
+                user_subscription={user_subscription}
+                user_id={user_id}
+                loggedInUserId={loggedInUserId}
+                user_img={user_img}
+              />
+            )}
+          </ProfileImageDiv>
+        </div>
 
         {/* 요리 대표 이미지 */}
         <RecipeImg>
@@ -307,47 +359,48 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
-        <div className="flex flex-col gap-[1.5rem] py-[3.5rem] justify-center items-center">
-          <div className="flex gap-[1.5rem]">
-            {/* 좋아요 */}
-            <div onClick={notLoggedInTryHandler}>
-              <RecipeUserLikes
-                isLiked={isLiked}
-                countText={countText}
-                heartClickHandler={heartClickHandler}
-              />
-            </div>
-
-            {/* 스크랩 */}
-            <div id="heading6" onClick={notLoggedInTryHandler}>
-              <RecipeScrap
-                isSaved={isSaved}
-                setIsSaved={setIsSaved}
-                isBooked={isBooked}
-                scrapClickHandler={scrapClickHandler}
-                recipe_id={recipe_id}
-              />
-              {isBooked && (
-                <ScrapModal
-                  setIsSaved={setIsSaved}
-                  modalCloseHandler={modalCloseHandler}
-                  recipe={recipe}
-                />
-              )}
-            </div>
+        <div className="flex gap-[1.5rem] justify-center items-center mt-[3rem]">
+          {/* 좋아요 */}
+          <div onClick={loginConfirmModalHandler}>
+            <RecipeUserLikes
+              isLiked={isLiked}
+              countText={countText}
+              heartClickHandler={heartClickHandler}
+            />
           </div>
-          {/* 링크, 카카오 공유하기 */}
-          <ShareButtonDiv>
-            <div onClick={copyToClipboard}>
-              <Image
-                src="/images/link.png"
-                alt="링크 공유 아이콘"
-                width={60}
-                height={50}
+
+          {/* 스크랩 */}
+          <div id="heading6" onClick={loginConfirmModalHandler}>
+            <RecipeScrap
+              isSaved={isSaved}
+              setIsSaved={setIsSaved}
+              isBooked={isBooked}
+              scrapClickHandler={scrapClickHandler}
+              recipe_id={recipe_id}
+            />
+            {isBooked && loggedInUserId !== undefined && (
+              <ScrapModal
+                setIsSaved={setIsSaved}
+                modalCloseHandler={modalCloseHandler}
+                recipe={recipe}
               />
-            </div>
-            <RecipeKakaoShareButton />
-          </ShareButtonDiv>
+            )}
+          </div>
+
+          {/* 링크, 카카오 공유하기 */}
+          <ShareWrapperButton onClick={shareButtonClickHandler}>
+            <ShareIconDiv>
+              <Image
+                src="/images/recipe-view/share_goldbrown.png"
+                alt="공유하기 아이콘"
+                width={26}
+                height={22}
+                style={{ objectFit: "cover", cursor: "pointer" }}
+              />
+            </ShareIconDiv>
+            {/* 공유 모달 */}
+            {isShareModal && <ShareModal />}
+          </ShareWrapperButton>
         </div>
 
         {/* 댓글 */}
@@ -365,7 +418,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
             {commentCount}
           </SubtitleH2>
           <RecipeComments comments={comments} />
-          <div onClick={notLoggedInTryHandler}>
+          <div onClick={loginConfirmModalHandler}>
             <RecipeCommentInput recipe_id={recipe_id} />
           </div>
         </div>
@@ -378,18 +431,34 @@ const RecipeDetail = (props: RecipeDataProps) => {
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
-  // gap: 2.5rem;
   padding: 0 1.5rem;
   max-width: 67rem;
   width: 100%;
   margin: 0 auto;
-  // justify-content: top;
   justify-content: flex-start;
-  // align-items: flex-start;
 
   @media (min-width: 1024px) {
     margin-top: 1.5rem;
     padding: 0;
+  }
+`;
+
+/** 프로필 이미지 감싸는 Div */
+const ProfileImageDiv = styled.div`
+  position: fixed;
+  bottom: 2%;
+  right: 8%;
+  width: 6rem;
+  height: 6rem;
+  margin-bottom: 1.3rem;
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ffffff;
+  z-index: 1000;
+
+  @media (min-width: 1024px) {
+    display: none;
   }
 `;
 
@@ -401,6 +470,7 @@ const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
     position: fixed;
     right: 14.7rem;
     top: 50.4rem;
+    gap: 1rem;
 
     transform: ${(props) =>
       props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
@@ -422,6 +492,7 @@ const EditButton = styled.button`
   }
 
   @media (min-width: 1024px) {
+    font-size: 16.5px;
     width: 6.7rem;
     height: 3.7rem;
     border-radius: 1rem;
@@ -444,6 +515,7 @@ const DeleteButton = styled.button`
   }
 
   @media (min-width: 1024px) {
+    font-size: 16.5px;
     width: 6.7rem;
     height: 3.7rem;
     border-radius: 1rem;
@@ -456,23 +528,10 @@ const DeleteButton = styled.button`
 /** 삭제 컨펌 모달창 */
 const StyledConfirmModal = styled(ConfirmModal)``;
 
-/** 이미지 감싸는 Div */
-const ImageWrapperDiv = styled.div`
-  // width: 100%;
-  // max-width: 65rem;
-  // height: 20rem;
-  // position: relative;
-  // margin: 1.4rem 0;
+/** 로그인 유도 모달창 */
+const StyledLoginConfirmModal = styled(LoginConfirmModal)``;
 
-  // @media (min-width: 1024px) {
-  //   max-width: 65rem;
-  //   height: 35rem;
-  // }
-
-  position: relative;
-  padding-top: 70%;
-`;
-
+/** 요리 대표 이미지 */
 const RecipeImg = styled.div`
   position: relative;
   padding-top: 55%;
@@ -480,7 +539,6 @@ const RecipeImg = styled.div`
   overflow: hidden;
   margin: 1.3rem 0;
 `;
-
 const Img = styled.img`
   position: absolute;
   width: 100%;
@@ -488,13 +546,6 @@ const Img = styled.img`
   inset: 0;
   object-fit: cover;
   border-radius: 0.8rem;
-`;
-
-/** 이미지 스타일 */
-const ResponsiveImage = styled(Image)`
-  width: 100%;
-  height: auto;
-  overflow: hidden;
 `;
 
 /** 요리 주제 소개 담은 Div */
@@ -554,7 +605,7 @@ const SubtitleH2 = styled.h2`
     font-size: 2rem;
     color: #b08038;
     font-weight: 500;
-    margin-top: 0rem;
+    \
   }
 `;
 
@@ -566,31 +617,42 @@ const RecipeTipDiv = styled.div`
 /** 댓글 아이콘 Div */
 const CommentIconDiv = styled.div`
   margin-left: 0.5rem;
-  // margin-top: 0.4rem;
   margin-right: 0.2rem;
-  // margin-bottom: 0.2rem;
+  margin-top: 0.1rem;
+
+  @media (min-width: 1024px) {
+    margin-top: 0.3rem;
+  }
 `;
 
-/** 링크 공유하기 버튼 Div */
-const ShareButtonDiv = styled.div`
-  width: 100%;
-  max-width: 13rem;
+/** 공유하기 아이콘 Button */
+const ShareWrapperButton = styled.button`
+  position: relative;
   display: flex;
-  align-items: center;
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 1.5rem;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  margin-left: 1rem;
+  align-items: center;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
 
-  & div {
-    cursor: pointer;
-    border-radius: 100%;
-    box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+  @media (min-width: 1024px) {
+    width: 5.5rem;
+    height: 5.5rem;
+    margin-top: 1rem;
+  }
+`;
 
-    &:hover {
-      transform: translateY(-3px);
-    }
+/** 공유하기 아이콘 Div */
+const ShareIconDiv = styled.div`
+  width: 2.2rem;
+
+  @media (min-width: 1024px) {
+    width: 3.2rem;
+    height: 2.8rem;
+    margin-left: 0.2rem;
+    margin-bottom: 0.2rem;
   }
 `;
 

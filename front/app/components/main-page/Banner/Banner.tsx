@@ -43,9 +43,12 @@ export default Banner;
 const BannerContainer = styled.div`
   display: block;
   width: 100%;
+  padding: 1.5rem 1.5rem 0 1.5rem;
 
   @media (min-width: 1024px) {
     display: block;
+    padding: 0;
+    border-radius: 0;
     min-width: 102.4rem;
     height: 40rem;
     background-color: #ffea85;
@@ -62,6 +65,8 @@ const BannerWrapper = styled.div`
   height: 100%;
   margin: 0 auto;
   padding: 0;
+  overflow: hidden;
+  border-radius: 0.8rem;
 
   @media (min-width: 1024px) {
     padding: 0 2rem;

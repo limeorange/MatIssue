@@ -7,8 +7,6 @@ import { useEffect, useState } from "react";
 import { axiosBase } from "@/app/api/axios";
 import ConfirmModal from "../../UI/ConfirmModal";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
-import LoginConfirmModal from "../../UI/LoginConfirmModal";
-import { useRouter } from "next/navigation";
 
 type WriterProfileProps = {
   user_nickname: string;
@@ -20,7 +18,7 @@ type WriterProfileProps = {
 };
 
 /** 작성자 프로필 컴포넌트 */
-const WriterProfile: React.FC<WriterProfileProps> = ({
+const MiniWriterProfile: React.FC<WriterProfileProps> = ({
   user_nickname,
   user_fan,
   user_subscription,
@@ -31,9 +29,6 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
   const isHeaderVisible = useMovingContentByScrolling();
   const [isFollowing, setIsFollowing] = useState(false);
   const [fanscount, setFansCount] = useState(user_fan);
-
-  // 로그인 유도 모달 상태 관리
-  const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
   // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
   useEffect(() => {
@@ -104,7 +99,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
       }
       // 로그인되지 않은 유저가 팔로우 요청하는 경우
       else if (loggedInUserId === undefined) {
-        setLoginConfirmModal(!loginConfirmModal);
+        toast.error("로그인을 진행해주세요!");
       }
       // 작성자와 다른 로그인 유저가 팔로우 요청하는 경우
       else {
@@ -163,39 +158,17 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
     setFollowDeleteConfirmModal(false);
   };
 
-  /** 로그인 유도 모달 : 취소 클릭 핸들러 */
-  const loginModalCloseHandler = () => {
-    setLoginConfirmModal(false);
-  };
-
-  /** 로그인 유도 모달 : 로그인 클릭 핸들러 */
-  const router = useRouter();
-  const loginMoveHandler = () => {
-    router.push("auth/login");
-  };
-
   return (
     <>
-      {/* 팔로우 취소 모달 */}
+      {/* 팔로잉 -> 팔로우 삭제 모달 */}
       {followDeleteConfirmModal && (
         <StyledConfirmModal
-          icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
+          icon={<AlertImage src="/images/alert.png" alt="alert" />}
           message="팔로우를 취소하시겠습니까?"
           onConfirm={deleteConfirmHandler}
           onCancel={confirmModalCloseHandler}
         />
       )}
-
-      {/* 비회원 로그인 유도 모달 */}
-      {loginConfirmModal && loggedInUserId === undefined && (
-        <StyledLoginConfirmModal
-          icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
-          message="로그인이 필요합니다. 로그인 하시겠습니까?"
-          onConfirm={loginMoveHandler}
-          onCancel={loginModalCloseHandler}
-        />
-      )}
-
       <ProfileContainerDiv isHeaderVisible={isHeaderVisible}>
         <ProfileHeaderDiv>오늘의 쉐프</ProfileHeaderDiv>
         <ProfileContentsDiv>
@@ -234,16 +207,13 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
 
 /** 프로필 박스 전체 감싸는 Div */
 const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
-  display: none;
-
-  @media (min-width: 1200px) {
     display: flex;
     flex-direction: column;
     position: fixed;
     width: 18.5rem;
     height: 32rem;
-    right: 12.5rem;
-    top: 16.5rem;
+    right: 8%;
+    bottom: 14%;
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
     border-radius: 2rem;
     background-color: #ffffff;
@@ -252,7 +222,10 @@ const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
     transform: ${(props) =>
       props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
     transition: transform 0.3s ease-in-out;
-  }
+    }
+
+  @media (min-width: 1024px) {
+    display: none;
 `;
 
 /** 프로필 헤더 박스 Div */
@@ -327,7 +300,4 @@ const FollowButton = styled.button`
 /** 팔로우 취소 컨펌 모달창 */
 const StyledConfirmModal = styled(ConfirmModal)``;
 
-/** 로그인 유도 모달창 */
-const StyledLoginConfirmModal = styled(LoginConfirmModal)``;
-
-export default WriterProfile;
+export default MiniWriterProfile;

@@ -38,26 +38,40 @@ const RecipeUserLikes: React.FC<UserLikesProps> = ({
 /** 좋아요 아이콘과 카운트 묶는 Button */
 const LikesWrapperButton = styled.button`
   display: flex;
-  width: 11rem;
-  height: 5.5rem;
+  width: 7rem;
+  height: 4.2rem;
   border-radius: 1.5rem;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
   background-color: #ffffff;
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+
+  @media (min-width: 1024px) {
+    width: 9rem;
+    height: 5.5rem;
+    margin-top: 1rem;
+  }
 `;
 
 /** 좋아요 아이콘 Div */
 const IconDiv = styled.div`
-  width: 3.2rem;
-  height: 2.8rem;
+  width: 2.1rem;
+  height: 1.8rem;
   margin-right: 0.6rem;
+
+  @media (min-width: 1024px) {
+    width: 3.2rem;
+    height: 2.8rem;
+  }
 `;
 
 /** 좋아요 개수 Span */
 const LikesCount = styled.span`
-  font-size: 18px;
+  font-size: 16px;
+
+  @media (min-width: 1024px) {
+    font-size: 18px;
+  }
 `;
 
 export default RecipeUserLikes;
