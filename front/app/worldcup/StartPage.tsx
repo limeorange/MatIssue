@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import Image from "next/image";
@@ -12,7 +12,24 @@ type StyledComponentProps = {
 
 const StartPage = () => {
   const [isAnimateOut, setIsAnimateOut] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0); // window width state
   const router = useRouter();
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth); // initially set window width
+
+    const handleResize = () => {
+      // update the window width when the window is resized
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      // cleanup the event listener
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const startGame = (stage: number) => {
     router.push(`/worldcup/game-page?stage=${stage}`);
@@ -34,52 +51,56 @@ const StartPage = () => {
           style={{ marginRight: "2rem" }}
         />
       </ImageBox>
-      <ButtonBox isAnimateOut={isAnimateOut}>
-        <Button
-          isBgColor={true}
-          isBorderColor={false}
-          isHoverColor={false}
-          onClick={() => {
-            setIsAnimateOut(true);
-            startGame(64);
-          }}
-        >
-          64강 시작
-        </Button>
-        <Button
-          isBgColor={false}
-          isBorderColor={true}
-          isHoverColor={true}
-          onClick={() => {
-            setIsAnimateOut(true);
-            startGame(32);
-          }}
-        >
-          32강 시작
-        </Button>
-        <Button
-          isBgColor={true}
-          isBorderColor={false}
-          isHoverColor={false}
-          onClick={() => {
-            setIsAnimateOut(true);
-            startGame(16);
-          }}
-        >
-          16강 시작
-        </Button>
-        <Button
-          isBgColor={false}
-          isBorderColor={true}
-          isHoverColor={true}
-          onClick={() => {
-            setIsAnimateOut(true);
-            startGame(8);
-          }}
-        >
-          8강 시작
-        </Button>
-      </ButtonBox>
+      <ButtonContainer isAnimateOut={isAnimateOut}>
+        <ButtonBoxOne>
+          <Button
+            isBgColor={true}
+            isBorderColor={false}
+            isHoverColor={false}
+            onClick={() => {
+              setIsAnimateOut(true);
+              startGame(64);
+            }}
+          >
+            64강 시작
+          </Button>
+          <Button
+            isBgColor={false}
+            isBorderColor={true}
+            isHoverColor={true}
+            onClick={() => {
+              setIsAnimateOut(true);
+              startGame(32);
+            }}
+          >
+            32강 시작
+          </Button>
+        </ButtonBoxOne>
+        <ButtonBoxTwo>
+          <Button
+            isBgColor={windowWidth <= 1024 ? false : true}
+            isBorderColor={windowWidth <= 1024 ? true : false}
+            isHoverColor={windowWidth <= 1024 ? true : false}
+            onClick={() => {
+              setIsAnimateOut(true);
+              startGame(16);
+            }}
+          >
+            16강 시작
+          </Button>
+          <Button
+            isBgColor={windowWidth <= 1024 ? true : false}
+            isBorderColor={windowWidth <= 1024 ? false : true}
+            isHoverColor={windowWidth <= 1024 ? false : true}
+            onClick={() => {
+              setIsAnimateOut(true);
+              startGame(8);
+            }}
+          >
+            8강 시작
+          </Button>
+        </ButtonBoxTwo>
+      </ButtonContainer>
     </WorldcupLayout>
   );
 };
@@ -150,7 +171,7 @@ const ImageBox = styled.div<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.4s")};
 `;
 
-const ButtonBox = styled.div<StyledComponentProps>`
+const ButtonContainer = styled.div<StyledComponentProps>`
   margin-top: 1rem;
   display: flex;
   justify-content: center;
@@ -178,6 +199,31 @@ const ButtonBox = styled.div<StyledComponentProps>`
   @media (min-width: 1024px) {
     & Button {
       margin-right: 1rem;
+    }
+  }
+`;
+
+const ButtonBoxOne = styled.div`
+  margin-right: 0;
+
+  @media (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    margin-right: 1rem;
+
+    & Button {
+      margin-bottom: 1rem;
+    }
+  }
+`;
+
+const ButtonBoxTwo = styled.div`
+  @media (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+
+    & Button {
+      margin-bottom: 1rem;
     }
   }
 `;
