@@ -51,24 +51,28 @@ const IngredientSection = ({
               onKeyPress={handleIngredientKeyPress}
               placeholder="재료의 양"
             />
-            {showRemoveButton && (
-              <RemoveIngredientButton
-                type="button"
-                onClick={() => handleRemoveIngredient(index)}
-              />
-            )}
+            <ButtonPlaceholder>
+              {showRemoveButton && (
+                <RemoveIngredientButton
+                  type="button"
+                  onClick={() => handleRemoveIngredient(index)}
+                />
+              )}
+            </ButtonPlaceholder>
           </IngredientRow>
         ))}
-        <AddIngredientButton
-          type="button"
-          onClick={(event) => {
-            event.preventDefault();
-            handleAddIngredient();
-          }}
-          onKeyPress={handleIngredientKeyPress}
-        >
-          + 재료 추가하기
-        </AddIngredientButton>
+        <CenteredAddButtonRow>
+          <AddIngredientButton
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              handleAddIngredient();
+            }}
+            onKeyPress={handleIngredientKeyPress}
+          >
+            + 재료 추가하기
+          </AddIngredientButton>
+        </CenteredAddButtonRow>
       </IngredientBox>
     </IngredientContainer>
   );
@@ -81,7 +85,7 @@ const IngredientContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-top: 2rem;
+  margin-top: 4rem;
 
   @media (min-width: 1024px) {
     flex-direction: row;
@@ -92,6 +96,7 @@ const IngredientContainer = styled.div`
 const IngredientBox = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const Label = styled.label`
@@ -113,7 +118,7 @@ const Label = styled.label`
 `;
 
 const IngredientInput = styled.input`
-  width: calc(60% - 0.6rem);
+  width: 100%;
   height: 3.6rem;
   margin-right: 1.2rem;
   border: 1px solid #c4c4c4;
@@ -133,7 +138,7 @@ const IngredientInput = styled.input`
 `;
 
 const QuantityInput = styled.input`
-  width: calc(40% - 0.6rem);
+  width: 60%;
   height: 3.6rem;
   border: 1px solid #c4c4c4;
   box-sizing: border-box;
@@ -158,6 +163,17 @@ const IngredientRow = styled.div`
   margin-bottom: 1.5rem;
 `;
 
+const ButtonPlaceholder = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
+`;
+
+const CenteredAddButtonRow = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
+
 const AddIngredientButton = styled.button`
   font-family: "Pretendard", sans-serif;
   font-style: normal;
@@ -174,9 +190,13 @@ const RemoveIngredientButton = styled.button`
   width: 2.5rem;
   height: 2.5rem;
   border: none;
-  margin-left: 1.4rem;
+  margin-left: 0.5rem;
   margin-top: 0.6rem;
   cursor: pointer;
   background: url("/images/stepDeleteIcon.png") no-repeat center;
   background-size: contain;
+
+  @media (min-width: 1024px) {
+    margin-left: 1.4rem;
+  }
 `;
