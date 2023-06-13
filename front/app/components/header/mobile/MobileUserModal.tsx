@@ -180,7 +180,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
             채식 레시피
           </MenuItem>
         </CategoryList>
-        {isLoggedIn && (
+        {isLoggedIn && currentUser && (
           <LogoutButton onClick={logoutHandler}>로그아웃</LogoutButton>
         )}
       </ModalContainer>
