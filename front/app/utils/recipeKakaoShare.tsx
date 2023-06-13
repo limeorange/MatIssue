@@ -43,8 +43,8 @@ const RecipeKakaoShareButton = () => {
         <Image
           id="kakao-link-btn"
           src="/images/kakao-talk.png"
-          width={60}
-          height={50}
+          width={200}
+          height={200}
           alt="카톡 공유 이미지"
         />
       </div>
