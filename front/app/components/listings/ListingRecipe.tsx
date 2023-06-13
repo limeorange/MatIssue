@@ -7,6 +7,7 @@ import FilterBar from "../filter/FilterBar";
 import FilterTag from "../filter/FilterTag";
 import Pagination from "../pagination/Pagination";
 import NonRecipePage from "../UI/NonRecipe";
+import InfiniteScroll from "react-infinite-scroll-component";
 import styled from "styled-components";
 import { useSearchParams } from "next/navigation";
 import { Recipe } from "@/app/types";
@@ -67,6 +68,8 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   };
   const [filter, setFilter] = useState(initialFilterState);
   const [search, setSearch] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
   const [newServings, setNewServings] = useState<OptionsType>(servings[0]);
   const [newDuration, setNewDuration] = useState<OptionsType>(duration[0]);
   const [newDifficulty, setNewDifficulty] = useState<OptionsType>(
@@ -107,46 +110,6 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     let result = [...recipes];
-    // let honmukResult: Recipe[] = [];
-    // let newestResult: Recipe[] = [];
-    // let bestResult: Recipe[] = [];
-
-    // 검색바로 레시피 필터링
-    // const term = searchQuery || "";
-    // if (term !== "") {
-    //   result = result.filter((recipe) =>
-    //     recipe.recipe_title.toLowerCase().includes(term.toLowerCase())
-    //   );
-    // }
-
-    // 혼먹 카테고리 필터링
-    // if (category === "honmuk") {
-    //   honmukResult = result.filter(
-    //     (recipe) => recipe.recipe_info.serving === 1
-    //   );
-    // }
-
-    // 최신 카테고리 필터링
-    // if (category === "newest") {
-    //   newestResult = [...result].sort(
-    //     (a, b) =>
-    //       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    //   );
-    // }
-
-    // // 베스트 카테고리 필터링
-    // if (category === "best") {
-    //   bestResult = result
-    //     .filter((recipe) => recipe.recipe_like >= 1500)
-    //     .sort((a, b) => +b.created_at - +a.created_at);
-    // }
-
-    // // 카테고리바 레시피 필터링
-    // if (category) {
-    //   result = result.filter((recipe) =>
-    //     recipe.recipe_category.toLowerCase().includes(category.toLowerCase())
-    //   );
-    // }
 
     // 필터바로 레시피 필터링
     if (filter.servings > 0) {
@@ -183,17 +146,6 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
       window.location.pathname + "?" + urlParams.toString()
     );
 
-    // 각 카테고리 별 result 할당
-    // if (category === "honmuk") {
-    //   result = honmukResult;
-    // } else if (category === "newest") {
-    //   result = newestResult;
-    // } else if (category === "best") {
-    //   result = bestResult;
-    // } else {
-    //   result = result;
-    // }
-
     // 버튼으로 레시피 정렬
     if (sortMethod === "date") {
       result.sort(
@@ -216,6 +168,15 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
     setFilteredRecipes(result);
   }, [search, searchQuery, filter, category, sortMethod, recipes]);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 375);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // 태그 삭제 로직
   const removeTag = (tagType: string) => {
@@ -247,10 +208,30 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = filteredRecipes.slice(
-    indexOfFirstRecipe,
-    indexOfLastRecipe
-  );
+  // const currentRecipes = filteredRecipes.slice(
+  //   indexOfFirstRecipe,
+  //   indexOfLastRecipe
+  // );
+
+  // 모바일에서는 처음부터 현재 페이지의 마지막 레시피까지의 모든 레시피들을 포함
+  const currentRecipes = isMobile
+    ? filteredRecipes.slice(0, indexOfLastRecipe)
+    : filteredRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe); // 데스크탑에서는 현재 페이지의 레시피들만 포함
+
+  // 레시피 추가 로딩 함수
+  const fetchMoreRecipes = async () => {
+    // 페이지 증가
+    setCurrentPage((prev) => prev + 1);
+    setIsLoading(true);
+
+    // 데이터 로딩 시간 설정
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    setIsLoading(false);
+  };
+
+  // 무한 스크롤 사용 가능 여부
+  const hasMore = currentPage * recipesPerPage < filteredRecipes.length;
 
   return (
     <>
@@ -320,19 +301,46 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
           </SortButtonContainer>
         </PageHeaderContainer>
         {currentRecipes.length > 0 ? (
-          <>
-            <RecipeListWrapper>
-              {currentRecipes.map((data, index) => (
-                <RecipeCard key={index} recipe={data} />
-              ))}
-            </RecipeListWrapper>
-            <Pagination
-              recipesPerPage={recipesPerPage}
-              totalRecipes={filteredRecipes.length}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
-          </>
+          isMobile ? (
+            <InfiniteScroll
+              dataLength={currentRecipes.length}
+              next={fetchMoreRecipes}
+              hasMore={hasMore}
+              loader={<h4>Loading...</h4>}
+              endMessage={
+                <p
+                  style={{
+                    fontSize: "16px",
+                    textAlign: "center",
+                    margin: "2rem",
+                    color: "#F8B551",
+                  }}
+                >
+                  <b>{`마지막 레시피 입니다 :)`}</b>
+                </p>
+              }
+            >
+              <RecipeListWrapper>
+                {currentRecipes.map((data, index) => (
+                  <RecipeCard key={index} recipe={data} />
+                ))}
+              </RecipeListWrapper>
+            </InfiniteScroll>
+          ) : (
+            <>
+              <RecipeListWrapper>
+                {currentRecipes.map((data, index) => (
+                  <RecipeCard key={index} recipe={data} />
+                ))}
+              </RecipeListWrapper>
+              <Pagination
+                recipesPerPage={recipesPerPage}
+                totalRecipes={filteredRecipes.length}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+            </>
+          )
         ) : (
           <NonRecipePage />
         )}
