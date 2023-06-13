@@ -27,7 +27,6 @@ import { useRouter } from "next/navigation";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
 import ShareModal from "@/app/components/recipe-view/likes-share/ShareModal";
-import KakaoShareButton from "@/app/utils/kakaoShare";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -305,7 +304,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
-        {/* <div className="flex flex-col gap-[1.5rem] py-[3.5rem] "> */}
         <div className="flex gap-[1.5rem] justify-center items-center mt-[3rem]">
           {/* 좋아요 */}
           <div onClick={notLoggedInTryHandler}>
@@ -378,14 +376,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
-  // gap: 2.5rem;
   padding: 0 1.5rem;
   max-width: 67rem;
   width: 100%;
   margin: 0 auto;
-  // justify-content: top;
   justify-content: flex-start;
-  // align-items: flex-start;
 
   @media (min-width: 1024px) {
     margin-top: 1.5rem;
@@ -575,9 +570,6 @@ const ShareWrapperButton = styled.button`
 /** 공유하기 아이콘 Div */
 const ShareIconDiv = styled.div`
   width: 2.2rem;
-  // height: 2rem;
-  // margin-right: 0.6rem;
-  // margin-bottom: 0.4rem;
 
   @media (min-width: 1024px) {
     width: 3.2rem;
