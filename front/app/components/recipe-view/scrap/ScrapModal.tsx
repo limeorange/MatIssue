@@ -167,7 +167,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 const ScrapContainerDiv = styled.div`
   position: fixed;
   top: 45%;
-  left: 54.3%;
+  left: 6%;
   display: flex;
   justify-content: center;
   width: 33rem;
@@ -177,6 +177,11 @@ const ScrapContainerDiv = styled.div`
   border-radius: 20px;
   z-index: 90;
   cursor: pointer;
+
+  @media (min-width: 1024px) {
+    top: 45%;
+    left: 54.3%;
+  }
 `;
 
 /** 스크랩 모달창 컨텐츠 세로 정렬을 위한 Div */
@@ -197,8 +202,12 @@ const ScrapTitleDiv = styled.div`
 
 /** 스크랩 메모하기 제목 Span */
 const ScrapTitleSpan = styled.span`
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 500;
+
+  @media (min-width: 1024px) {
+    font-size: 17px;
+  }
 `;
 
 /** 메모 입력칸 전체 감싸는 Div */
