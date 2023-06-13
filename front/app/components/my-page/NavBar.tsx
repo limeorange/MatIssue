@@ -2,7 +2,6 @@
 
 import styled from "styled-components";
 import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
 
 const NavBar = () => {
   const currentPath = usePathname();
@@ -15,7 +14,13 @@ const NavBar = () => {
           onClick={() => router.push("/my-page")}
           clicked={currentPath === "/my-page"}
         >
-          프로필
+          레시피
+        </NavItem>
+        <NavItem
+        onClick={() => router.push("/my-page/scrap")}
+          clicked={currentPath === "/my-page/scrap"}
+          >
+          스크랩
         </NavItem>
         <NavItem
           onClick={() => router.push("/my-page/modify-user-info")}
@@ -23,9 +28,6 @@ const NavBar = () => {
         >
           회원정보수정
         </NavItem>
-        {/* <NavItem>
-          <Link href="/my-page/notification">알림</Link>
-        </NavItem> */}
       </NavUl>
     </>
   );
@@ -38,8 +40,7 @@ const NavUl = styled.ul`
   height: 4rem;
   justify-content: center;
   border-bottom: 0.1rem solid rgb(200, 200, 200);
-  gap: 5.5rem;
-
+  gap: 3rem;
   @media (min-width: 1024px) {
     height: 6rem;
     gap: 6rem;
