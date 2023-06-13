@@ -147,6 +147,7 @@ const WorldcupLayout = styled.div`
   align-items: center;
   justify-content: center;
   margin: auto;
+  padding: 1.5rem;
   width: 100%;
   max-width: 50rem;
   height: 100vh;
@@ -162,23 +163,33 @@ const WorldcupLayout = styled.div`
       opacity: 1;
     }
   }
+
+  @media (min-width: 1024px) {
+    padding: 0;
+  }
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
-  font-size: 80px;
+  font-size: 60px;
   color: #fbd26a;
   font-family: "Dongle-Bold";
   margin-bottom: -3rem;
+  display: none;
 
   & span {
     font-size: 40px;
   }
+
+  @media (min-width: 1024px) {
+    font-size: 80px;
+    display: block;
+  }
 `;
 
 const GameProgress = styled.div`
-  font-size: 50px;
+  font-size: 35px;
   color: #4f3d21;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   font-family: "Dongle-Bold";
   transform-origin: center;
   transition: all 0.5s ease;
@@ -195,22 +206,32 @@ const GameProgress = styled.div`
   &.shrink {
     transform: scale(0.1);
     opacity: 0;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 50px;
+    margin-bottom: 2rem;
   }
 `;
 
 const CardContainer = styled.div`
   display: flex;
   justify-content: space-around;
+  flex-direction: column;
   align-items: center;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
 const VS = styled.div`
-  font-size: 50px;
+  font-size: 25px;
   color: #4f3d21;
   font-family: "Dongle-Bold";
   margin-left: 2rem;
   margin-right: 2rem;
-  margin-top: 3rem;
+  margin-top: 1rem;
   transform-origin: center;
   transition: all 0.5s ease;
   opacity: 1;
@@ -226,6 +247,11 @@ const VS = styled.div`
   &.shrink {
     transform: scale(0.1);
     opacity: 0;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 50px;
+    margin-top: 3rem;
   }
 `;
 
@@ -259,8 +285,8 @@ const RecipeTitleBox = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  width: 32.5rem;
-  height: 32.5rem;
+  width: 100%;
+  height: 20.5rem;
   overflow: hidden;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 1.5rem;
@@ -270,6 +296,11 @@ const ImageWrapper = styled.div`
 
   &:hover {
     transform: translateY(-5px);
+  }
+
+  @media (min-width: 1024px) {
+    width: 32.5rem;
+    height: 32.5rem;
   }
 `;
 
