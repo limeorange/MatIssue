@@ -65,8 +65,8 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
             />
             <Image
               src={currentUser ? currentUser.img : "/images/profileIcon.png"}
-              width={32}
-              height={32}
+              width={36}
+              height={36}
               objectFit="cover"
               alt="profile_icon"
               className="rounded-[100px]"
@@ -109,6 +109,8 @@ const ProfileButton = styled.div`
   display: none;
   padding: 0.6rem 0.2rem;
   cursor: pointer;
+  width: 4rem;
+  height: 4.8rem;
 
   &:hover {
     img {

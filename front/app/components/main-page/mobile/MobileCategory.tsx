@@ -175,7 +175,7 @@ const CategoryItem = styled.li`
 const IconWrapper = styled.div`
   background-color: #ffefc8;
   padding: 1rem;
-  border-radius: 0.8rem;
+  border-radius: 1.5rem;
 `;
 
 const TitleWrapper = styled.div`

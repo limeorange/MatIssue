@@ -167,7 +167,7 @@ const RightSlideBtn = styled.div<{ slide: number; totalSlide: number }>`
   right: 0;
   cursor: pointer;
   height: 9.2rem;
-  width: 2.8rem;
+  width: 3.128rem;
 
   transition: transform 0.3s;
   &:hover {
