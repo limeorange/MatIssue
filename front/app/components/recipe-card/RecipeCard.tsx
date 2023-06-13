@@ -19,8 +19,8 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <ImgWrapper>
             <Image
               fill
-              objectFit="cover"
               src={recipe.recipe_thumbnail}
+              style={{ objectFit: "cover" }}
               alt="게시물 썸네일 이미지"
             />
           </ImgWrapper>

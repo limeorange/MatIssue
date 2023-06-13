@@ -177,7 +177,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
               routerHandler("/recipes/category/vegetarian?category=vegetarian")
             }
           >
-            비건 레시피
+            채식 레시피
           </MenuItem>
         </CategoryList>
         {isLoggedIn && (
