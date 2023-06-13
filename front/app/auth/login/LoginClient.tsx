@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { axiosBase } from "@/app/api/axios";
 import toast from "react-hot-toast";
@@ -21,6 +21,7 @@ import {
 import Cookies from "js-cookie";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
+import styled from "styled-components";
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +63,7 @@ const LoginClient = () => {
   return (
     <AuthContainer>
       {isLoading && <LoadingModal />}
-      <AuthFormWrapper>
+      <LoginAuthContainer>
         <Logo />
         <form onSubmit={handleSubmit(onSubmit)}>
           <StyledInput
@@ -105,9 +106,16 @@ const LoginClient = () => {
             회원가입하기
           </UnderLineLinkDiv>
         </AuthChangeBox>
-      </AuthFormWrapper>
+      </LoginAuthContainer>
     </AuthContainer>
   );
 };
 
 export default LoginClient;
+
+const LoginAuthContainer = styled(AuthFormWrapper)`
+  padding-top: 5rem;
+  @media (min-width: 1024px) {
+    padding-top: 13rem;
+  }
+`;
