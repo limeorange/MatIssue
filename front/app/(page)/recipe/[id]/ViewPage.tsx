@@ -254,10 +254,10 @@ const RecipeDetail = (props: RecipeDataProps) => {
         <ProgressBar />
 
         {/* 목차 사이드바 */}
-        <div className="flex">
+        <StickySideDiv>
           <StickyProgressBar />
           <StickySideBar />
-        </div>
+        </StickySideDiv>
 
         {/* 작성자 프로필 */}
         <WriterProfile
@@ -398,7 +398,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
               />
             </ShareIconDiv>
             {/* 공유 모달 */}
-            {isShareModal && <ShareModal />}
+            {isShareModal && <ShareModal recipe_thumbnail={recipe_thumbnail} />}
           </ShareWrapperButton>
         </div>
 
@@ -439,6 +439,15 @@ const ContainerDiv = styled.div`
   @media (min-width: 1024px) {
     margin-top: 1.5rem;
     padding: 0;
+  }
+`;
+
+/** 사이드 목차바 묶는 Div */
+const StickySideDiv = styled.div`
+  display: none;
+
+  @media (min-width: 1024px) {
+    display: flex;
   }
 `;
 
