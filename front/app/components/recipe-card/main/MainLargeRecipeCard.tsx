@@ -50,7 +50,7 @@ const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 height={16}
                 width={20}
               />
-              <div>{recipe.recipe_like}</div>
+              <div>{recipe.recipe_like.length}</div>
             </LikeIconWrapper>
           </RecipeInfoBox>
         </TextContainer>
