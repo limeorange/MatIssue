@@ -1,15 +1,22 @@
 import { useEffect } from "react";
 import Image from "next/image";
 
-const RecipeKakaoShareButton = () => {
+type ShareModalProps = {
+  recipe_thumbnail: string;
+};
+
+const RecipeKakaoShareButton: React.FC<ShareModalProps> = ({
+  recipe_thumbnail,
+}) => {
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+  console.log("recipe_thumbnail", recipe_thumbnail);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const { Kakao } = window;
 
       if (!Kakao.isInitialized()) {
-        Kakao.init("8f8a30270178844fc3a8e4f1df9a1c22");
+        Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
       }
 
       Kakao.Link.createDefaultButton({
@@ -18,7 +25,7 @@ const RecipeKakaoShareButton = () => {
         content: {
           title: "맛이슈 레시피",
           description: "멋진 레시피 구경 가실래요?",
-          imageUrl: "/logo.svg",
+          imageUrl: recipe_thumbnail,
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,

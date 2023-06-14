@@ -3,8 +3,12 @@ import Image from "next/image";
 import RecipeKakaoShareButton from "@/app/utils/recipeKakaoShare";
 import styled from "styled-components";
 
+type ShareModalProps = {
+  recipe_thumbnail: string;
+};
+
 /** 공유하기 모달 컴포넌트 */
-const ShareModal = () => {
+const ShareModal: React.FC<ShareModalProps> = ({ recipe_thumbnail }) => {
   /** url 복사하는 함수 */
   const copyToClipboard = async () => {
     const currentPageUrl = window.location.href;
@@ -26,7 +30,7 @@ const ShareModal = () => {
             height={200}
           />
         </div>
-        <RecipeKakaoShareButton />
+        <RecipeKakaoShareButton recipe_thumbnail={recipe_thumbnail} />
       </ShareButtonDiv>
     </>
   );
