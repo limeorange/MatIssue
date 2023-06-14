@@ -45,6 +45,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
 
 const CommentModalContainer = styled.div`
   position: absolute;
+  right: 1.7rem;
   z-index: 9;
   padding: 0.6rem 0;
   background-color: white;
@@ -54,6 +55,10 @@ const CommentModalContainer = styled.div`
   font-size: 16px;
   font-weight: 400;
   color: #4f3d21;
+
+  @media (min-width: 1024px) {
+    right: auto;
+  }
 `;
 
 const CommentModalUl = styled.ul`
