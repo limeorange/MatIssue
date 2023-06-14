@@ -19,7 +19,7 @@ type Recipe = {
   recipe_thumbnail: string;
 };
 
-const WorldcupGame: React.FC = () => {
+const WorldcupGame = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const num = searchParams?.get("stage");
