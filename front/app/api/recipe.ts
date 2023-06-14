@@ -1,5 +1,8 @@
 import { axiosBase } from "./axios";
 
+const samplePagination = "?page=1&&limit=30"
+
+
 export const getRecipeById = async (recipe_id: string) => {
   try {
     const response = await axiosBase.get(`recipes/${recipe_id}`);
@@ -12,7 +15,7 @@ export const getRecipeById = async (recipe_id: string) => {
 
 export const getAllRecipes = async () => {
   try {
-    const response = await axiosBase.get("/recipes/");
+    const response = await axiosBase.get("/recipes"+samplePagination);
 
     if (!response.data) {
       return [];
@@ -41,7 +44,7 @@ export const getRecipesByParams = async (searchParams: any) => {
 export const getRecipesByCategory = async (category: string) => {
   try {
     const response = await axiosBase.get(
-      `/recipes/categories?value=${category}`
+      `/recipes/categories?value=${category}`+`&&${samplePagination}`
     );
 
     if (!response.data) {
@@ -55,7 +58,7 @@ export const getRecipesByCategory = async (category: string) => {
 
 export const getRecipesByPopularity = async () => {
   try {
-    const response = await axiosBase.get("/recipes/popularity");
+    const response = await axiosBase.get("/recipes/popularity"+samplePagination);
 
     if (!response.data) {
       return [];
@@ -68,7 +71,7 @@ export const getRecipesByPopularity = async () => {
 
 export const getRecipesByLastest = async () => {
   try {
-    const response = await axiosBase.get("/recipes/latest");
+    const response = await axiosBase.get("/recipes/latest"+samplePagination);
 
     if (!response.data) {
       return [];
@@ -81,7 +84,7 @@ export const getRecipesByLastest = async () => {
 
 export const getRecipesBySingle = async () => {
   try {
-    const response = await axiosBase.get("/recipes/single");
+    const response = await axiosBase.get("/recipes/single"+samplePagination);
 
     if (!response.data) {
       return [];
@@ -94,7 +97,7 @@ export const getRecipesBySingle = async () => {
 
 export const getRecipesByVegetarian = async () => {
   try {
-    const response = await axiosBase.get("/recipes/vegetarian");
+    const response = await axiosBase.get("/recipes/vegetarian"+samplePagination);
 
     if (!response.data) {
       return [];
@@ -125,7 +128,7 @@ export const updateRecipe = async (recipe_id: string, recipeData: any) => {
 
 export const getRecipeByUserId = async () => {
   try {
-    const response = await axiosBase.get("/recipes/user");
+    const response = await axiosBase.get("/recipes/user"+samplePagination);
 
     if (!response.data.recipes) {
       return [];
