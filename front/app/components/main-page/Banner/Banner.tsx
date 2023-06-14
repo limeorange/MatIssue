@@ -54,7 +54,7 @@ const Banner = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       slide(currentBannerIndex);
-    }, 5000);
+    }, 8000);
 
     return () => {
       clearInterval(interval);
@@ -83,7 +83,8 @@ const Banner = () => {
                   <Image
                     src="/images/banner/bannerImage1.png"
                     alt="banner"
-                    fill
+                    width={450}
+                    height={280}
                   />
                 </ImageWrapper>
               </ImageArea>
@@ -238,7 +239,7 @@ const ImageWrapper = styled.div`
   obejct-fit: contain;
   position: relative;
   width: 45rem;
-  height: 30rem;
+  height: 28rem;
   right: 0;
 `;
 
