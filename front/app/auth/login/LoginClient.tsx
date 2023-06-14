@@ -50,8 +50,8 @@ const LoginClient = () => {
       })
       .catch((err) => {
         toast.error(
-          err.reponse.data.detail
-            ? err.reponse.data.detail
+          err?.reponse?.data.detail
+            ? err?.reponse?.data.detail
             : "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
         );
       })
