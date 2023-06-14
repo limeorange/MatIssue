@@ -137,10 +137,6 @@ const WorldcupLayout = styled.div`
   &.opacity-1 {
     opacity: 1;
   }
-
-  @media (min-width: 1024px) {
-    padding: 0;
-  }
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
