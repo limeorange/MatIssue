@@ -27,7 +27,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   display: flex;
   justify-content: flex-start;
-  padding-top: 5rem;
+  padding: 5rem 0 0 1.5rem;
 `;
 
 export default Scrap;
