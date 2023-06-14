@@ -125,7 +125,7 @@ const Label = styled.label`
 
 const Select = styled.select`
   box-sizing: border-box;
-  width: 13.5rem;
+  width: 12.5rem;
   height: 3.6rem;
   border: 0.1rem solid #d9d9d9;
   border-radius: 5rem;
