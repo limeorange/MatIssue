@@ -72,9 +72,14 @@ const RecipeCards = ({
           {currentUserRecipes?.map((recipe: Recipe) => (
             <RecipeCardWrapper key={recipe.recipe_id}>
               <StyledRecipeCard recipe={recipe} />
-              <button onClick={() => handleOpenModal(recipe)}>
-                <DeleteButtonImage src="/images/x-box.png" alt="X-box" />
+              
+                <button onClick={() => handleOpenModal(recipe)}>
+                <ButtonDiv>
+                <DeleteButtonImage src="/images/brown-X.svg" alt="X-box" />
+                </ButtonDiv>
               </button>
+              
+              
             </RecipeCardWrapper>
           ))}
         </RecipeList>
@@ -165,19 +170,20 @@ width: 1.5rem;
     width: 1.8rem;
     height: 1.8rem;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    
-    
-    
   }
 `;
 
 const NonRecipeMsg = styled(NonRecipe)``;
-
 const StyledConfirmModal = styled(ConfirmModal)``;
-
 const AlertImage = styled.img`
   width: 3rem;
   height: 3rem;
 `;
 
-const PaginationComponent = styled(Pagination)``;
+const PaginationComponent = styled(Pagination)`
+margin-bottom: 1.6rem;
+`;
+
+const ButtonDiv = styled.div`
+
+`;

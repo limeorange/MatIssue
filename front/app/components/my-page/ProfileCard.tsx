@@ -8,6 +8,14 @@ import { useEffect, useState } from "react";
 import { getRecipeByUserId } from "@/app/api/recipe";
 import getCurrentUser from "@/app/api/user";
 import { useRouter } from "next/navigation";
+import { getUserFans } from "@/app/api/user";
+
+type ProfileCardProps = {
+  user_nickname: string;
+  user_id: string;
+  loggedInUserId: string | undefined;
+  user_img: string;
+};
 
 type MemoItemProps = {
   created_at: string;
@@ -25,7 +33,44 @@ type ScrapItemProps = {
   memo: string;
 };
 
-const ProfileCard = () => {
+const ProfileCard: React.FC<ProfileCardProps> = ({user_nickname,
+  user_id,
+  loggedInUserId,
+  user_img,
+}) => {
+  const [fansCount, setFansCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+
+  useEffect(() => {
+    const fetchFollowCounts = async () => {
+      try {
+        const fansList = await getUserFans(user_id);
+        setFansCount(fansList.length);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (loggedInUserId !== undefined) {
+      fetchFollowCounts();
+    }
+  }, [loggedInUserId]);
+
+  // useEffect(() => {
+  //   const fetchFollowingCount = async () => {
+  //     try {
+  //       // Fetch the following count using an API call or other logic
+  //       const followingList = await getUserFollowing(user_id);
+  //       setFollowingCount(followingList.length);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchFollowingCount();
+  // }, []);
+
+
   // 캐시에 저장된 현재 유저정보를 가져옴
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
     getCurrentUser()
@@ -79,12 +124,12 @@ const ProfileCard = () => {
             <FollowAndFollowing>
               <FollowerDiv>
                 <Follower>팔로워</Follower>
-                <FollowerCount>99</FollowerCount>
+                <FollowerCount>{fansCount}</FollowerCount>
               </FollowerDiv>
               <FollowDivider />
               <FollowingDiv>
                 <Following>팔로잉</Following>
-                <FollowingCount>50</FollowingCount>
+                <FollowingCount>{followingCount}</FollowingCount>
               </FollowingDiv>
             </FollowAndFollowing>
 

@@ -15,7 +15,8 @@ import {
   FlexBox,
   ContentSection,
   InputBoxCode,
-  CodeDescription,
+  SendingCodeButton,
+  FlexSmallBox,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 const VerificationEmail = ({
@@ -58,8 +59,8 @@ const VerificationEmail = ({
     <EmailContainer>
       <EmailWrapper>
         <Title>이메일 *</Title>
-        <ContentSection>
           <FlexBox>
+            <FlexSmallBox>
             <InputBox
               type="email"
               name="email"
@@ -69,14 +70,7 @@ const VerificationEmail = ({
               readOnly={!isEdit}
               isEdit={isEdit}
             />
-            {isEdit && (
-              <EmailDescription>
-                변경 할 이메일을 입력 후 인증코드 발송 버튼을 클릭하세요.
-              </EmailDescription>
-            )}
-          </FlexBox>
-
-          {!isEdit && (
+            {!isEdit && (
             <SendingCodeButton>
               <Button
                 type="button"
@@ -92,7 +86,7 @@ const VerificationEmail = ({
               </Button>
             </SendingCodeButton>
           )}
-          {isEdit && (
+            {isEdit && (
             <SendingCodeButton>
               <Button
                 type="button"
@@ -104,18 +98,23 @@ const VerificationEmail = ({
                 isSmallFont={true}
                 onClick={handleVerificationButton}
               >
-                인증코드 발송
+                메일 인증
               </Button>
             </SendingCodeButton>
           )}
-        </ContentSection>
+          </FlexSmallBox>
+            {isEdit && (
+              <EmailDescription>
+                변경 할 이메일을 입력 후 메일 인증 버튼을 클릭하세요.
+              </EmailDescription>
+            )}
+          </FlexBox>
       </EmailWrapper>
       {isButtonClicked && (
         <Wrapper>
           <EmailContainer>
             <EmailWrapper>
               <Title>인증코드 *</Title>
-              <ContentSection>
                 <FlexBox>
                   <InputBoxCode
                     type="text"
@@ -123,12 +122,10 @@ const VerificationEmail = ({
                     value={userData?.email_code}
                     onChange={handleChangeInput}
                   />
-
-                  <CodeDescription>
+                  <EmailDescription>
                     인증코드를 입력 후 회원 정보 수정 버튼을 클릭하세요.
-                  </CodeDescription>
+                  </EmailDescription>
                 </FlexBox>
-              </ContentSection>
             </EmailWrapper>
           </EmailContainer>
         </Wrapper>
@@ -139,8 +136,4 @@ const VerificationEmail = ({
 
 export default VerificationEmail;
 
-const SendingCodeButton = styled.div`
-  width: 11rem;
-  height: 4rem;
-  margin-left: 2rem;
-`;
+

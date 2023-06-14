@@ -44,11 +44,11 @@ const StartPage = () => {
       </StartPageMessage>
       <ImageBox isAnimateOut={isAnimateOut}>
         <Image
-          src={"/images/worldcup/worldcupIcon3.png"}
+          src={"/images/worldcup/worldcupIcon4.svg"}
           alt="월드컵 캐릭터 이미지"
           width={400}
           height={200}
-          style={{ marginRight: "2rem" }}
+          style={{ padding: "2rem" }}
         />
       </ImageBox>
       <ButtonContainer isAnimateOut={isAnimateOut}>

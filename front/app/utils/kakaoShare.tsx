@@ -18,7 +18,8 @@ const KakaoShareButton = () => {
         content: {
           title: "맛이슈 MukBTI 테스트",
           description: "나와 어울리는 음식은?",
-          imageUrl: "/images/logo1.png",
+          imageUrl:
+            "https://eliceproject.s3.amazonaws.com/20230614055800160_%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-06-14%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.04.04.png",
           link: {
             mobileWebUrl: shareUrl,
             webUrl: shareUrl,

@@ -339,7 +339,6 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
     updateRecipe(recipe_id, recipeData)
       .then((res) => {
-        console.log(res);
         toast.success("레시피가 수정되었습니다!");
         router.push(`/recipe/${recipe_id}`);
       })

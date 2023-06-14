@@ -30,11 +30,12 @@ import {
   AccountDeletion,
   AlertImage,
   StyledChangePassword,
-  InputBoxNickName,
   EmailWrapper,
   EmailContainer,
   ContentSection,
   FlexBox,
+  TitleAndPassword,
+  InputBox,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 type LabelForFileProps = {
@@ -197,6 +198,7 @@ const ModifyUserInfo: React.FC = () => {
   return (
     <>
       <Container>
+        <TitleAndPassword>
         <Header>회원정보수정</Header>
         <Divider />
         <StyledChangePassword
@@ -205,18 +207,10 @@ const ModifyUserInfo: React.FC = () => {
           }
         >
           비밀번호 변경
+          <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
         </StyledChangePassword>
-        <Wrapper>
-          <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
-          {isModalOpen && (
-            <ConfirmModal
-              icon={<AlertImage src="/images/alert.png" alt="alert" />}
-              message="정말 탈퇴 하시겠습니까?"
-              onCancel={closeModal}
-              onConfirm={handleDeleteAccount}
-            />
-          )}
-        </Wrapper>
+        </TitleAndPassword>
+       
         <form onSubmit={handleFormSubmit}>
           <WrapperInfo>
             <Wrapper>
@@ -230,17 +224,17 @@ const ModifyUserInfo: React.FC = () => {
               <EmailContainer>
                 <EmailWrapper>
                   <Title>별명 *</Title>
-                  <ContentSection>
-                    <FlexBox>
-                      <InputBoxNickName
+               
+                    {/* <FlexBox> */}
+                      <InputBox
                         type="text"
                         name="username"
                         value={userData?.username}
                         required
                         onChange={handleChangeInput}
                       />
-                    </FlexBox>
-                  </ContentSection>
+                    {/* </FlexBox> */}
+                 
                 </EmailWrapper>
               </EmailContainer>
             </Wrapper>
@@ -249,8 +243,6 @@ const ModifyUserInfo: React.FC = () => {
                 <EmailWrapper>
                   {" "}
                   <Title>생년월일</Title>
-                  <ContentSection>
-                    <FlexBox>
                       <InputDateBox
                         type="date"
                         name="birth_date"
@@ -258,8 +250,8 @@ const ModifyUserInfo: React.FC = () => {
                         required
                         onChange={handleChangeInput}
                       />
-                    </FlexBox>
-                  </ContentSection>
+                
+                
                 </EmailWrapper>
               </EmailContainer>
             </Wrapper>
@@ -267,7 +259,7 @@ const ModifyUserInfo: React.FC = () => {
           </WrapperInfo>
 
           <ProfileImageWrapper>
-            <Title>프로필 이미지</Title>
+            <ProfileImageTitle>프로필 이미지</ProfileImageTitle>
             <LabelForFile htmlFor="upload-button" onClick={handleLabelClick}>
               {previewImage && (
                 <>
@@ -301,6 +293,18 @@ const ModifyUserInfo: React.FC = () => {
               회원 정보 수정
             </Button>
           </UserModifyButton>
+         <DeletionAndArrow>
+          <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
+          <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
+          {isModalOpen && (
+            <ConfirmModal
+              icon={<AlertImage src="/images/alert.png" alt="alert" />}
+              message="정말 탈퇴 하시겠습니까?"
+              onCancel={closeModal}
+              onConfirm={handleDeleteAccount}
+            />
+          )}
+      </DeletionAndArrow>
         </form>
       </Container>
     </>
@@ -313,7 +317,7 @@ const LabelForFile = styled.label<LabelForFileProps>`
   position: relative;
   width: 19.8rem;
   height: 19.8rem;
-  margin-left: 4.1rem;
+  margin-top: 0.3rem;
   border-radius: 0.8rem;
   background-color: #fff9ea;
   display: flex;
@@ -327,4 +331,34 @@ const LabelForFile = styled.label<LabelForFileProps>`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  @media (min-width: 1024px) {
+    margin-left: 4.1rem;
+    margin-top: 0;
+  }
+`;
+
+const ArrowImage = styled.img`
+width:2.5rem;
+height:3rem;
+}
+@media (min-width: 1024px) {
+display: none;
+}
+`;
+
+const DeletionAndArrow = styled.div`
+display:flex;
+align-items: center;
+margin-bottom: 2rem;
+`;
+
+const ProfileImageTitle = styled.div`
+font-size: 16px;
+  cursor: pointer;
+  color: #4f3d21;
+  margin-left: 0.1rem;
+  @media (min-width: 1024px) {
+    font-size: 17px;
+    width: 10rem;
+  }
 `;

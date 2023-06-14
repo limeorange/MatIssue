@@ -307,6 +307,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
               next={fetchMoreRecipes}
               hasMore={hasMore}
               loader={<h4>Loading...</h4>}
+              scrollThreshold={0.5}
               endMessage={
                 <p
                   style={{
@@ -359,7 +360,13 @@ const MainWrapper = styled.div`
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
-  padding: 1.5rem 1.5rem;
+  margin-bottom: 2rem;
+  padding: 0 1.5rem;
+  padding-top: 1.5rem;
+
+  @media (min-width: 768px) {
+    margin-bottom: 16rem;
+  }
 `;
 
 const RecipeListWrapper = styled.div`
