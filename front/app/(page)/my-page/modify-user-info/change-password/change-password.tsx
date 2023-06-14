@@ -142,54 +142,35 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-width: 100%;
-  padding: 5rem 1.5rem 16rem;
-  background-color: #ffffff;
-  color: #4f3d21;
-  @media (min-width: 1024px) {
-    width: 49rem;
+  width: 48rem;
   height: 43.5rem;
   padding: 4rem;
-    margin: 5.4rem 0 16rem;
-    border-radius: 1.8rem;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+  margin-top: 5.4rem;
+  border-radius: 1.8rem;
+  background-color: #ffffff;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  }
-  `;
+  color: #4f3d21;
+`;
 
 const Header = styled.h1`
-font-size: 23px;
   font-weight: 600;
-  
-  @media (min-width: 1024px) {
-    font-size: 26px;
-
-  }
+  font-size: 26px;
 `;
 
 const NewPassword = styled.h2`
-font-size: 15px;
-padding-top: 1rem;
+  padding-top: 1.8rem;
+  font-size: 15px;
   font-weight: 700;
-  @media (min-width: 1024px) {
-    
-    padding-top: 1.8rem;
-  }
 `;
 
 const PasswordInstruction = styled.p`
-  font-size: 14px;
-  margin-top: 0.2rem;
-  @media (min-width: 1024px) {
-    font-size: 15px;
-    margin-top: 0;
-  }
+  font-size: 15px;
 `;
 
 const InputBox = styled.input`
-width: 100%;
-  max-width: 40rem;
-  height: 4.5rem;
+  width: 40rem;
+  height: 4.8rem;
   border: 0.1rem solid #d2d2d2;
   border-radius: 1.8rem;
   margin-top: 1.8rem;
@@ -198,9 +179,6 @@ width: 100%;
   &:focus {
     outline: 0.3rem solid #fbd26a;
     border: none;
-  }
-  @media (min-width: 1024px) {
-    height: 4.8rem;
   }
 `;
 
@@ -211,11 +189,6 @@ const PasswordConfirm = styled.h2`
 `;
 
 const ChangePasswordButton = styled.div`
-width: 100%;
-  max-width: 40rem;
-  height: 4.8rem;
+  width: 40rem;
   padding-top: 3.2rem;
-  @media (min-width: 1024px) { 
-
-  }
 `;

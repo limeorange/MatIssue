@@ -9,8 +9,6 @@ export type User =
       created_at: string;
       session_id: string;
       email_code?: string;
-      id: string;
-      user_subscription: number;
     }
   | undefined;
 
