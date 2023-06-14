@@ -233,8 +233,8 @@ const SignupClient = () => {
                   message: "닉네임은 최소 2글자 이상이여야 합니다.",
                 },
                 maxLength: {
-                  value: 12,
-                  message: "닉네임은 최대 12글자까지 허용됩니다.",
+                  value: 8,
+                  message: "닉네임은 최대 8글자까지 허용됩니다.",
                 },
               })}
               placeholder="닉네임을 입력하세요."
