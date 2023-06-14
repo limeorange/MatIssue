@@ -166,7 +166,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 /** 스크랩 메모 전체 감싸는 Div */
 const ScrapContainerDiv = styled.div`
   position: fixed;
-  top: 45%;
+  top: 35%;
   left: 6%;
   display: flex;
   justify-content: center;
