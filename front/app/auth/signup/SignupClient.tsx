@@ -403,6 +403,8 @@ const SignupClient = () => {
             로그인하기
           </UnderLineLinkDiv>
         </AuthNavBox>
+        <br />
+        <br />
       </AuthFormWrapper>
     </AuthContainer>
   );
