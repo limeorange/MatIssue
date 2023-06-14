@@ -23,7 +23,7 @@ const CategoryBar = () => {
         >
           {isModal && <CategoryModal isModal={isModal} />}
           <IconWrapper>
-            <Image src="/images/listIcon.png" alt="list_icon" fill />
+            <Image src="/images/header/listIcon.svg" alt="list_icon" fill />
           </IconWrapper>
           음식 카테고리
         </CategoryItem>
