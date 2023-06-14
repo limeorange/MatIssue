@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { axiosBase } from "@/app/api/axios";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import FollowDeleteModal from "../../UI/FollowDeleteModal";
+import { useRouter } from "next/navigation";
+import LoginConfirmModal from "../../UI/LoginConfirmModal";
 
 type WriterProfileProps = {
   user_nickname: string;
@@ -28,6 +30,9 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
 }) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [fanscount, setFansCount] = useState(user_fan);
+
+  // 로그인 유도 모달 상태 관리
+  const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
   // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
   useEffect(() => {
@@ -98,7 +103,7 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
       }
       // 로그인되지 않은 유저가 팔로우 요청하는 경우
       else if (loggedInUserId === undefined) {
-        toast.error("로그인을 진행해주세요!");
+        setLoginConfirmModal(!loginConfirmModal);
       }
       // 작성자와 다른 로그인 유저가 팔로우 요청하는 경우
       else {
@@ -157,6 +162,17 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
     setFollowDeleteConfirmModal(false);
   };
 
+  /** 로그인 유도 모달 : 취소 클릭 핸들러 */
+  const loginModalCloseHandler = () => {
+    setLoginConfirmModal(false);
+  };
+
+  /** 로그인 유도 모달 : 로그인 클릭 핸들러 */
+  const router = useRouter();
+  const loginMoveHandler = () => {
+    router.push("auth/login");
+  };
+
   return (
     <>
       {/* 팔로우 취소 모달 */}
@@ -166,6 +182,16 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
           message="팔로우를 취소하시겠습니까?"
           onConfirm={deleteConfirmHandler}
           onCancel={confirmModalCloseHandler}
+        />
+      )}
+
+      {/* 비회원 로그인 유도 모달 */}
+      {loginConfirmModal && loggedInUserId === undefined && (
+        <StyledLoginConfirmModal
+          icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
+          message="로그인이 필요합니다. 로그인 하시겠습니까?"
+          onConfirm={loginMoveHandler}
+          onCancel={loginModalCloseHandler}
         />
       )}
       <ProfileContainerDiv>
@@ -296,5 +322,8 @@ const FollowButton = styled.button`
 
 /** 팔로우 취소 컨펌 모달창 */
 const StyledConfirmModal = styled(FollowDeleteModal)``;
+
+/** 로그인 유도 모달창 */
+const StyledLoginConfirmModal = styled(LoginConfirmModal)``;
 
 export default MiniWriterProfile;

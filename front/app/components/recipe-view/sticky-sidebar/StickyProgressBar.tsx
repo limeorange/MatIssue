@@ -28,34 +28,13 @@ const StickyProgressBar = () => {
     return () => window.removeEventListener("scroll", scrollHandler);
   }, []);
 
-  // 768px 이하일 때 사이드 진행바 숨김 반응형 처리
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
-
-  useEffect(() => {
-    const handleResize = () => {
-      const screenWidth = window.innerWidth;
-      if (screenWidth <= 900) {
-        setSidebarVisible(false);
-      } else {
-        setSidebarVisible(true);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <>
-      {isSidebarVisible && (
+      {
         <ProgressBarContainerDiv isHeaderVisible={isHeaderVisible}>
           <ProgressBarDiv progress={scrollPercentage} />
         </ProgressBarContainerDiv>
-      )}
+      }
     </>
   );
 };

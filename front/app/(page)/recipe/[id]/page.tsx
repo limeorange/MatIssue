@@ -1,4 +1,3 @@
-import { axiosBase } from "@/app/api/axios";
 import RecipeDetail from "./ViewPage";
 import { getRecipeById } from "@/app/api/recipe";
 

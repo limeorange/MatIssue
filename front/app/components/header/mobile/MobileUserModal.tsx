@@ -184,7 +184,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
             <div>카테고리</div>
             <IconWrapper>
               <Image
-                src="/images/listIcon.png"
+                src="/images/header/listIcon.svg"
                 alt="list_icon"
                 width={16}
                 height={16}
@@ -298,6 +298,8 @@ const ProfileWrapper = styled.div`
 `;
 
 const ProfileImgWrapper = styled.div`
+  max-width: 2.4rem;
+  max-height: 2.4rem;
   border-radius: 5rem;
   overflow: hidden;
 `;

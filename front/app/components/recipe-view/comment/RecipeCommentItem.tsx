@@ -12,6 +12,7 @@ import getCurrentUser from "@/app/api/user";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import { useRouter } from "next/navigation";
+import ConfirmModal from "../../UI/ConfirmModal";
 
 /** 요리 댓글 단일 Props */
 type RecipeCommentProps = Comments;
@@ -69,6 +70,10 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   );
   const countText = commentLikesCount.toLocaleString();
 
+  // 댓글 삭제 확인 모달 상태 관리
+  const [commentDeleteConfirmModal, setCommentDeleteConfirmModal] =
+    useState(false);
+
   /** 댓글창 클릭시 상태 업데이트 핸들러 */
   const boxClickHandler = () => {
     setIsCommenting(true);
@@ -112,8 +117,13 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
     setEditedCommentText(comment_text);
   };
 
-  /** 삭제 버튼 핸들러 */
-  const commentDeleteHandler = async () => {
+  /** 댓글 삭제 버튼 핸들러 */
+  const deleteClickHandler = () => {
+    setCommentDeleteConfirmModal(true);
+  };
+
+  /** 댓글 삭제 모달 : 확인 클릭 핸들러 */
+  const deleteConfirmHandler = async () => {
     try {
       await axiosBase.delete(`/recipes/comment/${comment_id}`);
       toast.success("댓글 삭제가 완료되었습니다");
@@ -122,6 +132,11 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
       console.log("댓글 삭제 실패", error);
       toast.error("댓글 삭제에 실패했습니다 ㅠ.ㅠ");
     }
+  };
+
+  /** 댓글 삭제 모달 : 취소 클릭 핸들러 */
+  const confirmModalCloseHandler = () => {
+    setCommentDeleteConfirmModal(false);
   };
 
   /** 좋아요 버튼 클릭 핸들러 */
@@ -189,6 +204,16 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
           />
         )}
 
+        {/* 댓글 삭제 확인 모달 */}
+        {commentDeleteConfirmModal && (
+          <StyledConfirmModal
+            icon={<AlertImage src="/images/orange_alert.svg" alt="alert" />}
+            message="댓글을 삭제하시겠습니까?"
+            onConfirm={deleteConfirmHandler}
+            onCancel={confirmModalCloseHandler}
+          />
+        )}
+
         <ProfileImageDiv>
           <Image
             src={comment_profile_img}
@@ -230,12 +255,12 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
                 <LikesCount>{countText}</LikesCount>
               </LikesWrapperButton>
               <ThreeDotsImageDiv onClick={() => setIsModal(true)}>
-                {isModal && (
+                {isModal && loggedInUserId === comment_author && (
                   <CommentModal
                     isModal={isModal}
                     modalCloseHandler={modalCloseHandler}
                     editClickHandler={editClickHandler}
-                    commentDeleteHandler={commentDeleteHandler}
+                    deleteClickHandler={deleteClickHandler}
                   />
                 )}
                 {loggedInUserId !== undefined &&
@@ -459,5 +484,8 @@ const LikesCount = styled.span`
   font-size: 14px;
   color: #6f6f6f;
 `;
+
+/** 댓글 삭제 컨펌 모달창 */
+const StyledConfirmModal = styled(ConfirmModal)``;
 
 export default RecipeComment;
