@@ -211,11 +211,8 @@ const PasswordConfirm = styled.h2`
 `;
 
 const ChangePasswordButton = styled.div`
-width: 100%;
+  width: 100%;
   max-width: 40rem;
   height: 4.8rem;
   padding-top: 3.2rem;
-  @media (min-width: 1024px) { 
-
-  }
 `;
