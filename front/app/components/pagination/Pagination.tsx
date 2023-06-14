@@ -26,6 +26,9 @@ const Pagination = (props: PaginationProps) => {
 
   const totalPages = Math.ceil(props.totalRecipes / props.recipesPerPage);
   const pagesToShow = windowWidth <= 480 ? 5 : 10;
+  const startBlock =
+    Math.floor((props.currentPage - 1) / pagesToShow) * pagesToShow;
+  const endBlock = startBlock + pagesToShow;
 
   // 이전 버튼 로직
   const handlePrevClick = () => {
@@ -62,14 +65,8 @@ const Pagination = (props: PaginationProps) => {
   };
 
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-  const startIndex =
-    props.currentPage - Math.floor(pagesToShow / 2) > 0
-      ? props.currentPage - Math.floor(pagesToShow / 2)
-      : 0;
-  const endIndex =
-    startIndex + pagesToShow < totalPages
-      ? startIndex + pagesToShow
-      : totalPages;
+  const startIndex = startBlock;
+  const endIndex = Math.min(endBlock, totalPages);
 
   return (
     <>
