@@ -36,7 +36,10 @@ const CookingStepsSection = ({
 
       try {
         const response = await uploadImage(file);
-        const imageUrl = response.imageUrl;
+        let imageUrl = response.imageUrl;
+
+        const timestamp = new Date().getTime();
+        imageUrl += `?${timestamp}`;
 
         handleStepImageChange(imageUrl, index);
       } catch (error) {
