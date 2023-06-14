@@ -9,7 +9,7 @@ const KakaoShareButton = () => {
       const { Kakao } = window;
 
       if (!Kakao.isInitialized()) {
-        Kakao.init("8f8a30270178844fc3a8e4f1df9a1c22");
+        Kakao.init(process.env.NEXT_PUBLIC_KAKAO_API_KEY);
       }
 
       Kakao.Link.createDefaultButton({
