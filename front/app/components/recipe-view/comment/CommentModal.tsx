@@ -5,14 +5,14 @@ type CommentModalProps = {
   isModal: boolean;
   modalCloseHandler: () => void;
   editClickHandler: () => void;
-  commentDeleteHandler: () => void;
+  deleteClickHandler: () => void;
 };
 
 const CommentModal: React.FC<CommentModalProps> = ({
   isModal,
   modalCloseHandler,
   editClickHandler,
-  commentDeleteHandler,
+  deleteClickHandler,
 }) => {
   // 모달 컨테이너의 ref 생성
   const modalRef = useRef<HTMLDivElement>(null);
@@ -37,7 +37,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
     <CommentModalContainer ref={modalRef}>
       <CommentModalUl>
         <CommentModalSpan onClick={editClickHandler}>수정</CommentModalSpan>
-        <CommentModalSpan onClick={commentDeleteHandler}>삭제</CommentModalSpan>
+        <CommentModalSpan onClick={deleteClickHandler}>삭제</CommentModalSpan>
       </CommentModalUl>
     </CommentModalContainer>
   );
