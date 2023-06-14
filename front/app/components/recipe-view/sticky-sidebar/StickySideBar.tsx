@@ -1,5 +1,4 @@
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
-import { useEffect, useState } from "react";
 import { Link } from "react-scroll";
 import styled from "styled-components";
 
@@ -21,27 +20,9 @@ const StickySideBar = () => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // 768px 이하일 때 사이드바 숨김 반응형 처리
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
-  useEffect(() => {
-    const handleResize = () => {
-      const screenWidth = window.innerWidth;
-      if (screenWidth <= 900) {
-        setSidebarVisible(false);
-      } else {
-        setSidebarVisible(true);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <>
-      {isSidebarVisible && (
+      {
         <SidebarContainerDiv isHeaderVisible={isHeaderVisible}>
           <TitleH3>목차</TitleH3>
           <SidebarContentsDiv>
@@ -61,7 +42,7 @@ const StickySideBar = () => {
             ))}
           </SidebarContentsDiv>
         </SidebarContainerDiv>
-      )}
+      }
     </>
   );
 };
