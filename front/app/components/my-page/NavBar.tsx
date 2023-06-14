@@ -17,17 +17,18 @@ const NavBar = () => {
           레시피
         </NavItem>
         <NavItem
-        onClick={() => router.push("/my-page/scrap")}
-          clicked={currentPath === "/my-page/scrap"}
-          >
-          스크랩
-        </NavItem>
-        <NavItem
           onClick={() => router.push("/my-page/modify-user-info")}
           clicked={currentPath === "/my-page/modify-user-info"}
         >
           회원정보수정
         </NavItem>
+        <NavItem
+        onClick={() => router.push("/my-page/scrap")}
+          clicked={currentPath === "/my-page/scrap"}
+          >
+          스크랩
+        </NavItem>
+        
       </NavUl>
     </>
   );
