@@ -22,7 +22,7 @@ type Recipe = {
   recipe_thumbnail: string;
 };
 
-const ResultPage: React.FC = () => {
+const ResultPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams?.get("winnerId");
