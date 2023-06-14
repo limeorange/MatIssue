@@ -111,9 +111,8 @@ width: calc(100% - 9rem);
   border-radius: 0.8rem;
   font-size: 16px;
   padding: 0 1.6rem;
- 
   &:focus {
-    ${(props) => (props.isEdit ? "outline: 0.3rem solid #fbd26a" : "")};
+    outline: 0.3rem solid #fbd26a;
     border: none;
   }
   @media (min-width: 1024px) {
@@ -122,7 +121,10 @@ width:100%;
   }
 `;
 
-
+// &:focus {
+//   ${(props) => (props.isEdit ? "outline: 0.3rem solid #fbd26a" : "")};
+//   border: none;
+// }
 
 export const InputBoxCode = styled.input<{ isEdit?: boolean }>`
 max-width: 40rem;
@@ -134,9 +136,9 @@ font-size: 16px;
 padding: 0 1.6rem;
 margin-top: 0.3rem;
 &:focus {
-  ${(props) => (props.isEdit ? "outline: 0.3rem solid #fbd26a" : "")};
-  border: none;
-}
+    outline: 0.3rem solid #fbd26a;
+    border: none;
+  }
 @media (min-width: 1024px) {
 width:100%;
 }
@@ -190,11 +192,7 @@ align-items: center;
 flex-shrink: 1;
   width: 8rem;
   height: 4rem;
-  @media (min-width: 1024px) {
-    position: absolute;
-    right: 22.4rem;
-    top: 7rem;
-  }
+  
 `;
 
 export const ProfileImageWrapper = styled.div`
@@ -317,7 +315,7 @@ export const EmailContainer = styled.div`
   width: 100%;
   flex-direction: column;
   @media (min-width: 1024px) {
-
+margin-top: -1.5rem;
   }
 `;
 
@@ -327,7 +325,7 @@ export const EmailWrapper = styled.div`
   flex-direction: column;
   @media (min-width: 1024px) {
     flex-direction: row;
-    margin-top: 4.5rem;
+    margin-top: 3.5rem;
   }
 `;
 
@@ -348,4 +346,7 @@ gap: 0.7rem;
 align-items: center;
 justify-content: space-between;
 width: 100%;
+@media (min-width: 1024px) {
+  justify-content: start;
+}
 `;

@@ -76,8 +76,8 @@ const ModalContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 45rem;
-  height: 20rem;
+  width: 31rem;
+  height: 19rem;
   background-color: white;
   padding: 2rem;
   border-radius: 1.3rem;
