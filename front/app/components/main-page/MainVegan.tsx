@@ -55,7 +55,7 @@ const MainVegan = () => {
   };
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)"); // 화면 너비가 768px 이하인 경우 모바일로 간주
+    const mediaQuery = window.matchMedia("(max-width: 1024px)"); // 화면 너비가 768px 이하인 경우 모바일로 간주
     setIsMobile(mediaQuery.matches); // 초기 렌더링 시 미디어 쿼리 결과에 따라 상태를 설정
 
     const handleResize = () => {
