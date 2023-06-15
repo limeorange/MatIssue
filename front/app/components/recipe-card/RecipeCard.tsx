@@ -7,10 +7,7 @@ import Image from "next/image";
 import { getRecipeById } from "@/app/api/recipe";
 import { Comments, Recipe } from "@/app/types";
 
-const RecipeCard = (
-  { recipe }: { recipe: Recipe },
-  { comments }: { comments: Comments }
-) => {
+const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
 
   const [commentCount, setCommentCount] = useState<number>(0);
@@ -155,18 +152,22 @@ const RecipeRankItem = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-  font-size: 12px;
-  font-weight: 400;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
+
+  @media (min-width: 768px) {
+    margin-left: 1rem;
+  }
 `;
 
 const RecipeRankImg = styled.div`
-  min-width: 1.6rem;
-  min-height: 1.4rem;
   margin-right: 0.5rem;
-
   max-width: 1.3rem;
   max-height: 1.1rem;
+
+  @media (min-width: 768px) {
+    min-width: 1.6rem;
+    min-height: 1.4rem;
+  }
 `;
 
 const Count = styled.span`
