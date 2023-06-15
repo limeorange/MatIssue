@@ -44,7 +44,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
     isLoading,
     isError,
   } = useQuery<Recipe>(
-    ["currentRecipe"],
+    ["currentRecipe", props.recipe_id],
     () => getRecipeById(props.recipe_id),
     {
       refetchOnWindowFocus: false,
@@ -371,6 +371,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
           {/* 스크랩 */}
           <div id="heading6" onClick={loginConfirmModalHandler}>
             <RecipeScrap
+              currentUserID={currentUser?.user_id}
               isSaved={isSaved}
               setIsSaved={setIsSaved}
               isBooked={isBooked}

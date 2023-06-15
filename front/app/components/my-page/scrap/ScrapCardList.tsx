@@ -4,6 +4,8 @@ import NonRecipe from "../../UI/NonRecipe";
 import { useEffect, useState } from "react";
 import NonScrapPage from "../../UI/NonScrap";
 import Pagination from "../../pagination/Pagination";
+import { useQuery } from "@tanstack/react-query";
+import getCurrentUser from "@/app/api/user";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 type MemoItemProps = {
@@ -20,11 +22,15 @@ type MemoItemProps = {
 type ScrapItemProps = {
   scrapData: MemoItemProps;
   memo: string;
+  user_id: string;
 };
 
 /** 스크랩 리스트 컴포넌트 */
 const ScrapCardList: React.FC = () => {
   const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
+  const { data: currentUser } = useQuery(["currentUser"], () =>
+    getCurrentUser()
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const scrapsPerPage = 16;
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,7 +42,10 @@ const ScrapCardList: React.FC = () => {
     if (typeof window !== "undefined") {
       const existingMemo = localStorage.getItem("scrapMemo");
       const parsedMemo = existingMemo ? JSON.parse(existingMemo) : [];
-      setParsedMemo(parsedMemo);
+      const currentUserMemo = parsedMemo.filter(
+        (item: ScrapItemProps) => item.user_id === currentUser.user_id
+      );
+      setParsedMemo(currentUserMemo);
     }
   }, []);
 
@@ -167,19 +176,19 @@ const ScrapListContainer = styled.div`
 `;
 
 const TitleAndNickname = styled.div`
-padding: 0 1rem 0.6rem 3.7rem;
-@media (min-width: 1024px) {
-padding: 0;
-}
+  padding: 0 1rem 0.6rem 3.7rem;
+  @media (min-width: 1024px) {
+    padding: 0;
+  }
 `;
 
 /** 스크랩 제목 Span */
 const ScrapTitleSpan = styled.span`
-font-size: 15px;
-font-weight: 600;
-letter-spacing: 0.01em;
-margin: 0 0.3rem 0 1rem;
-color: #4f3d21;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 0 0.3rem 0 1rem;
+  color: #4f3d21;
   @media (min-width: 1024px) {
     font-size: 18px;
     margin: 0 0.5rem 0 1.9rem;
@@ -188,7 +197,7 @@ color: #4f3d21;
 
 /** 스크랩 개수 Span */
 const ScrapCountSpan = styled.span`
-font-size: 15px;
+  font-size: 15px;
   font-weight: 700;
   color: #545454;
   @media (min-width: 1024px) {
@@ -196,30 +205,26 @@ font-size: 15px;
   }
 `;
 
-
-
 /** 레시피 스크랩 grid Div */
 const ScrapListGrid = styled.div`
-@media (max-width: 767px) {
-  width: 100%;
-  flex-direction: column;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  padding-bottom: 2rem;
-  margin-top: 0.5rem;
-}
+  @media (max-width: 767px) {
+    width: 100%;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    margin-top: 0.5rem;
+  }
 
   @media (min-width: 1024px) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     margin: 1.5rem 0 3rem;
     grid-column-gap: 2.5rem;
-  grid-row-gap: 2.5rem;
-  padding-bottom: 0;
-
-    
+    grid-row-gap: 2.5rem;
+    padding-bottom: 0;
   }
 `;
 
