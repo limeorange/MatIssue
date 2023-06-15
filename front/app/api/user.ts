@@ -43,6 +43,16 @@ export async function getUserFans(user_id: string) {
   }
 }
 
+export async function getUserSubscriptions(user_id: string) {
+  try {
+    const response = await axiosBase.get(`/users/${user_id}/subscriptions`);
+    const subscriptionsList = response.data["people"];
+    return subscriptionsList;
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
 export const getAllUsers = async (page: number, per_page: number) => {
   try {
     const response = await axiosBase.get(

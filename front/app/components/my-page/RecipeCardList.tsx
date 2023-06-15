@@ -8,6 +8,7 @@ import { Recipe } from "@/app/types";
 import ConfirmModal from "../UI/ConfirmModal";
 import Pagination from "../pagination/Pagination";
 import { useQueryClient } from "@tanstack/react-query";
+import { Title } from "@/app/styles/my-page/modify-user-info.style";
 
 const RecipeCards = ({
   currentUserRecipes,
@@ -19,7 +20,7 @@ const RecipeCards = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const recipesPerPage = 12;
+  const recipesPerPage = 16;
 
   const handleOpenModal = (recipe: Recipe) => {
     setRecipeToDelete(recipe);
@@ -63,8 +64,9 @@ const RecipeCards = ({
 
   return (
     <RecipeListContainer>
-      <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{currentUserRecipes?.length}</RecipeHeadingCount>
+      <TitleAndNickname> <RecipeHeading>나의 레시피</RecipeHeading>
+      <RecipeHeadingCount>{currentUserRecipes?.length}</RecipeHeadingCount></TitleAndNickname>
+     
       {currentUserRecipes?.length === 0 ? (
         <NonRecipeMsg />
       ) : (
@@ -75,7 +77,8 @@ const RecipeCards = ({
               
                 <button onClick={() => handleOpenModal(recipe)}>
                 <ButtonDiv>
-                <DeleteButtonImage src="/images/brown-X.svg" alt="X-box" />
+                <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
+                <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
                 </ButtonDiv>
               </button>
               
@@ -111,7 +114,16 @@ const RecipeListContainer = styled.div`
   width: 100%;
   margin-top: 1.8rem;
   @media (min-width: 1024px) {
+    margin-top: 0;
+    margin-bottom: 16rem;
   }
+`;
+
+const TitleAndNickname = styled.div`
+padding: 0 0 0.6rem;
+@media (min-width: 1024px) {
+padding:0;
+}
 `;
 
 const RecipeHeading = styled.span`
@@ -154,23 +166,35 @@ const RecipeCardWrapper = styled.div`
 const StyledRecipeCard = styled(RecipeCard)``;
 
 const DeleteButtonImage = styled.img`
+    @media (min-width: 1024px) {
+      position: absolute;
+      transition: transform 0.1s ease-in-out;
+      top: 25rem;
+      right: 0.7rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+
+    @media (max-width: 1023px) {
+      display: none;
+    }
+`;
+
+const DeleteButtonMobile = styled.img`
 position: absolute;
-box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 top: 0.7rem;
 right: 0.7rem;
 width: 1.5rem;
-    height: 1.5rem;
-    transition: transform 0.1s ease-in-out;
-    &:hover {
-      transform: scale(1.2);
+height: 1.5rem;
+transition: transform 0.1s ease-in-out;
+@media (min-width: 1024px) {
+display: none;
     }
-  @media (min-width: 1024px) {
-    top: 25rem;
-    right: 0.7rem;
-    width: 1.8rem;
-    height: 1.8rem;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-  }
 `;
 
 const NonRecipeMsg = styled(NonRecipe)``;
@@ -181,9 +205,13 @@ const AlertImage = styled.img`
 `;
 
 const PaginationComponent = styled(Pagination)`
-margin-bottom: 1.6rem;
+
 `;
 
 const ButtonDiv = styled.div`
-
+position: absolute;
+top:0;
+right:0;
+width: 3rem;
+height: 3rem;
 `;

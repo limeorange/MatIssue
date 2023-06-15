@@ -16,7 +16,6 @@ export const Header = styled.h1`
   font-size: 20px;
   font-weight: 700;
   color: #4f3d21;
-  cursor: pointer;
  
   @media (min-width: 1024px) {
     font-size: 26px;
@@ -52,6 +51,7 @@ position: relative;
     text-decoration: underline;
     padding-top: 0;
     color: #201ce0;
+    z-index: 99;
   }
 `;
 

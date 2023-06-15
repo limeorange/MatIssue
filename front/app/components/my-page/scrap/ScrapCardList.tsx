@@ -3,6 +3,7 @@ import ScrapCardItem from "./ScrapCardItem";
 import NonRecipe from "../../UI/NonRecipe";
 import { useEffect, useState } from "react";
 import NonScrapPage from "../../UI/NonScrap";
+import Pagination from "../../pagination/Pagination";
 
 type MemoItemProps = {
   created_at: string;
@@ -36,8 +37,12 @@ const ScrapCardList: React.FC = () => {
 
   return (
     <ScrapListContainer>
+      <TitleAndNickname>
       <ScrapTitleSpan>나의 스크랩</ScrapTitleSpan>
       <ScrapCountSpan>{parsedMemo.length}</ScrapCountSpan>
+      </TitleAndNickname>
+      
+
       {parsedMemo.length === 0 ? (
         <NonScrapMsg />
       ) : (
@@ -63,31 +68,67 @@ const ScrapCardList: React.FC = () => {
 /** 스크랩 리스트 전체 감싸는 Div */
 const ScrapListContainer = styled.div`
   width: 100%;
+  margin-top: 1.8rem;
+  @media (min-width: 1024px) {
+    margin-top: 0;
+  }
+`;
+
+const TitleAndNickname = styled.div`
+padding: 0 1rem 0.6rem 3.7rem;
+@media (min-width: 1024px) {
+padding: 0;
+}
 `;
 
 /** 스크랩 제목 Span */
 const ScrapTitleSpan = styled.span`
-  font-size: 18px;
-  letter-spacing: 0.01em;
-  margin: 0 0.5rem 0 1.9rem;
-  font-weight: 600;
-  color: #4f3d21;
+font-size: 15px;
+font-weight: 600;
+letter-spacing: 0.01em;
+margin: 0 0.3rem 0 1rem;
+color: #4f3d21;
+  @media (min-width: 1024px) {
+    font-size: 18px;
+    margin: 0 0.5rem 0 1.9rem;
+  }
 `;
 
 /** 스크랩 개수 Span */
 const ScrapCountSpan = styled.span`
-  font-size: 17px;
+font-size: 15px;
   font-weight: 700;
   color: #545454;
+  @media (min-width: 1024px) {
+    font-size: 17px;
+  }
 `;
+
+
 
 /** 레시피 스크랩 grid Div */
 const ScrapListGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 1.5rem;
-  grid-column-gap: 25px;
-  grid-row-gap: 25px;
+@media (max-width: 767px) {
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  margin-top: 0.5rem;
+}
+
+  @media (min-width: 1024px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 1.5rem 0 16rem;
+    grid-column-gap: 2.5rem;
+  grid-row-gap: 2.5rem;
+  padding-bottom: 0;
+
+    
+  }
 `;
 
 /** 레시피가 없을 경우 띄워주는 안내 그림 */
