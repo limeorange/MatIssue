@@ -43,7 +43,8 @@ export default AdminLayout;
 
 const AdminContainer = styled.div`
   display: flex;
-  width: 100vw;
+  width: 100%;
+  min-width: 100vw;
   min-height: 100vh;
   font-size: 16px;
   font-weight: 600;
@@ -52,6 +53,7 @@ const AdminContainer = styled.div`
 
 const CategoryBar = styled.div`
   display: flex;
+  flex: none;
   flex-direction: column;
   min-height: 100vh;
   width: 30rem;
@@ -95,6 +97,7 @@ const CategoryItem = styled.li<{ clicked: boolean }>`
 
 const MainContainer = styled.div`
   display: flex;
+  flex: 1;
   width: 100%;
   min-height: 100vh;
 

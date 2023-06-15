@@ -45,8 +45,10 @@ export async function getUserFans(user_id: string) {
 
 export const getAllUsers = async (page: number, per_page: number) => {
   try {
-    const response = await axiosBase.get("users", { data: { page, per_page } });
-    return response.data;
+    const response = await axiosBase.get(
+      `users/?page=${page}&per_page=${per_page}`
+    );
+    return response.data.users;
   } catch (err: any) {
     return null;
   }
