@@ -23,7 +23,7 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
     if (currentUser?.user_id === "admin") {
       setIsAdmin(true);
     } else {
-      setIsAdmin(fale);
+      setIsAdmin(false);
     }
   }, [currentUser]);
 
