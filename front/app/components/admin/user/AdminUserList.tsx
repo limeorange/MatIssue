@@ -45,7 +45,7 @@ const AdminUserList = ({ users }: { users: User[] }) => {
 };
 
 const PanelList = styled.ul`
-  width: calc(100% - 3rem);
+  width: 100rem;
   display: flex;
   flex-direction: column;
   background-color: white;

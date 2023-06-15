@@ -56,7 +56,7 @@ const AdminRecipeList = ({ recipes }: { recipes: Recipe[] }) => {
 };
 
 const PanelList = styled.ul`
-  width: calc(100% - 3rem);
+  width: 90rem;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -66,7 +66,6 @@ const PanelList = styled.ul`
 `;
 
 const PanelListHeader = styled.li`
-  width: 100%;
   display: flex;
   padding: 0.5rem 2rem;
   background-color: #fbe2a1;
