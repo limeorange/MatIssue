@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 import RecipeCard from "../recipe-card/RecipeCard";
 import { axiosBase } from "@/app/api/axios";
@@ -8,7 +8,7 @@ import { Recipe } from "@/app/types";
 import ConfirmModal from "../UI/ConfirmModal";
 import Pagination from "../pagination/Pagination";
 import { useQueryClient } from "@tanstack/react-query";
-import { Title } from "@/app/styles/my-page/modify-user-info.style";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const RecipeCards = ({
   currentUserRecipes,
@@ -17,10 +17,13 @@ const RecipeCards = ({
 }) => {
   const client = useQueryClient();
 
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recipesPerPage = 16;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
 
   const handleOpenModal = (recipe: Recipe) => {
     setRecipeToDelete(recipe);
@@ -40,7 +43,7 @@ const RecipeCards = ({
     try {
       await axiosBase.delete(`recipes/${id}`);
       console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
-      client.invalidateQueries(["currentUserRecipes"]);
+      client.invalidateQueries(["currentRecipe"]);
       // setIsModalOpen(false);
     } catch (error) {
       console.error(
@@ -51,62 +54,124 @@ const RecipeCards = ({
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 375);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
   // 페이지네이션
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = currentUserRecipes?.slice(
-    indexOfFirstRecipe,
-    indexOfLastRecipe
-  );
+  // const currentRecipes = currentRecipe?.slice(
+  //   indexOfFirstRecipe,
+  //   indexOfLastRecipe
+  // );
+  const currentRecipe = isMobile
+  ? currentUserRecipes?.slice(0, indexOfLastRecipe)
+  : currentUserRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe);
 
-  return (
-    <RecipeListContainer>
-      <TitleAndNickname> <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{currentUserRecipes?.length}</RecipeHeadingCount></TitleAndNickname>
-     
-      {currentUserRecipes?.length === 0 ? (
-        <NonRecipeMsg />
-      ) : (
-        <RecipeList>
-          {currentUserRecipes?.map((recipe: Recipe) => (
-            <RecipeCardWrapper key={recipe.recipe_id}>
-              <StyledRecipeCard recipe={recipe} />
-              
+  const fetchMoreRecipes = async () => {
+    // 페이지 증가
+    setCurrentPage((prev) => prev + 1);
+    setIsLoading(true);
+
+    // 데이터 로딩 시간 설정
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    setIsLoading(false);
+  };
+
+  const hasMore = currentPage * recipesPerPage < currentRecipe?.length;
+
+  
+return (
+  <RecipeListContainer>
+    <RecipeHeading>나의 레시피</RecipeHeading>
+    <RecipeHeadingCount>{currentRecipe?.length}</RecipeHeadingCount>
+    {currentRecipe?.length === 0 ? (
+      <NonRecipeMsg />
+    ) : (
+      isMobile ? (
+        <InfiniteScroll
+          dataLength={currentRecipe?.length}
+          next={fetchMoreRecipes}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          scrollThreshold={0.5}
+          endMessage={
+            <p
+              style={{
+                fontSize: "16px",
+                textAlign: "center",
+                margin: "2rem",
+                color: "#F8B551",
+              }}
+            >
+              <b>{`마지막 레시피 입니다 :)`}</b>
+            </p>
+          }
+        >
+          <RecipeList>
+            {currentRecipe?.map((recipe: Recipe) => (
+              <RecipeCardWrapper key={recipe.recipe_id}>
+                <StyledRecipeCard recipe={recipe} />
+
                 <button onClick={() => handleOpenModal(recipe)}>
-                <ButtonDiv>
-                <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
-                <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
-                </ButtonDiv>
-              </button>
-              
-              
-            </RecipeCardWrapper>
-          ))}
-        </RecipeList>
-      )}
-      {isModalOpen && (
-        <StyledConfirmModal
-          icon={<AlertImage src="/images/alert.png" alt="alert" />}
-          message="레시피를 삭제하시겠습니까?"
-          onConfirm={handleDeleteRecipe}
-          onCancel={handleCloseModal}
-        />
-      )}
-      {currentUserRecipes?.length > 0 && (
-        <PaginationComponent
-          recipesPerPage={recipesPerPage}
-          totalRecipes={currentUserRecipes?.length}
-          paginate={paginate}
-          currentPage={currentPage}
-        />
-      )}
-    </RecipeListContainer>
-  );
+                  <ButtonDiv>
+                    <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
+                    <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
+                  </ButtonDiv>
+                </button>
+              </RecipeCardWrapper>
+            ))}
+          </RecipeList>
+        </InfiniteScroll>
+      ) : (
+        <>
+          <RecipeList>
+            {currentRecipe?.slice(0, recipesPerPage * currentPage).map((recipe: Recipe) => (
+              <RecipeCardWrapper key={recipe.recipe_id}>
+                <StyledRecipeCard recipe={recipe} />
+
+                <button onClick={() => handleOpenModal(recipe)}>
+                  <ButtonDiv>
+                    <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
+                    <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
+                  </ButtonDiv>
+                </button>
+              </RecipeCardWrapper>
+            ))}
+          </RecipeList>
+          <PaginationComponent
+            recipesPerPage={recipesPerPage}
+            totalRecipes={currentRecipe?.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </>
+      )
+    )}
+    {isModalOpen && (
+      <StyledConfirmModal
+        icon={<AlertImage src="/images/alert.png" alt="alert" />}
+        message="레시피를 삭제하시겠습니까?"
+        onConfirm={handleDeleteRecipe}
+        onCancel={handleCloseModal}
+      />
+    )}
+  </RecipeListContainer>
+);
 };
 export default RecipeCards;
+
 
 // 레시피 리스트
 
@@ -205,7 +270,10 @@ const AlertImage = styled.img`
 `;
 
 const PaginationComponent = styled(Pagination)`
-
+display: none;
+@media (min-width: 1024px) {
+display: block;
+}
 `;
 
 const ButtonDiv = styled.div`
