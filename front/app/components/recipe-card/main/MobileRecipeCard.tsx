@@ -48,17 +48,17 @@ const MobileRecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 {recipe.recipe_like.length.toLocaleString()}
               </HeartCount>
             </RecipeRankItem>
-            {/* <RecipeRankItem>
-              <RecipeRankImg>
+            <RecipeRankItem>
+              <RecipeRankImg style={{ marginBottom: "0.25rem" }}>
                 <Image
-                  src="/images/view.png"
-                  alt="게시물 조회수 이미지"
-                  width={13}
-                  height={11}
+                  src="/images/recipe-view/comment.svg"
+                  alt="게시물 댓글 이미지"
+                  width={30}
+                  height={26}
                 />
               </RecipeRankImg>
-              <p>{data.view}</p>
-            </RecipeRankItem> */}
+              <Count>0</Count>
+            </RecipeRankItem>
           </RecipeRank>
         </RecipeInfo>
       </RecipeCardWrapper>
@@ -155,6 +155,11 @@ const RecipeRankImg = styled.div`
 `;
 
 const HeartCount = styled.span`
+  font-size: 14px;
+  margin-right: 0.2rem;
+`;
+
+const Count = styled.span`
   font-size: 14px;
   margin-right: 0.2rem;
 `;
