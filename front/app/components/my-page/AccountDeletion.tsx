@@ -1,50 +1,41 @@
 "use client";
 
 import styled from "styled-components";
-import Link from "next/link";
-import Button from "../UI/Button";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import ConfirmModal from "../UI/ConfirmModal";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import uploadImage from "@/app/api/aws";
 import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
 import { User } from "../../types/index";
-import {
-  Container,
-  Header,
-  WrapperInfo,
-  Wrapper,
-  Title,
-  InputBox,
-  SpaceDiv,
-  ShowIconBox,
-} from "@/app/styles/my-page/modify-user-info.style";
+import { Wrapper } from "@/app/styles/my-page/modify-user-info.style";
 
-const AccountDeletion: React.FC = () => {
-  const { data: currentUser } = useQuery<User>(["currentUser"]); //비동기적으로 실행, 서버에서 온 값
-  const [userData, setUserData] = useState<any>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
+const AccountDeletion= ({id, password} : {id: any, password: any}) => {
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
   // 회원 탈퇴 컴포넌트
   const handleDeleteAccount = async () => {
     try {
       const response = await axiosBase.delete("users", {
         data: {
-          user_id: userData?.user_id,
-          password: userData?.password,
+          user_id: id,
+          password: password,
           session_id: "session_id",
         },
       });
       console.log("delete 후 response : ", response);
 
       if (response.status === 200) {
-        queryClient.invalidateQueries(["currentUser"]);
-        console.log("회원탈퇴 성공");
         Cookies.remove("session_id");
         console.log("계정이 삭제되었습니다.");
         await axiosBase.post("users/logout");
@@ -58,14 +49,7 @@ const AccountDeletion: React.FC = () => {
     closeModal();
   };
 
-  // 모달 컨트롤
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+ 
   return (
     <>
       <Wrapper>
