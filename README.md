@@ -2,12 +2,13 @@
 
 ## <데모 사이트>
 
-![image](/uploads/bef7ec1c6cdcedac42e2719b5013a449/image.png)
+[![logo_2.svg](/uploads/f7162a12b83fe9d781efb64f4dfa9694/logo_2.svg)](https://www.matissue.com)
 <br/>
-[맛이슈 바로가기](https://www.matissue.com/)
+**_<div align="center">로고 클릭 시 맛이슈 홈페이지로 이동합니다.</div>_**
 
 ## <프로젝트 주제>
-이미지 첨부 (페르소나도 넣어야 함)
+![맛이슈란_](/uploads/f880fe06a1508d3cbc47ebbea85e8e87/맛이슈란_.png)
+![페르소나](/uploads/9cf5a80ca64a541e2c95f4dfc434ce1c/페르소나.png)
 <br/>
 - 목적 : 오늘 뭐 먹지? 고민하는 주부, 자취생 및 요리를 좋아하는 모든 사람들을 위한 레시피를 공유하고 소통할 수 있는 플랫폼을 구축 합니다.
 - 목표 :
@@ -23,7 +24,7 @@
 
 1. 회원가입, 로그인, 회원정보 수정 등 **유저 정보 관련 CRUD**
 2. 회원가입 및 회원정보 수정시 **회원인증 이메일 발송 기능** 제공
-3. **마이페이지** 에서 작성 레시피, 스크랩 레시피 확인 가능
+3. **마이페이지** 에서 사용자는 자신이 업로드한 레시피를 마이페이지에서 확인 조회, 삭제. 회원정보수정 페이지에서 비밀번호, 닉네임, 프로필 사진 사용자 정보 CRUD. 사용자는 스크랩한 레시피를 확인하고 메모를 수정 가능
 4. **레시피 작성**, **레시피 수정**, **레시피 조회** 및, **레시피 상세 정보 조회** 등 **기본적인 게시물 관련 CRUD**
 5. **레시피 통합 검색 (제목, 재료, 내용 등)**, **카테고리 별 레시피 조회** 가능
 6. **레시피 스크랩 기능** 제공, 스크랩의 경우 서버 DB가 아닌, 프론트 단에서 저장 및 관리됨 (local strorage)
@@ -52,11 +53,12 @@
 - 이수현
   - 어마어마 하게 많은 일
 - 이나현
-  - 어마어마 하게 많은 일
+  -마이페이지 (유저프로필, 레시피 조회/삭제, 회원정보수정(프로필사진 업로드/ 비밀번호 변경 / 회원탈퇴), 모달창)
 - 김동균
   - 어마어마 하게 많은 일
 - 임정훈
-  - 넌 뭐했니 ?
+  - 게시물 검색 페이지 (웹 및 모바일) 구현
+  - (레시피 썸네일 컴포넌트, FilterBar 및 Tag, 정렬 버튼, 페이지네이션, 무한스크롤, 관련 API 연결, MBTI, Kakao API를 이용한 공유 기능)
 
 #### Back-End
 
@@ -66,8 +68,7 @@
   - 어마어마 하게 많은 일
 
 ## <기술 스택>
-<!-- ![image](/uploads/f44d85bf46bbe39ab49affd5f3c9b633/image.png) -->
-![image](/uploads/64724cd768531d3dd040317e2620dbf3/image.png)
+![기술스택.svg](/uploads/03484eb7ff839fd314d11bc2f85de74e/기술스택.svg)
 
 ## <API 문서>
 [ERD](https://www.erdcloud.com/d/AW9MEiXv4g2T9mJHx)
@@ -203,7 +204,8 @@ feature/(기능명)으로 개인 작업 브랜치 생성, 기능구현 후 dev�
 #### Back-End
 - 어캐했누!
 
-## 서버 실행 방법
+## <서버 실행 방법>
+#### Front-End
 ```bash
 git clone {.....repository_name}.git
 cd {repository_name}
@@ -212,13 +214,14 @@ npm run dev
 ```
 
 ## <.env 설정>
+#### Front-End
 ```
 NEXT_PUBLIC_KAKAO_API_KEY={OUR_KAKAO_KEY}
 NEXT_PUBLIC_AWS_ACCESS_KEY_ID={AWS_KEY}
 NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY={AWS_ACCESS_KEY}
 NEXT_PUBLIC_AWS_BUCKET_NAME={AWS_NAME}
 ```
-## <꿇어라, 그게 우리와 너의 눈높이다.>
-![image](/uploads/40996b7bfd823e2441521e5bafcf146f/image.png)
+## <꿇어라, 그게 맛이슈와 너의 눈높이다.>
+![토끼들.svg](/uploads/d8ecc12258f7d831d1b56dcad080a3be/토끼들.svg)
 
 

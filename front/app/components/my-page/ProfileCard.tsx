@@ -6,8 +6,9 @@ import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { getRecipeByUserId } from "@/app/api/recipe";
-import getCurrentUser from "@/app/api/user";
+import getCurrentUser, { getUserFans } from "@/app/api/user";
 import { useRouter } from "next/navigation";
+import { set } from "react-hook-form";
 
 type MemoItemProps = {
   created_at: string;
@@ -27,9 +28,14 @@ type ScrapItemProps = {
 
 const ProfileCard = () => {
   // 캐시에 저장된 현재 유저정보를 가져옴
-  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
-    getCurrentUser()
-  );
+  const { data: currentUser } = useQuery<User>(["currentUser"] );
+const [fansCount, setFansCount] = useState<number>(0);
+const [subscriptionsCount, setSubscriptionsCount] = useState<number>(0);
+
+  useEffect(() => {
+    console.log("currentUser", currentUser?.user_id);
+  }
+  , [currentUser]);
 
   // 캐시에 저장된 현재 유저가 작성한 레시피들을 가져옴
   const { data: currentUserRecipes } = useQuery<Recipe[]>(
@@ -49,6 +55,31 @@ const ProfileCard = () => {
       setParsedMemo(parsedMemo);
     }
   }, []);
+
+  useEffect(() => {
+    const getFansCount = async () => {
+      try {
+        const fansList = await getUserFans(currentUser?.user_id || ""); 
+        setFansCount(fansList.length);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getSubscriptionsCount = async () => {
+      try {
+        const subscriptionsList = await getUserFans(currentUser?.user_id || "");
+        setSubscriptionsCount(subscriptionsList.length);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getSubscriptionsCount();
+    getFansCount()
+  }
+  , [currentUser]);
+
+
+
 
   return (
     <ProfileContainer>
@@ -79,12 +110,12 @@ const ProfileCard = () => {
             <FollowAndFollowing>
               <FollowerDiv>
                 <Follower>팔로워</Follower>
-                <FollowerCount>99</FollowerCount>
+                <FollowerCount>{fansCount}</FollowerCount>
               </FollowerDiv>
               <FollowDivider />
               <FollowingDiv>
                 <Following>팔로잉</Following>
-                <FollowingCount>50</FollowingCount>
+                <FollowingCount>{subscriptionsCount}</FollowingCount>
               </FollowingDiv>
             </FollowAndFollowing>
 
@@ -315,13 +346,16 @@ const ModifyUserDiv = styled.div`
 `;
 
 const Divider = styled.div`
-  display: none;
   @media (min-width: 1024px) {
     display: flex;
-    width: 100%;
+    width: 20rem;
     height: 1px;
     background-color: #ccc;
     margin: 2rem 0;
+  }
+
+  @media (max-width: 1023px) {
+    display: none;
   }
 `;
 

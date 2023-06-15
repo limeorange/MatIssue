@@ -98,14 +98,13 @@ const LoginClient = () => {
             >
               아이디•비밀번호 찾기
             </button>
+            <AuthChangeBox>
+              <UnderLineLinkDiv onClick={() => router.push("/auth/signup")}>
+                회원가입하기
+              </UnderLineLinkDiv>
+            </AuthChangeBox>
           </AuthNavBox>
         </form>
-        <AuthChangeBox>
-          <div>처음이신가요?</div>
-          <UnderLineLinkDiv onClick={() => router.push("/auth/signup")}>
-            회원가입하기
-          </UnderLineLinkDiv>
-        </AuthChangeBox>
       </LoginAuthContainer>
     </AuthContainer>
   );
