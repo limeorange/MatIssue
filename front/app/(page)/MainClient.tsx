@@ -43,7 +43,11 @@ const MainWrapper = styled.div`
   @media (min-width: 768px) {
     margin: 0 auto;
     padding: 2rem 0;
-    gap: 4rem;
+    gap: 1rem;
     background-color: white;
+  }
+
+  @media (min-width: 1024px) {
+    gap: 4rem;
   }
 `;

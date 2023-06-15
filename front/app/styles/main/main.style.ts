@@ -10,7 +10,7 @@ export const StyledContainer = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-    width: 100%;
+    width: 90%;
     max-width: 120rem;
     padding: 2rem 2rem 4rem 2rem;
   }
@@ -35,10 +35,11 @@ export const StyledTitleBox = styled.div`
   flex-direction: column;
   gap: 1rem;
   padding: 0.8rem 0 0 0;
-  align-items: center;
+  align-items: left;
 
   @media (min-width: 1024px) {
     padding: 1.6rem 0 0 0;
+    align-items: center;
   }
 `;
 
@@ -52,11 +53,12 @@ export const StyledTitle = styled.h2`
 `;
 
 export const StyledSubTitle = styled.h3`
-  font-size: 14px;
-  color: #666;
+  display: none;
 
   @media (min-width: 1024px) {
+    display: block;
     font-size: 16px;
+    color: #666;
   }
 `;
 
@@ -85,7 +87,7 @@ export const RecipeContainer = styled.div`
   width: 100%;
   max-width: 96rem;
   margin: 0 auto;
-  padding: 4rem 2rem;
+ 
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   overflow-hidden;
@@ -94,6 +96,7 @@ export const RecipeContainer = styled.div`
 
   @media (min-width : 1024px){
     grid-template-columns: repeat(3, 1fr);
+     padding: 4rem 2rem;
 
   }
 `;
