@@ -44,7 +44,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
     isLoading,
     isError,
   } = useQuery<Recipe>(
-    ["currentRecipe"],
+    ["currentRecipe", props.recipe_id],
     () => getRecipeById(props.recipe_id),
     {
       refetchOnWindowFocus: false,
