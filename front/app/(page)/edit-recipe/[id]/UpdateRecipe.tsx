@@ -12,6 +12,7 @@ import Button from "@/app/components/UI/Button";
 import { updateRecipe } from "@/app/api/recipe";
 import { toast } from "react-hot-toast";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import ConfirmModal from "@/app/components/UI/ConfirmModal";
 
 type Recipe = {
   recipe_category: string;
@@ -97,6 +98,17 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     videoLink: recipe_video,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  useEffect(() => {
+    // 새로고침 막기(조건 부여 가능)
+    window.onbeforeunload = function () {
+      return true;
+    };
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
 
   useEffect(() => {
     // 새로고침 막기(조건 부여 가능)
@@ -362,6 +374,11 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
   // 취소 핸들러
   const handleCancel = () => {
+    setShowConfirmModal(true);
+  };
+
+  // 취소 모달 확인 핸들러
+  const handleConfirm = () => {
     router.back();
   };
 
@@ -462,6 +479,13 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           </Button>
         </CancleButton>
       </ButtonContainer>
+      {showConfirmModal && (
+        <ConfirmModal
+          message="레시피를 수정을 취소하시겠습니까?"
+          onCancel={() => setShowConfirmModal(false)}
+          onConfirm={handleConfirm}
+        />
+      )}
     </FormWrapper>
   );
 };
