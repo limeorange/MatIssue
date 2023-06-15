@@ -4,11 +4,11 @@ import styled from "styled-components";
 import React, {  useState } from "react";
 import ConfirmModal from "../UI/ConfirmModal";
 import { useRouter } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
 import { User } from "../../types/index";
-import { Wrapper } from "@/app/styles/my-page/modify-user-info.style";
+
+
 
 
 const AccountDeletion= ({id, password} : {id: any, password: any}) => {
@@ -52,36 +52,57 @@ const AccountDeletion= ({id, password} : {id: any, password: any}) => {
  
   return (
     <>
-      <Wrapper>
-        <StyledAccountDeletion onClick={openModal}>
-          회원 탈퇴
-        </StyledAccountDeletion>
-        {isModalOpen && (
-          <ConfirmModal
-            icon={<AlertImage src="/images/alert.png" alt="alert" />}
-            message="정말 탈퇴 하시겠습니까?"
-            onCancel={closeModal}
-            onConfirm={handleDeleteAccount}
-          />
-        )}
-      </Wrapper>
+      
+      <DeletionAndArrow>
+          <AccountDelete onClick={openModal}>회원 탈퇴</AccountDelete>
+          <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
+          {isModalOpen && (
+            <ConfirmModal
+              icon={<AlertImage src="/images/alert.png" alt="alert" />}
+              message="정말 탈퇴 하시겠습니까?"
+              onCancel={closeModal}
+              onConfirm={handleDeleteAccount}
+            />
+          )}
+      </DeletionAndArrow>
+     
     </>
   );
 };
 
 export default AccountDeletion;
 
-const StyledAccountDeletion = styled.div`
-  position: absolute;
-  right: 16.1rem;
-  top: 13.5rem;
+
+const AccountDelete = styled.div`
   font-size: 14px;
-  text-decoration: underline;
-  color: #e11717;
   cursor: pointer;
+  margin-left: 0.3rem;
+  @media (min-width: 1024px) {
+    position: absolute;
+    right: 16.1rem;
+    top: 13.5rem;
+    text-decoration: underline;
+    color: #e11717;
+    margin-left: 0;
+  }
 `;
 
-const AlertImage = styled.img`
+const ArrowImage = styled.img`
+width:2.5rem;
+height:3rem;
+}
+@media (min-width: 1024px) {
+display: none;
+}
+`;
+
+const DeletionAndArrow = styled.div`
+display:flex;
+align-items: center;
+margin-bottom: 2rem;
+`;
+
+export const AlertImage = styled.img`
   width: 3rem;
   height: 3rem;
 `;

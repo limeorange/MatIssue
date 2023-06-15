@@ -27,8 +27,8 @@ import {
   InputDateBox,
   UserModifyButton,
   SpaceDiv,
-  AccountDeletion,
-  AlertImage,
+  // AccountDeletion,
+  // AlertImage,
   StyledChangePassword,
   EmailWrapper,
   EmailContainer,
@@ -46,6 +46,8 @@ const ModifyUserInfo: React.FC = () => {
   const { data: currentUser } = useQuery<User>(["currentUser"]); //비동기적으로 실행, 서버에서 온 값
   const [userData, setUserData] = useState<any>(); //얘가 먼저 실행되서 밸류 값 undefined, 우리가 갖고 있던 값
   const queryClient = useQueryClient();
+const defaultImage = "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png"
+
 
   useEffect(() => {
     // 받아온 data 객체로 상태 저장
@@ -61,13 +63,14 @@ const ModifyUserInfo: React.FC = () => {
 
   const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null | undefined>(
-    currentUser?.img
+  const [previewImage, setPreviewImage] = useState<string>(
+    currentUser ? currentUser.img : defaultImage
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("hi")
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setSelectedFile(file);
@@ -170,17 +173,17 @@ const ModifyUserInfo: React.FC = () => {
 
   //이미지
   const handleLabelClick = (e: React.MouseEvent<HTMLLabelElement>) => {
-    if (previewImage) {
+    if (previewImage !== defaultImage) {
       e.preventDefault();
     }
   };
 
   //이미지 삭제
   const handleDeleteImage = () => {
-    setPreviewImage("");
+    setPreviewImage(defaultImage);
     setSelectedFile(null);
     setUserData((prev: any) => {
-      return { ...prev, img: "" };
+      return { ...prev, img: defaultImage};
     });
   };
 
@@ -262,7 +265,7 @@ const ModifyUserInfo: React.FC = () => {
           <ProfileImageWrapper>
             <ProfileImageTitle>프로필 이미지</ProfileImageTitle>
             <LabelForFile htmlFor="upload-button" onClick={handleLabelClick}>
-              {previewImage && (
+              {previewImage !== defaultImage && (
                 <>
                   <StyledImage src={previewImage} alt="Preview" />
                   <button type="button" onClick={handleDeleteImage}>
@@ -270,11 +273,11 @@ const ModifyUserInfo: React.FC = () => {
                   </button>
                 </>
               )}
-              {!previewImage && (
-                <StyledImage src="/images/dongs-logo.png" alt="Default" />
+              {previewImage === defaultImage && (
+                <StyledImage src={defaultImage} alt="Default" />
               )}
             </LabelForFile>
-            {!previewImage && (
+            {previewImage === defaultImage && (
               <InputFile
                 type="file"
                 accept="image/*"
@@ -348,11 +351,11 @@ display: none;
 }
 `;
 
-const DeletionAndArrow = styled.div`
-display:flex;
-align-items: center;
-margin-bottom: 2rem;
-`;
+// const DeletionAndArrow = styled.div`
+// display:flex;
+// align-items: center;
+// margin-bottom: 2rem;
+// `;
 
 const ProfileImageTitle = styled.div`
 font-size: 16px;
