@@ -34,7 +34,6 @@ const AdminUserClient = () => {
     <PanelContainer>
       <PanelHeaderArea>
         <AdminSearchBar />
-        <PanelProfileBox>프로필네임</PanelProfileBox>
       </PanelHeaderArea>
       <PanelTitle>
         <h1>유저</h1>
@@ -48,6 +47,7 @@ const AdminUserClient = () => {
 export default AdminUserClient;
 
 const PanelContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -56,7 +56,6 @@ const PanelContainer = styled.div`
 const PanelHeaderArea = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
   justify-content: space-between;
   border-bottom: 1px solid #ddd;
   background-color: white;

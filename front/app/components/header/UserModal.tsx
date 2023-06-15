@@ -12,6 +12,7 @@ import { loginState } from "@/app/store/authAtom";
 import LoadingModal from "../UI/LoadingModal";
 
 type UserModalProps = {
+  isAdmin: boolean;
   isUserModal: boolean;
   setIsUserModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -60,6 +61,14 @@ const UserModal = (props: UserModalProps) => {
     <UserModalContainer visible={props.isUserModal}>
       {isLoading && <LoadingModal />}
       <UserModalList>
+        {props.isAdmin && (
+          <>
+            <UserModalItem onClick={() => routerHandler("/admin/user")}>
+              관리자페이지
+            </UserModalItem>{" "}
+            <UnderLine />
+          </>
+        )}
         <UserModalItem onClick={() => routerHandler("/my-page")}>
           마이페이지
         </UserModalItem>
