@@ -14,7 +14,7 @@ import { toast } from "react-hot-toast";
 import styled from "styled-components";
 
 type AdminUserItemProps = {
-  user: User;
+  user: any;
 };
 
 const AdminUserItem = (props: AdminUserItemProps) => {
@@ -53,24 +53,24 @@ const AdminUserItem = (props: AdminUserItemProps) => {
   };
 
   const deleteHanlder = () => {
-    if (window.confirm("정말로 유저를 탈퇴 시키겠습니까?")) {
-      axiosBase
-        .delete(`users`, { user_id, password: "" })
-        .then((res) => {
-          client.invalidateQueries(["users"]);
-          toast.success("유저가 성공적으로 탈퇴 되었습니다.");
-        })
-        .catch((err: any) => {
-          toast.error(
-            err.response
-              ? err.response.data.detail
-              : "네트워크 연결에 문제가 있습니다."
-          );
-        })
-        .finally(() => {});
-    } else {
-      return;
-    }
+    // if (window.confirm("정말로 유저를 탈퇴 시키겠습니까?")) {
+    //   axiosBase
+    //     .delete(`users`, { user_id, password: "" })
+    //     .then((res) => {
+    //       client.invalidateQueries(["users"]);
+    //       toast.success("유저가 성공적으로 탈퇴 되었습니다.");
+    //     })
+    //     .catch((err: any) => {
+    //       toast.error(
+    //         err.response
+    //           ? err.response.data.detail
+    //           : "네트워크 연결에 문제가 있습니다."
+    //       );
+    //     })
+    //     .finally(() => {});
+    // } else {
+    //   return;
+    // }
   };
 
   return (
