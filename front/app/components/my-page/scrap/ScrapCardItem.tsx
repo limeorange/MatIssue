@@ -19,6 +19,7 @@ type MemoItemProps = {
 type ScrapItemProps = {
   scrapData: MemoItemProps;
   memo: string;
+  user_id: string;
 };
 
 type ScrapCardProps = {

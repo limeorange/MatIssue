@@ -29,7 +29,9 @@ type ScrapItemProps = {
 
 const ProfileCard = () => {
   // 캐시에 저장된 현재 유저정보를 가져옴
-  const { data: currentUser } = useQuery<User>(["currentUser"]);
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
   const [fansCount, setFansCount] = useState<number>(0);
   const [subscriptionsCount, setSubscriptionsCount] = useState<number>(0);
 
@@ -53,7 +55,7 @@ const ProfileCard = () => {
       const existingMemo = localStorage.getItem("scrapMemo");
       const parsedMemo = existingMemo ? JSON.parse(existingMemo) : [];
       const currentUserMemo = parsedMemo.filter(
-        (item: ScrapItemProps) => item.user_id === currentUser.user_id
+        (item: ScrapItemProps) => item.user_id === currentUser?.user_id
       );
       setParsedMemo(currentUserMemo);
     }
