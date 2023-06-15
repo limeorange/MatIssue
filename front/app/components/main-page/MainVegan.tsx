@@ -33,7 +33,7 @@ const MainVegan = () => {
   const [slide, setSlide] = useState<number>(1);
   const totalRecipesNumber = vegetarianRecipes?.length;
   const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   const shuffledRecipes = useMemo(
     () => shuffleRecipes(vegetarianRecipes),
@@ -55,11 +55,11 @@ const MainVegan = () => {
   };
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 1024px)"); // 화면 너비가 768px 이하인 경우 모바일로 간주
-    setIsMobile(mediaQuery.matches); // 초기 렌더링 시 미디어 쿼리 결과에 따라 상태를 설정
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mediaQuery.matches); // 초기 렌더링 시 미디어 쿼리 결과에 따라 상태를 설정
 
     const handleResize = () => {
-      setIsMobile(mediaQuery.matches); // 화면 크기 변경 시 미디어 쿼리 결과에 따라 상태를 업데이트
+      setIsDesktop(mediaQuery.matches); // 화면 크기 변경 시 미디어 쿼리 결과에 따라 상태를 업데이트
     };
 
     mediaQuery.addListener(handleResize); // 화면 크기 변경 이벤트 리스너 등록
@@ -86,7 +86,7 @@ const MainVegan = () => {
           <NonDataCrying />
         ) : (
           <RecipeSliderContainer>
-            {isMobile ? (
+            {!isDesktop ? (
               <RecipeContainer>
                 <MainMobileListingRecipe
                   recipes={shuffledRecipes}
