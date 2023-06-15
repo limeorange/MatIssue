@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import VideoSection from "@/app/components/add-recipe/VideoSection";
@@ -97,6 +97,16 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     videoLink: recipe_video,
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    // 새로고침 막기(조건 부여 가능)
+    window.onbeforeunload = function () {
+      return true;
+    };
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
