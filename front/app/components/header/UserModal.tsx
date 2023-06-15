@@ -81,13 +81,6 @@ const UserModal = (props: UserModalProps) => {
         </UserModalItem>
         <UserModalItem
           onClick={() => {
-            routerHandler("/my-page/notification");
-          }}
-        >
-          알림
-        </UserModalItem>
-        <UserModalItem
-          onClick={() => {
             routerHandler("/add-recipe");
           }}
         >
