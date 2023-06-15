@@ -39,6 +39,7 @@ max-width: 34.5rem;
     justify-content: flex-start;
     padding: 5rem 0 0 1.5rem;
     margin: 0;
+    max-width: 100vw;
   }
 `;
 

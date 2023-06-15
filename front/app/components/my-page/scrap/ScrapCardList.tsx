@@ -24,7 +24,8 @@ type ScrapItemProps = {
 /** 스크랩 리스트 컴포넌트 */
 const ScrapCardList: React.FC = () => {
   const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
-
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const scrapsPerPage = 16;
   // localStorage is not defined 에러 해결
   // 페이지가 client에 마운트될 때까지 기다렸다가 localStorage에 접근
   useEffect(() => {
@@ -35,14 +36,20 @@ const ScrapCardList: React.FC = () => {
     }
   }, []);
 
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const indexOfLastScrap = currentPage * scrapsPerPage;
+  const indexOfFirstScrap = indexOfLastScrap - scrapsPerPage;
+  const currentScraps = parsedMemo.slice(indexOfFirstScrap, indexOfLastScrap);
+
   return (
     <ScrapListContainer>
       <TitleAndNickname>
       <ScrapTitleSpan>나의 스크랩</ScrapTitleSpan>
       <ScrapCountSpan>{parsedMemo.length}</ScrapCountSpan>
       </TitleAndNickname>
-      
-
       {parsedMemo.length === 0 ? (
         <NonScrapMsg />
       ) : (
@@ -61,9 +68,21 @@ const ScrapCardList: React.FC = () => {
           })}
         </ScrapListGrid>
       )}
+     
+       {parsedMemo.length > 0 && (
+        <PaginationComponent
+          recipesPerPage={scrapsPerPage}
+          totalRecipes={parsedMemo.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
+      )}
+       
     </ScrapListContainer>
   );
 };
+
+export default ScrapCardList;
 
 /** 스크랩 리스트 전체 감싸는 Div */
 const ScrapListContainer = styled.div`
@@ -71,6 +90,7 @@ const ScrapListContainer = styled.div`
   margin-top: 1.8rem;
   @media (min-width: 1024px) {
     margin-top: 0;
+    margin-bottom: 16rem;
   }
 `;
 
@@ -122,7 +142,7 @@ const ScrapListGrid = styled.div`
   @media (min-width: 1024px) {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    margin: 1.5rem 0 16rem;
+    margin: 1.5rem 0 3rem;
     grid-column-gap: 2.5rem;
   grid-row-gap: 2.5rem;
   padding-bottom: 0;
@@ -134,4 +154,12 @@ const ScrapListGrid = styled.div`
 /** 레시피가 없을 경우 띄워주는 안내 그림 */
 const NonScrapMsg = styled(NonScrapPage)``;
 
-export default ScrapCardList;
+const PaginationComponent = styled(Pagination)`
+display: none;
+@media (min-width: 1024px) {
+  margin: 0 auto;
+}
+`;
+
+
+
