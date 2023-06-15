@@ -136,11 +136,9 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
         </div>
         {/* 스크랩 메모 내용 */}
         <MemoContainerDiv>
-          <ScrapTextArea
-            placeholder="게시글에서 메모를 입력해보세요!"
-            value={memoText}
-            hasMemo={hasMemo}
-          ></ScrapTextArea>
+          <ScrapTextDiv hasMemo={hasMemo}>
+            {hasMemo ? memoText : "게시글에서 메모를 입력해보세요!"}
+          </ScrapTextDiv>
         </MemoContainerDiv>
         {/* 스크랩 삭제 버튼 */}
         <ButtonDiv>
@@ -231,11 +229,10 @@ const MemoContainerDiv = styled.div`
   width: 24rem;
   height: 15rem;
   font-size: 15.5px;
-  cursor: pointer;
 `;
 
 /** 메모 입력하는 Textarea */
-const ScrapTextArea = styled.textarea<{ hasMemo: boolean }>`
+const ScrapTextDiv = styled.div<{ hasMemo: boolean }>`
   outline: none;
   width: 100%;
   height: 100%;

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import styled from "styled-components";
 
 type UserScrapProps = {
+  currentUserID: string | undefined;
   scrapClickHandler: () => void;
   isBooked: boolean;
   isSaved: boolean;
@@ -12,8 +13,26 @@ type UserScrapProps = {
   recipe_id: string;
 };
 
+type MemoItemProps = {
+  created_at: string;
+  recipe_id: string;
+  recipe_like: string[];
+  recipe_thumbnail: string;
+  recipe_title: string;
+  recipe_view: number;
+  user_id: string;
+  user_nickname: string;
+};
+
+type ScrapItemProps = {
+  scrapData: MemoItemProps;
+  memo: string;
+  user_id: string;
+};
+
 /** 게시글 스크랩 컴포넌트 */
 const RecipeScrap: React.FC<UserScrapProps> = ({
+  currentUserID,
   scrapClickHandler,
   isBooked,
   isSaved,
@@ -25,8 +44,11 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
   useEffect(() => {
     const savedMemo = localStorage.getItem("scrapMemo");
     const savedParsedMemo = savedMemo ? JSON.parse(savedMemo) : [];
-    const savedMemotext = savedParsedMemo.filter(
-      (item: any) => item.scrapData.recipe_id === recipe_id
+    const currentUserMemo = savedParsedMemo.filter(
+      (item: ScrapItemProps) => item.user_id === currentUserID
+    );
+    const savedMemotext = currentUserMemo.filter(
+      (item: ScrapItemProps) => item.scrapData.recipe_id === recipe_id
     );
     setIsSaved(savedMemotext.length === 0 ? false : true);
   }, []);
