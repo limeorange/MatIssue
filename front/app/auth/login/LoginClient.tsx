@@ -22,10 +22,14 @@ import Cookies from "js-cookie";
 import { useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
 import styled from "styled-components";
+import { useQueryClient } from "@tanstack/react-query";
+import getCurrentUser from "@/app/api/user";
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const setIsLoggedIn = useSetRecoilState(loginState);
+
+  const client = useQueryClient();
 
   const { register, handleSubmit } = useForm<FieldValues>({
     defaultValues: {
@@ -45,6 +49,13 @@ const LoginClient = () => {
         setIsLoggedIn(true);
         const sessionId = res.data.session_id;
         Cookies.set("session-id", sessionId);
+        getCurrentUser()
+          .then((res) => {
+            client.setQueryData(["currentUser"], res);
+          })
+          .catch((err) => {
+            toast.error("로그인 유저정보를 받아오는것을 실패하였습니다.");
+          });
         router.back();
         toast.success("로그인 되었습니다.");
       })
