@@ -371,6 +371,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
           {/* 스크랩 */}
           <div id="heading6" onClick={loginConfirmModalHandler}>
             <RecipeScrap
+              currentUserID={currentUser?.user_id}
               isSaved={isSaved}
               setIsSaved={setIsSaved}
               isBooked={isBooked}
