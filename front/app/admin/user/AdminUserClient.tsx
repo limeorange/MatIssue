@@ -1,13 +1,11 @@
 "use client";
 
-import { getAllRecipes } from "@/app/api/recipe";
 import { getAllUsers } from "@/app/api/user";
 import LoadingModal from "@/app/components/UI/LoadingModal";
-import AdminRecipeList from "@/app/components/admin/recipe/AdminRecipeList";
 import AdminSearchBar from "@/app/components/admin/AdminSearchBar";
 import AdminUserList from "@/app/components/admin/user/AdminUserList";
 import NotFound from "@/app/not-found";
-import { Recipe, User } from "@/app/types";
+import { User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import styled from "styled-components";
 
@@ -16,9 +14,9 @@ const AdminUserClient = () => {
     data: users,
     isLoading,
     isError,
-  } = useQuery<User[]>(["users"], () => getAllUsers(10, 10));
+  } = useQuery<User[]>(["users"], () => getAllUsers(1, 30));
 
-  console.log(users, isLoading, isError);
+  console.log(users);
 
   if (isLoading) {
     return <LoadingModal />;
@@ -36,7 +34,6 @@ const AdminUserClient = () => {
     <PanelContainer>
       <PanelHeaderArea>
         <AdminSearchBar />
-        <PanelProfileBox>프로필네임</PanelProfileBox>
       </PanelHeaderArea>
       <PanelTitle>
         <h1>유저</h1>

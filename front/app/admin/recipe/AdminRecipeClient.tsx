@@ -55,7 +55,6 @@ const AdminRecipeClient = () => {
     <PanelContainer>
       <PanelHeaderArea>
         <AdminSearchBar />
-        <PanelProfileBox>프로필네임</PanelProfileBox>
       </PanelHeaderArea>
       <PanelTitle>
         <h1>레시피</h1>

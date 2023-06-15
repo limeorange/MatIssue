@@ -20,25 +20,15 @@ const AdminUserList = ({ users }: { users: User[] }) => {
     <>
       <PanelList>
         <PanelListHeader>
-          <input
-            type="checkbox"
-            style={{
-              padding: "1rem",
-              marginRight: "1rem",
-              width: "1.8rem",
-            }}
-          />
           <ShortSpan>아이디</ShortSpan>
           <ShortSpan>닉네임</ShortSpan>
           <LongSpan>이메일</LongSpan>
+          <MediumSpan>생년월일</MediumSpan>
           <MediumSpan>생성일</MediumSpan>
-          <ShortSpan>권한</ShortSpan>
         </PanelListHeader>
-        {users
-          ?.slice(offset, offset + limit)
-          .map((item: User, index: number) => (
-            <AdminUserItem key={index} user={item} index={index} />
-          ))}
+        {users?.slice(offset, offset + limit).map((item: User) => (
+          <AdminUserItem key={item?.user_id} user={item} />
+        ))}
       </PanelList>
       <PagenationContainer>
         <PagenationBox>
@@ -55,7 +45,7 @@ const AdminUserList = ({ users }: { users: User[] }) => {
 };
 
 const PanelList = styled.ul`
-  width: 100%;
+  width: 100rem;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -69,16 +59,6 @@ const PanelListHeader = styled.li`
   display: flex;
   padding: 0.5rem 2rem;
   background-color: #fbe2a1;
-`;
-
-const PanelListItem = styled.li`
-  font-size: 16px;
-  font-weight: 400;
-  width: 100%;
-  display: flex;
-  padding: 0.5rem 2rem;
-  border-top: 1px solid #ddd;
-  align-items: center;
 `;
 
 const ShortSpan = styled.span`
