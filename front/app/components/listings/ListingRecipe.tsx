@@ -425,7 +425,8 @@ const SortButton = styled.button<{ selected: boolean }>`
   @media (min-width: 768px) {
     margin: 0.5rem;
     padding: 0.5rem 2.5rem;
-
+    color: black;
+    font-weight: normal;
     border-radius: 10rem;
     background-color: ${(props) =>
       props.selected ? "#fbd26a" : "transparent"};
