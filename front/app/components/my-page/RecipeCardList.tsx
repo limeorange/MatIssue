@@ -8,6 +8,7 @@ import { Recipe } from "@/app/types";
 import ConfirmModal from "../UI/ConfirmModal";
 import Pagination from "../pagination/Pagination";
 import { useQueryClient } from "@tanstack/react-query";
+import { Title } from "@/app/styles/my-page/modify-user-info.style";
 
 const RecipeCards = ({
   currentUserRecipes,
@@ -63,8 +64,9 @@ const RecipeCards = ({
 
   return (
     <RecipeListContainer>
-      <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{currentUserRecipes?.length}</RecipeHeadingCount>
+      <TitleAndNickname> <RecipeHeading>나의 레시피</RecipeHeading>
+      <RecipeHeadingCount>{currentUserRecipes?.length}</RecipeHeadingCount></TitleAndNickname>
+     
       {currentUserRecipes?.length === 0 ? (
         <NonRecipeMsg />
       ) : (
@@ -115,6 +117,13 @@ const RecipeListContainer = styled.div`
     margin-top: 0;
     margin-bottom: 16rem;
   }
+`;
+
+const TitleAndNickname = styled.div`
+padding: 0 0 0.6rem;
+@media (min-width: 1024px) {
+padding:0;
+}
 `;
 
 const RecipeHeading = styled.span`

@@ -12,7 +12,7 @@ import Cookies from "js-cookie";
 import { User } from "../../../types/index";
 import VerificationEmail from "@/app/components/my-page/VerificationEmail";
 import { toast } from "react-hot-toast";
-
+import AccountDeletionComponent from "@/app/components/my-page/AccountDeletion";
 import {
   Container,
   Header,
@@ -97,10 +97,11 @@ const ModifyUserInfo: React.FC = () => {
     setReadyUpdate(true);
   };
 
+  
+
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("form 태그 제출");
-    console.log("userData 확인: ", userData);
+  
     uploadProfileImage();
   };
 
@@ -293,7 +294,7 @@ const ModifyUserInfo: React.FC = () => {
               회원 정보 수정
             </Button>
           </UserModifyButton>
-         <DeletionAndArrow>
+         {/* <DeletionAndArrow>
           <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
           <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
           {isModalOpen && (
@@ -304,7 +305,8 @@ const ModifyUserInfo: React.FC = () => {
               onConfirm={handleDeleteAccount}
             />
           )}
-      </DeletionAndArrow>
+      </DeletionAndArrow> */}
+      <AccountDeletionComponent id={userData?.user_id} password={userData?.password}></AccountDeletionComponent>
         </form>
       </Container>
     </>
