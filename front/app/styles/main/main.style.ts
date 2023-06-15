@@ -10,7 +10,7 @@ export const StyledContainer = styled.div`
     display: flex;
     align-items: center;
     position: relative;
-    width: 100%;
+    width: 90%;
     max-width: 120rem;
     padding: 2rem 2rem 4rem 2rem;
   }
