@@ -17,8 +17,10 @@ type TagListType = {
 };
 
 const FilterTag = (props: FilterTagProps) => {
-  const [tagList, setTagList] = useState<TagListType[]>([]);
   const { search, filter, category, onRemove } = props;
+
+  // 필터 태그 상태 빈 배열로 설정
+  const [tagList, setTagList] = useState<TagListType[]>([]);
 
   // 검색바 입력값 및 필터바 필터 값에 따른 태그 추가
   useEffect(() => {

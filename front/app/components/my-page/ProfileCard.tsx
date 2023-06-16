@@ -6,7 +6,10 @@ import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { getRecipeByUserId } from "@/app/api/recipe";
-import getCurrentUser, { getUserFans } from "@/app/api/user";
+import getCurrentUser, {
+  getUserFans,
+  getUserSubscriptions,
+} from "@/app/api/user";
 import { useRouter } from "next/navigation";
 import { set } from "react-hook-form";
 
@@ -72,7 +75,9 @@ const ProfileCard = () => {
     };
     const getSubscriptionsCount = async () => {
       try {
-        const subscriptionsList = await getUserFans(currentUser?.user_id || "");
+        const subscriptionsList = await getUserSubscriptions(
+          currentUser?.user_id || ""
+        );
         setSubscriptionsCount(subscriptionsList.length);
       } catch (error) {
         console.log(error);

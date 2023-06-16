@@ -32,7 +32,7 @@ type RecipeFormState = {
   selectedCategory: string;
   selectedPeople: number;
   selectedTime: number;
-  selectedDifficulty: number;
+  selectedDifficulty: string;
   selectedImage: string;
   recipeTitle: string;
   cookingIntro: string;
@@ -80,7 +80,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     selectedCategory: recipe_category,
     selectedPeople: recipe_info.serving,
     selectedTime: recipe_info.time,
-    selectedDifficulty: recipe_info.level,
+    selectedDifficulty: difficulties[recipe_info.level],
     selectedImage: recipe_thumbnail,
     recipeTitle: recipe_title,
     cookingIntro: recipe_description,
@@ -117,7 +117,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
   // 난이도
   const handleDifficultyChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setState({ ...state, selectedDifficulty: +e.target.value });
+    setState({ ...state, selectedDifficulty: e.target.value });
   };
 
   // 섬네일 이미지
@@ -319,7 +319,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
       recipe_info: {
         serving: state.selectedPeople,
         time: state.selectedTime,
-        level: state.selectedDifficulty,
+        level: difficulties.indexOf(state.selectedDifficulty),
       },
       recipe_ingredients: state.ingredients.map(({ ingredient, quantity }) => ({
         name: ingredient,
@@ -391,7 +391,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
             handlePeopleChange={handlePeopleChange}
             selectedTime={state.selectedTime.toString()}
             handleTimeChange={handleTimeChange}
-            selectedDifficulty={state.selectedDifficulty.toString()}
+            selectedDifficulty={state.selectedDifficulty}
             handleDifficultyChange={handleDifficultyChange}
             categories={categories}
             peopleCount={peopleCount}

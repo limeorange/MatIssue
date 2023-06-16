@@ -53,6 +53,16 @@ export async function getUserSubscriptions(user_id: string) {
   }
 }
 
+export async function getChefByUserId(user_id: string) {
+  try {
+    const reponse = await axiosBase.get(`/users/${user_id}`);
+    return reponse.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
 export const getAllUsers = async (page: number, per_page: number) => {
   try {
     const response = await axiosBase.get(
