@@ -26,14 +26,14 @@ const AdminUserList = ({ users }: { users: User[] }) => {
           <MediumSpan>생년월일</MediumSpan>
           <MediumSpan>생성일</MediumSpan>
         </PanelListHeader>
-        {users?.slice(offset, offset + limit).map((item: User) => (
-          <AdminUserItem key={item?.user_id} user={item} />
+        {users.slice(offset, offset + limit).map((item: User) => (
+          <AdminUserItem key={item.user_id} user={item} />
         ))}
       </PanelList>
       <PagenationContainer>
         <PagenationBox>
           <AdminPagination
-            total={users?.length}
+            total={users.length}
             limit={limit}
             page={page}
             setPage={setPage}

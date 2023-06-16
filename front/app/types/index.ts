@@ -1,18 +1,16 @@
-export type User =
-  | {
-      user_id: string;
-      username: string;
-      email: string;
-      birth_date: string;
-      img: string;
-      password: string;
-      created_at: string;
-      session_id: string;
-      email_code?: string;
-      id: string;
-      user_subscription: number;
-    }
-  | undefined;
+export type User = {
+  user_id: string;
+  username: string;
+  email: string;
+  birth_date: string;
+  img: string;
+  password: string;
+  created_at: string;
+  session_id: string;
+  email_code?: string;
+  id: string;
+  user_subscription: number;
+};
 
 export type Recipe = {
   recipe_id: string;
