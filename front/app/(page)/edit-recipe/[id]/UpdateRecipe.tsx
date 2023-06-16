@@ -383,7 +383,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   };
 
   return (
-    <FormWrapper>
+    <FormLayout>
       {isLoading && <LoadingModal />}
       <Title>레시피 수정하기</Title>
       <MainSection>
@@ -486,7 +486,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           onConfirm={handleConfirm}
         />
       )}
-    </FormWrapper>
+    </FormLayout>
   );
 };
 
@@ -562,7 +562,7 @@ const TextArea = styled.textarea`
 `;
 
 // 전체 폼 스타일링
-const FormWrapper = styled.form`
+const FormLayout = styled.form`
   width: 100%;
   padding: 1.5rem;
   margin-bottom: 2rem;
