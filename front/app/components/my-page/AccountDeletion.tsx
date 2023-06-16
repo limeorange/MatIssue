@@ -1,100 +1,107 @@
 "use client";
 
 import styled from "styled-components";
-import Link from "next/link";
-import Button from "../UI/Button";
-import React, { useEffect, useState } from "react";
-import ConfirmModal from "../UI/ConfirmModal";
+import React, { useState } from "react";
+import PasswordModalComponent from "../UI/PasswordModal";
 import { useRouter } from "next/navigation";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import uploadImage from "@/app/api/aws";
+import PasswordModal from "../UI/PasswordModal";
 import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
-import { User } from "../../types/index";
-import {
-  Container,
-  Header,
-  WrapperInfo,
-  Wrapper,
-  Title,
-  InputBox,
-  SpaceDiv,
-  ShowIconBox,
-} from "@/app/styles/my-page/modify-user-info.style";
+import { toast } from "react-hot-toast";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { loginState } from "@/app/store/authAtom";
 
-const AccountDeletion: React.FC = () => {
-  const { data: currentUser } = useQuery<User>(["currentUser"]); //비동기적으로 실행, 서버에서 온 값
-  const [userData, setUserData] = useState<any>();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+const AccountDeletion = ({ id }: { id: string }) => {
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [enteredPassword, setEnteredPassword] = useState<string>("");
+  const setIsLoggedIn = useSetRecoilState<boolean>(loginState);
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEnteredPassword("");
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
   // 회원 탈퇴 컴포넌트
   const handleDeleteAccount = async () => {
     try {
       const response = await axiosBase.delete("users", {
         data: {
-          user_id: userData?.user_id,
-          password: userData?.password,
-          session_id: "session_id",
+          user_id: id,
+          password: enteredPassword,
         },
       });
-      console.log("delete 후 response : ", response);
 
-      if (response.status === 200) {
-        queryClient.invalidateQueries(["currentUser"]);
-        console.log("회원탈퇴 성공");
-        Cookies.remove("session_id");
-        console.log("계정이 삭제되었습니다.");
-        await axiosBase.post("users/logout");
-        router.push("/");
-      } else {
-        console.error("계정 삭제에 실패하였습니다.");
-      }
-    } catch (error) {
-      console.error("Error occurred while deleting account:", error);
+      toast.success("더 맛있는 이슈로 찾아뵙겠습니다.");
+      Cookies.remove("session-id");
+      setIsLoggedIn(false);
+
+      router.push("/");
+    } catch (error: any) {
+      toast.error(
+        error.reponse ? error.reponse.data.detail : "회원 탈퇴에 실패했습니다."
+      );
     }
     closeModal();
   };
 
-  // 모달 컨트롤
-  const openModal = () => {
-    setIsModalOpen(true);
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEnteredPassword(event.target.value);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   return (
     <>
-      <Wrapper>
-        <StyledAccountDeletion onClick={openModal}>
-          회원 탈퇴
-        </StyledAccountDeletion>
+      <DeletionAndArrow>
+        <AccountDelete onClick={openModal}>회원 탈퇴</AccountDelete>
+        <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
         {isModalOpen && (
-          <ConfirmModal
+          <PasswordModal
             icon={<AlertImage src="/images/alert.png" alt="alert" />}
-            message="정말 탈퇴 하시겠습니까?"
+            message="탈퇴하시려면 비밀번호를 입력해주세요."
             onCancel={closeModal}
             onConfirm={handleDeleteAccount}
+            onPasswordChange={handlePasswordChange}
+            enteredPassword={enteredPassword}
           />
         )}
-      </Wrapper>
+      </DeletionAndArrow>
     </>
   );
 };
 
 export default AccountDeletion;
 
-const StyledAccountDeletion = styled.div`
-  position: absolute;
-  right: 16.1rem;
-  top: 13.5rem;
+const AccountDelete = styled.div`
   font-size: 14px;
-  text-decoration: underline;
-  color: #e11717;
   cursor: pointer;
+  margin-left: 0.3rem;
+  @media (min-width: 1024px) {
+    position: absolute;
+    right: 16.1rem;
+    top: 13.5rem;
+    text-decoration: underline;
+    color: #e11717;
+    margin-left: 0;
+  }
+`;
+
+const ArrowImage = styled.img`
+width:2.5rem;
+height:3rem;
+}
+@media (min-width: 1024px) {
+display: none;
+}
+`;
+
+const DeletionAndArrow = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
 `;
 
 const AlertImage = styled.img`

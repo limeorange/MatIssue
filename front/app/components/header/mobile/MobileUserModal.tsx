@@ -144,10 +144,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
           <MenuItem onClick={() => routerHandler("my-page/scrap")}>
             스크랩
           </MenuItem>
-          <MenuItem onClick={() => routerHandler("my-page/notification")}>
-            알림
-          </MenuItem>
-          <MenuItem onClick={() => routerHandler("my-page/add-recipe")}>
+          <MenuItem onClick={() => routerHandler("add-recipe")}>
             글쓰기
           </MenuItem>
         </MenuList>

@@ -4,14 +4,26 @@ import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import Image from "next/image";
 import { Recipe } from "@/app/types";
+import { useEffect, useState } from "react";
+import { getRecipeById } from "@/app/api/recipe";
 
 /** 메인 레시피 카드 */
 const MobileRecipeCard = ({ recipe }: { recipe: Recipe }) => {
+  const [commentCount, setCommentCount] = useState<number>(0);
   const router = useRouter();
 
   const handleRecipeClick = () => {
     router.push(`/recipe/${recipe.recipe_id}`);
   };
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const recipeData = await getRecipeById(recipe.recipe_id);
+      setCommentCount(recipeData.comments.length || 0);
+    };
+
+    fetchComments();
+  }, [recipe.recipe_id]);
 
   return (
     <>
@@ -48,17 +60,17 @@ const MobileRecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 {recipe.recipe_like.length.toLocaleString()}
               </HeartCount>
             </RecipeRankItem>
-            {/* <RecipeRankItem>
-              <RecipeRankImg>
+            <RecipeRankItem>
+              <RecipeRankImg style={{ marginBottom: "0.25rem" }}>
                 <Image
-                  src="/images/view.png"
-                  alt="게시물 조회수 이미지"
-                  width={13}
-                  height={11}
+                  src="/images/recipe-view/comment.svg"
+                  alt="게시물 댓글 이미지"
+                  width={30}
+                  height={26}
                 />
               </RecipeRankImg>
-              <p>{data.view}</p>
-            </RecipeRankItem> */}
+              <Count>{commentCount.toLocaleString()}</Count>
+            </RecipeRankItem>
           </RecipeRank>
         </RecipeInfo>
       </RecipeCardWrapper>
@@ -155,6 +167,11 @@ const RecipeRankImg = styled.div`
 `;
 
 const HeartCount = styled.span`
+  font-size: 14px;
+  margin-right: 0.2rem;
+`;
+
+const Count = styled.span`
   font-size: 14px;
   margin-right: 0.2rem;
 `;

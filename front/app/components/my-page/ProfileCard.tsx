@@ -24,18 +24,20 @@ type MemoItemProps = {
 type ScrapItemProps = {
   scrapData: MemoItemProps;
   memo: string;
+  user_id: string;
 };
 
 const ProfileCard = () => {
   // 캐시에 저장된 현재 유저정보를 가져옴
-  const { data: currentUser } = useQuery<User>(["currentUser"] );
-const [fansCount, setFansCount] = useState<number>(0);
-const [subscriptionsCount, setSubscriptionsCount] = useState<number>(0);
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
+  const [fansCount, setFansCount] = useState<number>(0);
+  const [subscriptionsCount, setSubscriptionsCount] = useState<number>(0);
 
   useEffect(() => {
     console.log("currentUser", currentUser?.user_id);
-  }
-  , [currentUser]);
+  }, [currentUser]);
 
   // 캐시에 저장된 현재 유저가 작성한 레시피들을 가져옴
   const { data: currentUserRecipes } = useQuery<Recipe[]>(
@@ -52,14 +54,17 @@ const [subscriptionsCount, setSubscriptionsCount] = useState<number>(0);
     if (typeof window !== "undefined") {
       const existingMemo = localStorage.getItem("scrapMemo");
       const parsedMemo = existingMemo ? JSON.parse(existingMemo) : [];
-      setParsedMemo(parsedMemo);
+      const currentUserMemo = parsedMemo.filter(
+        (item: ScrapItemProps) => item.user_id === currentUser?.user_id
+      );
+      setParsedMemo(currentUserMemo);
     }
   }, []);
 
   useEffect(() => {
     const getFansCount = async () => {
       try {
-        const fansList = await getUserFans(currentUser?.user_id || ""); 
+        const fansList = await getUserFans(currentUser?.user_id || "");
         setFansCount(fansList.length);
       } catch (error) {
         console.log(error);
@@ -74,12 +79,8 @@ const [subscriptionsCount, setSubscriptionsCount] = useState<number>(0);
       }
     };
     getSubscriptionsCount();
-    getFansCount()
-  }
-  , [currentUser]);
-
-
-
+    getFansCount();
+  }, [currentUser]);
 
   return (
     <ProfileContainer>

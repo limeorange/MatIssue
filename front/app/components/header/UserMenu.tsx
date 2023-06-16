@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import Image from "next/image";
@@ -15,8 +15,17 @@ import UserModal from "./UserModal";
 const UserMenu = ({ currentUser }: { currentUser: User }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const isLoggedIn = useRecoilValue(loginState);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const router = useRouter();
+
+  useEffect(() => {
+    if (currentUser?.user_id === "admin") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [currentUser]);
 
   return (
     <UserMenuContainer>
@@ -62,12 +71,13 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
             <UserModal
               isUserModal={isUserModal}
               setIsUserModal={setIsUserModal}
+              isAdmin={isAdmin}
             />
             <Image
               src={currentUser ? currentUser.img : "/images/profileIcon.png"}
               width={36}
               height={36}
-              objectFit="cover"
+              style={{ objectFit: "cover", backgroundColor: "#fff9ea" }}
               alt="profile_icon"
               className="rounded-[100px]"
             />

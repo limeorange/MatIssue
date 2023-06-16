@@ -15,8 +15,6 @@ const AdminRecipeClient = () => {
   const searchParams = useSearchParams();
   const search = searchParams?.get("search");
 
-  console.log(search);
-
   const {
     data: recipes,
     isLoading,
@@ -41,8 +39,6 @@ const AdminRecipeClient = () => {
     }
   }, [recipes, search]);
 
-  console.log(filteredRecipes);
-
   if (isLoading) {
     return <LoadingModal />;
   }
@@ -55,7 +51,6 @@ const AdminRecipeClient = () => {
     <PanelContainer>
       <PanelHeaderArea>
         <AdminSearchBar />
-        <PanelProfileBox>프로필네임</PanelProfileBox>
       </PanelHeaderArea>
       <PanelTitle>
         <h1>레시피</h1>

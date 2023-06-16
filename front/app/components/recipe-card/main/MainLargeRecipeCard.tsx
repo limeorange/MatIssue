@@ -1,5 +1,6 @@
 "use client";
 
+import { getRecipeById } from "@/app/api/recipe";
 import { Recipe } from "@/app/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -7,11 +8,21 @@ import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
+  const [commentCount, setCommentCount] = useState<number>(0);
   const [showImage, setShowImage] = useState(false);
 
   useEffect(() => {
     setShowImage(true);
   }, [recipe]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const recipeData = await getRecipeById(recipe.recipe_id);
+      setCommentCount(recipeData.comments.length || 0);
+    };
+
+    fetchComments();
+  }, [recipe.recipe_id]);
 
   const router = useRouter();
 
@@ -35,23 +46,24 @@ const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
           </RecipeTitleBox>
           <RecipeInfoBox>
             <AuthorBox>
-              <Image
-                src="/images/profileIcon.png"
-                height={20}
-                width={20}
-                alt="profile_image"
-              />
               <p>{recipe.user_nickname}</p>
             </AuthorBox>
-            <LikeIconWrapper>
+            <IconWrapper>
               <Image
-                src="/images/like.png"
+                src="/images/recipe-view/heart_full.svg"
                 alt="게시물 좋아요 이미지"
-                height={16}
-                width={20}
+                height={12}
+                width={16}
               />
-              <div>{recipe.recipe_like}</div>
-            </LikeIconWrapper>
+              <div>{recipe.recipe_like.length}&nbsp;&nbsp;</div>
+              <Image
+                src="/images/recipe-view/comment.svg"
+                alt="게시물 댓글 이미지"
+                width={16}
+                height={24}
+              />
+              {commentCount}
+            </IconWrapper>
           </RecipeInfoBox>
         </TextContainer>
       </CardContainer>
@@ -113,6 +125,7 @@ const RecipeTitleBox = styled.div`
   width: 100%;
   font-size: 18px;
   font-weight: 500;
+  color: #4b4b4b;
 
   & h3 {
     text-align: start;
@@ -128,8 +141,9 @@ const RecipeInfoBox = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
+  color: #6f6f6f;
 `;
 
 const AuthorBox = styled.div`
@@ -138,7 +152,7 @@ const AuthorBox = styled.div`
   gap: 0.4rem;
 `;
 
-const LikeIconWrapper = styled.div`
+const IconWrapper = styled.div`
   position: relative;
   display: flex;
   gap: 0.4rem;

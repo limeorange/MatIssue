@@ -12,7 +12,7 @@ import Cookies from "js-cookie";
 import { User } from "../../../types/index";
 import VerificationEmail from "@/app/components/my-page/VerificationEmail";
 import { toast } from "react-hot-toast";
-
+import AccountDeletionComponent from "@/app/components/my-page/AccountDeletion";
 import {
   Container,
   Header,
@@ -27,8 +27,8 @@ import {
   InputDateBox,
   UserModifyButton,
   SpaceDiv,
-  AccountDeletion,
-  AlertImage,
+  // AccountDeletion,
+  // AlertImage,
   StyledChangePassword,
   EmailWrapper,
   EmailContainer,
@@ -46,6 +46,9 @@ const ModifyUserInfo: React.FC = () => {
   const { data: currentUser } = useQuery<User>(["currentUser"]); //비동기적으로 실행, 서버에서 온 값
   const [userData, setUserData] = useState<any>(); //얘가 먼저 실행되서 밸류 값 undefined, 우리가 갖고 있던 값
   const queryClient = useQueryClient();
+  const defaultImage =
+    "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png";
+  console.log("currentUser:", currentUser);
 
   useEffect(() => {
     // 받아온 data 객체로 상태 저장
@@ -61,8 +64,8 @@ const ModifyUserInfo: React.FC = () => {
 
   const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null | undefined>(
-    currentUser?.img
+  const [previewImage, setPreviewImage] = useState<string>(
+    currentUser ? currentUser.img : defaultImage
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [readyUpdate, setReadyUpdate] = useState<boolean>(false);
@@ -99,8 +102,7 @@ const ModifyUserInfo: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("form 태그 제출");
-    console.log("userData 확인: ", userData);
+
     uploadProfileImage();
   };
 
@@ -130,34 +132,6 @@ const ModifyUserInfo: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [readyUpdate === true]);
 
-  // 회원 탈퇴 컴포넌트
-  const handleDeleteAccount = async () => {
-    try {
-      const response = await axiosBase.delete("users", {
-        data: {
-          user_id: userData?.user_id,
-          password: userData?.password,
-          session_id: "session_id",
-        },
-      });
-      console.log("delete 후 response : ", response);
-
-      if (response.status === 200) {
-        queryClient.invalidateQueries(["currentUser"]);
-        console.log("회원탈퇴 성공");
-        Cookies.remove("session_id");
-        console.log("계정이 삭제되었습니다.");
-        await axiosBase.post("users/logout");
-        router.push("/");
-      } else {
-        console.error("계정 삭제에 실패하였습니다.");
-      }
-    } catch (error) {
-      console.error("Error occurred while deleting account:", error);
-    }
-    closeModal();
-  };
-
   // 모달 컨트롤
   const openModal = () => {
     setIsModalOpen(true);
@@ -169,17 +143,17 @@ const ModifyUserInfo: React.FC = () => {
 
   //이미지
   const handleLabelClick = (e: React.MouseEvent<HTMLLabelElement>) => {
-    if (previewImage) {
+    if (previewImage !== defaultImage) {
       e.preventDefault();
     }
   };
 
   //이미지 삭제
   const handleDeleteImage = () => {
-    setPreviewImage("");
+    setPreviewImage(defaultImage);
     setSelectedFile(null);
     setUserData((prev: any) => {
-      return { ...prev, img: "" };
+      return { ...prev, img: defaultImage };
     });
   };
 
@@ -199,18 +173,18 @@ const ModifyUserInfo: React.FC = () => {
     <>
       <Container>
         <TitleAndPassword>
-        <Header>회원정보수정</Header>
-        <Divider />
-        <StyledChangePassword
-          onClick={() =>
-            router.push("/my-page/modify-user-info/change-password")
-          }
-        >
-          비밀번호 변경
-          <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
-        </StyledChangePassword>
+          <Header>회원정보수정</Header>
+          <Divider />
+          <StyledChangePassword
+            onClick={() =>
+              router.push("/my-page/modify-user-info/change-password")
+            }
+          >
+            비밀번호 변경
+            <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
+          </StyledChangePassword>
         </TitleAndPassword>
-       
+
         <form onSubmit={handleFormSubmit}>
           <WrapperInfo>
             <Wrapper>
@@ -224,17 +198,16 @@ const ModifyUserInfo: React.FC = () => {
               <EmailContainer>
                 <EmailWrapper>
                   <Title>별명 *</Title>
-               
-                    {/* <FlexBox> */}
-                      <InputBox
-                        type="text"
-                        name="username"
-                        value={userData?.username}
-                        required
-                        onChange={handleChangeInput}
-                      />
-                    {/* </FlexBox> */}
-                 
+
+                  {/* <FlexBox> */}
+                  <InputBox
+                    type="text"
+                    name="username"
+                    value={userData?.username}
+                    required
+                    onChange={handleChangeInput}
+                  />
+                  {/* </FlexBox> */}
                 </EmailWrapper>
               </EmailContainer>
             </Wrapper>
@@ -243,15 +216,13 @@ const ModifyUserInfo: React.FC = () => {
                 <EmailWrapper>
                   {" "}
                   <Title>생년월일</Title>
-                      <InputDateBox
-                        type="date"
-                        name="birth_date"
-                        value={userData?.birth_date}
-                        required
-                        onChange={handleChangeInput}
-                      />
-                
-                
+                  <InputDateBox
+                    type="date"
+                    name="birth_date"
+                    value={userData?.birth_date}
+                    required
+                    onChange={handleChangeInput}
+                  />
                 </EmailWrapper>
               </EmailContainer>
             </Wrapper>
@@ -261,7 +232,7 @@ const ModifyUserInfo: React.FC = () => {
           <ProfileImageWrapper>
             <ProfileImageTitle>프로필 이미지</ProfileImageTitle>
             <LabelForFile htmlFor="upload-button" onClick={handleLabelClick}>
-              {previewImage && (
+              {previewImage !== defaultImage && (
                 <>
                   <StyledImage src={previewImage} alt="Preview" />
                   <button type="button" onClick={handleDeleteImage}>
@@ -269,11 +240,11 @@ const ModifyUserInfo: React.FC = () => {
                   </button>
                 </>
               )}
-              {!previewImage && (
-                <StyledImage src="/images/dongs-logo.png" alt="Default" />
+              {previewImage === defaultImage && (
+                <StyledImage src={defaultImage} alt="Default" />
               )}
             </LabelForFile>
-            {!previewImage && (
+            {previewImage === defaultImage && (
               <InputFile
                 type="file"
                 accept="image/*"
@@ -293,7 +264,7 @@ const ModifyUserInfo: React.FC = () => {
               회원 정보 수정
             </Button>
           </UserModifyButton>
-         <DeletionAndArrow>
+          {/* <DeletionAndArrow>
           <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
           <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
           {isModalOpen && (
@@ -304,7 +275,10 @@ const ModifyUserInfo: React.FC = () => {
               onConfirm={handleDeleteAccount}
             />
           )}
-      </DeletionAndArrow>
+      </DeletionAndArrow> */}
+          <AccountDeletionComponent
+            id={userData?.user_id}
+          ></AccountDeletionComponent>
         </form>
       </Container>
     </>
@@ -346,14 +320,14 @@ display: none;
 }
 `;
 
-const DeletionAndArrow = styled.div`
-display:flex;
-align-items: center;
-margin-bottom: 2rem;
-`;
+// const DeletionAndArrow = styled.div`
+// display:flex;
+// align-items: center;
+// margin-bottom: 2rem;
+// `;
 
 const ProfileImageTitle = styled.div`
-font-size: 16px;
+  font-size: 16px;
   cursor: pointer;
   color: #4f3d21;
   margin-left: 0.1rem;

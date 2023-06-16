@@ -71,8 +71,6 @@ const MobileCategory = () => {
             </IconWrapper>
             <TitleWrapper>중식</TitleWrapper>
           </CategoryItem>
-        </CategoryList>
-        <CategoryList>
           <CategoryItem
             onClick={() => router.push("/recipes/category/best?category=best")}
           >
@@ -158,8 +156,14 @@ const CategoryContainer = styled.div`
 
 const CategoryList = styled.ul`
   display: grid;
+  row-gap: 1rem;
+
   grid-template-columns: repeat(4, minmax(0, 1fr));
   place-items: center;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
 `;
 
 const CategoryItem = styled.li`

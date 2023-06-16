@@ -11,6 +11,28 @@ type PaginationProps = {
 const AdminPagination = (props: PaginationProps) => {
   const { total, limit, page, setPage } = props;
   const numPages = Math.ceil(total / limit);
+  const maxDisplayPages = 10; // 한 번에 표시할 최대 페이지 수
+  const startPage =
+    Math.floor((page - 1) / maxDisplayPages) * maxDisplayPages + 1;
+  const endPage = Math.min(startPage + maxDisplayPages - 1, numPages);
+
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <PagenationBtn
+          key={i}
+          onClick={() => setPage(i)}
+          aria-current={page === i ? "page" : undefined}
+          selected={page === i}
+          disabled={false}
+        >
+          {i}
+        </PagenationBtn>
+      );
+    }
+    return pageNumbers;
+  };
 
   return (
     <PagenationBox>
@@ -22,19 +44,7 @@ const AdminPagination = (props: PaginationProps) => {
       >
         &lt;
       </PagenationBtn>
-      {Array(numPages)
-        .fill(undefined)
-        .map((_, i) => (
-          <PagenationBtn
-            key={i + 1}
-            onClick={() => setPage(i + 1)}
-            aria-current={page === i + 1 ? "page" : undefined}
-            selected={page === i + 1}
-            disabled={false}
-          >
-            {i + 1}
-          </PagenationBtn>
-        ))}
+      {renderPageNumbers()}
       {/* 우측 이동 버튼 */}
       <PagenationBtn
         onClick={() => setPage(page + 1)}

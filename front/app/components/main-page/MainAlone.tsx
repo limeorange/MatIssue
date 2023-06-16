@@ -17,6 +17,8 @@ import styled from "styled-components";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
 import NonRecipeCrying from "../UI/NonRecipeCrying";
+import { useEffect, useState } from "react";
+import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
 
 const MainAlone = () => {
   const {
@@ -28,6 +30,23 @@ const MainAlone = () => {
     initialData: [],
   });
 
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mediaQuery.matches); // 초기 렌더링 시 미디어 쿼리 결과에 따라 상태를 설정
+
+    const handleResize = () => {
+      setIsDesktop(mediaQuery.matches); // 화면 크기 변경 시 미디어 쿼리 결과에 따라 상태를 업데이트
+    };
+
+    mediaQuery.addListener(handleResize); // 화면 크기 변경 이벤트 리스너 등록
+
+    return () => {
+      mediaQuery.removeListener(handleResize); // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    };
+  }, []);
+
   const router = useRouter();
 
   const shuffledRecipes = shuffleRecipes(singleRecipes);
@@ -37,7 +56,7 @@ const MainAlone = () => {
   }
 
   return (
-    <MainAloneContainer>
+    <StyledContainer>
       <StyledContentsArea>
         <StyledTitleBox>
           <StyledTitle>혼먹 자취생 레시피</StyledTitle>
@@ -51,91 +70,102 @@ const MainAlone = () => {
           <NonRecipeCrying />
         ) : (
           <RecipeContainer>
-            <RecipeImageWrapperBase
-              onClick={() =>
-                router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
-              }
-            >
-              <SquareImageWrapper>
-                <Image
-                  src={shuffledRecipes?.[0].recipe_thumbnail}
-                  alt="ingredient"
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
-              </SquareImageWrapper>
-              <TitleOnImage>{shuffledRecipes?.[0].recipe_title}</TitleOnImage>
-            </RecipeImageWrapperBase>
-            <RecipeImageWrapper2
-              onClick={() =>
-                router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
-              }
-            >
-              <SquareImageWrapper>
-                <Image
-                  src={shuffledRecipes?.[1].recipe_thumbnail}
-                  alt="ingredient"
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
-              </SquareImageWrapper>
-              <TitleOnImage>{shuffledRecipes?.[1].recipe_title}</TitleOnImage>
-            </RecipeImageWrapper2>
-            <RecipeImageWrapper3
-              onClick={() =>
-                router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
-              }
-            >
-              <SquareImageWrapper>
-                <Image
-                  src={shuffledRecipes?.[2].recipe_thumbnail}
-                  alt="ingredient"
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
-              </SquareImageWrapper>
-              <TitleOnImage>{shuffledRecipes?.[2].recipe_title}</TitleOnImage>
-            </RecipeImageWrapper3>
-            <RecipeImageWrapper4
-              onClick={() =>
-                router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
-              }
-            >
-              <SquareImageWrapper>
-                <Image
-                  src={shuffledRecipes?.[3].recipe_thumbnail}
-                  alt="ingredient"
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
-              </SquareImageWrapper>
-              <TitleOnImage>{shuffledRecipes?.[3].recipe_title}</TitleOnImage>
-            </RecipeImageWrapper4>
+            {!isDesktop ? (
+              <MainMobileListingRecipe
+                recipes={singleRecipes}
+                url="/recipes/category/honmuk?category=honmuk"
+              />
+            ) : (
+              <>
+                <RecipeImageWrapperBase
+                  onClick={() =>
+                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                  }
+                >
+                  <SquareImageWrapper>
+                    <Image
+                      src={shuffledRecipes?.[0].recipe_thumbnail}
+                      alt="ingredient"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </SquareImageWrapper>
+                  <TitleOnImage>
+                    {shuffledRecipes?.[0].recipe_title}
+                  </TitleOnImage>
+                </RecipeImageWrapperBase>
+                <RecipeImageWrapper2
+                  onClick={() =>
+                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                  }
+                >
+                  <SquareImageWrapper>
+                    <Image
+                      src={shuffledRecipes?.[1].recipe_thumbnail}
+                      alt="ingredient"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </SquareImageWrapper>
+                  <TitleOnImage>
+                    {shuffledRecipes?.[1].recipe_title}
+                  </TitleOnImage>
+                </RecipeImageWrapper2>
+                <RecipeImageWrapper3
+                  onClick={() =>
+                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                  }
+                >
+                  <SquareImageWrapper>
+                    <Image
+                      src={shuffledRecipes?.[2].recipe_thumbnail}
+                      alt="ingredient"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </SquareImageWrapper>
+                  <TitleOnImage>
+                    {shuffledRecipes?.[2].recipe_title}
+                  </TitleOnImage>
+                </RecipeImageWrapper3>
+                <RecipeImageWrapper4
+                  onClick={() =>
+                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                  }
+                >
+                  <SquareImageWrapper>
+                    <Image
+                      src={shuffledRecipes?.[3].recipe_thumbnail}
+                      alt="ingredient"
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  </SquareImageWrapper>
+                  <TitleOnImage>
+                    {shuffledRecipes?.[3].recipe_title}
+                  </TitleOnImage>
+                </RecipeImageWrapper4>
+              </>
+            )}
           </RecipeContainer>
         )}
       </StyledContentsArea>
-    </MainAloneContainer>
+    </StyledContainer>
   );
 };
 
 export default MainAlone;
 
-const MainAloneContainer = styled(StyledContainer)`
-  display: none;
-
-  @media (min-width: 1024px) {
-    display: block;
-  }
-`;
-
 const RecipeContainer = styled.div`
-  max-width: 120rem;
-  margin: 0 auto;
-  padding: 2rem 2rem;
-  display: grid;
-  grid-template-columns: repeat(4, 21rem);
-  grid-template-rows: repeat(2, 21rem);
-  gap: 2rem;
+  @media (min-width: 1024px) {
+    max-width: 120rem;
+    margin: 0 auto;
+    padding: 2rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 21rem);
+    grid-template-rows: repeat(2, 21rem);
+    gap: 2rem;
+  }
 `;
 
 const RecipeImageWrapperBase = styled.div`

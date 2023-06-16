@@ -1,16 +1,29 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import Image from "next/image";
-import { Recipe } from "@/app/types";
+import { getRecipeById } from "@/app/api/recipe";
+import { Comments, Recipe } from "@/app/types";
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
 
+  const [commentCount, setCommentCount] = useState<number>(0);
+
   const handleRecipeClick = () => {
     router.push(`/recipe/${recipe.recipe_id}`);
   };
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const recipeData = await getRecipeById(recipe.recipe_id);
+      setCommentCount(recipeData.comments.length || 0);
+    };
+
+    fetchComments();
+  }, [recipe.recipe_id]);
 
   return (
     <>
@@ -42,21 +55,19 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   height={26}
                 />
               </RecipeRankImg>
-              <HeartCount>
-                {recipe.recipe_like.length.toLocaleString()}
-              </HeartCount>
+              <Count>{recipe.recipe_like.length.toLocaleString()}</Count>
             </RecipeRankItem>
-            {/* <RecipeRankItem>
-              <RecipeRankImg>
+            <RecipeRankItem>
+              <RecipeRankImg style={{ marginBottom: "0.25rem" }}>
                 <Image
-                  src="/images/view.png"
-                  alt="게시물 조회수 이미지"
-                  width={13}
-                  height={11}
+                  src="/images/recipe-view/comment.svg"
+                  alt="게시물 댓글 이미지"
+                  width={30}
+                  height={26}
                 />
               </RecipeRankImg>
-              <p>{data.view}</p>
-            </RecipeRankItem> */}
+              <Count>{commentCount.toLocaleString()}</Count>
+            </RecipeRankItem>
           </RecipeRank>
         </RecipeInfo>
       </RecipeCardWrapper>
@@ -141,21 +152,25 @@ const RecipeRankItem = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
-  font-size: 12px;
-  font-weight: 400;
-  margin-left: 1rem;
+  margin-left: 0.5rem;
+
+  @media (min-width: 768px) {
+    margin-left: 1rem;
+  }
 `;
 
 const RecipeRankImg = styled.div`
-  min-width: 1.6rem;
-  min-height: 1.4rem;
   margin-right: 0.5rem;
-
   max-width: 1.3rem;
   max-height: 1.1rem;
+
+  @media (min-width: 768px) {
+    min-width: 1.6rem;
+    min-height: 1.4rem;
+  }
 `;
 
-const HeartCount = styled.span`
+const Count = styled.span`
   font-size: 14px;
   margin-right: 0.2rem;
 `;

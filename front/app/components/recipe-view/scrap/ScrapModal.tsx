@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Recipe } from "@/app/types";
+import { useQuery } from "@tanstack/react-query";
+import getCurrentUser from "@/app/api/user";
 
 type ScrapModalProps = {
   modalCloseHandler: () => void;
@@ -17,6 +19,10 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   setIsSaved,
   recipe,
 }) => {
+  const { data: currentUser } = useQuery(["currentUser"], () =>
+    getCurrentUser()
+  );
+
   // 스크랩 카드에 필요한 정보만 객체 분해 할당
   const {
     created_at,
@@ -107,7 +113,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
     const updatedMemo = parsedMemo.filter(
       (item: any) => item.scrapData.recipe_id !== recipe_id
     );
-    const newMemo = { scrapData, memo };
+    const newMemo = { scrapData, memo, user_id: currentUser.user_id };
     updatedMemo.push(newMemo);
 
     // 업데이트된 배열을 다시 localStorage에 저장

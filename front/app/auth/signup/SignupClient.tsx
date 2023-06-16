@@ -152,7 +152,7 @@ const SignupClient = () => {
       username: data.username,
       email: data.email,
       password: data.password,
-      img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
+      img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
       birth_date: birthDate,
     };
 

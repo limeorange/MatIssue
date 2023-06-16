@@ -67,7 +67,6 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     difficulty: -1,
   };
   const [filter, setFilter] = useState(initialFilterState);
-  const [search, setSearch] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
   const [newServings, setNewServings] = useState<OptionsType>(servings[0]);
@@ -82,20 +81,28 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   const category = searchParams?.get("category");
   const router = useRouter();
 
+  // urlParams에서 값 불러와 필터링
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const servingsFromURL = urlParams.get("servings");
     const durationFromURL = urlParams.get("duration");
     const difficultyFromURL = urlParams.get("difficulty");
 
-    setFilter({
-      servings: servingsFromURL ? parseInt(servingsFromURL) : -1,
-      duration: durationFromURL ? parseInt(durationFromURL) : -1,
-      difficulty: difficultyFromURL ? parseInt(difficultyFromURL) : -1,
-    });
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      servings: servingsFromURL
+        ? parseInt(servingsFromURL)
+        : prevFilter.servings,
+      duration: durationFromURL
+        ? parseInt(durationFromURL)
+        : prevFilter.duration,
+      difficulty: difficultyFromURL
+        ? parseInt(difficultyFromURL)
+        : prevFilter.difficulty,
+    }));
   }, []);
 
-  // 새로고침 했을 경우 버튼 정렬상태 유지
+  // urlParams에서 정렬 값 불러와서 레시피 정렬
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const sortMethodFromURL = urlParams.get("sortMethod");
@@ -107,6 +114,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     );
   }, []);
 
+  // 필터바 및 정렬버튼 로직
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     let result = [...recipes];
@@ -167,8 +175,9 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     );
 
     setFilteredRecipes(result);
-  }, [search, searchQuery, filter, category, sortMethod, recipes]);
+  }, [filter, sortMethod, recipes]);
 
+  // 모바일 스크롤 이벤트
   useEffect(() => {
     function handleResize() {
       setIsMobile(window.innerWidth <= 375);
@@ -208,10 +217,6 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  // const currentRecipes = filteredRecipes.slice(
-  //   indexOfFirstRecipe,
-  //   indexOfLastRecipe
-  // );
 
   // 모바일에서는 처음부터 현재 페이지의 마지막 레시피까지의 모든 레시피들을 포함
   const currentRecipes = isMobile
@@ -425,7 +430,8 @@ const SortButton = styled.button<{ selected: boolean }>`
   @media (min-width: 768px) {
     margin: 0.5rem;
     padding: 0.5rem 2.5rem;
-
+    color: black;
+    font-weight: normal;
     border-radius: 10rem;
     background-color: ${(props) =>
       props.selected ? "#fbd26a" : "transparent"};

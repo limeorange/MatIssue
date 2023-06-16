@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  RecipeContainer,
+  StyledContainer,
   StyledSubTitle,
   StyledTitle,
   StyledTitleBox,
@@ -8,13 +10,14 @@ import {
 import styled from "styled-components";
 import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { getRecipesByVegetarian } from "@/app/api/recipe";
 import shuffleRecipes from "@/app/utils/shuffleRecipes";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
+import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
 
 const MainVegan = () => {
   const {
@@ -30,6 +33,7 @@ const MainVegan = () => {
   const [slide, setSlide] = useState<number>(1);
   const totalRecipesNumber = vegetarianRecipes?.length;
   const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   const shuffledRecipes = useMemo(
     () => shuffleRecipes(vegetarianRecipes),
@@ -50,6 +54,21 @@ const MainVegan = () => {
     setSlide(slide + 1);
   };
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    setIsDesktop(mediaQuery.matches); // 초기 렌더링 시 미디어 쿼리 결과에 따라 상태를 설정
+
+    const handleResize = () => {
+      setIsDesktop(mediaQuery.matches); // 화면 크기 변경 시 미디어 쿼리 결과에 따라 상태를 업데이트
+    };
+
+    mediaQuery.addListener(handleResize); // 화면 크기 변경 이벤트 리스너 등록
+
+    return () => {
+      mediaQuery.removeListener(handleResize); // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    };
+  }, []);
+
   if (isLoading) {
     return <LoadingRecipe />;
   }
@@ -57,21 +76,32 @@ const MainVegan = () => {
   return (
     <MainVegunContainer>
       <MainVegunArea>
-        <VegunTitleBox>
+        <StyledTitleBox>
           <StyledTitle>채식러들을 위한 초록레시피</StyledTitle>
           <StyledSubTitle>
             건강과 환경을 생각하는 채식 레시피로 맛있는 변화를 경험하세요
           </StyledSubTitle>
-        </VegunTitleBox>
+        </StyledTitleBox>
         {isError ? (
           <NonDataCrying />
         ) : (
           <RecipeSliderContainer>
-            <VegunRecipeContainer slide={slide}>
-              {shuffledRecipes.slice(0, totalSlide * 3).map((item: Recipe) => (
-                <LargeRecipeCard key={item.recipe_id} recipe={item} />
-              ))}
-            </VegunRecipeContainer>
+            {!isDesktop ? (
+              <RecipeContainer>
+                <MainMobileListingRecipe
+                  recipes={shuffledRecipes}
+                  url="/recipes/category/vegetarian?category=vegetarian"
+                />
+              </RecipeContainer>
+            ) : (
+              <VegunRecipeContainer slide={slide}>
+                {shuffledRecipes
+                  .slice(0, totalSlide * 3)
+                  .map((item: Recipe) => (
+                    <LargeRecipeCard key={item.recipe_id} recipe={item} />
+                  ))}
+              </VegunRecipeContainer>
+            )}
           </RecipeSliderContainer>
         )}
 
@@ -101,10 +131,9 @@ const MainVegan = () => {
 export default MainVegan;
 
 const MainVegunContainer = styled.div`
-  display: none;
+  padding: 2rem;
 
   @media (min-width: 1024px) {
-    display: block;
     padding: 6rem 0;
     text-align: center;
     width: 100%;
@@ -118,13 +147,7 @@ const MainVegunArea = styled.div`
   position: relative;
   max-width: 110rem;
   margin: 0 auto;
-`;
-
-const VegunTitleBox = styled(StyledTitleBox)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
+  gap: 1rem;
 `;
 
 const RecipeSliderContainer = styled.div`
@@ -147,32 +170,42 @@ const VegunRecipeContainer = styled.div<{ slide: number }>`
 `;
 
 const LeftSlideBtn = styled.div<{ slide: number }>`
-  position: absolute;
-  top: 24rem;
-  cursor: pointer;
-  height: 9.2rem;
-  width: 2.8rem;
+  display: none;
 
-  transition: transform 0.3s;
-  &:hover {
-    transform: scale(120%);
+  @media (min-width: 1024px) {
+    display: block;
+    position: absolute;
+    top: 24rem;
+    cursor: pointer;
+    height: 9.2rem;
+    width: 2.8rem;
+
+    transition: transform 0.3s;
+    &:hover {
+      transform: scale(120%);
+    }
+
+    ${(props) => props.slide < 2 && "display : none;"};
   }
-
-  ${(props) => props.slide < 2 && "display : none;"};
 `;
 
 const RightSlideBtn = styled.div<{ slide: number; totalSlide: number }>`
-  position: absolute;
-  top: 24rem;
-  right: 0;
-  cursor: pointer;
-  height: 9.2rem;
-  width: 3.128rem;
+  display: none;
 
-  transition: transform 0.3s;
-  &:hover {
-    transform: scale(120%);
+  @media (min-width: 1024px) {
+    display: block;
+    position: absolute;
+    top: 24rem;
+    right: 0;
+    cursor: pointer;
+    height: 9.2rem;
+    width: 3.128rem;
+
+    transition: transform 0.3s;
+    &:hover {
+      transform: scale(120%);
+    }
+
+    ${(props) => props.slide >= props.totalSlide && "display : none;"};
   }
-
-  ${(props) => props.slide >= props.totalSlide && "display : none;"};
 `;

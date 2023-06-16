@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import VideoSection from "@/app/components/add-recipe/VideoSection";
@@ -12,6 +12,7 @@ import Button from "@/app/components/UI/Button";
 import { updateRecipe } from "@/app/api/recipe";
 import { toast } from "react-hot-toast";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import ConfirmModal from "@/app/components/UI/ConfirmModal";
 
 type Recipe = {
   recipe_category: string;
@@ -97,6 +98,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     videoLink: recipe_video,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -352,11 +354,26 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
 
   // 취소 핸들러
   const handleCancel = () => {
+    setShowConfirmModal(true);
+  };
+
+  // 취소 모달 확인 핸들러
+  const handleConfirm = () => {
     router.back();
   };
 
+  useEffect(() => {
+    // 새로고침 막기
+    window.onbeforeunload = function () {
+      return true;
+    };
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
+
   return (
-    <FormWrapper>
+    <FormLayout>
       {isLoading && <LoadingModal />}
       <Title>레시피 수정하기</Title>
       <MainSection>
@@ -452,7 +469,14 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           </Button>
         </CancleButton>
       </ButtonContainer>
-    </FormWrapper>
+      {showConfirmModal && (
+        <ConfirmModal
+          message="레시피를 수정을 취소하시겠습니까?"
+          onCancel={() => setShowConfirmModal(false)}
+          onConfirm={handleConfirm}
+        />
+      )}
+    </FormLayout>
   );
 };
 
@@ -528,7 +552,7 @@ const TextArea = styled.textarea`
 `;
 
 // 전체 폼 스타일링
-const FormWrapper = styled.form`
+const FormLayout = styled.form`
   width: 100%;
   padding: 1.5rem;
   margin-bottom: 2rem;
