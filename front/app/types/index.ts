@@ -9,7 +9,8 @@ export type User = {
   session_id: string;
   email_code?: string;
   id: string;
-  user_subscription: number;
+  fans: string[];
+  subscriptions: string[];
 };
 
 export type Recipe = {
