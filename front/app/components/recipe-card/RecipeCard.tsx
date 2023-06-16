@@ -10,12 +10,15 @@ import { Comments, Recipe } from "@/app/types";
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
 
+  // 댓글 수 설정 상태
   const [commentCount, setCommentCount] = useState<number>(0);
 
+  // 레시피 클릭 시 상세페이지 이동 함수
   const handleRecipeClick = () => {
     router.push(`/recipe/${recipe.recipe_id}`);
   };
 
+  // 레시피 데이터의 댓글 수 계산
   useEffect(() => {
     const fetchComments = async () => {
       const recipeData = await getRecipeById(recipe.recipe_id);

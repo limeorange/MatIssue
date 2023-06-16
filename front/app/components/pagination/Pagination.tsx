@@ -12,9 +12,13 @@ type PaginationProps = {
 };
 
 const Pagination = (props: PaginationProps) => {
+  // 페이지네이션 input 상태
   const [pageInput, setPageInput] = useState("");
+
+  // 화면 너비 상태
   const [windowWidth, setWindowWidth] = useState(0);
 
+  // 화면 너비에 따른 스크롤 이벤트
   useEffect(() => {
     setWindowWidth(window.innerWidth);
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -24,8 +28,13 @@ const Pagination = (props: PaginationProps) => {
     };
   }, []);
 
+  // 총 페이지 수 계산
   const totalPages = Math.ceil(props.totalRecipes / props.recipesPerPage);
+
+  // 페이지네이션 버튼 수 (화면 너비 480px 이하는 5개 까지)
   const pagesToShow = windowWidth <= 480 ? 5 : 10;
+
+  // 버튼 시작 및 끝나는 위치 조정
   const startBlock =
     Math.floor((props.currentPage - 1) / pagesToShow) * pagesToShow;
   const endBlock = startBlock + pagesToShow;
@@ -64,6 +73,7 @@ const Pagination = (props: PaginationProps) => {
     }
   };
 
+  // 페이지 번호 계산
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
   const startIndex = startBlock;
   const endIndex = Math.min(endBlock, totalPages);

@@ -57,31 +57,56 @@ const difficulty = [
 // 레시피 리스트 출력 컴포넌트
 const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes); // 레시피 데이터 필터링 상태
+
+  // 최신, 인기순 버튼 정렬 기본 상태 null로 설정
   const initialSortMethodState = null;
+
+  // 정렬 버튼 상태
   const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(
     initialSortMethodState
-  ); // 정렬 버튼에 따른 정렬 상태
+  );
+
+  // 필터바 기본 상태 -1로 설정
   const initialFilterState = {
     servings: -1,
     duration: -1,
     difficulty: -1,
   };
+
+  // 필터바 필터링 상태
   const [filter, setFilter] = useState(initialFilterState);
+
+  // 무한스크롤 로딩 상태
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
+
+  // 모바일 상태, 화면 너비 768px 이하의 경우 모바일
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // 인원수, 조리시간, 난이도 필터링 상태
   const [newServings, setNewServings] = useState<OptionsType>(servings[0]);
   const [newDuration, setNewDuration] = useState<OptionsType>(duration[0]);
   const [newDifficulty, setNewDifficulty] = useState<OptionsType>(
     difficulty[0]
   );
+
+  // 현재 페이지 설정 상태 (기본 1페이지)
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // 페이지당 출력 레시피 (16개)
   const recipesPerPage = 16;
+
+  // url의 params 값 사용
   const searchParams = useSearchParams();
-  const searchQuery = searchParams?.get("query"); // url의 query값 추출
+
+  // url의 query값 추출
+  const searchQuery = searchParams?.get("query");
+
+  // url의 category값 추출
   const category = searchParams?.get("category");
+
   const router = useRouter();
 
-  // urlParams에서 값 불러와 필터링
+  // urlParams에서 값 불러와 필터링, 이전 설정 값 있을 경우 ? 그 값 사용 : 새로 필터링
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const servingsFromURL = urlParams.get("servings");
@@ -180,14 +205,14 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   // 모바일 스크롤 이벤트
   useEffect(() => {
     function handleResize() {
-      setIsMobile(window.innerWidth <= 375);
+      setIsMobile(window.innerWidth <= 768);
     }
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 태그 삭제 로직
+  // 필터 태그 삭제 로직
   const removeTag = (tagType: string) => {
     {
       const resetValue = -1;
@@ -214,7 +239,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   // 페이지네이션
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  // 현재 페이지 데이터
+  // 현재 페이지 데이터 계산
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
 
