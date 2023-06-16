@@ -43,7 +43,7 @@ const AccountDeletion = ({ id }: { id: string }) => {
       router.push("/");
     } catch (error: any) {
       toast.error(
-        error.reponse ? error.reponse.data.detail : "회원 탈퇴가 실패했습니다."
+        error.reponse ? error.reponse.data.detail : "회원 탈퇴에 실패했습니다."
       );
     }
     closeModal();
