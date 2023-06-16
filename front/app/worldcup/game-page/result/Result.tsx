@@ -11,6 +11,16 @@ import LoadingModal from "@/app/components/UI/LoadingModal";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import WorldcupKakaoShareButton from "@/app/utils/worldcupKakaoShare";
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  LineIcon,
+  LineShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+} from "react-share";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -30,6 +40,13 @@ const ResultPage = () => {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [animation, setAnimation] = useState("opacity-0");
+
+  // 현재 페이지 url 주소 받아옴
+  let currentPageUrl;
+
+  if (typeof window !== "undefined") {
+    currentPageUrl = window.location.href;
+  }
 
   // Url 복사하는 함수
   const copyToClipboard = async () => {
@@ -96,7 +113,25 @@ const ResultPage = () => {
               />
             </div>
             <WorldcupKakaoShareButton />
+            {currentPageUrl && (
+              <StyledFacebookShareButton url={currentPageUrl}>
+                <FacebookIcon size={60} round />
+              </StyledFacebookShareButton>
+            )}
           </ShareButtonBox>
+          {currentPageUrl && (
+            <ShareButtonBox>
+              <StyledTwitterShareButton url={currentPageUrl}>
+                <TwitterIcon size={60} round />
+              </StyledTwitterShareButton>
+              <StyledLineShareButton url={currentPageUrl}>
+                <LineIcon size={60} round />
+              </StyledLineShareButton>
+              <StyledEmailShareButton url={currentPageUrl}>
+                <EmailIcon size={60} round />
+              </StyledEmailShareButton>
+            </ShareButtonBox>
+          )}
         </WorldcupCard>
         <RestartButtonBox>
           <Button
@@ -245,7 +280,7 @@ const ShareText = styled.p`
 
 const ShareButtonBox = styled.div`
   width: 100%;
-  max-width: 20rem;
+  max-width: 36rem;
   gap: 1rem;
   display: flex;
   align-items: center;
@@ -288,5 +323,45 @@ const RestartButtonBox = styled.div`
     &:hover {
       transform: translateY(-3px);
     }
+  }
+`;
+
+const StyledFacebookShareButton = styled(FacebookShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledTwitterShareButton = styled(TwitterShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledLineShareButton = styled(LineShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledEmailShareButton = styled(EmailShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
   }
 `;
