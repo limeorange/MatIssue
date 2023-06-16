@@ -106,6 +106,8 @@ const FilterBar = (props: FilterBarProps) => {
   );
 };
 
+export default FilterBar;
+
 const FilterBarContainer = styled.div`
   display: flex;
   align-items: center;
@@ -144,5 +146,3 @@ const FilterBarLi = styled.li`
     font-weight: 600;
   }
 `;
-
-export default FilterBar;
