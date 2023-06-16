@@ -36,14 +36,14 @@ const AccountDeletion = ({ id }: { id: string }) => {
         },
       });
 
-      toast.success("계정이 성공적으로 삭제되었습니다.");
+      toast.success("회원 탈퇴가 성공적으로 완료되었습니다.");
       Cookies.remove("session-id");
       setIsLoggedIn(false);
 
       router.push("/");
     } catch (error: any) {
       toast.error(
-        error.reponse ? error.reponse.data.detail : "회원탈퇴를 실패했습니다."
+        error.reponse ? error.reponse.data.detail : "회원 탈퇴에 실패했습니다."
       );
     }
     closeModal();
