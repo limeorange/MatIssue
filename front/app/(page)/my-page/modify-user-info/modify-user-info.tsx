@@ -47,7 +47,7 @@ const ModifyUserInfo: React.FC = () => {
   const [userData, setUserData] = useState<any>(); //얘가 먼저 실행되서 밸류 값 undefined, 우리가 갖고 있던 값
   const queryClient = useQueryClient();
 const defaultImage = "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png"
-
+console.log("currentUser:", currentUser);
 
   useEffect(() => {
     // 받아온 data 객체로 상태 저장

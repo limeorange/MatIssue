@@ -100,26 +100,6 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  useEffect(() => {
-    // 새로고침 막기(조건 부여 가능)
-    window.onbeforeunload = function () {
-      return true;
-    };
-    return () => {
-      window.onbeforeunload = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    // 새로고침 막기(조건 부여 가능)
-    window.onbeforeunload = function () {
-      return true;
-    };
-    return () => {
-      window.onbeforeunload = null;
-    };
-  }, []);
-
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setState({ ...state, selectedCategory: e.target.value });
@@ -382,8 +362,18 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     router.back();
   };
 
+  useEffect(() => {
+    // 새로고침 막기
+    window.onbeforeunload = function () {
+      return true;
+    };
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
+
   return (
-    <FormWrapper>
+    <FormLayout>
       {isLoading && <LoadingModal />}
       <Title>레시피 수정하기</Title>
       <MainSection>
@@ -486,7 +476,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           onConfirm={handleConfirm}
         />
       )}
-    </FormWrapper>
+    </FormLayout>
   );
 };
 
@@ -562,7 +552,7 @@ const TextArea = styled.textarea`
 `;
 
 // 전체 폼 스타일링
-const FormWrapper = styled.form`
+const FormLayout = styled.form`
   width: 100%;
   padding: 1.5rem;
   margin-bottom: 2rem;
