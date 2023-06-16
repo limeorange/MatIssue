@@ -8,7 +8,6 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const currentPath = usePathname();
 
-  console.log(currentPath);
   return (
     <AdminContainer>
       <CategoryBar>
