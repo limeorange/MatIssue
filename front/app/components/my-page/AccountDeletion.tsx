@@ -37,7 +37,7 @@ const AccountDeletion = ({ id }: { id: string }) => {
       });
 
       toast.success("계정이 성공적으로 삭제되었습니다.");
-      Cookies.remove("session_id");
+      Cookies.remove("session-id");
       setIsLoggedIn(false);
 
       router.push("/");

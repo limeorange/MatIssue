@@ -29,6 +29,12 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta
+          http-equiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
+      </head>
       <StyledComponentsRegistry>
         <body>
           <ToasterContext />
