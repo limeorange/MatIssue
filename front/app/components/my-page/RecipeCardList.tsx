@@ -56,7 +56,7 @@ const RecipeCards = ({
 
   useEffect(() => {
     function handleResize() {
-      setIsMobile(window.innerWidth <= 375);
+      setIsMobile(window.innerWidth <= 768);
     }
 
     window.addEventListener("resize", handleResize);
@@ -150,12 +150,13 @@ return (
               </RecipeCardWrapper>
             ))}
           </RecipeList>
+          {!isMobile && (
           <PaginationComponent
             recipesPerPage={recipesPerPage}
             totalRecipes={currentRecipe?.length}
             paginate={paginate}
             currentPage={currentPage}
-          />
+          />)}
         </>
       )
     )}
