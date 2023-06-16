@@ -36,7 +36,7 @@ const AccountDeletion = ({ id }: { id: string }) => {
         },
       });
 
-      toast.success("회원 탈퇴가 성공적으로 완료되었습니다.");
+      toast.success("더 맛있는 이슈로 찾아뵙겠습니다.");
       Cookies.remove("session-id");
       setIsLoggedIn(false);
 
