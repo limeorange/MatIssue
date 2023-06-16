@@ -104,7 +104,7 @@ const LoginClient = () => {
             <button
               type="button"
               onClick={() => {
-                router.push("/auth/find-id-password");
+                router.replace("/auth/find-id-password");
               }}
             >
               아이디•비밀번호 찾기
