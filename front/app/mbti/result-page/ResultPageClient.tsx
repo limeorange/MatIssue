@@ -289,24 +289,29 @@ const compatibilityData: CompatibilityData = {
   },
 };
 
-const currentPageUrl = window.location.href;
-
 const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
   const [recipeData, setRecipeData] = useState([...recipes]);
   const [MBTI, setMBTI] = useRecoilState(MBTIState);
   const [recipeToShow, setRecipeToShow] = useState<Recipe | null>(null);
   const router = useRouter();
-
   const [animation, setAnimation] = useState("opacity-0");
+
+  let currentPageUrl;
+
+  if (typeof window !== "undefined") {
+    currentPageUrl = window.location.href;
+  }
 
   // Url 복사하는 함수
   const copyToClipboard = async () => {
-    const currentPageUrl = window.location.href;
-    try {
-      await navigator.clipboard.writeText(currentPageUrl);
-      toast.success("Url이 복사 되었습니다!");
-    } catch (err: any) {
-      toast.error("Url 복사에 실패했습니다.", err);
+    if (typeof window !== "undefined") {
+      const currentPageUrl = window.location.href;
+      try {
+        await navigator.clipboard.writeText(currentPageUrl);
+        toast.success("Url이 복사 되었습니다!");
+      } catch (err: any) {
+        toast.error("Url 복사에 실패했습니다.", err);
+      }
     }
   };
 
@@ -438,21 +443,25 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
               />
             </div>
             <KakaoShareButton />
-            <StyledFacebookShareButton url={currentPageUrl}>
-              <FacebookIcon size={60} round />
-            </StyledFacebookShareButton>
+            {currentPageUrl && (
+              <StyledFacebookShareButton url={currentPageUrl}>
+                <FacebookIcon size={60} round />
+              </StyledFacebookShareButton>
+            )}
           </ShareButtonBox>
-          <ShareButtonBox>
-            <StyledTwitterShareButton url={currentPageUrl}>
-              <TwitterIcon size={60} round />
-            </StyledTwitterShareButton>
-            <StyledLineShareButton url={currentPageUrl}>
-              <LineIcon size={60} round />
-            </StyledLineShareButton>
-            <StyledEmailShareButton url={currentPageUrl}>
-              <EmailIcon size={60} round />
-            </StyledEmailShareButton>
-          </ShareButtonBox>
+          {currentPageUrl && (
+            <ShareButtonBox>
+              <StyledTwitterShareButton url={currentPageUrl}>
+                <TwitterIcon size={60} round />
+              </StyledTwitterShareButton>
+              <StyledLineShareButton url={currentPageUrl}>
+                <LineIcon size={60} round />
+              </StyledLineShareButton>
+              <StyledEmailShareButton url={currentPageUrl}>
+                <EmailIcon size={60} round />
+              </StyledEmailShareButton>
+            </ShareButtonBox>
+          )}
         </MBTIcard>
         <ButtonBox>
           <Button
