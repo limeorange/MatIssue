@@ -262,8 +262,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
         {/* 작성자 프로필 */}
         <WriterProfile
           user_nickname={user_nickname}
-          user_fan={user_fan}
-          user_subscription={user_subscription}
           user_id={user_id}
           loggedInUserId={loggedInUserId}
           user_img={user_img}
@@ -274,8 +272,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
           {isProfileModal && (
             <MiniWriterProfile
               user_nickname={user_nickname}
-              user_fan={user_fan}
-              user_subscription={user_subscription}
               user_id={user_id}
               loggedInUserId={loggedInUserId}
               user_img={user_img}
