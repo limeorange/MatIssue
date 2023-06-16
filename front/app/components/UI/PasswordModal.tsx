@@ -7,9 +7,7 @@ type PasswordModalProps = {
   message: string;
   onCancel: () => void;
   onConfirm: () => void;
-  showCancelButton?: boolean; // 추가: 취소 버튼을 보여줄지 여부를 결정하는 prop
-  errorMessage?: string;
-  password: string; // 추가: 사용자의 패스워드
+  showCancelButton?: boolean;
   enteredPassword: string; // 추가: 입력한 패스워드
   onPasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -19,23 +17,15 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
   message,
   onCancel,
   onConfirm,
-  showCancelButton = true, // 추가: 기본값은 true로 설정
-  errorMessage = "",
-  password,
+  showCancelButton = true,
   enteredPassword,
   onPasswordChange,
 }) => {
-  const isPasswordMismatch = enteredPassword !== password;
-
   return (
     <ModalWrapper>
       <ModalContent>
         <div>{icon}</div>
         <ModalMessage>{message}</ModalMessage>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-        {isPasswordMismatch && (
-          <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
-        )}
         <PasswordInput
           type="password"
           placeholder="탈퇴를 원하시면 비밀번호를 입력해주세요."
@@ -97,11 +87,10 @@ const ModalContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 31rem;
-  height: 23rem;
   background-color: white;
   padding: 2rem;
   border-radius: 1.3rem;
+  padding: 2rem 4rem;
 `;
 
 const ModalMessage = styled.p`
@@ -127,8 +116,8 @@ const CancelButton = styled.div`
 `;
 
 const ErrorMessage = styled.p`
-color: red;
-margin-top: 0.5rem;
+  color: red;
+  margin-top: 0.5rem;
 `;
 
 const PasswordInput = styled.input`
@@ -144,7 +133,7 @@ const PasswordInput = styled.input`
     font-size: 1.6rem;
   }
   &:focus {
-      outline: 0.3rem solid #fbd26a;
-      border: none;
+    outline: 0.3rem solid #fbd26a;
+    border: none;
   }
 `;
