@@ -10,7 +10,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (!request.cookies.get("session-id")) {
+  if (
+    !request.cookies.get("session-id") &&
+    !request.nextUrl.pathname.startsWith("/auth")
+  ) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 }
