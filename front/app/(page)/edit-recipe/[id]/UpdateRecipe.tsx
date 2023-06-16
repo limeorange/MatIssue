@@ -100,26 +100,6 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  useEffect(() => {
-    // 새로고침 막기(조건 부여 가능)
-    window.onbeforeunload = function () {
-      return true;
-    };
-    return () => {
-      window.onbeforeunload = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    // 새로고침 막기(조건 부여 가능)
-    window.onbeforeunload = function () {
-      return true;
-    };
-    return () => {
-      window.onbeforeunload = null;
-    };
-  }, []);
-
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setState({ ...state, selectedCategory: e.target.value });
@@ -381,6 +361,16 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   const handleConfirm = () => {
     router.back();
   };
+
+  useEffect(() => {
+    // 새로고침 막기
+    window.onbeforeunload = function () {
+      return true;
+    };
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, []);
 
   return (
     <FormLayout>
