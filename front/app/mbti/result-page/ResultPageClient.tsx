@@ -8,6 +8,16 @@ import Image from "next/image";
 import Button from "@/app/components/UI/Button";
 import Logo from "@/app/components/header/Logo";
 import KakaoShareButton from "@/app/utils/kakaoShare";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  LineShareButton,
+  LineIcon,
+  EmailShareButton,
+  EmailIcon,
+} from "react-share";
 import { toast } from "react-hot-toast";
 import { Recipe } from "@/app/types";
 import styled from "styled-components";
@@ -279,11 +289,12 @@ const compatibilityData: CompatibilityData = {
   },
 };
 
+const currentPageUrl = window.location.href;
+
 const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
   const [recipeData, setRecipeData] = useState([...recipes]);
   const [MBTI, setMBTI] = useRecoilState(MBTIState);
   const [recipeToShow, setRecipeToShow] = useState<Recipe | null>(null);
-
   const router = useRouter();
 
   const [animation, setAnimation] = useState("opacity-0");
@@ -427,6 +438,20 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
               />
             </div>
             <KakaoShareButton />
+            <StyledFacebookShareButton url={currentPageUrl}>
+              <FacebookIcon size={60} round />
+            </StyledFacebookShareButton>
+          </ShareButtonBox>
+          <ShareButtonBox>
+            <StyledTwitterShareButton url={currentPageUrl}>
+              <TwitterIcon size={60} round />
+            </StyledTwitterShareButton>
+            <StyledLineShareButton url={currentPageUrl}>
+              <LineIcon size={60} round />
+            </StyledLineShareButton>
+            <StyledEmailShareButton url={currentPageUrl}>
+              <EmailIcon size={60} round />
+            </StyledEmailShareButton>
           </ShareButtonBox>
         </MBTIcard>
         <ButtonBox>
@@ -589,7 +614,7 @@ const ShareText = styled.p`
 
 const ShareButtonBox = styled.div`
   width: 100%;
-  max-width: 20rem;
+  max-width: 36rem;
   gap: 1rem;
   display: flex;
   align-items: center;
@@ -605,6 +630,46 @@ const ShareButtonBox = styled.div`
     &:hover {
       transform: translateY(-3px);
     }
+  }
+`;
+
+const StyledFacebookShareButton = styled(FacebookShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledTwitterShareButton = styled(TwitterShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledLineShareButton = styled(LineShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledEmailShareButton = styled(EmailShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
   }
 `;
 
