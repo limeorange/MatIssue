@@ -262,8 +262,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
         {/* 작성자 프로필 */}
         <WriterProfile
           user_nickname={user_nickname}
-          user_fan={user_fan}
-          user_subscription={user_subscription}
           user_id={user_id}
           loggedInUserId={loggedInUserId}
           user_img={user_img}
@@ -274,8 +272,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
           {isProfileModal && (
             <MiniWriterProfile
               user_nickname={user_nickname}
-              user_fan={user_fan}
-              user_subscription={user_subscription}
               user_id={user_id}
               loggedInUserId={loggedInUserId}
               user_img={user_img}
@@ -358,7 +354,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
-        <div className="flex gap-[1.5rem] justify-center items-center mt-[3rem]">
+        <LikeScrapShareDiv>
           {/* 좋아요 */}
           <div onClick={loginConfirmModalHandler}>
             <RecipeUserLikes
@@ -401,7 +397,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
             {/* 공유 모달 */}
             {isShareModal && <ShareModal recipe_thumbnail={recipe_thumbnail} />}
           </ShareWrapperButton>
-        </div>
+        </LikeScrapShareDiv>
 
         {/* 댓글 */}
         <div>
@@ -663,6 +659,15 @@ const ShareIconDiv = styled.div`
     margin-left: 0.2rem;
     margin-bottom: 0.2rem;
   }
+`;
+
+/** 좋아요, 스크랩, 공유하기 감싸는 Div */
+const LikeScrapShareDiv = styled.div`
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
 `;
 
 export default React.memo(RecipeDetail);
