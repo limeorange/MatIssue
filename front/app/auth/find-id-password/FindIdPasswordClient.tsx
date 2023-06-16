@@ -142,7 +142,7 @@ const FindIdPasswordClient = () => {
           setMessage("아이디가 입력하신 메일로 발송되었습니다.");
           reset();
         })
-        .catch((error) => console.log(error))
+        .catch((error) => toast.error(error.response.data.detail))
         .finally(() => setIsLoading(false));
     }
 
@@ -157,7 +157,7 @@ const FindIdPasswordClient = () => {
           setMessage("임시비밀번호가 입력하신 메일로 발송되었습니다.");
           reset();
         })
-        .catch((error) => console.log(error))
+        .catch((error) => toast.error(error.response.data.detail))
         .finally(() => setIsLoading(false));
     }
   };

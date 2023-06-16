@@ -15,8 +15,6 @@ const AdminRecipeClient = () => {
   const searchParams = useSearchParams();
   const search = searchParams?.get("search");
 
-  console.log(search);
-
   const {
     data: recipes,
     isLoading,
@@ -40,8 +38,6 @@ const AdminRecipeClient = () => {
       setFilteredRecipes(recipes);
     }
   }, [recipes, search]);
-
-  console.log(filteredRecipes);
 
   if (isLoading) {
     return <LoadingModal />;

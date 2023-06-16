@@ -3,18 +3,16 @@ import {
   LongSpan,
   MediumSpan,
   ShortSpan,
-  XLongSpan,
 } from "@/app/styles/admin/admin.style";
 import { User } from "@/app/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import styled from "styled-components";
 
 type AdminUserItemProps = {
-  user: any;
+  user: User;
 };
 
 const AdminUserItem = (props: AdminUserItemProps) => {
@@ -52,26 +50,22 @@ const AdminUserItem = (props: AdminUserItemProps) => {
     }
   };
 
-  const deleteHanlder = () => {
-    // if (window.confirm("정말로 유저를 탈퇴 시키겠습니까?")) {
-    //   axiosBase
-    //     .delete(`users`, { user_id, password: "" })
-    //     .then((res) => {
-    //       client.invalidateQueries(["users"]);
-    //       toast.success("유저가 성공적으로 탈퇴 되었습니다.");
-    //     })
-    //     .catch((err: any) => {
-    //       toast.error(
-    //         err.response
-    //           ? err.response.data.detail
-    //           : "네트워크 연결에 문제가 있습니다."
-    //       );
-    //     })
-    //     .finally(() => {});
-    // } else {
-    //   return;
-    // }
-  };
+  // const deleteHanlder = () => {
+  //   if (window.confirm("정말로 유저를 탈퇴 시키겠습니까?")) {
+  //     axiosBase
+  //       .delete(`users`, { user_id, password: "" })
+  //       .then((res) => {
+  //         client.invalidateQueries(["users"]);
+  //         toast.success("유저가 성공적으로 탈퇴 되었습니다.");
+  //       })
+  //       .catch((err: any) => {
+  //         toast.error("네트워크 연결에 문제가 있습니다.");
+  //       })
+  //       .finally(() => {});
+  //   } else {
+  //     return;
+  //   }
+  // };
 
   return (
     <PanelListItem>
@@ -110,7 +104,7 @@ const AdminUserItem = (props: AdminUserItemProps) => {
         </IconWrapper>
       )}
 
-      <IconWrapper onClick={deleteHanlder}>
+      {/* <IconWrapper onClick={deleteHanlder}>
         <Image
           src="/images/admin/deleteIcon.png"
           width={16}
@@ -118,7 +112,7 @@ const AdminUserItem = (props: AdminUserItemProps) => {
           alt="delete_icon"
           style={{ boxSizing: "content-box", padding: "1rem" }}
         />
-      </IconWrapper>
+      </IconWrapper> */}
     </PanelListItem>
   );
 };
