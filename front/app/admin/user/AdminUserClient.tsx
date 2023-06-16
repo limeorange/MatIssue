@@ -16,8 +16,6 @@ const AdminUserClient = () => {
     isError,
   } = useQuery<User[]>(["users"], () => getAllUsers(1, 30));
 
-  console.log(users);
-
   if (isLoading) {
     return <LoadingModal />;
   }

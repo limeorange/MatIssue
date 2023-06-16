@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import Cookies from "js-cookie";
 
@@ -19,7 +19,7 @@ import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling
 import { User } from "@/app/types";
 
 const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
-  const setIsLoggedIn = useSetRecoilState(loginState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
   const isHeaderVisible = useMovingContentByScrolling();
 
   // 로그인된 유저정보를 받아옴
@@ -47,6 +47,14 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
       setIsLoggedIn(false);
     }
   }, [isError]);
+
+  useEffect(() => {
+    const sessionId = Cookies.get("session-id");
+    if (!sessionId && isLoggedIn) {
+      setIsLoggedIn(false);
+      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+    }
+  }, []);
 
   return (
     <HeaderWrapper isHeaderVisible={isHeaderVisible}>
