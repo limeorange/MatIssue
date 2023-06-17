@@ -243,6 +243,7 @@ const ProfileContentsDiv = styled.div`
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImageDiv = styled.div`
+  display: flex;
   width: 12rem;
   height: 12rem;
   margin-bottom: 1.3rem;

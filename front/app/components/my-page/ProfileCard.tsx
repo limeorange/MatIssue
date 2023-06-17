@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { getRecipeByUserId } from "@/app/api/recipe";
 import getCurrentUser from "@/app/api/user";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type MemoItemProps = {
   created_at: string;
@@ -76,8 +77,11 @@ const ProfileCard = () => {
         <ProfileBox>
           <ImageAndNickName>
             <RoundImage>
-              <ProfileImage
+              <Image
                 src={currentUser?.img || "images/dongs-logo.png"}
+                height={120}
+                width={120}
+                style={{ objectFit: "cover" }}
                 alt="profile-image"
               />
             </RoundImage>
@@ -240,6 +244,7 @@ const ImageAndNickName = styled.div`
 `;
 
 const RoundImage = styled.div`
+  display: flex;
   width: 8.7rem;
   height: 8.7rem;
   border-radius: 50%;
