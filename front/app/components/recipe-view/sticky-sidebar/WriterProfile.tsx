@@ -10,23 +10,20 @@ import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { User } from "@/app/types";
 
 type WriterProfileProps = {
-  user_nickname: string;
   user_id: string;
   loggedInUserId: string | undefined;
-  user_img: string;
 };
 
 /** 작성자 프로필 컴포넌트 */
 const WriterProfile: React.FC<WriterProfileProps> = ({
-  user_nickname,
   user_id,
   loggedInUserId,
-  user_img,
 }) => {
   // currentChef에 user 정보가 담김
-  const { data: currentChef } = useQuery(["currentChef", user_id], () =>
+  const { data: currentChef } = useQuery<User>(["currentChef", user_id], () =>
     getChefByUserId(user_id)
   );
 
@@ -166,7 +163,11 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
           {/* 프로필 사진 */}
           <ProfileImageDiv>
             <Image
-              src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
+              src={
+                currentChef
+                  ? currentChef.img
+                  : "/images/recipe-view/기본 프로필.PNG"
+              }
               alt="게시글 작성자 프로필 사진"
               width={130}
               height={130}
@@ -175,7 +176,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
           </ProfileImageDiv>
 
           {/* 닉네임 */}
-          <NicknameSpan>{user_nickname}</NicknameSpan>
+          <NicknameSpan>{currentChef?.username}</NicknameSpan>
 
           {/* 팔로잉, 팔로워 */}
           <FollowDiv>
