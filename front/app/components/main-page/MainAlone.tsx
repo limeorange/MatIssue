@@ -96,7 +96,7 @@ const MainAlone = () => {
                 </RecipeImageWrapperBase>
                 <RecipeImageWrapper2
                   onClick={() =>
-                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                    router.push(`/recipe/${shuffledRecipes?.[1].recipe_id}`)
                   }
                 >
                   <SquareImageWrapper>
@@ -113,7 +113,7 @@ const MainAlone = () => {
                 </RecipeImageWrapper2>
                 <RecipeImageWrapper3
                   onClick={() =>
-                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                    router.push(`/recipe/${shuffledRecipes?.[2].recipe_id}`)
                   }
                 >
                   <SquareImageWrapper>
@@ -130,7 +130,7 @@ const MainAlone = () => {
                 </RecipeImageWrapper3>
                 <RecipeImageWrapper4
                   onClick={() =>
-                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                    router.push(`/recipe/${shuffledRecipes?.[3].recipe_id}`)
                   }
                 >
                   <SquareImageWrapper>
