@@ -260,21 +260,14 @@ const RecipeDetail = (props: RecipeDataProps) => {
         </StickySideDiv>
 
         {/* 작성자 프로필 */}
-        <WriterProfile
-          user_nickname={user_nickname}
-          user_id={user_id}
-          loggedInUserId={loggedInUserId}
-          user_img={user_img}
-        />
+        <WriterProfile user_id={user_id} loggedInUserId={loggedInUserId} />
 
         {/* 모바일용 작성자 프로필 동그라미 */}
         <div>
           {isProfileModal && (
             <MiniWriterProfile
-              user_nickname={user_nickname}
               user_id={user_id}
               loggedInUserId={loggedInUserId}
-              user_img={user_img}
             />
           )}
           <ProfileImageDiv onClick={mobileProfileClickHandler}>
