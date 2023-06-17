@@ -23,7 +23,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
   loggedInUserId,
 }) => {
   // currentChef에 user 정보가 담김
-  const { data: currentChef } = useQuery<User>(["currentChef", user_id], () =>
+  const { data: currentChef } = useQuery(["currentChef", user_id], () =>
     getChefByUserId(user_id)
   );
 
