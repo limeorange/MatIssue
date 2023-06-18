@@ -23,6 +23,7 @@ import { Recipe } from "@/app/types";
 type MainListingRecipeProps = {
   title: string;
   recipes: Recipe[];
+  isLoading: boolean;
   isError: boolean;
   isFilter: boolean;
   categoryUrl: string;
