@@ -70,12 +70,7 @@ const MainAlone = () => {
           <NonRecipeCrying />
         ) : (
           <RecipeContainer>
-            {!isDesktop ? (
-              <MainMobileListingRecipe
-                recipes={singleRecipes}
-                url="/recipes/category/honmuk?category=honmuk"
-              />
-            ) : (
+            {isDesktop ? (
               <>
                 <RecipeImageWrapperBase
                   onClick={() =>
@@ -146,6 +141,11 @@ const MainAlone = () => {
                   </TitleOnImage>
                 </RecipeImageWrapper4>
               </>
+            ) : (
+              <MainMobileListingRecipe
+                recipes={singleRecipes}
+                url="/recipes/category/honmuk?category=honmuk"
+              />
             )}
           </RecipeContainer>
         )}
