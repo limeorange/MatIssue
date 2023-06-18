@@ -17,7 +17,7 @@ import { getRecipesByVegetarian } from "@/app/api/recipe";
 import shuffleRecipes from "@/app/utils/shuffleRecipes";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
-import MainMobileListingRecipe from "./mobile/MainMobileListingRecipe";
+import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
 
 const MainVegan = () => {
   const {

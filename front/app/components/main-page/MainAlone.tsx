@@ -18,7 +18,7 @@ import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
 import NonRecipeCrying from "../UI/NonRecipeCrying";
 import { useEffect, useState } from "react";
-import MainMobileListingRecipe from "./mobile/MainMobileListingRecipe";
+import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
 
 const MainAlone = () => {
   const {
