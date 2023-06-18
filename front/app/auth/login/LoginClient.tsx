@@ -27,7 +27,6 @@ import getCurrentUser from "@/app/api/user";
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const setIsLoggedIn = useSetRecoilState(loginState);
 
   const client = useQueryClient();
 
@@ -41,34 +40,28 @@ const LoginClient = () => {
   const router = useRouter();
 
   /** auth 폼 제출 핸들러 */
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
-    axiosBase
-      .post("users/login", data)
-      .then((res) => {
-        setIsLoggedIn(true);
-        const sessionId = res.data.session_id;
-        Cookies.set("session-id", sessionId);
-        getCurrentUser()
-          .then((res) => {
-            client.setQueryData(["currentUser"], res);
-          })
-          .catch((err) => {
-            toast.error("로그인 유저정보를 받아오는것을 실패하였습니다.");
-          });
-        router.back();
-        toast.success("로그인 되었습니다.");
-      })
-      .catch((err) => {
-        toast.error(
-          err?.reponse?.data.detail
-            ? err?.reponse?.data.detail
-            : "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
-        );
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const response = await axiosBase.post("users/login", data);
+      const sessionId = response.data.session_id;
+      Cookies.set("session-id", sessionId);
+
+      const currentUser = await getCurrentUser();
+      client.setQueryData(["currentUser"], currentUser);
+
+      router.back();
+      toast.success("로그인 되었습니다.");
+    } catch (err: any) {
+      const errorMessage = err?.response.data.detail;
+      toast.error(
+        errorMessage
+          ? errorMessage
+          : "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

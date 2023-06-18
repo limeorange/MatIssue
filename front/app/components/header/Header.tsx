@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import Cookies from "js-cookie";
 
@@ -19,7 +19,7 @@ import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling
 import { User } from "@/app/types";
 
 const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
+  // 레시피 조회페이지일 경우, 스크롤 감지하여 헤더를 숨기는 커스텀훅
   const isHeaderVisible = useMovingContentByScrolling();
 
   // 로그인된 유저정보를 받아옴
@@ -30,37 +30,25 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   } = useQuery<User>(["currentUser"], () => getCurrentUser(), {
     refetchOnWindowFocus: false,
     retry: 0,
+    // 서버사이드에서 받아온 미리 유저정보를 기본값으로 넣어서 새로고침시 유저메뉴 바로띄움
     initialData: initialCurrentUser,
+    // 5초마다 유저정보를 요청해서 세션만료시 로그아웃
+    refetchInterval: 5000,
   });
 
-  // 유저정보가 있으면 login state을 true로 변경
-  useEffect(() => {
-    if (currentUser) {
-      setIsLoggedIn(true);
-    }
-  }, [currentUser]);
-
-  // 유저정보 패치에 에러가 있으면 쿠키의 세션아이디 삭제 및 로그아웃
+  // 유저정보 요청시 에러가 있으면 쿠키의 세션아이디 삭제 및 로그아웃
   useEffect(() => {
     if (isError) {
       Cookies.remove("session-id");
-      setIsLoggedIn(false);
-    }
-  }, [isError]);
-
-  useEffect(() => {
-    const sessionId = Cookies.get("session-id");
-    if (!sessionId && isLoggedIn) {
-      setIsLoggedIn(false);
       alert("세션이 만료되었습니다. 다시 로그인해주세요.");
     }
-  }, []);
+  }, [isError]);
 
   return (
     <HeaderWrapper isHeaderVisible={isHeaderVisible}>
       <HeaderContainer>
         <TopNavBar>
-          <HamburgerBtn initialCurrentUser={currentUser} />
+          <HamburgerBtn currentUser={currentUser} />
           <LogoWrapper>
             <Logo />
           </LogoWrapper>
@@ -74,6 +62,8 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
     </HeaderWrapper>
   );
 };
+
+export default Header;
 
 const HeaderWrapper = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
@@ -122,5 +112,3 @@ const LogoWrapper = styled.div`
     transform: translate(-50%, -50%);
   }
 `;
-
-export default Header;
