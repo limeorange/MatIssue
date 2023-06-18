@@ -14,7 +14,6 @@ import HamburgerBtn from "./mobile/HamburgerBtn";
 import SearchBtn from "./mobile/SearchBtn";
 
 import getCurrentUser from "@/app/api/user";
-import { loginState } from "@/app/store/authAtom";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { User } from "@/app/types";
 
