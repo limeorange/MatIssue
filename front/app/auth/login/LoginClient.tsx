@@ -45,24 +45,15 @@ const LoginClient = () => {
     try {
       const response = await axiosBase.post("users/login", data);
       const sessionId = response.data.session_id;
+      Cookies.set("session-id", sessionId);
 
-      try {
-        const currentUser = await getCurrentUser();
-        client.setQueryData(["currentUser"], currentUser);
-      } catch (err: any) {
-        const errorMessage = err.reponse.data.detail;
-        toast.error(
-          errorMessage
-            ? errorMessage
-            : "로그인 유저정보를 받아오는것을 실패하였습니다."
-        );
-      }
+      const currentUser = await getCurrentUser();
+      client.setQueryData(["currentUser"], currentUser);
 
       router.back();
-      Cookies.set("session-id", sessionId);
       toast.success("로그인 되었습니다.");
     } catch (err: any) {
-      const errorMessage = err.respone.data.detail;
+      const errorMessage = err?.response.data.detail;
       toast.error(
         errorMessage
           ? errorMessage
