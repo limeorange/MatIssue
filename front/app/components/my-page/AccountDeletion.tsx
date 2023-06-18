@@ -10,12 +10,13 @@ import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { loginState } from "@/app/store/authAtom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AccountDeletion = ({ id }: { id: string }) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [enteredPassword, setEnteredPassword] = useState<string>("");
-  const setIsLoggedIn = useSetRecoilState<boolean>(loginState);
+  const queryClient = useQueryClient();
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -38,7 +39,8 @@ const AccountDeletion = ({ id }: { id: string }) => {
 
       toast.success("더 맛있는 이슈로 찾아뵙겠습니다.");
       Cookies.remove("session-id");
-      setIsLoggedIn(false);
+      queryClient.removeQueries(["currentUser"]);
+      queryClient.removeQueries(["currentUserRecipes"]);
 
       router.push("/");
     } catch (error: any) {

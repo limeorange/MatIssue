@@ -2,21 +2,11 @@ import Cookies from "js-cookie";
 import { axiosBase } from "../api/axios";
 
 export default async function getCurrentUser() {
-  const session_id = Cookies.get("session-id");
-
-  if (session_id) {
-    try {
-      const response = await axiosBase.get(`users/me`);
-      if (response.data === undefined) {
-        return null;
-      }
-      return response.data;
-    } catch (err: any) {
-      Cookies.remove("session-id");
-      return null;
-    }
-  } else {
-    Cookies.remove("session-id");
+  console.log("a");
+  try {
+    const response = await axiosBase.get(`users/me`);
+    return response.data;
+  } catch (err: any) {
     return null;
   }
 }
