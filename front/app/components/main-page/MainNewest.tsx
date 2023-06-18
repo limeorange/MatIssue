@@ -14,7 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllRecipes } from "@/app/api/recipe";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
-import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
+import MainMobileListingRecipe from "./mobile/MainMobileListingRecipe";
 import NonRecipeCrying from "../UI/NonRecipeCrying";
 import Image from "next/image";
 import RecipeCard from "../recipe-card/RecipeCard";

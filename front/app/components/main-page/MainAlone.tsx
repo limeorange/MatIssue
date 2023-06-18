@@ -18,7 +18,7 @@ import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
 import NonRecipeCrying from "../UI/NonRecipeCrying";
 import { useEffect, useState } from "react";
-import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
+import MainMobileListingRecipe from "./mobile/MainMobileListingRecipe";
 
 const MainAlone = () => {
   const {
@@ -70,12 +70,7 @@ const MainAlone = () => {
           <NonRecipeCrying />
         ) : (
           <RecipeContainer>
-            {!isDesktop ? (
-              <MainMobileListingRecipe
-                recipes={singleRecipes}
-                url="/recipes/category/honmuk?category=honmuk"
-              />
-            ) : (
+            {isDesktop ? (
               <>
                 <RecipeImageWrapperBase
                   onClick={() =>
@@ -146,6 +141,11 @@ const MainAlone = () => {
                   </TitleOnImage>
                 </RecipeImageWrapper4>
               </>
+            ) : (
+              <MainMobileListingRecipe
+                recipes={singleRecipes}
+                url="/recipes/category/honmuk?category=honmuk"
+              />
             )}
           </RecipeContainer>
         )}

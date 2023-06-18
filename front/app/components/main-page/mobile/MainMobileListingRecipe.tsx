@@ -1,7 +1,7 @@
 import { Recipe } from "@/app/types";
 import styled from "styled-components";
 
-import MobileRecipeCard from "../recipe-card/main/MobileRecipeCard";
+import MobileRecipeCard from "../../recipe-card/main/MobileRecipeCard";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 

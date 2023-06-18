@@ -17,7 +17,7 @@ import { getRecipesByVegetarian } from "@/app/api/recipe";
 import shuffleRecipes from "@/app/utils/shuffleRecipes";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
-import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
+import MainMobileListingRecipe from "./mobile/MainMobileListingRecipe";
 
 const MainVegan = () => {
   const {
@@ -35,11 +35,13 @@ const MainVegan = () => {
   const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
+  /** 레시피들을 무작위로 섞어주는 함수 */
   const shuffledRecipes = useMemo(
     () => shuffleRecipes(vegetarianRecipes),
     [vegetarianRecipes]
   );
 
+  /**  이전 페이지 버튼 핸들러 */
   const leftBtnHandler = () => {
     if (slide < 2) {
       return;
@@ -47,6 +49,7 @@ const MainVegan = () => {
     setSlide(slide - 1);
   };
 
+  /** 다음 페이지 버튼 핸들러 */
   const rightBtnHandler = () => {
     if (slide >= totalSlide) {
       return;
@@ -74,8 +77,8 @@ const MainVegan = () => {
   }
 
   return (
-    <MainVegunContainer>
-      <MainVegunArea>
+    <MainVegetarianWrapper>
+      <MainVegetarianContainer>
         <StyledTitleBox>
           <StyledTitle>채식러들을 위한 초록레시피</StyledTitle>
           <StyledSubTitle>
@@ -85,15 +88,8 @@ const MainVegan = () => {
         {isError ? (
           <NonDataCrying />
         ) : (
-          <RecipeSliderContainer>
-            {!isDesktop ? (
-              <RecipeContainer>
-                <MainMobileListingRecipe
-                  recipes={shuffledRecipes}
-                  url="/recipes/category/vegetarian?category=vegetarian"
-                />
-              </RecipeContainer>
-            ) : (
+          <RecipeSliderWindow>
+            {isDesktop ? (
               <VegunRecipeContainer slide={slide}>
                 {shuffledRecipes
                   .slice(0, totalSlide * 3)
@@ -101,8 +97,15 @@ const MainVegan = () => {
                     <LargeRecipeCard key={item.recipe_id} recipe={item} />
                   ))}
               </VegunRecipeContainer>
+            ) : (
+              <RecipeContainer>
+                <MainMobileListingRecipe
+                  recipes={shuffledRecipes}
+                  url="/recipes/category/vegetarian?category=vegetarian"
+                />
+              </RecipeContainer>
             )}
-          </RecipeSliderContainer>
+          </RecipeSliderWindow>
         )}
 
         <LeftSlideBtn onClick={leftBtnHandler} slide={slide}>
@@ -123,14 +126,14 @@ const MainVegan = () => {
             fill
           />
         </RightSlideBtn>
-      </MainVegunArea>
-    </MainVegunContainer>
+      </MainVegetarianContainer>
+    </MainVegetarianWrapper>
   );
 };
 
 export default MainVegan;
 
-const MainVegunContainer = styled.div`
+const MainVegetarianWrapper = styled.div`
   padding: 2rem;
 
   @media (min-width: 1024px) {
@@ -141,7 +144,7 @@ const MainVegunContainer = styled.div`
   }
 `;
 
-const MainVegunArea = styled.div`
+const MainVegetarianContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -150,7 +153,7 @@ const MainVegunArea = styled.div`
   gap: 1rem;
 `;
 
-const RecipeSliderContainer = styled.div`
+const RecipeSliderWindow = styled.div`
   width: 100%;
   max-width: 96rem;
   margin: 0 auto;

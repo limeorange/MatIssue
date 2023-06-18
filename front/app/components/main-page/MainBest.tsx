@@ -20,7 +20,7 @@ import {
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
 import NonDataCrying from "../UI/NonDataCrying";
-import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
+import MainMobileListingRecipe from "./mobile/MainMobileListingRecipe";
 import RecipeCard from "../recipe-card/RecipeCard";
 
 const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
