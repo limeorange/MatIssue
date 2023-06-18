@@ -1,23 +1,24 @@
 "use client";
 
-import {
-  RecipeContainer,
-  StyledContainer,
-  StyledSubTitle,
-  StyledTitle,
-  StyledTitleBox,
-} from "@/app/styles/main/main.style";
 import styled from "styled-components";
-import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
-import { getRecipesByVegetarian } from "@/app/api/recipe";
+
 import shuffleRecipes from "@/app/utils/shuffleRecipes";
 import LoadingRecipe from "../UI/LoadingRecipe";
 import NonDataCrying from "../UI/NonDataCrying";
+import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import MainMobileListingRecipe from "../listings/MainMobileListingRecipe";
+import { getRecipesByVegetarian } from "@/app/api/recipe";
+
+import {
+  RecipeContainer,
+  StyledSubTitle,
+  StyledTitle,
+  StyledTitleBox,
+} from "@/app/styles/main/main.style";
 
 const MainVegan = () => {
   const {
