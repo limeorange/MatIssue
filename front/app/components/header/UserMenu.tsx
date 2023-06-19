@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { loginState } from "@/app/store/authAtom";
 import { User } from "@/app/types";
 
 import UserModal from "./UserModal";
