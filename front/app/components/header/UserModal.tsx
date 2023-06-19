@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import styled from "styled-components";
 
 import toast from "react-hot-toast";
-import { loginState } from "@/app/store/authAtom";
 
 import LoadingModal from "../UI/LoadingModal";
 

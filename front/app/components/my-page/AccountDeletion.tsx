@@ -8,8 +8,6 @@ import PasswordModal from "../UI/PasswordModal";
 import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { loginState } from "@/app/store/authAtom";
 import { useQueryClient } from "@tanstack/react-query";
 
 const AccountDeletion = ({ id }: { id: string }) => {

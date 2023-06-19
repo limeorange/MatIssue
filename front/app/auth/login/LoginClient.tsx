@@ -19,8 +19,6 @@ import {
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
 import Cookies from "js-cookie";
-import { useSetRecoilState } from "recoil";
-import { loginState } from "@/app/store/authAtom";
 import styled from "styled-components";
 import { useQueryClient } from "@tanstack/react-query";
 import getCurrentUser from "@/app/api/user";
