@@ -35,14 +35,6 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
     refetchInterval: 5000,
   });
 
-  // 유저정보 요청시 에러가 있으면 쿠키의 세션아이디 삭제 및 로그아웃
-  useEffect(() => {
-    if (isError) {
-      Cookies.remove("session-id");
-      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-    }
-  }, [isError]);
-
   return (
     <HeaderWrapper isHeaderVisible={isHeaderVisible}>
       <HeaderContainer>
