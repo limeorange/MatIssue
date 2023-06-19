@@ -42,7 +42,7 @@ const MainListingRecipe = ({
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
 
   const contentsPerPage = 8;
-  const totalRecipesLength = recipes.length;
+  const totalRecipesLength = isFilter ? filteredRecipes.length : recipes.length;
   const totalPage = Math.ceil(totalRecipesLength / contentsPerPage);
   const currentDate = dayjs();
   dayjs.extend(isBetween);
@@ -171,6 +171,7 @@ const MainListingRecipe = ({
                     .map((item: Recipe) => (
                       <RecipeCard key={item.recipe_id} recipe={item} />
                     ))}
+              {filteredRecipes.length === 0 && <NonRecipeCrying />}
             </ListingRecipeContainer>
             <MainMobileListingRecipe
               recipes={isFilter ? filteredRecipes : recipes}
