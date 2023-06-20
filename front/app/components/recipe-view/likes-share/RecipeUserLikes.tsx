@@ -15,8 +15,8 @@ const RecipeUserLikes: React.FC<UserLikesProps> = ({
 }) => {
   return (
     <>
-      <LikesWrapperButton onClick={heartClickHandler}>
-        <IconDiv>
+      <LikesButtonWrapper onClick={heartClickHandler}>
+        <LikesIcon>
           <Image
             src={
               isLiked
@@ -28,15 +28,15 @@ const RecipeUserLikes: React.FC<UserLikesProps> = ({
             height={26}
             style={{ objectFit: "cover", cursor: "pointer" }}
           />
-        </IconDiv>
+        </LikesIcon>
         <LikesCount>{countText}</LikesCount>
-      </LikesWrapperButton>
+      </LikesButtonWrapper>
     </>
   );
 };
 
 /** 좋아요 아이콘과 카운트 묶는 Button */
-const LikesWrapperButton = styled.button`
+const LikesButtonWrapper = styled.button`
   display: flex;
   width: 7rem;
   height: 4.2rem;
@@ -54,7 +54,7 @@ const LikesWrapperButton = styled.button`
 `;
 
 /** 좋아요 아이콘 Div */
-const IconDiv = styled.div`
+const LikesIcon = styled.div`
   width: 2.1rem;
   height: 1.8rem;
   margin-right: 0.6rem;

@@ -53,7 +53,7 @@ const RecipeCommentInput: React.FC<CommentProps> = ({ recipe_id }) => {
   };
 
   return (
-    <CommentContainerDiv isCommenting={isCommenting} onClick={boxClickHandler}>
+    <CommentContainer isCommenting={isCommenting} onClick={boxClickHandler}>
       <InputTextArea
         value={commentText}
         onChange={commentInputHandler}
@@ -70,12 +70,12 @@ const RecipeCommentInput: React.FC<CommentProps> = ({ recipe_id }) => {
           height={25}
         />
       </SubmitButton>
-    </CommentContainerDiv>
+    </CommentContainer>
   );
 };
 
 /** 댓글 입력칸 전체 감싸는 Div */
-const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
+const CommentContainer = styled.div<{ isCommenting: boolean }>`
   display: flex;
   width: 100%;
   border-radius: 1rem;

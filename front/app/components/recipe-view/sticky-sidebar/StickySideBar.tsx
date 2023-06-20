@@ -23,11 +23,11 @@ const StickySideBar = () => {
   return (
     <>
       {
-        <SidebarContainerDiv isHeaderVisible={isHeaderVisible}>
-          <TitleH3>목차</TitleH3>
-          <SidebarContentsDiv>
+        <SidebarContainer isHeaderVisible={isHeaderVisible}>
+          <Title>목차</Title>
+          <SidebarContentsWrapper>
             {sections.map((section) => (
-              <ItemLink
+              <TitleLink
                 key={section.id}
                 to={section.id}
                 smooth={true}
@@ -38,17 +38,17 @@ const StickySideBar = () => {
                 onClick={() => titleClickHandler(section.id)}
               >
                 {section.label}
-              </ItemLink>
+              </TitleLink>
             ))}
-          </SidebarContentsDiv>
-        </SidebarContainerDiv>
+          </SidebarContentsWrapper>
+        </SidebarContainer>
       }
     </>
   );
 };
 
 /** 목차 사이드바 전체 감싸는 Div */
-const SidebarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
+const SidebarContainer = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
   top: 17rem;
   left: 20rem;
@@ -58,12 +58,12 @@ const SidebarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
 `;
 
 /** 목차 사이드바 감싸는 Div */
-const SidebarContentsDiv = styled.div`
+const SidebarContentsWrapper = styled.div`
   z-index: 50;
 `;
 
 /** 목차 H3 */
-const TitleH3 = styled.h3`
+const Title = styled.h3`
   font-size: 22px;
   color: #b08038;
   font-weight: 500;
@@ -71,7 +71,7 @@ const TitleH3 = styled.h3`
 `;
 
 /** 목차 제목 Link */
-const ItemLink = styled(Link)`
+const TitleLink = styled(Link)`
   display: block;
   font-size: 16.5px;
   margin-bottom: 2.1rem;

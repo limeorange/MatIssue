@@ -20,49 +20,49 @@ const RecipeStep = ({
 
   return (
     <>
-      <ContainerDiv>
+      <StepItemContainer>
         {/* 단계 숫자, 점선 */}
-        <StepNavigationDiv>
-          <RoundedStepDiv>
+        <StepNavigationWrapper>
+          <RoundedStep>
             <h3>{stepNumber}</h3>
-          </RoundedStepDiv>
-          <StepDotDiv isLastStep={isLastStep}></StepDotDiv>
-        </StepNavigationDiv>
+          </RoundedStep>
+          <StepDottedLine isLastStep={isLastStep}></StepDottedLine>
+        </StepNavigationWrapper>
 
-        <StepContentDiv>
+        <StepContentsWrapper>
           {/* 요리 과정 사진 */}
-          <ImageWrapperDiv>
+          <StepImage>
             <Image
               src={stepImage}
               alt={`step${stepNumber}`}
               fill
               style={{ objectFit: "cover", borderRadius: 20 }}
             />
-          </ImageWrapperDiv>
+          </StepImage>
 
           {/* 요리 과정 설명 */}
-          <StepDescriptionDiv>{stepDescription}</StepDescriptionDiv>
-        </StepContentDiv>
-      </ContainerDiv>
+          <StepDescription>{stepDescription}</StepDescription>
+        </StepContentsWrapper>
+      </StepItemContainer>
     </>
   );
 };
 
 /** 전체 감싸는 Div */
-const ContainerDiv = styled.div`
+const StepItemContainer = styled.div`
   display: flex;
   gap: 1.5rem;
 `;
 
 /** 요리 단계 네이게이션 디자인 Div */
-const StepNavigationDiv = styled.div`
+const StepNavigationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 20px;
 `;
 
 /** 요리 단계 숫자 동그라미 배경 Div */
-const RoundedStepDiv = styled.div`
+const RoundedStep = styled.div`
   display: flex;
   background-color: #fbe2a1;
   min-height: 3.5rem;
@@ -78,7 +78,7 @@ const RoundedStepDiv = styled.div`
 `;
 
 /** 요리 단계 점선 Div */
-const StepDotDiv = styled.div<{ isLastStep: boolean }>`
+const StepDottedLine = styled.div<{ isLastStep: boolean }>`
   /* 기본 스타일 */
   border-right-width: 0.25rem;
   border-right-color: #ababab;
@@ -96,20 +96,20 @@ const StepDotDiv = styled.div<{ isLastStep: boolean }>`
 `;
 
 /** 요리 과정 이미지 감싸는 Div */
-const ImageWrapperDiv = styled.div`
+const StepImage = styled.div`
   width: 29rem;
   height: 29rem;
   position: relative;
 `;
 
 /** 요리 과정 설명 Div */
-const StepDescriptionDiv = styled.div`
+const StepDescription = styled.div`
   width: 30rem;
   font-size: 16px;
 `;
 
 /** 요리 사진, 과정 묶는 Div */
-const StepContentDiv = styled.div`
+const StepContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 3.5rem;
