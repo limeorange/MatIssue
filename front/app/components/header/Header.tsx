@@ -114,6 +114,6 @@ const LogoWrapper = styled.div`
 
 const ButtonsWrapper = styled.div`
   display: flex;
-  gap: 1.2rem;
+  gap: 3rem;
   align-items: center;
 `;
