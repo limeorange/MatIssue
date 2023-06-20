@@ -5,7 +5,7 @@ import Button from "../../components/UI/Button";
 import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { getRecipeByUserId } from "@/app/api/recipe";
+import { getRecipeByCurrentId } from "@/app/api/recipe";
 import getCurrentUser from "@/app/api/user";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -40,7 +40,7 @@ const ProfileCard = () => {
   // 캐시에 저장된 현재 유저가 작성한 레시피들을 가져옴
   const { data: currentUserRecipes } = useQuery<Recipe[]>(
     ["currentUserRecipes"],
-    () => getRecipeByUserId()
+    () => getRecipeByCurrentId()
   );
 
   const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
