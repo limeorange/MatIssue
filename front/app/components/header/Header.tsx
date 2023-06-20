@@ -14,10 +14,13 @@ import getCurrentUser from "@/app/api/user";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { User } from "@/app/types";
 import DarkmodeBtn from "./DarkModeBtn";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   // 레시피 조회페이지일 경우, 스크롤 감지하여 헤더를 숨기는 커스텀훅
   const isHeaderVisible = useMovingContentByScrolling();
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   // 로그인된 유저정보를 받아옴
   const {
@@ -34,7 +37,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   });
 
   return (
-    <HeaderLayout isHeaderVisible={isHeaderVisible}>
+    <HeaderLayout isHeaderVisible={isHeaderVisible} isDarkMode={isDarkMode}>
       <HeaderContainer>
         <TopNavBar>
           <HamburgerBtn currentUser={currentUser} />
@@ -57,10 +60,14 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
 
 export default Header;
 
-const HeaderLayout = styled.div<{ isHeaderVisible: boolean }>`
+const HeaderLayout = styled.div<{
+  isHeaderVisible: boolean;
+  isDarkMode: boolean;
+}>`
   position: fixed;
   width: 100%;
-  background-color: #ffffff;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : "#fff"};
   z-index: 999;
   font-size: 16px;
   }

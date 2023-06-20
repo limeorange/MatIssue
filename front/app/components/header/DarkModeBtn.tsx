@@ -22,16 +22,19 @@ const DarkmodeBtn = () => {
 export default DarkmodeBtn;
 
 const ToggleContainer = styled.div<{ darkMode: boolean }>`
-  display: flex;
-  align-items: center;
-  width: 5rem;
-  height: 3rem;
-  border-radius: 10rem;
-  background-color: ${(props) =>
-    props.darkMode ? props.theme.lightNavy : "#aaa"};
-  padding: 0.25rem;
-  cursor: pointer;
-  position: relative;
+  display: none;
+  @media (min-width: 1024px) {
+    display: flex;
+    align-items: center;
+    width: 5rem;
+    height: 3rem;
+    border-radius: 10rem;
+    background-color: ${(props) =>
+      props.darkMode ? props.theme.lightNavy : "#aaa"};
+    padding: 0.25rem;
+    cursor: pointer;
+    position: relative;
+  }
 `;
 
 const ToggleBtn = styled.div<{ darkMode: boolean }>`
