@@ -138,15 +138,13 @@ export const getRecipeByCurrentId = async () => {
   }
 };
 
-export const getRecipeByUserId = async (user_id: string) => {
+export const getRecipesByUserId = async (user_id: string) => {
   try {
-    const response = await axiosBase.get("/recipes/{user_id}");
-
-    if (!response.data.recipes) {
+    const response = await axiosBase.get(`/recipes/user/${user_id}`);
+    if (!response.data) {
       return [];
     }
-
-    return response.data.recipes;
+    return response.data;
   } catch (error) {
     console.log(error);
     return [];
