@@ -28,34 +28,44 @@ const FilterTag = (props: FilterTagProps) => {
 
     if (search) {
       newTagList.push({ tag: `#${search}`, type: "search" });
+      return;
     }
 
     if (category === "western") {
       newTagList.push({ tag: `#양식`, type: "category" });
+      return;
     }
     if (category === "chinese") {
       newTagList.push({ tag: `#중식`, type: "category" });
+      return;
     }
     if (category === "japanese") {
       newTagList.push({ tag: `#일식`, type: "category" });
+      return;
     }
     if (category === "korean") {
       newTagList.push({ tag: `#한식`, type: "category" });
+      return;
     }
     if (category === "best") {
       newTagList.push({ tag: `#베스트 레시피`, type: "category" });
+      return;
     }
     if (category === "newest") {
       newTagList.push({ tag: `#최신 레시피`, type: "category" });
+      return;
     }
     if (category === "honmuk") {
       newTagList.push({ tag: `#혼먹 레시피`, type: "category" });
+      return;
     }
     if (category === "vegetarian") {
       newTagList.push({ tag: `#채식 레시피`, type: "category" });
+      return;
     }
     if (filter.servings > -1) {
       newTagList.push({ tag: `#${filter.servings}인`, type: "servings" });
+      return;
     }
     if (filter.duration > -1) {
       if (filter.duration === 61) {
@@ -63,6 +73,7 @@ const FilterTag = (props: FilterTagProps) => {
       } else {
         newTagList.push({ tag: `#${filter.duration}분`, type: "duration" });
       }
+      return;
     }
     if (filter.difficulty > -1) {
       if (filter.difficulty === 0) {
@@ -72,6 +83,7 @@ const FilterTag = (props: FilterTagProps) => {
       } else {
         newTagList.push({ tag: `#어려움`, type: "difficulty" });
       }
+      return;
     }
 
     setTagList(newTagList);
@@ -79,22 +91,22 @@ const FilterTag = (props: FilterTagProps) => {
 
   return (
     <>
-      <Text>검색결과</Text>
-      <FilterTagBox>
+      <SearchText>검색결과</SearchText>
+      <FilterTagLayout>
         {tagList.map((item, index) => (
           <span key={index}>
             {item.tag}
             <RemoveButton onClick={() => onRemove(item.type)}>X</RemoveButton>
           </span>
         ))}
-      </FilterTagBox>
+      </FilterTagLayout>
     </>
   );
 };
 
 export default FilterTag;
 
-const FilterTagBox = styled.div`
+const FilterTagLayout = styled.div`
   font-size: 14px;
   color: #9f783a;
   width: 100%;
@@ -134,7 +146,7 @@ const FilterTagBox = styled.div`
   }
 `;
 
-const Text = styled.p`
+const SearchText = styled.p`
   margin: 1rem auto;
   font-size: 16px;
   color: #4f3d21;
