@@ -45,8 +45,8 @@ const FilterBar = (props: FilterBarProps) => {
   }, [newServings, newDuration, newDifficulty, setFilter]);
 
   return (
-    <FilterBarContainer>
-      <FilterBarLi onClick={() => setIsServingsModal(!isServingsModal)}>
+    <FilterBarLayout>
+      <FilterBarItem onClick={() => setIsServingsModal(!isServingsModal)}>
         {isServingsModal && (
           <FilterModal
             options={servings}
@@ -63,9 +63,9 @@ const FilterBar = (props: FilterBarProps) => {
           />
         </div>
         {newServings.name}
-      </FilterBarLi>
+      </FilterBarItem>
       <FilterBarLine></FilterBarLine>
-      <FilterBarLi onClick={() => setIsDurationModal(!isDurationModal)}>
+      <FilterBarItem onClick={() => setIsDurationModal(!isDurationModal)}>
         {isDurationModal && (
           <FilterModal
             options={duration}
@@ -82,9 +82,9 @@ const FilterBar = (props: FilterBarProps) => {
           />
         </div>
         {newDuration.name}
-      </FilterBarLi>
+      </FilterBarItem>
       <FilterBarLine></FilterBarLine>
-      <FilterBarLi onClick={() => setIsDifficultyModal(!isDifficultyModal)}>
+      <FilterBarItem onClick={() => setIsDifficultyModal(!isDifficultyModal)}>
         {isDifficultyModal && (
           <FilterModal
             options={difficulty}
@@ -101,14 +101,14 @@ const FilterBar = (props: FilterBarProps) => {
           />
         </div>
         {newDifficulty.name}
-      </FilterBarLi>
-    </FilterBarContainer>
+      </FilterBarItem>
+    </FilterBarLayout>
   );
 };
 
 export default FilterBar;
 
-const FilterBarContainer = styled.div`
+const FilterBarLayout = styled.div`
   display: flex;
   align-items: center;
   height: 4rem;
@@ -130,7 +130,7 @@ const FilterBarLine = styled.div`
   border-right: solid #d9d9d9 0.1rem;
 `;
 
-const FilterBarLi = styled.li`
+const FilterBarItem = styled.li`
   display: flex;
   position: relative;
   align-items: center;
