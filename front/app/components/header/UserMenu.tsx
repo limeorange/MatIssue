@@ -32,6 +32,7 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
       {currentUser ? (
         <>
           <IconButton
+            isDarkMode={isDarkMode}
             onClick={() => {
               router.push("/my-page/scrap");
             }}
@@ -45,6 +46,7 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
             스크랩
           </IconButton>
           <IconButton
+            isDarkMode={isDarkMode}
             onClick={() => {
               router.push("/add-recipe");
             }}
@@ -107,8 +109,11 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
   );
 };
 
-const backgroundColor = (props) =>
-  props.isDarkMode ? props.theme.lightYellow : props.theme.yellow;
+const buttonColor = (props: any) =>
+  props.isDarkMode ? props.theme.lightYellow : props.theme.brown;
+
+const buttonBackgroundColor = (props: any) =>
+  props.isDarkMode ? props.theme.lightNavy : props.theme.lightGrey;
 
 const UserMenuContainer = styled.div`
   display: flex;
@@ -177,25 +182,26 @@ const SignupButton = styled.button<{ isDarkMode: boolean }>`
   }
 `;
 
-const IconButton = styled.div`
-  font-size: 16px;
-  margin-left: -1rem;
+const IconButton = styled.div<{ isDarkMode: boolean }>`
   display: none;
-  align-items: center;
-  gap: 0.8rem;
-  padding: 0.8rem 1.6rem;
-  border-radius: 10rem;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.1);
-    background-color: rgb(230, 230, 230);
-  }
-
-  transition: all 0.3s;
 
   @media (min-width: 1024px) {
     display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1.6rem;
+    border-radius: 10rem;
+    cursor: pointer;
+    color: ${buttonColor};
+    font-size: 16px;
+    margin-left: -1rem;
+
+    &:hover {
+      transform: scale(1.05);
+      background-color:${buttonBackgroundColor};
+  
+    transition: all 0.3s;
+  
   }
 `;
 
