@@ -14,7 +14,6 @@ type WriterProfileProps = {
   user_nickname: string;
   user_id: string;
   loggedInUserId: string | undefined;
-  user_img: string;
 };
 
 /** 작성자 프로필 컴포넌트 */
@@ -22,11 +21,11 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
   user_nickname,
   user_id,
   loggedInUserId,
-  user_img,
 }) => {
   // currentChef에 user 정보가 담김
-  const { data: currentChef } = useQuery(["currentChef", user_id], () =>
-    getChefByUserId(user_id)
+  const { data: currentChef, isLoading } = useQuery(
+    ["currentChef", user_id],
+    () => getChefByUserId(user_id)
   );
 
   const client = useQueryClient();
@@ -135,6 +134,11 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
     router.push("auth/login");
   };
 
+  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
+  if (isLoading) {
+    return <div>Loading...</div>; //
+  }
+
   return (
     <>
       {/* 팔로우 취소 모달 */}
@@ -162,7 +166,11 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
           {/* 프로필 사진 */}
           <ProfileImageDiv>
             <Image
-              src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
+              src={
+                currentChef.img
+                  ? currentChef.img
+                  : "/images/recipe-view/기본 프로필.PNG"
+              }
               alt="게시글 작성자 프로필 사진"
               width={130}
               height={130}
