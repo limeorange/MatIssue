@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { axiosBase } from "@/app/api/axios";
 import { useRouter } from "next/navigation";
 import ConfirmModal from "../../../../components/UI/ConfirmModal";
+import { toast } from "react-hot-toast";
 
 type User = {
   password: string;
@@ -21,9 +22,9 @@ const ChangePassword = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleChangePassword = () => {
-    setIsModalOpen(true);
-  };
+  // const handleChangePassword = () => {
+  //   setIsModalOpen(true);
+  // };
 
   const handleConfirm = () => {
     setIsModalOpen(false);
@@ -55,7 +56,7 @@ const ChangePassword = () => {
     ) {
       modifyUser();
     } else {
-      alert(
+      toast.error(
         "비빌번호를 확인해주세요. 8자리 이상, 대소문자, 숫자, 특수문자가 포함되어어 있어야 합니다."
       );
     }
@@ -69,7 +70,7 @@ const ChangePassword = () => {
     console.log("modifyUserInfo : ", modifyUserInfo);
     try {
       const response = await axiosBase.patch("users", modifyUserInfo);
-      alert("비밀번호가 변경되었습니다.");
+      toast.success("비밀번호가 변경되었습니다.");
       router.push("/my-page/modify-user-info");
     } catch (error) {
       console.error(error);
@@ -110,7 +111,7 @@ const ChangePassword = () => {
                 fullWidth={true}
                 isBorderColor={false}
                 isHoverColor={false}
-                onClick={handleChangePassword}
+                // onClick={handleChangePassword}
               >
                 비밀번호 변경
               </Button>
@@ -141,35 +142,54 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 48rem;
+width: 100%;
+  padding: 5rem 1.5rem 16rem;
+  background-color: #ffffff;
+  color: #4f3d21;
+  @media (min-width: 1024px) {
+    width: 49rem;
   height: 43.5rem;
   padding: 4rem;
-  margin-top: 5.4rem;
-  border-radius: 1.8rem;
-  background-color: #ffffff;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    margin: 5.4rem 0 16rem;
+    border-radius: 1.8rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  color: #4f3d21;
-`;
+  }
+  `;
 
 const Header = styled.h1`
+font-size: 23px;
   font-weight: 600;
-  font-size: 26px;
+  
+  @media (min-width: 1024px) {
+    font-size: 26px;
+
+  }
 `;
 
 const NewPassword = styled.h2`
-  padding-top: 1.8rem;
-  font-size: 15px;
+font-size: 15px;
+padding-top: 1rem;
   font-weight: 700;
+  @media (min-width: 1024px) {
+    
+    padding-top: 1.8rem;
+  }
 `;
 
 const PasswordInstruction = styled.p`
-  font-size: 15px;
+  font-size: 14px;
+  margin-top: 0.2rem;
+  @media (min-width: 1024px) {
+    font-size: 15px;
+    margin-top: 0;
+  }
 `;
 
 const InputBox = styled.input`
-  width: 40rem;
-  height: 4.8rem;
+width: 100%;
+  max-width: 40rem;
+  height: 4.5rem;
   border: 0.1rem solid #d2d2d2;
   border-radius: 1.8rem;
   margin-top: 1.8rem;
@@ -178,6 +198,9 @@ const InputBox = styled.input`
   &:focus {
     outline: 0.3rem solid #fbd26a;
     border: none;
+  }
+  @media (min-width: 1024px) {
+    height: 4.8rem;
   }
 `;
 
@@ -188,6 +211,8 @@ const PasswordConfirm = styled.h2`
 `;
 
 const ChangePasswordButton = styled.div`
-  width: 40rem;
+  width: 100%;
+  max-width: 40rem;
+  height: 4.8rem;
   padding-top: 3.2rem;
 `;

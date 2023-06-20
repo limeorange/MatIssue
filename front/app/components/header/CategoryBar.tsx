@@ -1,63 +1,66 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styled from "styled-components";
+import Image from "next/image";
+
 import CategoryModal from "./CategoryModal";
 
+/** 헤더 카테고리바 컴포넌트 */
 const CategoryBar = () => {
-  const router = useRouter();
   const [isModal, setIsModal] = useState<boolean>(false);
 
+  const router = useRouter();
+
   return (
-    <CategoryBarDiv>
-      <CategoryUl>
-        <CategoryLi
+    <CategoryBarWrapper>
+      <CategoryList>
+        <CategoryItem
           onClick={() => setIsModal(!isModal)}
           onMouseOver={() => setIsModal(true)}
           onMouseOut={() => setIsModal(false)}
         >
           {isModal && <CategoryModal isModal={isModal} />}
           <IconWrapper>
-            <Image src="/images/listIcon.png" alt="list_icon" fill />
+            <Image src="/images/header/listIcon.svg" alt="list_icon" fill />
           </IconWrapper>
           음식 카테고리
-        </CategoryLi>
-        <CategoryLi
+        </CategoryItem>
+        <CategoryItem
           onClick={() => router.push("/recipes/category/best?category=best")}
         >
           베스트 레시피
-        </CategoryLi>
-        <CategoryLi
+        </CategoryItem>
+        <CategoryItem
           onClick={() =>
             router.push("/recipes/category/newest?category=newest")
           }
         >
           최신 레시피
-        </CategoryLi>
-        <CategoryLi
+        </CategoryItem>
+        <CategoryItem
           onClick={() =>
             router.push("/recipes/category/honmuk?category=honmuk")
           }
         >
           혼먹 레시피
-        </CategoryLi>
-        <CategoryLi
+        </CategoryItem>
+        <CategoryItem
           onClick={() =>
             router.push("/recipes/category/vegetarian?category=vegetarian")
           }
         >
           채식 레시피
-        </CategoryLi>
-      </CategoryUl>
-    </CategoryBarDiv>
+        </CategoryItem>
+      </CategoryList>
+    </CategoryBarWrapper>
   );
 };
 
 export default CategoryBar;
 
-const CategoryBarDiv = styled.div`
+const CategoryBarWrapper = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
@@ -72,7 +75,7 @@ const CategoryBarDiv = styled.div`
   }
 `;
 
-const CategoryUl = styled.ul`
+const CategoryList = styled.ul`
   display: flex;
   flex-wrap: wrap;
   gap: 0.8rem;
@@ -83,16 +86,13 @@ const CategoryUl = styled.ul`
   }
 `;
 
-const CategoryLi = styled.li`
-  position: relative;
-  font-size: 13px;
-  padding: 0.3rem 0.6rem;
-  background-color: #fbd26a;
-  border-radius: 0.5rem;
+const CategoryItem = styled.li`
+  display: none;
 
   @media (min-width: 1024px) {
     display: flex;
     font-size: 16px;
+    position: relative;
 
     background-color: white;
     border-radius: 0;

@@ -1,16 +1,17 @@
-export type User =
-  | {
-      user_id: string;
-      username: string;
-      email: string;
-      birth_date: string;
-      img: string;
-      password: string;
-      created_at: string;
-      session_id: string;
-      email_code?: string;
-    }
-  | undefined;
+export type User = {
+  user_id: string;
+  username: string;
+  email: string;
+  birth_date: string;
+  img: string;
+  password: string;
+  created_at: string;
+  session_id: string;
+  email_code?: string;
+  id: string;
+  fans: string[];
+  subscriptions: string[];
+};
 
 export type Recipe = {
   recipe_id: string;
@@ -35,10 +36,13 @@ export type Recipe = {
   }[];
   recipe_tip: string;
   recipe_view: number;
-  recipe_like: number;
+  recipe_like: string[];
   user_id: string;
   user_nickname: string;
   created_at: string;
+  user_fan: number;
+  user_subscription: number;
+  user_img: string;
 
   // 댓글 관련 Data Type 정의
   comments: Comments[];
@@ -47,7 +51,7 @@ export type Recipe = {
 export type Comments = {
   comment_author: string;
   comment_text: string;
-  comment_like: number;
+  comment_like: string[];
   comment_id: string;
   created_at: string;
   comment_parent: string;

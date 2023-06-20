@@ -1,9 +1,9 @@
 import ToasterContext from "./context/ToasterContext";
 import StyledComponentsRegistry from "./libs/registry";
-
 import "./globals.css";
 import Recoil from "./context/RecoilContext";
 import ReactQuery from "./context/ReactQueryContext";
+import Script from "next/script";
 
 export const metadata = {
   title: "맛이슈",
@@ -28,14 +28,20 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="upgrade-insecure-requests"
+        />
+      </head>
       <StyledComponentsRegistry>
         <body>
           <ToasterContext />
           <Recoil>
             <ReactQuery>{children}</ReactQuery>
           </Recoil>
-          <script src={"https://developers.kakao.com/sdk/js/kakao.js"} async />
         </body>
+        <Script src="https://developers.kakao.com/sdk/js/kakao.js" async />
       </StyledComponentsRegistry>
     </html>
   );

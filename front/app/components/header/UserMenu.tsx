@@ -1,23 +1,32 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { loginState } from "@/app/store/authAtom";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import UserModal from "./UserModal";
 import { User } from "@/app/types";
 
+import UserModal from "./UserModal";
+
+/** 유저 메뉴 컴포넌트  */
 const UserMenu = ({ currentUser }: { currentUser: User }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
-  const isLoggedIn = useRecoilValue(loginState);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
   const router = useRouter();
 
+  useEffect(() => {
+    if (currentUser?.user_id === "admin") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [currentUser]);
+
   return (
-    <UserMenuDiv>
-      {isLoggedIn ? (
+    <UserMenuContainer>
+      {currentUser ? (
         <>
           <IconButton
             onClick={() => {
@@ -56,12 +65,16 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
               setIsUserModal(!isUserModal);
             }}
           >
-            <UserModal isUserModal={isUserModal} />
+            <UserModal
+              isUserModal={isUserModal}
+              setIsUserModal={setIsUserModal}
+              isAdmin={isAdmin}
+            />
             <Image
-              src={"/images/profileIcon.png"}
-              width={32}
-              height={32}
-              objectFit="cover"
+              src={currentUser ? currentUser.img : "/images/profileIcon.png"}
+              width={36}
+              height={36}
+              style={{ objectFit: "cover", backgroundColor: "#fff9ea" }}
               alt="profile_icon"
               className="rounded-[100px]"
             />
@@ -85,11 +98,11 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
           </LogoutButton>
         </>
       )}
-    </UserMenuDiv>
+    </UserMenuContainer>
   );
 };
 
-const UserMenuDiv = styled.div`
+const UserMenuContainer = styled.div`
   display: flex;
   position: relative;
   gap: 1.6rem;
@@ -103,6 +116,8 @@ const ProfileButton = styled.div`
   display: none;
   padding: 0.6rem 0.2rem;
   cursor: pointer;
+  width: 4rem;
+  height: 4.8rem;
 
   &:hover {
     img {
@@ -113,7 +128,7 @@ const ProfileButton = styled.div`
     transition: all 0.3s;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: flex;
   }
 `;

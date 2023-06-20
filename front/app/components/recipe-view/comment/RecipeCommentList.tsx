@@ -21,6 +21,7 @@ const RecipeComments = ({ comments }: { comments: Comments[] }) => {
             updated_at={comment.updated_at}
             comment_nickname={comment.comment_nickname}
             comment_profile_img={comment.comment_profile_img}
+            comment_parent={comment.comment_parent}
           />
         ))}
     </div>

@@ -1,47 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import styled from "styled-components";
-import RecipeCard from "../recipe-card/RecipeCard";
-import {
-  StyledContentsArea,
-  ListingRecipeContainer,
-  StyledContainer,
-  StyledTitle,
-  StyledTitleBox,
-} from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
-import MainRecipeCard from "../recipe-card/main/MainRecipeCard";
+import { useQuery } from "@tanstack/react-query";
 
-const MainNewest = ({ newestRecipes }: { newestRecipes: Recipe[] }) => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
+import MainListingRecipe from "../listings/MainListingRecipe";
 
-  const contentsPerPage = 8;
+import { getAllRecipes } from "@/app/api/recipe";
+
+const MainNewest = () => {
+  const {
+    data: allRecipes,
+    isLoading,
+    isError,
+  } = useQuery<Recipe[]>(["recipes"], () => getAllRecipes(), {
+    retry: 0,
+    initialData: [],
+  });
 
   return (
-    <StyledContainer>
-      <StyledContentsArea>
-        <StyledNewestTitleBox>
-          <StyledTitle>최신 레시피</StyledTitle>
-        </StyledNewestTitleBox>
-        <ListingRecipeContainer>
-          {newestRecipes
-            .slice(
-              contentsPerPage * (currentPage - 1),
-              contentsPerPage * currentPage
-            )
-            .map((item, index: number) => (
-              <MainRecipeCard key={index} recipe={item} />
-            ))}
-        </ListingRecipeContainer>
-      </StyledContentsArea>
-    </StyledContainer>
+    <MainListingRecipe
+      title="최신 레시피"
+      recipes={allRecipes}
+      isLoading={isLoading}
+      isError={isError}
+      isFilter={false}
+      categoryUrl="/recipes/category/newest?category=newest"
+    />
   );
 };
 
 export default MainNewest;
-
-const StyledNewestTitleBox = styled(StyledTitleBox)`
-  align-items: end;
-  flex-direction: row;
-`;

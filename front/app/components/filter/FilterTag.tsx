@@ -5,9 +5,9 @@ import { Filter } from "../listings/ListingRecipe";
 import styled from "styled-components";
 
 type FilterTagProps = {
-  search: string | null;
+  search: string | null | undefined;
   filter: Filter;
-  category: string | null;
+  category: string | null | undefined;
   onRemove: (tagType: string) => void;
 };
 
@@ -17,8 +17,10 @@ type TagListType = {
 };
 
 const FilterTag = (props: FilterTagProps) => {
-  const [tagList, setTagList] = useState<TagListType[]>([]);
   const { search, filter, category, onRemove } = props;
+
+  // 필터 태그 상태 빈 배열로 설정
+  const [tagList, setTagList] = useState<TagListType[]>([]);
 
   // 검색바 입력값 및 필터바 필터 값에 따른 태그 추가
   useEffect(() => {
@@ -52,11 +54,15 @@ const FilterTag = (props: FilterTagProps) => {
     if (category === "vegetarian") {
       newTagList.push({ tag: `#채식 레시피`, type: "category" });
     }
-    if (filter.servings > 0) {
+    if (filter.servings > -1) {
       newTagList.push({ tag: `#${filter.servings}인`, type: "servings" });
     }
-    if (filter.duration > 0) {
-      newTagList.push({ tag: `#${filter.duration}분`, type: "duration" });
+    if (filter.duration > -1) {
+      if (filter.duration === 61) {
+        newTagList.push({ tag: `#1시간 이상`, type: "duration" });
+      } else {
+        newTagList.push({ tag: `#${filter.duration}분`, type: "duration" });
+      }
     }
     if (filter.difficulty > -1) {
       if (filter.difficulty === 0) {
@@ -73,8 +79,8 @@ const FilterTag = (props: FilterTagProps) => {
 
   return (
     <>
+      <Text>검색결과</Text>
       <FilterTagBox>
-        <p>검색결과</p>
         {tagList.map((item, index) => (
           <span key={index}>
             {item.tag}
@@ -89,23 +95,52 @@ const FilterTag = (props: FilterTagProps) => {
 export default FilterTag;
 
 const FilterTagBox = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   color: #9f783a;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 2rem 0;
-  gap: 1.6rem;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
 
   & p {
     color: #4f3d21;
+    text-align: center;
   }
 
   & span {
-    background-color: #fbd26a;
+    background-color: #fbe2a1;
     border-radius: 10rem;
-    padding: 0.5rem 1.5rem;
+    padding: 0.2rem 0.9rem;
+    flex-shrink: 0;
+
+    @media (min-width: 1024px) {
+      padding: 0.5rem 1.5rem;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 10px;
+    background: #217af4;
+
+    border-radius: 10px;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+    gap: 1.6rem;
+  }
+`;
+
+const Text = styled.p`
+  margin: 1rem auto;
+  font-size: 16px;
+  color: #4f3d21;
+
+  @media (min-width: 1024px) {
+    margin-top: 2rem;
   }
 `;
 
@@ -113,9 +148,13 @@ const RemoveButton = styled.button`
   margin-left: 0.5rem;
   color: #b89b6f;
   border-radius: 0.5rem;
-  font-size: 1.3rem;
+  font-size: 13px;
 
   &:hover {
     color: #9f783a;
+  }
+
+  @media (max-width: 425px) {
+    font-size: 15px;
   }
 `;

@@ -32,19 +32,11 @@ const IngredientSection = ({
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-        marginTop: "7.2rem",
-      }}
-    >
+    <IngredientContainer>
       <Label>재료 등록</Label>
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <IngredientWrapper>
         {ingredients.map((_, index) => (
-          <IngredientRow key={index}>
+          <IngredientRowBox key={index}>
             <IngredientInput
               type="text"
               value={ingredients[index].ingredient}
@@ -59,34 +51,55 @@ const IngredientSection = ({
               onKeyPress={handleIngredientKeyPress}
               placeholder="재료의 양"
             />
-            {showRemoveButton && (
-              <RemoveIngredientButton
-                type="button"
-                onClick={() => handleRemoveIngredient(index)}
-              />
-            )}
-          </IngredientRow>
+            <ButtonPlaceBox>
+              {showRemoveButton && (
+                <RemoveIngredientButton
+                  type="button"
+                  onClick={() => handleRemoveIngredient(index)}
+                />
+              )}
+            </ButtonPlaceBox>
+          </IngredientRowBox>
         ))}
-        <AddIngredientButton
-          type="button"
-          onClick={(event) => {
-            event.preventDefault();
-            handleAddIngredient();
-          }}
-          onKeyPress={handleIngredientKeyPress}
-        >
-          + 재료 추가하기
-        </AddIngredientButton>
-      </div>
-    </div>
+        <CenteredAddButtonRowBox>
+          <AddIngredientButton
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              handleAddIngredient();
+            }}
+            onKeyPress={handleIngredientKeyPress}
+          >
+            + 재료 추가하기
+          </AddIngredientButton>
+        </CenteredAddButtonRowBox>
+      </IngredientWrapper>
+    </IngredientContainer>
   );
 };
 
 export default IngredientSection;
 
+const IngredientContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 4rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    margin-top: 7.2rem;
+  }
+`;
+
+const IngredientWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const Label = styled.label`
-  width: 9.8rem;
-  height: 2.1rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 600;
@@ -95,10 +108,17 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
+
+  margin-bottom: 1rem;
+
+  @media (min-width: 1024px) {
+    width: 9.8rem;
+    height: 2.1rem;
+  }
 `;
 
 const IngredientInput = styled.input`
-  width: 27.5rem;
+  width: 100%;
   height: 3.6rem;
   margin-right: 1.2rem;
   border: 1px solid #c4c4c4;
@@ -111,10 +131,14 @@ const IngredientInput = styled.input`
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
+
+  @media (min-width: 1024px) {
+    width: 27.5rem;
+  }
 `;
 
 const QuantityInput = styled.input`
-  width: 12.5rem;
+  width: 60%;
   height: 3.6rem;
   border: 1px solid #c4c4c4;
   box-sizing: border-box;
@@ -126,13 +150,28 @@ const QuantityInput = styled.input`
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
+
+  @media (min-width: 1024px) {
+    width: 12.5rem;
+  }
 `;
 
-const IngredientRow = styled.div`
+const IngredientRowBox = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 1.5rem;
+`;
+
+const ButtonPlaceBox = styled.div`
+  width: 2.5rem;
+  height: 2.5rem;
+`;
+
+const CenteredAddButtonRowBox = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `;
 
 const AddIngredientButton = styled.button`
@@ -151,9 +190,13 @@ const RemoveIngredientButton = styled.button`
   width: 2.5rem;
   height: 2.5rem;
   border: none;
-  margin-left: 1.4rem;
+  margin-left: 0.5rem;
   margin-top: 0.6rem;
   cursor: pointer;
   background: url("/images/stepDeleteIcon.png") no-repeat center;
   background-size: contain;
+
+  @media (min-width: 1024px) {
+    margin-left: 1.4rem;
+  }
 `;

@@ -13,7 +13,7 @@ const BannerSearchBar = () => {
     e
   ) => {
     if (e.key === "Enter") {
-      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
+      router.push(`/recipes/search?query=${encodeURIComponent(searchQuery)}`);
     }
   };
 

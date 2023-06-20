@@ -1,14 +1,24 @@
+"use client";
+
+import styled from "styled-components";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getAllRecipes } from "@/app/api/recipe";
+
+import shuffleRecipes from "@/app/utils/shuffleRecipes";
+import LoadingRecipe from "../UI/LoadingRecipe";
+import NonDataCrying from "../UI/NonDataCrying";
+import NonRecipeCrying from "../UI/NonRecipeCrying";
+import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
+
 import {
   RecipeContainer,
   StyledSubTitle,
   StyledTitle,
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
-import styled from "styled-components";
-import LargeRecipeCard from "../recipe-card/main/MainLargeRecipeCard";
 import { Recipe } from "@/app/types";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 
 const Ingredient = [
   {
@@ -48,7 +58,16 @@ const Ingredient = [
   },
 ];
 
-const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
+const MainFridge = () => {
+  const {
+    data: recipes,
+    isLoading,
+    isError,
+  } = useQuery<Recipe[]>(["recipes"], () => getAllRecipes(), {
+    retry: 0,
+    initialData: [],
+  });
+
   const [selectedIngredient, setSelectedIngredient] = useState<string>("계란");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
 
@@ -60,9 +79,9 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
       )
     );
 
-    const randomSelection = filteredRecipes.sort(() => 0.5 - Math.random());
+    const shuffledRecipes = shuffleRecipes(filteredRecipes);
 
-    setFilteredRecipes(randomSelection);
+    setFilteredRecipes(shuffledRecipes);
   }, [selectedIngredient, recipes]);
 
   /**  재료 선택 핸들러 */
@@ -73,14 +92,18 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
     setSelectedIngredient(e.currentTarget.id);
   };
 
+  if (isLoading) {
+    return <LoadingRecipe />;
+  }
+
   return (
     <MainFridgeContainer>
-      <FridgedTitleBox>
+      <StyledTitleBox>
         <StyledTitle>당신을 위한 냉장고털이 레시피</StyledTitle>
         <StyledSubTitle>
           냉장고 속 재료로 손쉽게 훌륭한 요리를 선보이세요
         </StyledSubTitle>
-      </FridgedTitleBox>
+      </StyledTitleBox>
       <IngredientSelectBox>
         {Ingredient.map((item) => (
           <IngredientButton
@@ -97,11 +120,13 @@ const MainFridge = ({ recipes }: { recipes: Recipe[] }) => {
           </IngredientButton>
         ))}
       </IngredientSelectBox>
-      {filteredRecipes?.length === 0 ? (
-        <div>레시피가 없어요 ㅠㅠ</div>
+      {isError ? (
+        <NonDataCrying />
+      ) : filteredRecipes.length === 0 && !isError ? (
+        <NonRecipeCrying />
       ) : (
         <RecipeContainer>
-          {filteredRecipes.slice(0, 3).map((item: Recipe) => (
+          {filteredRecipes?.slice(0, 3).map((item: Recipe) => (
             <LargeRecipeCard key={item.recipe_id} recipe={item} />
           ))}
         </RecipeContainer>
@@ -125,15 +150,8 @@ const MainFridgeContainer = styled.div`
   }
 `;
 
-const FridgedTitleBox = styled(StyledTitleBox)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 1.6rem;
-`;
-
 const IngredientSelectBox = styled.div`
-  padding-top: 2rem;
+  padding-top: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;

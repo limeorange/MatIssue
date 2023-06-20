@@ -16,6 +16,7 @@ export const AuthContainer = styled.div`
   margin-right: auto;
   width: 100%;
   max-width: 40rem;
+
   color: #4f3d21;
 `;
 
@@ -32,7 +33,7 @@ export const AuthFormWrapper = styled.div`
   padding-bottom: 3.2rem;
   box-shadow: 0 0.1rem 0.3rem 0 rgb(0 0 0 / 0.1);
   border-radius: 1.5rem;
-  min-height: 80vh;
+  min-height: 100vh;
 
   form {
     display: flex;
@@ -65,6 +66,7 @@ export const StyledInput = styled.input<StyledInputProps>`
   color: #333333;
   outline: none;
   &:focus {
+  border : 0.1rem solid #fb26a;
   box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
   opacity: ${(props) => props.disabled && "0.5"};
   cursor: ${(props) => props.disabled && "default"};
@@ -91,8 +93,8 @@ export const AuthNavBox = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 0.6rem;
-  font-size: 14px;
-  color: rgb(150, 150, 150);
+  font-size: 16px;
+  color: #999;
 `;
 
 export const AuthChangeBox = styled(AuthNavBox)`

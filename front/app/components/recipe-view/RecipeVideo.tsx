@@ -16,7 +16,7 @@ const extractVideoId = (url: string): string | null => {
   }
 
   // 유튜브 링크가 아닌 경우 또는 고유 id를 찾을 수 없는 경우
-  return "https://youtu.be/jk29M4knFBw";
+  return "JVQaQBsCbrE";
 };
 
 /** 레시피 비디오 컴포넌트 */
@@ -36,10 +36,19 @@ const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipe_video }) => {
 
 /** 비디오 감싸는 Div */
 const VideoContainerDiv = styled.div`
-  width: 48rem;
-  height: 27rem;
-  border-radius: 1.5rem;
+  width: calc(100vw - 3rem);
+  height: calc((100vw - 3rem) * (27 / 48));
+  max-width: 48rem;
+  max-height: 27rem;
+  border-radius: 1rem;
   overflow: hidden;
+
+  @media (min-width: 1024px) {
+    width: 48rem;
+    height: 27rem;
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
 `;
 
 /** 유튜브 영상 Iframe */

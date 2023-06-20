@@ -23,13 +23,11 @@ input {
 }
 
 main {
-  padding-bottom: 8rem;
-  padding-top: 10.1rem;
+  padding-top: 7.1rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   main {
-    padding-bottom: 8rem;
     padding-top: 13.1rem;
   }
 }

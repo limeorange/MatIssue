@@ -42,12 +42,12 @@ const IngredientList: React.FC<IngredientListProps> = ({
       <IngredientUl>
         {recipe_ingredients.map((item, index) => (
           <IngredientItemLi key={index}>
-            <IngredientSpan isChecked={isCheckedList[index]}>
+            <IngredientDiv isChecked={isCheckedList[index]}>
               {item.name}
-            </IngredientSpan>
-            <IngredientCountSpan isChecked={isCheckedList[index]}>
+            </IngredientDiv>
+            <IngredientCountDiv isChecked={isCheckedList[index]}>
               {item.amount}
-            </IngredientCountSpan>
+            </IngredientCountDiv>
             <CheckboxWrapperDiv>
               <CheckboxInput
                 type="checkbox"
@@ -68,10 +68,16 @@ const IngredientList: React.FC<IngredientListProps> = ({
 
 /** 재료 목록 전체 감싸는 Div */
 const ContainerDiv = styled.div`
-  width: 33rem;
+  width: 100%;
+  height: 100%;
   border: 1rem solid #fff6df;
   border-radius: 2rem;
-  padding: 2rem;
+  padding: 1.7rem;
+
+  @media (min-width: 1024px) {
+    width: 40rem;
+    padding: 2rem;
+  }
 `;
 
 /** 재료 목록 리스트 Ul */
@@ -84,15 +90,15 @@ const IngredientUl = styled.ul`
 /** 재료 목록 Li */
 const IngredientItemLi = styled.li`
   display: flex;
-  height: 2.5rem;
-  justify-items: center;
+  justify-content: flex-start;
   align-items: center;
 `;
 
-/** 재료명 Span */
-const IngredientSpan = styled.span<{ isChecked: boolean }>`
+/** 재료명 Div */
+const IngredientDiv = styled.div<{ isChecked: boolean }>`
   font-size: 16px;
-  width: 15rem;
+  flex-grow: 1;
+
   ${({ isChecked }) =>
     isChecked
       ? css`
@@ -102,11 +108,12 @@ const IngredientSpan = styled.span<{ isChecked: boolean }>`
       : null}
 `;
 
-/** 재료 양 Span */
-const IngredientCountSpan = styled.span<{ isChecked: boolean }>`
+/** 재료 양 Div */
+const IngredientCountDiv = styled.div<{ isChecked: boolean }>`
   font-size: 16px;
-  width: 8rem;
   margin-right: 1rem;
+  align-self: flex-start;
+
   ${({ isChecked }) =>
     isChecked
       ? css`
@@ -120,6 +127,12 @@ const IngredientCountSpan = styled.span<{ isChecked: boolean }>`
 const CheckboxWrapperDiv = styled.div`
   position: relative;
   margin-bottom: 0.7rem;
+  margin-right: 1rem;
+
+  @media (min-width: 1024px) {
+    position: relative;
+    margin-bottom: 0.7rem;
+  }
 `;
 
 /** 체크박스 Input */

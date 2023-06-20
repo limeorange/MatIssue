@@ -1,10 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { getAllRecipes } from "@/app/api/recipe";
 import Link from "next/link";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import Logo from "@/app/components/header/Logo";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -16,11 +19,15 @@ type Recipe = {
   recipe_thumbnail: string;
 };
 
-const WorldcupGame: React.FC = () => {
+const WorldcupGame = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const num = searchParams?.get("stage");
+
   const [foods, setFoods] = useState<Recipe[]>([]);
   const [displays, setDisplays] = useState<Recipe[]>([]);
   const [winners, setWinners] = useState<Recipe[]>([]);
-  const [stage, setStage] = useState(32);
+  const [stage, setStage] = useState(num ? parseInt(num) : 16);
   const [selectedCount, setSelectedCount] = useState(0);
   const [isAnimateOut, setIsAnimateOut] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +37,7 @@ const WorldcupGame: React.FC = () => {
       try {
         const recipes = await getAllRecipes();
         recipes.sort(() => Math.random() - 0.5);
-        const selectedRecipes = recipes.slice(0, 32); // 랜덤으로 32개의 레시피 선택
+        const selectedRecipes = recipes.slice(0, num);
         setFoods(selectedRecipes);
         setDisplays([selectedRecipes[0], selectedRecipes[1]]);
         setIsLoading(false);
@@ -41,7 +48,7 @@ const WorldcupGame: React.FC = () => {
     };
 
     fetchRecipes();
-  }, []);
+  }, [num]);
 
   const clickHandler = (food: Recipe) => () => {
     if (stage !== 1) {
@@ -50,8 +57,9 @@ const WorldcupGame: React.FC = () => {
 
     if (foods.length <= 2) {
       if (winners.length === 0) {
-        setDisplays([food]);
-        setStage(1);
+        const queryParams = { winnerId: food.recipe_id };
+        const query = new URLSearchParams(queryParams).toString();
+        router.push(`/worldcup/game-page/result?${query}`);
       } else {
         const updatedFood = [...winners, food];
         setFoods(updatedFood);
@@ -68,29 +76,54 @@ const WorldcupGame: React.FC = () => {
   };
 
   if (isLoading) {
-    // 데이터 로딩 중일 때 로딩 모달 표시
     return <LoadingModal />;
   }
 
   return (
     <WorldcupLayout>
-      <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
+      <Logo />
+      <GameHeader>레시피 이상형 월드컵!</GameHeader>
       <GameProgress>
-        {stage === 1 && displays.length === 1
-          ? "우승 레시피 선정!"
-          : stage === 2
-          ? "결승전"
-          : `${stage}강 (${selectedCount + 1}/${stage / 2})`}
+        {stage === 2 ? (
+          "결승전"
+        ) : (
+          <>
+            {`${stage}강 (`}
+            <span style={{ color: "#fbd26a" }}>{selectedCount + 1}</span>
+            {`/${stage / 2})`}
+          </>
+        )}
       </GameProgress>
       <CardContainer>
-        {displays.map((recipe) =>
+        {displays.map((recipe, index) =>
           stage === 1 && displays.length === 1 ? (
-            <Link
-              href={`/recipes/${recipe.recipe_id}`}
-              key={recipe.recipe_id}
-              passHref
-            >
-              <Card onClick={clickHandler(recipe)}>
+            <>
+              {index !== 0 && <VS>VS</VS>}
+              <Link
+                href={`/recipes/${recipe.recipe_id}`}
+                key={recipe.recipe_id}
+                passHref
+              >
+                <Card onClick={clickHandler(recipe)}>
+                  <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+                  <ImageWrapper>
+                    <ImageContainer>
+                      <Image
+                        src={recipe.recipe_thumbnail}
+                        alt={recipe.recipe_title}
+                        layout="fill"
+                        objectFit="cover"
+                        style={{ borderRadius: "1.5rem" }}
+                      />
+                    </ImageContainer>
+                  </ImageWrapper>
+                </Card>
+              </Link>
+            </>
+          ) : (
+            <>
+              {index !== 0 && <VS>VS</VS>}
+              <Card onClick={clickHandler(recipe)} key={recipe.recipe_id}>
                 <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
                 <ImageWrapper>
                   <ImageContainer>
@@ -104,32 +137,9 @@ const WorldcupGame: React.FC = () => {
                   </ImageContainer>
                 </ImageWrapper>
               </Card>
-            </Link>
-          ) : (
-            <Card onClick={clickHandler(recipe)} key={recipe.recipe_id}>
-              <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
-              <ImageWrapper>
-                <ImageContainer>
-                  <Image
-                    src={recipe.recipe_thumbnail}
-                    alt={recipe.recipe_title}
-                    layout="fill"
-                    objectFit="cover"
-                    style={{ borderRadius: "1.5rem" }}
-                  />
-                </ImageContainer>
-              </ImageWrapper>
-            </Card>
+            </>
           )
         )}
-        <TextContainer>
-          {displays.length === 1 && (
-            <ResultText>
-              짜잔! 우승 레시피입니다. <br /> 사진을 클릭시 해당 레시피로
-              이동합니다.
-            </ResultText>
-          )}
-        </TextContainer>
       </CardContainer>
     </WorldcupLayout>
   );
@@ -142,7 +152,11 @@ const WorldcupLayout = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 3em;
+  margin: auto;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 50rem;
+  height: 100vh;
 
   @keyframes slideUp {
     0% {
@@ -155,29 +169,33 @@ const WorldcupLayout = styled.div`
       opacity: 1;
     }
   }
+
+  @media (min-width: 1024px) {
+    padding: 0;
+  }
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
-  font-size: 80px;
+  font-size: 60px;
   color: #fbd26a;
   font-family: "Dongle-Bold";
   margin-bottom: -3rem;
+  display: none;
 
   & span {
     font-size: 40px;
   }
 
-  animation: ${(props) =>
-    props.isAnimateOut
-      ? "slideOut 1.3s ease-in-out"
-      : "slideUp 1s ease-in-out"};
-  animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
+  @media (min-width: 1024px) {
+    font-size: 80px;
+    display: block;
+  }
 `;
 
 const GameProgress = styled.div`
-  font-size: 50px;
+  font-size: 35px;
   color: #4f3d21;
-  margin-bottom: 5rem;
+  margin-bottom: 0.5rem;
   font-family: "Dongle-Bold";
   transform-origin: center;
   transition: all 0.5s ease;
@@ -195,11 +213,52 @@ const GameProgress = styled.div`
     transform: scale(0.1);
     opacity: 0;
   }
+
+  @media (min-width: 1024px) {
+    font-size: 50px;
+    margin-bottom: 2rem;
+  }
 `;
 
 const CardContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
+`;
+
+const VS = styled.div`
+  font-size: 25px;
+  color: #4f3d21;
+  font-family: "Dongle-Bold";
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-top: 1rem;
+  transform-origin: center;
+  transition: all 0.5s ease;
+  opacity: 1;
+
+  &.grow {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  &.normal {
+    transform: scale(1);
+    opacity: 1;
+  }
+  &.shrink {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 50px;
+    margin-top: 3rem;
+  }
 `;
 
 const Card = styled.div`
@@ -207,7 +266,6 @@ const Card = styled.div`
   border: none;
   box-sizing: border-box;
   cursor: pointer;
-  margin-right: 2rem;
   position: relative;
   transition: transform 0.3s ease;
   cursor: pointer;
@@ -218,8 +276,9 @@ const Card = styled.div`
 `;
 
 const RecipeTitleBox = styled.div`
-  font-size: 15px;
+  font-size: 20px;
   color: #4f3d21;
+  margin-bottom: 1rem;
   white-space: pre-line;
   text-align: center;
   transform-origin: center;
@@ -232,10 +291,10 @@ const RecipeTitleBox = styled.div`
 `;
 
 const ImageWrapper = styled.div`
-  width: 32.5rem;
-  height: 32.5rem;
+  width: 100%;
+  height: 20.5rem;
   overflow: hidden;
-  border: 0.2rem solid #fbd26a;
+  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 1.5rem;
   position: relative;
   transition: transform 0.3s ease;
@@ -243,6 +302,11 @@ const ImageWrapper = styled.div`
 
   &:hover {
     transform: translateY(-5px);
+  }
+
+  @media (min-width: 1024px) {
+    width: 32.5rem;
+    height: 32.5rem;
   }
 `;
 
@@ -256,23 +320,4 @@ const ImageContainer = styled.div`
   ${ImageWrapper}:hover & {
     opacity: 0.8;
   }
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 1rem;
-`;
-
-const ResultText = styled.p<StyledComponentProps>`
-  font-size: 17px;
-  color: #4f3d21;
-
-  animation: ${(props) =>
-    props.isAnimateOut
-      ? "slideOut 1.3s ease-in-out"
-      : "slideUp 1s ease-in-out"};
-  animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;

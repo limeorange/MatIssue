@@ -5,15 +5,19 @@ import styled from "styled-components";
 
 type FilterModalProps = {
   options: { value: number; name: string }[];
-  setState: any; // 타입 수정 필요
+  setState: React.Dispatch<
+    React.SetStateAction<{ value: number; name: string }>
+  >;
   onClose: () => void;
 };
 
 const FilterModal = (props: FilterModalProps) => {
   const { options, setState, onClose } = props;
 
+  // 필터바 모달창 ref
   const modalRef = useRef<HTMLDivElement | null>(null);
 
+  // 바깥 화면 클릭 시 모달창 닫힘
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -60,7 +64,6 @@ const FilterModalContainer = styled.div`
   font-size: 16px;
   font-weight: 400;
   color: #4f3d21;
-  margin-left: -1.3rem;
 `;
 
 const FilterModalUl = styled.ul`

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Recipe } from "@/app/types";
+import { useQuery } from "@tanstack/react-query";
+import getCurrentUser from "@/app/api/user";
 
 type ScrapModalProps = {
   modalCloseHandler: () => void;
@@ -17,6 +19,10 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   setIsSaved,
   recipe,
 }) => {
+  const { data: currentUser } = useQuery(["currentUser"], () =>
+    getCurrentUser()
+  );
+
   // 스크랩 카드에 필요한 정보만 객체 분해 할당
   const {
     created_at,
@@ -107,7 +113,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
     const updatedMemo = parsedMemo.filter(
       (item: any) => item.scrapData.recipe_id !== recipe_id
     );
-    const newMemo = { scrapData, memo };
+    const newMemo = { scrapData, memo, user_id: currentUser.user_id };
     updatedMemo.push(newMemo);
 
     // 업데이트된 배열을 다시 localStorage에 저장
@@ -166,17 +172,22 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 /** 스크랩 메모 전체 감싸는 Div */
 const ScrapContainerDiv = styled.div`
   position: fixed;
-  top: 45%;
-  left: 59%;
+  top: 35%;
+  left: 6%;
   display: flex;
   justify-content: center;
   width: 33rem;
-  height: 36.5rem;
+  height: 34.5rem;
   background: #ffffff;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   z-index: 90;
   cursor: pointer;
+
+  @media (min-width: 1024px) {
+    top: 39.1%;
+    left: 56.2%;
+  }
 `;
 
 /** 스크랩 모달창 컨텐츠 세로 정렬을 위한 Div */
@@ -197,14 +208,18 @@ const ScrapTitleDiv = styled.div`
 
 /** 스크랩 메모하기 제목 Span */
 const ScrapTitleSpan = styled.span`
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 500;
+
+  @media (min-width: 1024px) {
+    font-size: 17px;
+  }
 `;
 
 /** 메모 입력칸 전체 감싸는 Div */
 const MemoContainerDiv = styled.div`
   width: 29.5rem;
-  height: 21.5rem;
+  height: 19.5rem;
   font-size: 15.5px;
   cursor: pointer;
 `;

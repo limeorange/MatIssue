@@ -15,10 +15,14 @@ type StyledComponentProps = {
 
 const StartPage = () => {
   const router = useRouter();
+
+  // MBTI 성향 상태
   const setEI = useSetRecoilState(EIState);
   const setSN = useSetRecoilState(SNState);
   const setTF = useSetRecoilState(TFState);
   const setJP = useSetRecoilState(JPState);
+
+  // 첫 렌더링 애니메이션 상태
   const [isAnimateOut, setIsAnimateOut] = useState(false);
 
   return (
@@ -33,7 +37,7 @@ const StartPage = () => {
         </StartPageMessage>
         <ImageBox isAnimateOut={isAnimateOut}>
           <Image
-            src={"/images/foodIcon.png"}
+            src={"/images/mbti/foodIcon.png"}
             alt="음식 아이콘 이미지"
             width={400}
             height={200}
@@ -75,6 +79,7 @@ const StratPageWrapper = styled.div`
   width: 100%;
   max-width: 50rem;
   height: 100vh;
+  padding: 0 1.5rem;
 
   @keyframes slideUp {
     0% {
@@ -86,6 +91,10 @@ const StratPageWrapper = styled.div`
       transform: translateY(0);
       opacity: 1;
     }
+  }
+
+  @media (min-width: 1024px) {
+    padding: 0;
   }
 `;
 

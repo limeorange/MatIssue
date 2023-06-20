@@ -20,14 +20,27 @@ const Scrap = () => {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 120rem;
   margin: 0 auto;
+  @media (min-width: 1024px) {
+    max-width: 120rem;
+    
+  }
 `;
 
 const Wrapper = styled.div`
+width: 100%;
+max-width: 34.5rem;
   display: flex;
-  justify-content: flex-start;
-  padding-top: 5rem;
+  flex-direction: column;
+ margin: 0 1.5rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 5rem 0 0 1.5rem;
+    margin: 0;
+    max-width: 100vw;
+  }
 `;
 
 export default Scrap;

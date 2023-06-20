@@ -5,23 +5,52 @@ import { useEffect } from "react";
 import styled from "styled-components";
 
 type UserScrapProps = {
+  currentUserID: string | undefined;
   scrapClickHandler: () => void;
   isBooked: boolean;
   isSaved: boolean;
   setIsSaved: React.Dispatch<React.SetStateAction<boolean>>;
+  recipe_id: string;
+};
+
+type MemoItemProps = {
+  created_at: string;
+  recipe_id: string;
+  recipe_like: string[];
+  recipe_thumbnail: string;
+  recipe_title: string;
+  recipe_view: number;
+  user_id: string;
+  user_nickname: string;
+};
+
+type ScrapItemProps = {
+  scrapData: MemoItemProps;
+  memo: string;
+  user_id: string;
 };
 
 /** 게시글 스크랩 컴포넌트 */
 const RecipeScrap: React.FC<UserScrapProps> = ({
+  currentUserID,
   scrapClickHandler,
   isBooked,
   isSaved,
   setIsSaved,
+  recipe_id,
 }) => {
   // 처음 렌더링 시 클라이언트 사이드에서 로컬스토리지 받아오기 위한 의존성 관리
+  // 스크랩 된 메모가 있으면 색칠되어있음
   useEffect(() => {
     const savedMemo = localStorage.getItem("scrapMemo");
-    setIsSaved(savedMemo ? true : false);
+    const savedParsedMemo = savedMemo ? JSON.parse(savedMemo) : [];
+    const currentUserMemo = savedParsedMemo.filter(
+      (item: ScrapItemProps) => item.user_id === currentUserID
+    );
+    const savedMemotext = currentUserMemo.filter(
+      (item: ScrapItemProps) => item.scrapData.recipe_id === recipe_id
+    );
+    setIsSaved(savedMemotext.length === 0 ? false : true);
   }, []);
 
   return (
@@ -49,26 +78,42 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
 /** 스크랩 아이콘과 글자 묶는 Button */
 const ScrapWrapperButton = styled.button`
   display: flex;
-  width: 12rem;
-  height: 5.5rem;
-  border: 0.17rem solid #c8c8c8;
+  width: 10rem;
+  height: 4.2rem;
   border-radius: 1.5rem;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+
+  @media (min-width: 1024px) {
+    width: 12rem;
+    height: 5.5rem;
+    margin-top: 1rem;
+  }
 `;
 
 /** 스크랩 아이콘 Div */
 const IconDiv = styled.div`
-  width: 3.2rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2rem;
   margin-right: 0.6rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+
+  @media (min-width: 1024px) {
+    width: 3.2rem;
+    height: 3rem;
+    margin-bottom: 0.3rem;
+  }
 `;
 
 /** 스크랩 글자 Span */
 const ScrapTitle = styled.span`
-  font-size: 18px;
+  font-size: 16px;
+
+  @media (min-width: 1024px) {
+    font-size: 18px;
+  }
 `;
 
 export default RecipeScrap;

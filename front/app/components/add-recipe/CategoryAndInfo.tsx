@@ -32,9 +32,9 @@ const CategoryAndInfo = ({
   difficulties,
 }: Props): FunctionComponentElement<Props> => {
   return (
-    <>
-      <InfoSection>
-        <LabelWithInfo>
+    <InfoSectionContainer>
+      <InfoSectionWrapper>
+        <LabelWithInfoBox>
           <Label>카테고리</Label>
           <Info>
             <Select value={selectedCategory} onChange={handleCategoryChange}>
@@ -48,10 +48,10 @@ const CategoryAndInfo = ({
               ))}
             </Select>
           </Info>
-        </LabelWithInfo>
-      </InfoSection>
-      <InfoSection>
-        <LabelWithInfo>
+        </LabelWithInfoBox>
+      </InfoSectionWrapper>
+      <InfoSectionWrapper>
+        <LabelWithInfoBox>
           <Label>요리정보</Label>
           <Info>
             <Select value={selectedPeople} onChange={handlePeopleChange}>
@@ -88,13 +88,22 @@ const CategoryAndInfo = ({
               ))}
             </Select>
           </Info>
-        </LabelWithInfo>
-      </InfoSection>
-    </>
+        </LabelWithInfoBox>
+      </InfoSectionWrapper>
+    </InfoSectionContainer>
   );
 };
 
 export default CategoryAndInfo;
+
+const InfoSectionContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  @media (min-width: 1024px) {
+    flex-direction: column;
+  }
+`;
 
 const Label = styled.label`
   width: 8.8rem;
@@ -107,11 +116,16 @@ const Label = styled.label`
   color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
+  margin-left: 0.5rem;
+
+  @media (min-width: 1024px) {
+    margin-left: 0;
+  }
 `;
 
 const Select = styled.select`
   box-sizing: border-box;
-  width: 13.5rem;
+  width: 12.5rem;
   height: 3.6rem;
   border: 0.1rem solid #d9d9d9;
   border-radius: 5rem;
@@ -132,20 +146,28 @@ const Select = styled.select`
     outline: none;
     box-shadow: 0 0 0 0.2rem #fbd26a;
   }
+
+  @media (min-width: 1024px) {
+  }
 `;
 
-const InfoSection = styled.div`
+const InfoSectionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-top: 2rem;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
 `;
 
-const LabelWithInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
+const LabelWithInfoBox = styled.div`
+  @media (min-width: 1024px) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 `;
 
 const Info = styled.div`

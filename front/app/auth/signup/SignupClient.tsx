@@ -119,18 +119,18 @@ const SignupClient = () => {
     }
     if (
       (+monthValue === 1 || 3 || 5 || 7 || 8 || 10 || 12) &&
-      (0 > +day || +day > 31)
+      (0 > +day || +day > 32)
     ) {
       resetField("day");
       birthError();
       dayInputRef.current?.focus();
       return;
-    } else if ((+monthValue === 4 || 6 || 9 || 11) && (0 > +day || +day > 30)) {
+    } else if ((+monthValue === 4 || 6 || 9 || 11) && (0 > +day || +day > 31)) {
       resetField("day");
       birthError();
       dayInputRef.current?.focus();
       return;
-    } else if (+monthValue === 2 && (0 > +day || +day > 29)) {
+    } else if (+monthValue === 2 && (0 > +day || +day > 30)) {
       resetField("day");
       birthError();
       dayInputRef.current?.focus();
@@ -152,7 +152,7 @@ const SignupClient = () => {
       username: data.username,
       email: data.email,
       password: data.password,
-      img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/20230603051822347_dongs-logo.png",
+      img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
       birth_date: birthDate,
     };
 
@@ -233,8 +233,8 @@ const SignupClient = () => {
                   message: "닉네임은 최소 2글자 이상이여야 합니다.",
                 },
                 maxLength: {
-                  value: 12,
-                  message: "닉네임은 최대 12글자까지 허용됩니다.",
+                  value: 8,
+                  message: "닉네임은 최대 8글자까지 허용됩니다.",
                 },
               })}
               placeholder="닉네임을 입력하세요."
@@ -403,6 +403,8 @@ const SignupClient = () => {
             로그인하기
           </UnderLineLinkDiv>
         </AuthNavBox>
+        <br />
+        <br />
       </AuthFormWrapper>
     </AuthContainer>
   );

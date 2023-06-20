@@ -7,6 +7,7 @@ import FilterBar from "../filter/FilterBar";
 import FilterTag from "../filter/FilterTag";
 import Pagination from "../pagination/Pagination";
 import NonRecipePage from "../UI/NonRecipe";
+import InfiniteScroll from "react-infinite-scroll-component";
 import styled from "styled-components";
 import { useSearchParams } from "next/navigation";
 import { Recipe } from "@/app/types";
@@ -56,43 +57,77 @@ const difficulty = [
 // 레시피 리스트 출력 컴포넌트
 const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes); // 레시피 데이터 필터링 상태
+
+  // 최신, 인기순 버튼 정렬 기본 상태 null로 설정
   const initialSortMethodState = null;
+
+  // 정렬 버튼 상태
   const [sortMethod, setSortMethod] = useState<"date" | "likes" | null>(
     initialSortMethodState
-  ); // 정렬 버튼에 따른 정렬 상태
+  );
+
+  // 필터바 기본 상태 -1로 설정
   const initialFilterState = {
     servings: -1,
     duration: -1,
     difficulty: -1,
   };
+
+  // 필터바 필터링 상태
   const [filter, setFilter] = useState(initialFilterState);
-  const [search, setSearch] = useState<string>("");
+
+  // 무한스크롤 로딩 상태
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // 모바일 상태, 화면 너비 768px 이하의 경우 모바일
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  // 인원수, 조리시간, 난이도 필터링 상태
   const [newServings, setNewServings] = useState<OptionsType>(servings[0]);
   const [newDuration, setNewDuration] = useState<OptionsType>(duration[0]);
   const [newDifficulty, setNewDifficulty] = useState<OptionsType>(
     difficulty[0]
   );
+
+  // 현재 페이지 설정 상태 (기본 1페이지)
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // 페이지당 출력 레시피 (16개)
   const recipesPerPage = 16;
+
+  // url의 params 값 사용
   const searchParams = useSearchParams();
-  const searchQuery = searchParams?.get("query"); // url의 query값 추출
+
+  // url의 query값 추출
+  const searchQuery = searchParams?.get("query");
+
+  // url의 category값 추출
   const category = searchParams?.get("category");
+
   const router = useRouter();
 
+  // urlParams에서 값 불러와 필터링, 이전 설정 값 있을 경우 ? 그 값 사용 : 새로 필터링
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const servingsFromURL = urlParams.get("servings");
     const durationFromURL = urlParams.get("duration");
     const difficultyFromURL = urlParams.get("difficulty");
 
-    setFilter({
-      servings: servingsFromURL ? parseInt(servingsFromURL) : -1,
-      duration: durationFromURL ? parseInt(durationFromURL) : -1,
-      difficulty: difficultyFromURL ? parseInt(difficultyFromURL) : -1,
-    });
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      servings: servingsFromURL
+        ? parseInt(servingsFromURL)
+        : prevFilter.servings,
+      duration: durationFromURL
+        ? parseInt(durationFromURL)
+        : prevFilter.duration,
+      difficulty: difficultyFromURL
+        ? parseInt(difficultyFromURL)
+        : prevFilter.difficulty,
+    }));
   }, []);
 
-  // 새로고침 했을 경우 버튼 정렬상태 유지
+  // urlParams에서 정렬 값 불러와서 레시피 정렬
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const sortMethodFromURL = urlParams.get("sortMethod");
@@ -104,49 +139,10 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     );
   }, []);
 
+  // 필터바 및 정렬버튼 로직
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     let result = [...recipes];
-    // let honmukResult: Recipe[] = [];
-    // let newestResult: Recipe[] = [];
-    // let bestResult: Recipe[] = [];
-
-    // 검색바로 레시피 필터링
-    // const term = searchQuery || "";
-    // if (term !== "") {
-    //   result = result.filter((recipe) =>
-    //     recipe.recipe_title.toLowerCase().includes(term.toLowerCase())
-    //   );
-    // }
-
-    // 혼먹 카테고리 필터링
-    // if (category === "honmuk") {
-    //   honmukResult = result.filter(
-    //     (recipe) => recipe.recipe_info.serving === 1
-    //   );
-    // }
-
-    // 최신 카테고리 필터링
-    // if (category === "newest") {
-    //   newestResult = [...result].sort(
-    //     (a, b) =>
-    //       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    //   );
-    // }
-
-    // // 베스트 카테고리 필터링
-    // if (category === "best") {
-    //   bestResult = result
-    //     .filter((recipe) => recipe.recipe_like >= 1500)
-    //     .sort((a, b) => +b.created_at - +a.created_at);
-    // }
-
-    // // 카테고리바 레시피 필터링
-    // if (category) {
-    //   result = result.filter((recipe) =>
-    //     recipe.recipe_category.toLowerCase().includes(category.toLowerCase())
-    //   );
-    // }
 
     // 필터바로 레시피 필터링
     if (filter.servings > 0) {
@@ -183,17 +179,6 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
       window.location.pathname + "?" + urlParams.toString()
     );
 
-    // 각 카테고리 별 result 할당
-    // if (category === "honmuk") {
-    //   result = honmukResult;
-    // } else if (category === "newest") {
-    //   result = newestResult;
-    // } else if (category === "best") {
-    //   result = bestResult;
-    // } else {
-    //   result = result;
-    // }
-
     // 버튼으로 레시피 정렬
     if (sortMethod === "date") {
       result.sort(
@@ -202,7 +187,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
       );
       urlParams.set("sortMethod", "date");
     } else if (sortMethod === "likes") {
-      result.sort((a, b) => b.recipe_like - a.recipe_like);
+      result.sort((a, b) => b.recipe_like.length - a.recipe_like.length);
       urlParams.set("sortMethod", "likes");
     } else {
       urlParams.delete("sortMethod");
@@ -215,9 +200,19 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
     );
 
     setFilteredRecipes(result);
-  }, [search, searchQuery, filter, category, sortMethod, recipes]);
+  }, [filter, sortMethod, recipes]);
 
-  // 태그 삭제 로직
+  // 모바일 스크롤 이벤트
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 768);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // 필터 태그 삭제 로직
   const removeTag = (tagType: string) => {
     {
       const resetValue = -1;
@@ -244,13 +239,29 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   // 페이지네이션
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  // 현재 페이지 데이터
+  // 현재 페이지 데이터 계산
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = filteredRecipes.slice(
-    indexOfFirstRecipe,
-    indexOfLastRecipe
-  );
+
+  // 모바일에서는 처음부터 현재 페이지의 마지막 레시피까지의 모든 레시피들을 포함
+  const currentRecipes = isMobile
+    ? filteredRecipes.slice(0, indexOfLastRecipe)
+    : filteredRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe); // 데스크탑에서는 현재 페이지의 레시피들만 포함
+
+  // 레시피 추가 로딩 함수
+  const fetchMoreRecipes = async () => {
+    // 페이지 증가
+    setCurrentPage((prev) => prev + 1);
+    setIsLoading(true);
+
+    // 데이터 로딩 시간 설정
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    setIsLoading(false);
+  };
+
+  // 무한 스크롤 사용 가능 여부
+  const hasMore = currentPage * recipesPerPage < filteredRecipes.length;
 
   return (
     <>
@@ -277,7 +288,21 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
           onRemove={removeTag}
         />
         <PageHeaderContainer>
-          <p>총 {filteredRecipes.length}개의 레시피가 있습니다.</p>
+          {currentRecipes.length > 0 && (
+            <p>
+              총&nbsp;
+              <span
+                style={{
+                  color: "#F8B551",
+                  fontWeight: "bold",
+                  fontSize: "17px",
+                }}
+              >
+                {filteredRecipes.length}
+              </span>
+              개의 레시피가 있습니다.
+            </p>
+          )}
           <SortButtonContainer>
             {category !== "best" &&
               category !== "newest" &&
@@ -306,19 +331,47 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
           </SortButtonContainer>
         </PageHeaderContainer>
         {currentRecipes.length > 0 ? (
-          <>
-            <RecipeListWrapper>
-              {currentRecipes.map((data, index) => (
-                <RecipeCard key={index} recipe={data} />
-              ))}
-            </RecipeListWrapper>
-            <Pagination
-              recipesPerPage={recipesPerPage}
-              totalRecipes={filteredRecipes.length}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
-          </>
+          isMobile ? (
+            <InfiniteScroll
+              dataLength={currentRecipes.length}
+              next={fetchMoreRecipes}
+              hasMore={hasMore}
+              loader={<h4>Loading...</h4>}
+              scrollThreshold={0.5}
+              endMessage={
+                <p
+                  style={{
+                    fontSize: "16px",
+                    textAlign: "center",
+                    margin: "2rem",
+                    color: "#F8B551",
+                  }}
+                >
+                  <b>{`마지막 레시피 입니다 :)`}</b>
+                </p>
+              }
+            >
+              <RecipeListWrapper>
+                {currentRecipes.map((data, index) => (
+                  <RecipeCard key={index} recipe={data} />
+                ))}
+              </RecipeListWrapper>
+            </InfiniteScroll>
+          ) : (
+            <>
+              <RecipeListWrapper>
+                {currentRecipes.map((data, index) => (
+                  <RecipeCard key={index} recipe={data} />
+                ))}
+              </RecipeListWrapper>
+              <Pagination
+                recipesPerPage={recipesPerPage}
+                totalRecipes={filteredRecipes.length}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+            </>
+          )
         ) : (
           <NonRecipePage />
         )}
@@ -337,42 +390,81 @@ const MainWrapper = styled.div`
   width: 100%;
   max-width: 120rem;
   margin: 0 auto;
-  padding: 2%;
+  margin-bottom: 2rem;
+  padding: 0 1.5rem;
+  padding-top: 1.5rem;
+
+  @media (min-width: 768px) {
+    margin-bottom: 16rem;
+  }
 `;
 
 const RecipeListWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 27rem);
-  row-gap: 3rem;
-  column-gap: 2rem;
+  row-gap: 1.5rem;
+  column-gap: 1.5rem;
   justify-content: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 `;
 
 const PageHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin: 1rem 0.5rem;
+  align-items: center;
+  text-align: center;
 
   & p {
-    font-size: 1.55rem;
-    margin-left: 1rem;
+    font-size: 15.5px;
+
+    @media (min-width: 1024px) {
+      padding: 0 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    align-items: left;
+    margin-top: 0;
   }
 `;
 
-const SortButtonContainer = styled.div``;
+const SortButtonContainer = styled.div`
+  display: flex;
+  gap: 0.75rem;
+
+  @media (min-width: 1024px) {
+    padding: 0 1.5rem;
+  }
+`;
 
 const SortButton = styled.button<{ selected: boolean }>`
-  padding: 0.5rem 2.5rem;
-  font-size: 1.55rem;
-  border-radius: 10rem;
-  background-color: ${(props) => (props.selected ? "#fbd26a" : "transparent")};
+  padding: 0.5rem 0 0.5rem 0.5rem;
+  font-size: 15.5px;
+  color: ${(props) => (props.selected ? "#fbd26a" : "normal")};
+  font-weight: ${(props) => (props.selected ? "bold" : "normal")};
 
-  &:hover {
-    background-color: #fbd26a;
+  @media (min-width: 768px) {
+    margin: 0.5rem;
+    padding: 0.5rem 2.5rem;
+    color: black;
+    font-weight: normal;
+    border-radius: 10rem;
+    background-color: ${(props) =>
+      props.selected ? "#fbd26a" : "transparent"};
+
+    &:hover {
+      background-color: #fbd26a;
+    }
   }
 `;
 
-const FilterBarBox = styled.div`
-  margin: 0 auto;
-`;
+const FilterBarBox = styled.div``;

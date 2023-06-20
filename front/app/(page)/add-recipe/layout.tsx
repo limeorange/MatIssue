@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     router.replace("/");
   };
 
-  if (!currentUser) {
+  if (!currentUser && !isLoading) {
     return (
       <ConfirmModal
         message="글을 작성하시려면 로그인이 필요합니다."
