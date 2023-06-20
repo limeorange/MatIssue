@@ -10,6 +10,9 @@ const theme = {
   brown: "#4F3D21",
   deepNavy: "#2A2E41",
   lightNavy: "#404353",
+  grey: "#ccc",
+  lightGrey: "#ddd",
+  white: "#fff",
 
   // 여기에 추가적으로 사용할 색상들을 정의할 수 있습니다.
 };
