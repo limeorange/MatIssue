@@ -376,31 +376,29 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
     <FormLayout>
       {isLoading && <LoadingModal />}
       <Title>레시피 수정하기</Title>
-      <MainSection>
-        <ImageContainer>
+      <MainContainer>
+        <ImageWrapper>
           <ThumbnailUpload
             selectedImage={state.selectedImage}
             handleThumbnailChange={handleThumbnailChange}
           />
-        </ImageContainer>
-        <div>
-          <CategoryAndInfo
-            selectedCategory={state.selectedCategory}
-            handleCategoryChange={handleCategoryChange}
-            selectedPeople={state.selectedPeople.toString()}
-            handlePeopleChange={handlePeopleChange}
-            selectedTime={state.selectedTime.toString()}
-            handleTimeChange={handleTimeChange}
-            selectedDifficulty={state.selectedDifficulty}
-            handleDifficultyChange={handleDifficultyChange}
-            categories={categories}
-            peopleCount={peopleCount}
-            times={times}
-            difficulties={difficulties}
-          />
-        </div>
-      </MainSection>
-      <RecipeTitle>
+        </ImageWrapper>
+        <CategoryAndInfo
+          selectedCategory={state.selectedCategory}
+          handleCategoryChange={handleCategoryChange}
+          selectedPeople={state.selectedPeople.toString()}
+          handlePeopleChange={handlePeopleChange}
+          selectedTime={state.selectedTime.toString()}
+          handleTimeChange={handleTimeChange}
+          selectedDifficulty={state.selectedDifficulty}
+          handleDifficultyChange={handleDifficultyChange}
+          categories={categories}
+          peopleCount={peopleCount}
+          times={times}
+          difficulties={difficulties}
+        />
+      </MainContainer>
+      <RecipeTitleWrapper>
         <Label>레시피 제목</Label>
         <Input
           type="text"
@@ -408,15 +406,15 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           onChange={handleRecipeTitleChange}
           placeholder="ex) 소고기 미역국 끓이기"
         />
-      </RecipeTitle>
-      <CookingIntro>
+      </RecipeTitleWrapper>
+      <CookingIntroWrapper>
         <Label>요리 소개</Label>
         <TextArea
           value={state.cookingIntro}
           onChange={handleCookingIntroChange}
           placeholder="요리 소개를 입력해주세요."
         />
-      </CookingIntro>
+      </CookingIntroWrapper>
       <VideoSection
         videoLink={state.videoLink}
         handleVideoLinkChange={handleVideoLinkChange}
@@ -437,16 +435,16 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
         handleAddStep={handleAddStep}
         handleRemoveStep={handleRemoveStep}
       />
-      <CookingTips>
+      <CookingTipsWrapper>
         <TipsLabel>요리팁</TipsLabel>
         <TipsTextArea
           value={state.cookingTips}
           onChange={handleCookingTipsChange}
           placeholder="나만의 요리팁을 입력해주세요."
         />
-      </CookingTips>
+      </CookingTipsWrapper>
       <ButtonContainer>
-        <SaveButton>
+        <SaveButtonWrapper>
           <Button
             onClick={handleUpdate}
             type="button"
@@ -456,8 +454,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           >
             {isLoading ? "수정 중..." : "수정"}
           </Button>
-        </SaveButton>
-        <CancleButton>
+        </SaveButtonWrapper>
+        <CancleButtonWrapper>
           <Button
             onClick={handleCancel}
             type="button"
@@ -467,7 +465,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           >
             취소
           </Button>
-        </CancleButton>
+        </CancleButtonWrapper>
       </ButtonContainer>
       {showConfirmModal && (
         <ConfirmModal
@@ -581,7 +579,7 @@ const Title = styled.h2`
   margin: 0;
 `;
 
-const MainSection = styled.div`
+const MainContainer = styled.div`
   flex-direction: column;
 
   @media (min-width: 1024px) {
@@ -592,7 +590,7 @@ const MainSection = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
+const ImageWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
 
@@ -603,7 +601,7 @@ const ImageContainer = styled.div`
   }
 `;
 
-const RecipeTitle = styled.div`
+const RecipeTitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -617,7 +615,7 @@ const RecipeTitle = styled.div`
   }
 `;
 
-const CookingIntro = styled.div`
+const CookingIntroWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2rem;
@@ -629,7 +627,7 @@ const CookingIntro = styled.div`
   }
 `;
 
-const CookingTips = styled.div`
+const CookingTipsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -662,10 +660,10 @@ const ButtonContainer = styled.div`
   width: 100%;
 `;
 
-const SaveButton = styled.div`
+const SaveButtonWrapper = styled.div`
   width: 18rem;
 `;
 
-const CancleButton = styled.div`
+const CancleButtonWrapper = styled.div`
   width: 18rem;
 `;

@@ -9,16 +9,15 @@ import FollowDeleteModal from "../../UI/FollowDeleteModal";
 import { useRouter } from "next/navigation";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { User } from "@/app/types";
 
 type WriterProfileProps = {
-  user_nickname: string;
   user_id: string;
   loggedInUserId: string | undefined;
 };
 
 /** 작성자 프로필 컴포넌트 */
 const MiniWriterProfile: React.FC<WriterProfileProps> = ({
-  user_nickname,
   user_id,
   loggedInUserId,
 }) => {
@@ -179,7 +178,7 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
           </ProfileImageDiv>
 
           {/* 닉네임 */}
-          <NicknameSpan>{user_nickname}</NicknameSpan>
+          <NicknameSpan>{currentChef?.username}</NicknameSpan>
 
           {/* 팔로잉, 팔로워 */}
           <FollowDiv>
@@ -187,7 +186,7 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
             <BoldSpan>{currentChef?.fans.length}</BoldSpan>
             <span>|</span>
             <span>팔로잉</span>
-            <BoldSpan>{currentChef.subscriptions.length}</BoldSpan>
+            <BoldSpan>{currentChef?.subscriptions.length}</BoldSpan>
           </FollowDiv>
 
           {/* 팔로우 버튼 */}
@@ -244,6 +243,7 @@ const ProfileContentsDiv = styled.div`
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImageDiv = styled.div`
+  display: flex;
   width: 12rem;
   height: 12rem;
   margin-bottom: 1.3rem;

@@ -7,41 +7,25 @@ import styled from "styled-components";
 import Logo from "../Logo";
 import Image from "next/image";
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { User } from "@/app/types";
 import Cookies from "js-cookie";
 import { axiosBase } from "@/app/api/axios";
-import { useRecoilState } from "recoil";
-import { loginState } from "@/app/store/authAtom";
 
 import { toast } from "react-hot-toast";
-
-import getCurrentUser from "@/app/api/user";
 
 import LoadingModal from "../../UI/LoadingModal";
 
 type MobileUserModalProps = {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
-  initialCurrentUser: User;
+  currentUser: User;
 };
 
 /** 모바일 전용 사이드 유저 모달 */
 const MobileUserModal = (props: MobileUserModalProps) => {
-  // 현재 로그인된 유저정보 가져옴
-  const { data: currentUser } = useQuery<User>(
-    ["currentUser"],
-    () => getCurrentUser(),
-    {
-      refetchOnWindowFocus: false,
-      retry: 0,
-      initialData: props.initialCurrentUser,
-    }
-  );
-
   const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState<boolean>(loginState);
   const [isShowAdditional, setIsShowAdditional] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -66,7 +50,6 @@ const MobileUserModal = (props: MobileUserModalProps) => {
       .post(`users/logout`)
       .then((res) => {
         Cookies.remove("session-id");
-        setIsLoggedIn(false);
         queryClient.removeQueries(["currentUser"]);
         queryClient.removeQueries(["currentUserRecipes"]);
         router.refresh();
@@ -102,18 +85,18 @@ const MobileUserModal = (props: MobileUserModalProps) => {
       <Backdrop isModal={props.isModal} onClick={closeModalHandler} />
       <ModalContainer isModal={props.isModal}>
         <Logo />
-        {currentUser ? (
+        {props.currentUser ? (
           <ProfileWrapper>
             <ProfileImgWrapper>
               <Image
-                src={currentUser.img}
+                src={props.currentUser.img}
                 width={24}
                 height={24}
                 alt="profile"
               />
             </ProfileImgWrapper>
 
-            {currentUser.username}
+            {props.currentUser.username}
           </ProfileWrapper>
         ) : (
           <AuthWraaper>
@@ -219,7 +202,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
             </AdditionalCategoryItem>
           </AdditionalMenuWrapper>
         </CategoryList>
-        {isLoggedIn && currentUser && (
+        {props.currentUser && (
           <LogoutButton onClick={logoutHandler}>로그아웃</LogoutButton>
         )}
       </ModalContainer>

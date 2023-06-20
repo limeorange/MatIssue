@@ -10,9 +10,9 @@ import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { User } from "@/app/types";
 
 type WriterProfileProps = {
-  user_nickname: string;
   user_id: string;
   loggedInUserId: string | undefined;
   // user_img: string;
@@ -20,7 +20,6 @@ type WriterProfileProps = {
 
 /** 작성자 프로필 컴포넌트 */
 const WriterProfile: React.FC<WriterProfileProps> = ({
-  user_nickname,
   user_id,
   loggedInUserId,
 }) => {
@@ -186,7 +185,7 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
           </ProfileImageDiv>
 
           {/* 닉네임 */}
-          <NicknameSpan>{user_nickname}</NicknameSpan>
+          <NicknameSpan>{currentChef?.username}</NicknameSpan>
 
           {/* 팔로잉, 팔로워 */}
           <FollowDiv>
@@ -253,6 +252,7 @@ const ProfileContentsDiv = styled.div`
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImageDiv = styled.div`
+  display: flex;
   width: 12rem;
   height: 12rem;
   margin-bottom: 1.3rem;

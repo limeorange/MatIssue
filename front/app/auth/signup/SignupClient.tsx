@@ -119,18 +119,18 @@ const SignupClient = () => {
     }
     if (
       (+monthValue === 1 || 3 || 5 || 7 || 8 || 10 || 12) &&
-      (0 > +day || +day > 31)
+      (0 > +day || +day > 32)
     ) {
       resetField("day");
       birthError();
       dayInputRef.current?.focus();
       return;
-    } else if ((+monthValue === 4 || 6 || 9 || 11) && (0 > +day || +day > 30)) {
+    } else if ((+monthValue === 4 || 6 || 9 || 11) && (0 > +day || +day > 31)) {
       resetField("day");
       birthError();
       dayInputRef.current?.focus();
       return;
-    } else if (+monthValue === 2 && (0 > +day || +day > 29)) {
+    } else if (+monthValue === 2 && (0 > +day || +day > 30)) {
       resetField("day");
       birthError();
       dayInputRef.current?.focus();

@@ -7,13 +7,13 @@ import MobileUserModal from "./MobileUserModal";
 import { User } from "@/app/types";
 
 /** 모바일 전용 햄버거 버튼과 유저 모달 묶어놓은 컴포넌트 */
-const HamburgerBtn = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
+const HamburgerBtn = ({ currentUser }: { currentUser: User }) => {
   const [isModal, setIsModal] = useState<boolean>(false);
 
   return (
     <>
       <MobileUserModal
-        initialCurrentUser={initialCurrentUser}
+        currentUser={currentUser}
         isModal={isModal}
         setIsModal={setIsModal}
       />

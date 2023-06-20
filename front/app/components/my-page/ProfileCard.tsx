@@ -6,12 +6,9 @@ import { Recipe, User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { getRecipeByUserId } from "@/app/api/recipe";
-import getCurrentUser, {
-  getUserFans,
-  getUserSubscriptions,
-} from "@/app/api/user";
+import getCurrentUser from "@/app/api/user";
 import { useRouter } from "next/navigation";
-import { set } from "react-hook-form";
+import Image from "next/image";
 
 type MemoItemProps = {
   created_at: string;
@@ -35,8 +32,6 @@ const ProfileCard = () => {
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
     getCurrentUser()
   );
-  const [fansCount, setFansCount] = useState<number>(0);
-  const [subscriptionsCount, setSubscriptionsCount] = useState<number>(0);
 
   useEffect(() => {
     console.log("currentUser", currentUser?.user_id);
@@ -64,29 +59,6 @@ const ProfileCard = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const getFansCount = async () => {
-      try {
-        const fansList = await getUserFans(currentUser?.user_id || "");
-        setFansCount(fansList.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getSubscriptionsCount = async () => {
-      try {
-        const subscriptionsList = await getUserSubscriptions(
-          currentUser?.user_id || ""
-        );
-        setSubscriptionsCount(subscriptionsList.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getSubscriptionsCount();
-    getFansCount();
-  }, [currentUser]);
-
   return (
     <ProfileContainer>
       <ProfileWrapper>
@@ -105,8 +77,11 @@ const ProfileCard = () => {
         <ProfileBox>
           <ImageAndNickName>
             <RoundImage>
-              <ProfileImage
+              <Image
                 src={currentUser?.img || "images/dongs-logo.png"}
+                height={120}
+                width={120}
+                style={{ objectFit: "cover" }}
                 alt="profile-image"
               />
             </RoundImage>
@@ -116,12 +91,14 @@ const ProfileCard = () => {
             <FollowAndFollowing>
               <FollowerDiv>
                 <Follower>팔로워</Follower>
-                <FollowerCount>{fansCount}</FollowerCount>
+                <FollowerCount>{currentUser?.fans.length}</FollowerCount>
               </FollowerDiv>
               <FollowDivider />
               <FollowingDiv>
                 <Following>팔로잉</Following>
-                <FollowingCount>{subscriptionsCount}</FollowingCount>
+                <FollowingCount>
+                  {currentUser?.subscriptions.length}
+                </FollowingCount>
               </FollowingDiv>
             </FollowAndFollowing>
 
@@ -267,6 +244,7 @@ const ImageAndNickName = styled.div`
 `;
 
 const RoundImage = styled.div`
+  display: flex;
   width: 8.7rem;
   height: 8.7rem;
   border-radius: 50%;
