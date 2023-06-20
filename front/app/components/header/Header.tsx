@@ -1,10 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import Cookies from "js-cookie";
 
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
@@ -16,6 +13,7 @@ import SearchBtn from "./mobile/SearchBtn";
 import getCurrentUser from "@/app/api/user";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { User } from "@/app/types";
+import DarkmodeBtn from "./DarkModeBtn";
 
 const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
   // 레시피 조회페이지일 경우, 스크롤 감지하여 헤더를 숨기는 커스텀훅
@@ -44,7 +42,10 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
             <Logo />
           </LogoWrapper>
           <SearchBar />
-          {isLoading ? null : <UserMenu currentUser={currentUser} />}
+          <ButtonsWrapper>
+            <DarkmodeBtn />
+            {isLoading ? null : <UserMenu currentUser={currentUser} />}
+          </ButtonsWrapper>
           <SearchBtn />
         </TopNavBar>
         <CategoryBar />
@@ -102,4 +103,10 @@ const LogoWrapper = styled.div`
     top: 50%;
     transform: translate(-50%, -50%);
   }
+`;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
 `;
