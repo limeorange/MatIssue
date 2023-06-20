@@ -11,13 +11,15 @@ import { getRecipesByUserId } from "@/app/api/recipe";
 
 type UserProfileProps = {
   userProfileId: string;
-  ProfileUserRecipes: Recipe;
+  initialProfileUserRecipes: Recipe[];
+  initialCurrentChef: User;
 };
 
 /** 유저 프로필 컴포넌트 */
 const UserProfile = ({
   userProfileId,
-  ProfileUserRecipes,
+  initialProfileUserRecipes,
+  initialCurrentChef,
 }: UserProfileProps) => {
   // 캐시에 저장된 현재 로그인한 유저 정보 가져옴
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
@@ -32,18 +34,15 @@ const UserProfile = ({
   }
 
   // 검색된 유저가 작성한 레시피 데이터를 리액트쿼리 캐시로 관리
-  //   const { data: ProfileUserRecipes } = useQuery(
-  //     ["ProfileUserRecipes"],
-  //     () => getRecipesByUserId(userProfileId),
-  //     {
-  //       refetchOnWindowFocus: false,
-  //       retry: 0,
-  //       //   initialData: [],
-  //     }
-  //   );
-  //   const ProfileUserRecipes = await getRecipesByUserId(userProfileId);
-
-  console.log("ProfileUserRecipes~~~", ProfileUserRecipes);
+  const { data: ProfileUserRecipes } = useQuery(
+    ["ProfileUserRecipes"],
+    () => getRecipesByUserId(userProfileId),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: initialProfileUserRecipes,
+    }
+  );
 
   return (
     <Container>
@@ -52,9 +51,14 @@ const UserProfile = ({
         <UserProfileCard
           loggedInUserId={loggedInUserId}
           userProfileId={userProfileId}
+          initialCurrentChef={initialCurrentChef}
         />
         {/* 유저 레시피 리스트 */}
-        <UserRecipeCardList ProfileUserRecipes={ProfileUserRecipes} />
+        <UserRecipeCardList
+          userProfileId={userProfileId}
+          ProfileUserRecipes={ProfileUserRecipes}
+          initialCurrentChef={initialCurrentChef}
+        />
       </Wrapper>
     </Container>
   );
@@ -65,9 +69,8 @@ const Container = styled.div`
   width:100%;
   padding: 0 1.5rem;
   @media (min-width: 1024px) {
-    
     max-width: 120rem;
-  margin: 0 auto;
+    margin: 0 auto;
 `;
 
 const Wrapper = styled.div`
