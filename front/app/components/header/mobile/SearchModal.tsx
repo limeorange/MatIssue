@@ -41,7 +41,7 @@ const SearchModal = (props: SearchModalProps) => {
     }
   }, [props.isModal]);
 
-  /** 모달 오픈시 스크롤 기능 정지, 재개 기능 */
+  /** 모달 오픈시 스크롤 기능 정지, 재개 */
   useEffect(() => {
     if (props.isModal) {
       setScrollPosition(window.pageYOffset);

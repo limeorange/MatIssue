@@ -290,12 +290,20 @@ const compatibilityData: CompatibilityData = {
 };
 
 const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
+  // BackEnd에서 recipes 데이터 받아와 상태에 저장
   const [recipeData, setRecipeData] = useState([...recipes]);
+
+  // TestPage에서 저장된 MBTI 결과 상태 받아옴
   const [MBTI, setMBTI] = useRecoilState(MBTIState);
+
+  // 성향에 따른 레시피 데이터 출력 상태
   const [recipeToShow, setRecipeToShow] = useState<Recipe | null>(null);
   const router = useRouter();
+
+  // 첫 렌더링 애니메이션
   const [animation, setAnimation] = useState("opacity-0");
 
+  // 현재 페이지 url 주소 받아옴
   let currentPageUrl;
 
   if (typeof window !== "undefined") {
@@ -315,11 +323,12 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
     }
   };
 
-  // 렌더링 시 페이지 애니메이션, urlParams에서 MBTI 가져옴
+  // 렌더링 시 페이지 애니메이션
   useEffect(() => {
     setAnimation("opacity-1");
   }, []);
 
+  // urlParams에서 MBTI 가져와 MBTI state에 저장 (새로고침 해도 결과 데이터 유지됨)
   useEffect(() => {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
@@ -343,6 +352,7 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
     setRecipeData([...recipes]);
   }, [recipes]);
 
+  // 받아온 recipes 데이터에서 결과 값에 따른 레시피 뽑아서 출력
   useEffect(() => {
     const food = resultData[MBTI]?.food;
     if (food) {

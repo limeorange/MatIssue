@@ -8,14 +8,13 @@ import PasswordModal from "../UI/PasswordModal";
 import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { loginState } from "@/app/store/authAtom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AccountDeletion = ({ id }: { id: string }) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [enteredPassword, setEnteredPassword] = useState<string>("");
-  const setIsLoggedIn = useSetRecoilState<boolean>(loginState);
+  const queryClient = useQueryClient();
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -36,14 +35,15 @@ const AccountDeletion = ({ id }: { id: string }) => {
         },
       });
 
-      toast.success("계정이 성공적으로 삭제되었습니다.");
-      Cookies.remove("session_id");
-      setIsLoggedIn(false);
+      toast.success("더 맛있는 이슈로 찾아뵙겠습니다.");
+      Cookies.remove("session-id");
+      queryClient.removeQueries(["currentUser"]);
+      queryClient.removeQueries(["currentUserRecipes"]);
 
       router.push("/");
     } catch (error: any) {
       toast.error(
-        error.reponse ? error.reponse.data.detail : "회원탈퇴를 실패했습니다."
+        error.reponse ? error.reponse.data.detail : "회원 탈퇴에 실패했습니다."
       );
     }
     closeModal();

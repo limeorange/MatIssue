@@ -15,10 +15,14 @@ type StyledComponentProps = {
 
 const StartPage = () => {
   const router = useRouter();
+
+  // MBTI 성향 상태
   const setEI = useSetRecoilState(EIState);
   const setSN = useSetRecoilState(SNState);
   const setTF = useSetRecoilState(TFState);
   const setJP = useSetRecoilState(JPState);
+
+  // 첫 렌더링 애니메이션 상태
   const [isAnimateOut, setIsAnimateOut] = useState(false);
 
   return (

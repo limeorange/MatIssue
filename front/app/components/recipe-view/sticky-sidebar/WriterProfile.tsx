@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
-import { getUserFans } from "@/app/api/user";
+import { getChefByUserId } from "@/app/api/user";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { axiosBase } from "@/app/api/axios";
@@ -9,80 +9,41 @@ import ConfirmModal from "../../UI/ConfirmModal";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useRouter } from "next/navigation";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { User } from "@/app/types";
 
 type WriterProfileProps = {
-  user_nickname: string;
-  user_fan: number;
-  user_subscription: number;
   user_id: string;
   loggedInUserId: string | undefined;
-  user_img: string;
 };
 
 /** 작성자 프로필 컴포넌트 */
 const WriterProfile: React.FC<WriterProfileProps> = ({
-  user_nickname,
-  user_fan,
-  user_subscription,
   user_id,
   loggedInUserId,
-  user_img,
 }) => {
+  // currentChef에 user 정보가 담김
+  const { data: currentChef } = useQuery(["currentChef", user_id], () =>
+    getChefByUserId(user_id)
+  );
+
+  const client = useQueryClient();
+
   const isHeaderVisible = useMovingContentByScrolling();
   const [isFollowing, setIsFollowing] = useState(false);
-  const [fanscount, setFansCount] = useState(user_fan);
 
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
+  // userid => 닉네임, 팔로잉, 팔로워, 프로필 사진 받아오는 API
   // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
   useEffect(() => {
     if (loggedInUserId !== undefined) {
-      const fetchFollowStatus = async () => {
-        try {
-          const fansList: Array<{
-            img: string;
-            user_id: string;
-            username: string;
-          }> = await getUserFans(user_id);
-          const isUserIdIncluded: boolean = fansList.some((fan) =>
-            fan.user_id.includes(loggedInUserId)
-          );
-          console.log("isUserIdIncluded", isUserIdIncluded);
-          setIsFollowing(isUserIdIncluded);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchFollowStatus();
+      const fans = currentChef?.fans;
+      const isFollowing = fans?.includes(loggedInUserId);
+      setIsFollowing(isFollowing);
     }
   }, [loggedInUserId]);
-
-  // 팔로우, 팔로잉 버튼 누를 때마다 팔로워 숫자 업데이트
-  useEffect(() => {
-    const getFansCount = async () => {
-      try {
-        const fansList = await getUserFans(user_id);
-        setFansCount(fansList.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getFansCount();
-  }, [isFollowing]);
-
-  // 처음 렌더링 시 팔로워 숫자 업데이트
-  useEffect(() => {
-    const getFansCount = async () => {
-      try {
-        const fansList = await getUserFans(user_id);
-        setFansCount(fansList.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getFansCount();
-  }, [isFollowing]);
 
   const followButtonText =
     loggedInUserId === user_id
@@ -120,7 +81,9 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
               `/users/subscription/${user_id}?subscribe=true`
             );
             toast.success("팔로우가 완료되었습니다!");
-            console.log("팔로우 요청 성공!", response);
+            // 요청 성공 시 query key를 무효화해서 현재 작성자 데이터 최신화
+            client.invalidateQueries(["currentChef", user_id]);
+
             // 팔로우 -> 팔로잉으로 변경
             setIsFollowing(true);
           } catch (error) {
@@ -140,11 +103,9 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
       const res = await axiosBase.post(
         `/users/subscription/${user_id}?subscribe=false`
       );
-      console.log("삭제 요청에 대한 응답은...", res);
 
-      // 팔로우 삭제 되었는지 확인용
-      const fansList = await getUserFans(user_id);
-      console.log("삭제 응답 200 후 실제 fans 데이터", fansList);
+      // 요청 성공 시 query key를 무효화해서 현재 작성자 데이터 최신화
+      client.invalidateQueries(["currentChef", user_id]);
 
       toast.success("팔로우가 취소되었습니다!");
     } catch (error) {
@@ -202,7 +163,11 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
           {/* 프로필 사진 */}
           <ProfileImageDiv>
             <Image
-              src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
+              src={
+                currentChef
+                  ? currentChef.img
+                  : "/images/recipe-view/기본 프로필.PNG"
+              }
               alt="게시글 작성자 프로필 사진"
               width={130}
               height={130}
@@ -211,15 +176,15 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
           </ProfileImageDiv>
 
           {/* 닉네임 */}
-          <NicknameSpan>{user_nickname}</NicknameSpan>
+          <NicknameSpan>{currentChef?.username}</NicknameSpan>
 
           {/* 팔로잉, 팔로워 */}
           <FollowDiv>
             <span>팔로워</span>
-            <BoldSpan>{fanscount}</BoldSpan>
+            <BoldSpan>{currentChef?.fans.length}</BoldSpan>
             <span>|</span>
             <span>팔로잉</span>
-            <BoldSpan>{user_subscription}</BoldSpan>
+            <BoldSpan>{currentChef?.subscriptions.length}</BoldSpan>
           </FollowDiv>
 
           {/* 팔로우 버튼 */}
@@ -278,6 +243,7 @@ const ProfileContentsDiv = styled.div`
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImageDiv = styled.div`
+  display: flex;
   width: 12rem;
   height: 12rem;
   margin-bottom: 1.3rem;

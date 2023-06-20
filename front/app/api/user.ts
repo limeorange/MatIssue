@@ -2,23 +2,18 @@ import Cookies from "js-cookie";
 import { axiosBase } from "../api/axios";
 
 export default async function getCurrentUser() {
-  const session_id = Cookies.get("session-id");
+  const sessionId = Cookies.get("session-id");
 
-  if (session_id) {
+  if (sessionId) {
     try {
       const response = await axiosBase.get(`users/me`);
-      if (response.data === undefined) {
-        return null;
-      }
       return response.data;
     } catch (err: any) {
-      Cookies.remove("session-id");
       return null;
     }
-  } else {
-    Cookies.remove("session-id");
-    return null;
   }
+
+  return null;
 }
 
 export async function getFollowStatus(user_id: string) {
@@ -50,6 +45,16 @@ export async function getUserSubscriptions(user_id: string) {
     return subscriptionsList;
   } catch (error) {
     console.log("error", error);
+  }
+}
+
+export async function getChefByUserId(user_id: string) {
+  try {
+    const reponse = await axiosBase.get(`/users/${user_id}`);
+    return reponse.data;
+  } catch (error) {
+    console.log(error);
+    return [];
   }
 }
 
