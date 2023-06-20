@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Image from "next/image";
 
 import { User } from "@/app/types";
+import { Theme } from "@/app/context/ThemeContext";
 
 import UserModal from "./UserModal";
 import { useRecoilValue } from "recoil";
@@ -109,10 +110,15 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
   );
 };
 
-const buttonColor = (props: any) =>
+type ButtonProps = {
+  isDarkMode: boolean;
+  theme: Theme;
+};
+
+const buttonColor = (props: ButtonProps) =>
   props.isDarkMode ? props.theme.lightYellow : props.theme.brown;
 
-const buttonBackgroundColor = (props: any) =>
+const buttonBackgroundColor = (props: ButtonProps) =>
   props.isDarkMode ? props.theme.lightNavy : props.theme.lightGrey;
 
 const UserMenuContainer = styled.div`
