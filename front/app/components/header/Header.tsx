@@ -1,10 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import Cookies from "js-cookie";
 
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";

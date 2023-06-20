@@ -2,12 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  FieldError,
-  FieldValues,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Image from "next/image";
 import { axiosBase } from "@/app/api/axios";
 import styled from "styled-components";
