@@ -19,6 +19,8 @@ import {
   StyledTitle,
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const MainVegan = () => {
   const {
@@ -35,6 +37,7 @@ const MainVegan = () => {
   const totalRecipesNumber = vegetarianRecipes?.length;
   const totalSlide = totalRecipesNumber < 15 ? totalRecipesNumber / 3 : 5;
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   /** 레시피들을 무작위로 섞어주는 함수 */
   const shuffledRecipes = useMemo(
@@ -78,7 +81,7 @@ const MainVegan = () => {
   }
 
   return (
-    <MainVegetarianWrapper>
+    <MainVegetarianWrapper isDarkMode={isDarkMode}>
       <MainVegetarianContainer>
         <StyledTitleBox>
           <StyledTitle>채식러들을 위한 초록레시피</StyledTitle>
@@ -134,14 +137,15 @@ const MainVegan = () => {
 
 export default MainVegan;
 
-const MainVegetarianWrapper = styled.div`
+const MainVegetarianWrapper = styled.div<{ isDarkMode: boolean }>`
   padding: 2rem;
 
   @media (min-width: 1024px) {
     padding: 6rem 0;
     text-align: center;
     width: 100%;
-    background-color: #e8ffe8;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.lightNavy : "#e8ffe8"};
   }
 `;
 
