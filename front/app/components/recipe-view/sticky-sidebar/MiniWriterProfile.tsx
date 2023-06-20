@@ -9,7 +9,6 @@ import FollowDeleteModal from "../../UI/FollowDeleteModal";
 import { useRouter } from "next/navigation";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { User } from "@/app/types";
 
 type WriterProfileProps = {
   user_id: string;
