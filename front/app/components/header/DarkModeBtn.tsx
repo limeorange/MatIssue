@@ -25,7 +25,7 @@ const DarkmodeBtn = () => {
       isDarkMode={isDarkMode}
     >
       <Icon src="/images/darkMode/moon.svg" alt="Moon" width={15} height={15} />
-      <ToggleBtn darkMode={isDarkMode} />
+      <ToggleBtn isDarkMode={isDarkMode} />
       <Icon src="/images/darkMode/sun.svg" alt="Sun" width={15} height={15} />
     </ToggleContainer>
   );
