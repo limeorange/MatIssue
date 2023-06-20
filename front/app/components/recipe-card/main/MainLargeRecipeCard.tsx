@@ -1,15 +1,18 @@
 "use client";
 
 import { getRecipeById } from "@/app/api/recipe";
+import darkModeAtom from "@/app/store/darkModeAtom";
 import { Recipe } from "@/app/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled, { keyframes } from "styled-components";
 
 const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const [commentCount, setCommentCount] = useState<number>(0);
   const [showImage, setShowImage] = useState(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   useEffect(() => {
     setShowImage(true);
@@ -29,6 +32,7 @@ const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
   return (
     <SlideContainer>
       <CardContainer
+        isDarkMode={isDarkMode}
         className={showImage ? "show" : ""}
         onClick={() => router.push(`/recipe/${recipe.recipe_id}`)}
       >
@@ -42,11 +46,11 @@ const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
         </ImageWrapper>
         <TextContainer>
           <RecipeTitleBox>
-            <h3>{recipe.recipe_title}</h3>
+            <h2>{recipe.recipe_title}</h2>
           </RecipeTitleBox>
           <RecipeInfoBox>
             <AuthorBox>
-              <p>{recipe.user_nickname}</p>
+              <h3>{recipe.user_nickname}</h3>
             </AuthorBox>
             <IconWrapper>
               <Image
@@ -55,14 +59,14 @@ const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 height={12}
                 width={16}
               />
-              <div>{recipe.recipe_like.length}&nbsp;&nbsp;</div>
+              <span>{recipe.recipe_like.length}&nbsp;&nbsp;</span>
               <Image
                 src="/images/recipe-view/comment.svg"
                 alt="게시물 댓글 이미지"
                 width={16}
                 height={24}
               />
-              {commentCount}
+              <span>{commentCount}</span>
             </IconWrapper>
           </RecipeInfoBox>
         </TextContainer>
@@ -93,13 +97,13 @@ const SlideContainer = styled.div`
   transition: all 0.5s;
 `;
 
-const CardContainer = styled.div`
+const CardContainer = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: white;
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : props.theme.white};
   border-radius: 1.6rem;
-  color: #4f3d21;
   cursor: pointer;
 
   opacity: 0;
@@ -125,9 +129,8 @@ const RecipeTitleBox = styled.div`
   width: 100%;
   font-size: 18px;
   font-weight: 500;
-  color: #4b4b4b;
 
-  & h3 {
+  & h2 {
     text-align: start;
     width: 100%;
     white-space: nowrap;
