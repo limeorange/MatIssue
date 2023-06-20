@@ -98,22 +98,24 @@ const SelectBox = styled.div`
 -moz-appearance:none; /for firefox*/
 
   &:focus {
-    border: 0.1rem solid #fbd26a;
+    border: 0.1rem solid #fbe2a1;
+    border-radius: 0.5rem 0.5rem 0 0;
+    border-bottom: none;
     outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
-  }
-
-  @media (min-width: 1024px) {
+    box-shadow: 0 0 0 0.2rem #fbe2a1;
   }
 `;
 
 const OptionList = styled.ul`
   position: absolute;
-  top: 100%;
-  width: 12.5rem;
-  border: 1px solid #d9d9d9;
+  top: 3.45rem;
+  left: -0.2rem;
+  width: 12.9rem;
+  border: 3px solid #fbe2a1;
+  border-top: none;
   background-color: #ffffff;
-  border-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
+  border-bottom-right-radius: 1.5rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
@@ -129,14 +131,14 @@ const OptionItem = styled.li`
   padding: 1rem;
   cursor: pointer;
 
-  &:first-child {
-    border-top-left-radius: 1.3rem;
-    border-top-right-radius: 1.3rem;
-  }
+  // &:first-child {
+  //   border-top-left-radius: 1.3rem;
+  //   border-top-right-radius: 1.3rem;
+  // }
 
   &:last-child {
-    border-bottom-left-radius: 1.3rem;
-    border-bottom-right-radius: 1.3rem;
+    border-bottom-left-radius: 1.1rem;
+    border-bottom-right-radius: 1.1rem;
   }
 
   &:hover {
