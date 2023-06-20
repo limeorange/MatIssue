@@ -51,8 +51,8 @@ const StartPage = () => {
           style={{ padding: "2rem" }}
         />
       </ImageBox>
-      <ButtonContainer isAnimateOut={isAnimateOut}>
-        <ButtonBoxOne>
+      <ButtonWrapper isAnimateOut={isAnimateOut}>
+        <OptionOneButton>
           <Button
             isBgColor={true}
             isBorderColor={false}
@@ -75,8 +75,8 @@ const StartPage = () => {
           >
             32강 시작
           </Button>
-        </ButtonBoxOne>
-        <ButtonBoxTwo>
+        </OptionOneButton>
+        <OptionTwoButton>
           <Button
             isBgColor={windowWidth <= 1024 ? false : true}
             isBorderColor={windowWidth <= 1024 ? true : false}
@@ -99,8 +99,8 @@ const StartPage = () => {
           >
             8강 시작
           </Button>
-        </ButtonBoxTwo>
-      </ButtonContainer>
+        </OptionTwoButton>
+      </ButtonWrapper>
     </WorldcupLayout>
   );
 };
@@ -171,7 +171,7 @@ const ImageBox = styled.div<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.4s")};
 `;
 
-const ButtonContainer = styled.div<StyledComponentProps>`
+const ButtonWrapper = styled.div<StyledComponentProps>`
   margin-top: 1rem;
   display: flex;
   justify-content: center;
@@ -203,7 +203,7 @@ const ButtonContainer = styled.div<StyledComponentProps>`
   }
 `;
 
-const ButtonBoxOne = styled.div`
+const OptionOneButton = styled.div`
   margin-right: 0;
 
   @media (max-width: 1024px) {
@@ -217,7 +217,7 @@ const ButtonBoxOne = styled.div`
   }
 `;
 
-const ButtonBoxTwo = styled.div`
+const OptionTwoButton = styled.div`
   @media (max-width: 1024px) {
     display: flex;
     flex-direction: column;

@@ -48,13 +48,13 @@ const CookingStepsSection = ({
     }
   };
   return (
-    <CookingStep>
+    <CookingStepContainer>
       <Label>요리 순서</Label>
       {steps.map((step, index) => (
         <div key={index}>
-          <StepWrapper>
+          <StepContainer>
             <StepLabel>Step {index + 1}</StepLabel>
-            <StepContentsContainer>
+            <StepContentsWrapper>
               <StepTextArea
                 value={step.stepDetail}
                 onChange={(e) => handleStepDetailChange(e, index)}
@@ -75,7 +75,7 @@ const CookingStepsSection = ({
                         ?.click()
                     }
                   >
-                    <ImageContainer>
+                    <ImageBox>
                       <Image
                         src={stepImages[index]}
                         alt="step"
@@ -83,7 +83,7 @@ const CookingStepsSection = ({
                         objectFit="cover"
                         style={{ borderRadius: "1.5rem" }}
                       />
-                    </ImageContainer>
+                    </ImageBox>
                   </ImageWrapper>
                 )}
               </ImageUploadBox>
@@ -91,16 +91,16 @@ const CookingStepsSection = ({
                 <RemoveStepButton
                   type="button"
                   onClick={() => handleRemoveStep(index)}
-                ></RemoveStepButton>
+                />
               )}
-            </StepContentsContainer>
-          </StepWrapper>
+            </StepContentsWrapper>
+          </StepContainer>
         </div>
       ))}
       <AddStepButton type="button" onClick={handleAddStep}>
         + 순서 추가하기
       </AddStepButton>
-    </CookingStep>
+    </CookingStepContainer>
   );
 };
 
@@ -150,7 +150,7 @@ const TextArea = styled.textarea`
   }
 `;
 
-const CookingStep = styled.div`
+const CookingStepContainer = styled.div`
   margin-top: 4rem;
 
   @media (min-width: 1024px) {
@@ -168,7 +168,7 @@ const StepLabel = styled(Label)`
   margin-right: -2rem;
 `;
 
-const StepContentsContainer = styled.div`
+const StepContentsWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column-reverse;
@@ -204,7 +204,7 @@ const ImageUploadBox = styled.div<{ imgExists: boolean }>`
   }
 `;
 
-const StepWrapper = styled.div`
+const StepContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -276,7 +276,7 @@ const ImageWrapper = styled.div`
   border-radius: 1.5rem;
 `;
 
-const ImageContainer = styled.div`
+const ImageBox = styled.div`
   width: 100%;
   height: 100%;
 `;

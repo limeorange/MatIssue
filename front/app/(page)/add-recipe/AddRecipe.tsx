@@ -361,13 +361,13 @@ const RecipeForm = () => {
     <FormLayout>
       {isLoading && <LoadingModal />}
       <Title>레시피 등록하기</Title>
-      <MainSection>
-        <ImageContainer>
+      <MainContainer>
+        <ImageWrapper>
           <ThumbnailUpload
             selectedImage={state.selectedImage}
             handleThumbnailChange={handleThumbnailChange}
           />
-        </ImageContainer>
+        </ImageWrapper>
         <CategoryAndInfo
           selectedCategory={state.selectedCategory}
           handleCategoryChange={handleCategoryChange}
@@ -382,8 +382,8 @@ const RecipeForm = () => {
           times={times}
           difficulties={difficulties}
         />
-      </MainSection>
-      <RecipeTitle>
+      </MainContainer>
+      <RecipeTitleWrapper>
         <Label>레시피 제목</Label>
         <Input
           type="text"
@@ -391,15 +391,15 @@ const RecipeForm = () => {
           onChange={handleRecipeTitleChange}
           placeholder="ex) 소고기 미역국 끓이기"
         />
-      </RecipeTitle>
-      <CookingIntro>
+      </RecipeTitleWrapper>
+      <CookingIntroWrapper>
         <Label>요리 소개</Label>
         <TextArea
           value={state.cookingIntro}
           onChange={handleCookingIntroChange}
           placeholder="요리 소개를 입력해주세요."
         />
-      </CookingIntro>
+      </CookingIntroWrapper>
       <VideoSection
         videoLink={state.videoLink}
         handleVideoLinkChange={handleVideoLinkChange}
@@ -419,16 +419,16 @@ const RecipeForm = () => {
         handleAddStep={handleAddStep}
         handleRemoveStep={handleRemoveStep}
       />
-      <CookingTips>
+      <CookingTipsWrapper>
         <TipsLabel>요리팁</TipsLabel>
         <TipsTextArea
           value={state.cookingTips}
           onChange={handleCookingTipsChange}
           placeholder="나만의 요리팁을 입력해주세요."
         />
-      </CookingTips>
+      </CookingTipsWrapper>
       <ButtonContainer>
-        <SaveButton>
+        <SaveButtonWrapper>
           <Button
             onClick={handleSave}
             type="button"
@@ -438,8 +438,8 @@ const RecipeForm = () => {
           >
             {isLoading ? "저장 중..." : "저장"}
           </Button>
-        </SaveButton>
-        <CancleButton>
+        </SaveButtonWrapper>
+        <CancleButtonWrapper>
           <Button
             onClick={handleCancel}
             type="button"
@@ -449,7 +449,7 @@ const RecipeForm = () => {
           >
             취소
           </Button>
-        </CancleButton>
+        </CancleButtonWrapper>
       </ButtonContainer>
       {showConfirmModal && (
         <ConfirmModal
@@ -563,7 +563,7 @@ const Title = styled.h2`
   margin: 0;
 `;
 
-const MainSection = styled.div`
+const MainContainer = styled.div`
   flex-direction: column;
 
   @media (min-width: 1024px) {
@@ -574,7 +574,7 @@ const MainSection = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
+const ImageWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
 
@@ -585,7 +585,7 @@ const ImageContainer = styled.div`
   }
 `;
 
-const RecipeTitle = styled.div`
+const RecipeTitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -599,7 +599,7 @@ const RecipeTitle = styled.div`
   }
 `;
 
-const CookingIntro = styled.div`
+const CookingIntroWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 2rem;
@@ -611,7 +611,7 @@ const CookingIntro = styled.div`
   }
 `;
 
-const CookingTips = styled.div`
+const CookingTipsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -644,10 +644,10 @@ const ButtonContainer = styled.div`
   width: 100%;
 `;
 
-const SaveButton = styled.div`
+const SaveButtonWrapper = styled.div`
   width: 18rem;
 `;
 
-const CancleButton = styled.div`
+const CancleButtonWrapper = styled.div`
   width: 18rem;
 `;

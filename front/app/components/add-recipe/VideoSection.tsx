@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 
 type VideoSectionProps = {
@@ -11,7 +11,7 @@ const VideoSection = ({
   handleVideoLinkChange,
 }: VideoSectionProps) => {
   return (
-    <VideoWrapper>
+    <VideoContainer>
       <Label>동영상</Label>
       <VideoTextArea
         value={videoLink}
@@ -20,18 +20,18 @@ const VideoSection = ({
       />
       <ThumbnailWrapper>
         {videoLink ? (
-          <IframWrapper>
+          <IframBox>
             <iframe
               title="video thumbnail"
               src={`https://www.youtube.com/embed/${videoLink.split("v=")[1]}`}
               style={{ width: "100%", height: "100%", border: "none" }}
             />
-          </IframWrapper>
+          </IframBox>
         ) : (
           <EmptyThumbnailBox />
         )}
       </ThumbnailWrapper>
-    </VideoWrapper>
+    </VideoContainer>
   );
 };
 
@@ -55,7 +55,7 @@ const Label = styled.label`
   }
 `;
 
-const VideoWrapper = styled.div`
+const VideoContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -107,7 +107,7 @@ const ThumbnailWrapper = styled.div`
   }
 `;
 
-const IframWrapper = styled.div`
+const IframBox = styled.div`
   width: 100%;
   height: 18.6rem;
   border-radius: 1.5rem;
