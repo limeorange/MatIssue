@@ -23,9 +23,7 @@ type IngredientListProps = {
 };
 
 /** 재료 준비 목록 컴포넌트 */
-const IngredientList: React.FC<IngredientListProps> = ({
-  recipe_ingredients,
-}) => {
+const IngredientList = ({ recipe_ingredients }: IngredientListProps) => {
   const [isCheckedList, setIsCheckedList] = useState<boolean[]>(
     Array(recipe_ingredients.length).fill(false)
   );
