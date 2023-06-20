@@ -1,6 +1,7 @@
 // CategoryAndInfo.tsx
 import React, { ChangeEvent, FunctionComponentElement } from "react";
 import styled from "styled-components";
+import CustomSelectBox from "@/app/components/UI/CustomSelectBox";
 
 type Props = {
   selectedCategory: string;
@@ -37,16 +38,18 @@ const CategoryAndInfo = ({
         <LabelWithInfoBox>
           <Label>카테고리</Label>
           <Info>
-            <Select value={selectedCategory} onChange={handleCategoryChange}>
-              <option value="" disabled hidden>
-                종류
-              </option>
-              {categories.map((category) => (
-                <option key={category.value} value={category.value}>
-                  {category.label}
-                </option>
-              ))}
-            </Select>
+            <CustomSelectBox
+              options={categories}
+              selectedOption={selectedCategory}
+              handleOptionChange={(selectedOption) => {
+                handleCategoryChange({
+                  target: {
+                    value: selectedOption,
+                  },
+                } as ChangeEvent<HTMLSelectElement>);
+              }}
+              placeholder="종류"
+            />
           </Info>
         </LabelWithInfoBox>
       </InfoSectionWrapper>
@@ -54,39 +57,51 @@ const CategoryAndInfo = ({
         <LabelWithInfoBox>
           <Label>요리정보</Label>
           <Info>
-            <Select value={selectedPeople} onChange={handlePeopleChange}>
-              <option value="" disabled hidden>
-                인원
-              </option>
-              {peopleCount.map((count) => (
-                <option key={count} value={count}>
-                  {count}
-                </option>
-              ))}
-            </Select>
-            <Select value={selectedTime} onChange={handleTimeChange}>
-              <option value="" disabled hidden>
-                시간
-              </option>
-              {times.map((time) => (
-                <option key={time.value} value={time.value}>
-                  {time.label}
-                </option>
-              ))}
-            </Select>
-            <Select
-              value={selectedDifficulty}
-              onChange={handleDifficultyChange}
-            >
-              <option value="" disabled hidden>
-                난이도
-              </option>
-              {difficulties.map((difficulty) => (
-                <option key={difficulty} value={difficulty}>
-                  {difficulty}
-                </option>
-              ))}
-            </Select>
+            <CustomSelectBox
+              options={peopleCount.map((count) => ({
+                label: `${count}`,
+                value: `${count}`,
+              }))}
+              selectedOption={selectedPeople}
+              handleOptionChange={(selectedOption) => {
+                handlePeopleChange({
+                  target: {
+                    value: selectedOption,
+                  },
+                } as ChangeEvent<HTMLSelectElement>);
+              }}
+              placeholder="인원"
+            />
+            <CustomSelectBox
+              options={times.map((time) => ({
+                label: time.label,
+                value: `${time.value}`,
+              }))}
+              selectedOption={selectedTime}
+              handleOptionChange={(selectedOption) => {
+                handleTimeChange({
+                  target: {
+                    value: selectedOption,
+                  },
+                } as ChangeEvent<HTMLSelectElement>);
+              }}
+              placeholder="시간"
+            />
+            <CustomSelectBox
+              options={difficulties.map((difficulty) => ({
+                label: difficulty,
+                value: difficulty,
+              }))}
+              selectedOption={selectedDifficulty}
+              handleOptionChange={(selectedOption) => {
+                handleDifficultyChange({
+                  target: {
+                    value: selectedOption,
+                  },
+                } as ChangeEvent<HTMLSelectElement>);
+              }}
+              placeholder="난이도"
+            />
           </Info>
         </LabelWithInfoBox>
       </InfoSectionWrapper>
