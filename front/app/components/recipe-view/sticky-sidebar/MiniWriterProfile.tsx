@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { getChefByUserId, getUserFans } from "@/app/api/user";
+import { getChefByUserId } from "@/app/api/user";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { axiosBase } from "@/app/api/axios";
@@ -158,11 +158,11 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
           onCancel={loginModalCloseHandler}
         />
       )}
-      <ProfileContainerDiv>
-        <ProfileHeaderDiv>오늘의 쉐프</ProfileHeaderDiv>
-        <ProfileContentsDiv>
+      <ProfileContainer>
+        <ProfileHeader>오늘의 쉐프</ProfileHeader>
+        <ProfileContentsWrapper>
           {/* 프로필 사진 */}
-          <ProfileImageDiv>
+          <ProfileImage>
             <Image
               src={
                 currentChef.img
@@ -174,32 +174,32 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
               height={130}
               style={{ objectFit: "cover", cursor: "pointer" }}
             />
-          </ProfileImageDiv>
+          </ProfileImage>
 
           {/* 닉네임 */}
-          <NicknameSpan>{currentChef?.username}</NicknameSpan>
+          <Nickname>{currentChef?.username}</Nickname>
 
           {/* 팔로잉, 팔로워 */}
-          <FollowDiv>
+          <FollowBox>
             <span>팔로워</span>
-            <BoldSpan>{currentChef?.fans.length}</BoldSpan>
+            <BoldCount>{currentChef?.fans.length}</BoldCount>
             <span>|</span>
             <span>팔로잉</span>
-            <BoldSpan>{currentChef?.subscriptions.length}</BoldSpan>
-          </FollowDiv>
+            <BoldCount>{currentChef?.subscriptions.length}</BoldCount>
+          </FollowBox>
 
           {/* 팔로우 버튼 */}
           <FollowButton onClick={followButtonHandler}>
             {followButtonText}
           </FollowButton>
-        </ProfileContentsDiv>
-      </ProfileContainerDiv>
+        </ProfileContentsWrapper>
+      </ProfileContainer>
     </>
   );
 };
 
 /** 프로필 박스 전체 감싸는 Div */
-const ProfileContainerDiv = styled.div`
+const ProfileContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -220,7 +220,7 @@ const ProfileContainerDiv = styled.div`
 `;
 
 /** 프로필 헤더 박스 Div */
-const ProfileHeaderDiv = styled.div`
+const ProfileHeader = styled.div`
   width: 18.5rem;
   height: 4.3rem;
   background: #fbe2a1;
@@ -233,7 +233,7 @@ const ProfileHeaderDiv = styled.div`
 `;
 
 /** 프로필 내용 담는 Div */
-const ProfileContentsDiv = styled.div`
+const ProfileContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -241,7 +241,7 @@ const ProfileContentsDiv = styled.div`
 `;
 
 /** 프로필 이미지 감싸는 Div */
-const ProfileImageDiv = styled.div`
+const ProfileImage = styled.div`
   display: flex;
   width: 12rem;
   height: 12rem;
@@ -252,7 +252,7 @@ const ProfileImageDiv = styled.div`
 `;
 
 /** 닉네임 Span */
-const NicknameSpan = styled.span`
+const Nickname = styled.span`
   font-size: 1.8rem;
   font-weight: 500;
   color: #4f3d21;
@@ -260,7 +260,7 @@ const NicknameSpan = styled.span`
 `;
 
 /** 팔로잉, 팔로워 Div */
-const FollowDiv = styled.div`
+const FollowBox = styled.div`
   display: flex;
   color: #4f3d21;
   font-size: 1.5rem;
@@ -269,7 +269,7 @@ const FollowDiv = styled.div`
 `;
 
 /** 팔로잉, 팔로워수 강조 Span */
-const BoldSpan = styled.span`
+const BoldCount = styled.span`
   font-weight: 500;
 `;
 

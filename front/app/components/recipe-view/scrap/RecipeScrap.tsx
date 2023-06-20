@@ -55,8 +55,8 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
 
   return (
     <>
-      <ScrapWrapperButton onClick={scrapClickHandler}>
-        <IconDiv>
+      <ScrapButtonWrapper onClick={scrapClickHandler}>
+        <ScrapIcon>
           <Image
             src={
               isBooked || isSaved
@@ -68,15 +68,15 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
             height={28}
             style={{ objectFit: "cover", cursor: "pointer" }}
           />
-        </IconDiv>
+        </ScrapIcon>
         <ScrapTitle>스크랩</ScrapTitle>
-      </ScrapWrapperButton>
+      </ScrapButtonWrapper>
     </>
   );
 };
 
 /** 스크랩 아이콘과 글자 묶는 Button */
-const ScrapWrapperButton = styled.button`
+const ScrapButtonWrapper = styled.button`
   display: flex;
   width: 10rem;
   height: 4.2rem;
@@ -94,7 +94,7 @@ const ScrapWrapperButton = styled.button`
 `;
 
 /** 스크랩 아이콘 Div */
-const IconDiv = styled.div`
+const ScrapIcon = styled.div`
   width: 2.5rem;
   height: 2rem;
   margin-right: 0.6rem;

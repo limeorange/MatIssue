@@ -133,15 +133,15 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 
   return (
     <>
-      <ScrapContainerDiv
+      <ScrapContainer
         ref={modalRef}
         onMouseDown={mouseDownHandler}
         onMouseMove={mouseMoveHandler}
         onMouseUp={mouseUpHandler}
       >
-        <ScrapContentsDiv>
+        <ScrapContentsWrapper>
           {/* 스크랩 메모하기 Title */}
-          <ScrapTitleDiv>
+          <ScrapTitleIconBox>
             <Image
               src="/images/recipe-view/note.svg"
               alt="스크랩 노트 이모티콘"
@@ -149,28 +149,28 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
               height={35}
               style={{ objectFit: "cover" }}
             />
-            <ScrapTitleSpan>스크랩 메모하기</ScrapTitleSpan>
-          </ScrapTitleDiv>
-          <MemoContainerDiv>
+            <ScrapTitle>스크랩 메모하기</ScrapTitle>
+          </ScrapTitleIconBox>
+          <MemoBox>
             <ScrapTextArea
               placeholder="마우스로 메모를 원하는 곳에 배치해보세요!"
               value={memo}
               onChange={memoChangeHandler}
               hasMemo={hasMemo}
             ></ScrapTextArea>
-          </MemoContainerDiv>
-          <ButtonDiv>
+          </MemoBox>
+          <ButtonBox>
             <CancelButton onClick={memoCancelHandler}>취소</CancelButton>
             <SaveButton onClick={memoSaveHandler}>저장</SaveButton>
-          </ButtonDiv>
-        </ScrapContentsDiv>
-      </ScrapContainerDiv>
+          </ButtonBox>
+        </ScrapContentsWrapper>
+      </ScrapContainer>
     </>
   );
 };
 
 /** 스크랩 메모 전체 감싸는 Div */
-const ScrapContainerDiv = styled.div`
+const ScrapContainer = styled.div`
   position: fixed;
   top: 35%;
   left: 6%;
@@ -191,13 +191,13 @@ const ScrapContainerDiv = styled.div`
 `;
 
 /** 스크랩 모달창 컨텐츠 세로 정렬을 위한 Div */
-const ScrapContentsDiv = styled.div`
+const ScrapContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
 /** 스크랩 메모하기 제목 및 아이콘을 담은 Div */
-const ScrapTitleDiv = styled.div`
+const ScrapTitleIconBox = styled.div`
   display: flex;
   text-color: #4f3d21;
   margin-top: 2rem;
@@ -207,7 +207,7 @@ const ScrapTitleDiv = styled.div`
 `;
 
 /** 스크랩 메모하기 제목 Span */
-const ScrapTitleSpan = styled.span`
+const ScrapTitle = styled.span`
   font-size: 16px;
   font-weight: 500;
 
@@ -217,7 +217,7 @@ const ScrapTitleSpan = styled.span`
 `;
 
 /** 메모 입력칸 전체 감싸는 Div */
-const MemoContainerDiv = styled.div`
+const MemoBox = styled.div`
   width: 29.5rem;
   height: 19.5rem;
   font-size: 15.5px;
@@ -251,7 +251,7 @@ const ScrapTextArea = styled.textarea<{ hasMemo: boolean }>`
 `;
 
 /** 수정, 삭제 버튼 감싸는 Div */
-const ButtonDiv = styled.div`
+const ButtonBox = styled.div`
   display: flex;
   gap: 0.8rem;
   margin-top: 2rem;
