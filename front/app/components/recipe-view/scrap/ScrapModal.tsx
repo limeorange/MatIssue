@@ -14,11 +14,11 @@ type ScrapModalProps = {
 };
 
 /** 스크랩 모달 컴포넌트 */
-const ScrapModal: React.FC<ScrapModalProps> = ({
+const ScrapModal = ({
   modalCloseHandler,
   setIsSaved,
   recipe,
-}) => {
+}: ScrapModalProps) => {
   const { data: currentUser } = useQuery(["currentUser"], () =>
     getCurrentUser()
   );
