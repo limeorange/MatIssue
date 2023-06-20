@@ -3,6 +3,18 @@
 import { ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 
+export type Theme = {
+  deepYellow: string;
+  yellow: string;
+  lightYellow: string;
+  brown: string;
+  deepNavy: string;
+  lightNavy: string;
+  grey: string;
+  lightGrey: string;
+  white: string;
+};
+
 const theme = {
   deepYellow: "#F8B551",
   yellow: "#FBD26A",
