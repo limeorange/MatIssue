@@ -38,33 +38,33 @@ const RecipeInfo: React.FC<RecipeInfoProps> = ({
 
   return (
     <>
-      <ContainerDiv>
-        <RecipeInfoElementDiv>
+      <RecipeInfoContainer>
+        <RecipeInfoElement>
           <h2>{serving}</h2>
           <span>인분</span>
-        </RecipeInfoElementDiv>
+        </RecipeInfoElement>
         <Divider />
-        <RecipeInfoElementDiv>
+        <RecipeInfoElement>
           {time === 61 ? <h2>1시간</h2> : <h2>{time}</h2>}
           {time === 61 ? <span>이상</span> : <span>분</span>}
-        </RecipeInfoElementDiv>
+        </RecipeInfoElement>
         <Divider />
-        <RecipeInfoElementDiv>
+        <RecipeInfoElement>
           <h2>{levelText}</h2>
           <span>난이도</span>
-        </RecipeInfoElementDiv>
+        </RecipeInfoElement>
         <Divider />
-        <RecipeInfoElementDiv>
+        <RecipeInfoElement>
           <h2>{categoryText}</h2>
           <span>종류</span>
-        </RecipeInfoElementDiv>
-      </ContainerDiv>
+        </RecipeInfoElement>
+      </RecipeInfoContainer>
     </>
   );
 };
 
 /** 요리 정보 전체 감싸는 Div */
-const ContainerDiv = styled.div`
+const RecipeInfoContainer = styled.div`
   height: 6rem;
   width: 33rem;
   background-color: #fff6df;
@@ -75,7 +75,7 @@ const ContainerDiv = styled.div`
 `;
 
 /** 요리 정보 요소 감싸는 Div */
-const RecipeInfoElementDiv = styled.div`
+const RecipeInfoElement = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

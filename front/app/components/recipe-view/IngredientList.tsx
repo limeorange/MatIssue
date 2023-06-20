@@ -38,17 +38,17 @@ const IngredientList: React.FC<IngredientListProps> = ({
   };
 
   return (
-    <ContainerDiv>
-      <IngredientUl>
+    <IngredientsContainer>
+      <IngredientsList>
         {recipe_ingredients.map((item, index) => (
-          <IngredientItemLi key={index}>
-            <IngredientDiv isChecked={isCheckedList[index]}>
+          <IngredientItem key={index}>
+            <IngredientName isChecked={isCheckedList[index]}>
               {item.name}
-            </IngredientDiv>
-            <IngredientCountDiv isChecked={isCheckedList[index]}>
+            </IngredientName>
+            <IngredientCount isChecked={isCheckedList[index]}>
               {item.amount}
-            </IngredientCountDiv>
-            <CheckboxWrapperDiv>
+            </IngredientCount>
+            <CheckboxWrapper>
               <CheckboxInput
                 type="checkbox"
                 isChecked={isCheckedList[index]}
@@ -58,16 +58,16 @@ const IngredientList: React.FC<IngredientListProps> = ({
                 onClick={() => CheckClickHandler(index)}
                 isChecked={isCheckedList[index]}
               />
-            </CheckboxWrapperDiv>
-          </IngredientItemLi>
+            </CheckboxWrapper>
+          </IngredientItem>
         ))}
-      </IngredientUl>
-    </ContainerDiv>
+      </IngredientsList>
+    </IngredientsContainer>
   );
 };
 
 /** 재료 목록 전체 감싸는 Div */
-const ContainerDiv = styled.div`
+const IngredientsContainer = styled.div`
   width: 100%;
   height: 100%;
   border: 1rem solid #fff6df;
@@ -81,21 +81,21 @@ const ContainerDiv = styled.div`
 `;
 
 /** 재료 목록 리스트 Ul */
-const IngredientUl = styled.ul`
+const IngredientsList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 `;
 
 /** 재료 목록 Li */
-const IngredientItemLi = styled.li`
+const IngredientItem = styled.li`
   display: flex;
   justify-content: flex-start;
   align-items: center;
 `;
 
 /** 재료명 Div */
-const IngredientDiv = styled.div<{ isChecked: boolean }>`
+const IngredientName = styled.div<{ isChecked: boolean }>`
   font-size: 16px;
   flex-grow: 1;
 
@@ -109,7 +109,7 @@ const IngredientDiv = styled.div<{ isChecked: boolean }>`
 `;
 
 /** 재료 양 Div */
-const IngredientCountDiv = styled.div<{ isChecked: boolean }>`
+const IngredientCount = styled.div<{ isChecked: boolean }>`
   font-size: 16px;
   margin-right: 1rem;
   align-self: flex-start;
@@ -124,7 +124,7 @@ const IngredientCountDiv = styled.div<{ isChecked: boolean }>`
 `;
 
 /** 체크박스 감싸는 Div */
-const CheckboxWrapperDiv = styled.div`
+const CheckboxWrapper = styled.div`
   position: relative;
   margin-bottom: 0.7rem;
   margin-right: 1rem;

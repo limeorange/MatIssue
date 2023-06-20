@@ -31,16 +31,16 @@ const StickyProgressBar = () => {
   return (
     <>
       {
-        <ProgressBarContainerDiv isHeaderVisible={isHeaderVisible}>
-          <ProgressBarDiv progress={scrollPercentage} />
-        </ProgressBarContainerDiv>
+        <ProgressBarWrapper isHeaderVisible={isHeaderVisible}>
+          <ProgressBarBox progress={scrollPercentage} />
+        </ProgressBarWrapper>
       }
     </>
   );
 };
 
 /** 스크롤 진행바 전체 박스 */
-const ProgressBarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
+const ProgressBarWrapper = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
   top: 21rem;
   left: 16.5rem;
@@ -56,7 +56,7 @@ const ProgressBarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
 `;
 
 /** 스크롤 진행바 */
-const ProgressBarDiv = styled.div<{ progress: number }>`
+const ProgressBarBox = styled.div<{ progress: number }>`
   width: 100%;
   height: ${({ progress }) => `${progress}%`};
   background-color: #fbd26a;

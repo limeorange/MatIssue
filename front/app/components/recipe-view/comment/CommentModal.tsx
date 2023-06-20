@@ -35,10 +35,10 @@ const CommentModal: React.FC<CommentModalProps> = ({
 
   return (
     <CommentModalContainer ref={modalRef}>
-      <CommentModalUl>
-        <CommentModalSpan onClick={editClickHandler}>수정</CommentModalSpan>
-        <CommentModalSpan onClick={deleteClickHandler}>삭제</CommentModalSpan>
-      </CommentModalUl>
+      <CommentModalList>
+        <CommentModalItem onClick={editClickHandler}>수정</CommentModalItem>
+        <CommentModalItem onClick={deleteClickHandler}>삭제</CommentModalItem>
+      </CommentModalList>
     </CommentModalContainer>
   );
 };
@@ -61,12 +61,12 @@ const CommentModalContainer = styled.div`
   }
 `;
 
-const CommentModalUl = styled.ul`
+const CommentModalList = styled.ul`
   display: flex;
   flex-direction: column;
 `;
 
-const CommentModalSpan = styled.span`
+const CommentModalItem = styled.span`
   display: flex;
   width: 100%;
   text-align: center;

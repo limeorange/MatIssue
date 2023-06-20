@@ -51,16 +51,16 @@ const ProgressBar = () => {
   return (
     <>
       {isVisible && (
-        <ProgressBarContainerDiv isHeaderVisible={isHeaderVisible}>
-          <ProgressBarDiv progress={scrollPercentage} />
-        </ProgressBarContainerDiv>
+        <ProgressBarWrapper isHeaderVisible={isHeaderVisible}>
+          <ProgressBarBox progress={scrollPercentage} />
+        </ProgressBarWrapper>
       )}
     </>
   );
 };
 
 // 스크롤 진행바 전체 박스
-const ProgressBarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
+const ProgressBarWrapper = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
   left: 0;
   top: 13.1rem;
@@ -75,7 +75,7 @@ const ProgressBarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
 `;
 
 // 스크롤 진행바
-const ProgressBarDiv = styled.div<{ progress: number }>`
+const ProgressBarBox = styled.div<{ progress: number }>`
   height: 100%;
   width: ${({ progress }) => `${progress}%`};
   background-color: #fbd26a;
