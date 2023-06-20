@@ -8,11 +8,14 @@ import Image from "next/image";
 import { User } from "@/app/types";
 
 import UserModal from "./UserModal";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 /** 유저 메뉴 컴포넌트  */
 const UserMenu = ({ currentUser }: { currentUser: User }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const router = useRouter();
 
@@ -83,24 +86,29 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
       ) : (
         <>
           <LoginButton
+            isDarkMode={isDarkMode}
             onClick={() => {
               router.push("/auth/login");
             }}
           >
             로그인
           </LoginButton>
-          <LogoutButton
+          <SignupButton
+            isDarkMode={isDarkMode}
             onClick={() => {
               router.push("/auth/signup");
             }}
           >
             회원가입
-          </LogoutButton>
+          </SignupButton>
         </>
       )}
     </UserMenuContainer>
   );
 };
+
+const backgroundColor = (props) =>
+  props.isDarkMode ? props.theme.lightYellow : props.theme.yellow;
 
 const UserMenuContainer = styled.div`
   display: flex;
@@ -133,26 +141,33 @@ const ProfileButton = styled.div`
   }
 `;
 
-const LoginButton = styled.button`
+const LoginButton = styled.button<{ isDarkMode: boolean }>`
   display: none;
   padding: 0.8rem 1.6rem;
   border-radius: 10rem;
   &:hover {
-    background-color: rgb(230, 230, 230);
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.lightNavy : props.theme.lightGrey};
   }
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
 
   @media (min-width: 1024px) {
     display: flex;
   }
 `;
 
-const LogoutButton = styled.button`
+const SignupButton = styled.button<{ isDarkMode: boolean }>`
   display: none;
   padding: 0.8rem 1.6rem;
   border-radius: 10rem;
-  background-color: #fbd26a;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.yellow};
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : props.theme.brown};
   &:hover {
-    background-color: #f8b551;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.yellow : props.theme.deepYellow};
   }
 
   transition: background-color 0.3s;
