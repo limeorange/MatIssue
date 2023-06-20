@@ -15,7 +15,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 const UserRecipeCardList = ({
   ProfileUserRecipes,
 }: {
-  ProfileUserRecipes: Recipe;
+  ProfileUserRecipes: Recipe[];
 }) => {
   const client = useQueryClient();
 
@@ -25,35 +25,6 @@ const UserRecipeCardList = ({
   const recipesPerPage = 16;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
-
-  const handleOpenModal = (recipe: Recipe) => {
-    setRecipeToDelete(recipe);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setRecipeToDelete(null);
-  };
-
-  const handleDeleteRecipe = async () => {
-    if (!recipeToDelete) return;
-
-    const id = recipeToDelete.recipe_id;
-
-    try {
-      await axiosBase.delete(`recipes/${id}`);
-      console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
-      client.invalidateQueries(["currentRecipe"]);
-      // setIsModalOpen(false);
-    } catch (error) {
-      console.error(
-        "레시피 삭제 요청을 보내는 중에 오류가 발생했습니다:",
-        error
-      );
-    }
-    setIsModalOpen(false);
-  };
 
   useEffect(() => {
     function handleResize() {
@@ -70,10 +41,7 @@ const UserRecipeCardList = ({
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  // const currentRecipes = currentRecipe?.slice(
-  //   indexOfFirstRecipe,
-  //   indexOfLastRecipe
-  // );
+
   const currentRecipe = isMobile
     ? ProfileUserRecipes?.slice(0, indexOfLastRecipe)
     : ProfileUserRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -93,7 +61,9 @@ const UserRecipeCardList = ({
 
   return (
     <RecipeListContainer>
-      <RecipeHeading>나의 레시피</RecipeHeading>
+      <RecipeHeading>
+        {ProfileUserRecipes.user_nickname}님의 레시피
+      </RecipeHeading>
       <RecipeHeadingCount>{currentRecipe?.length}</RecipeHeadingCount>
       {currentRecipe?.length === 0 ? (
         <NonRecipeMsg />
@@ -122,12 +92,12 @@ const UserRecipeCardList = ({
               <RecipeCardWrapper key={recipe.recipe_id}>
                 <StyledRecipeCard recipe={recipe} />
 
-                <button onClick={() => handleOpenModal(recipe)}>
+                {/* <button onClick={() => handleOpenModal(recipe)}>
                   <ButtonDiv>
                     <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
                     <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
                   </ButtonDiv>
-                </button>
+                </button> */}
               </RecipeCardWrapper>
             ))}
           </RecipeList>
@@ -141,7 +111,7 @@ const UserRecipeCardList = ({
                 <RecipeCardWrapper key={recipe.recipe_id}>
                   <StyledRecipeCard recipe={recipe} />
 
-                  <button onClick={() => handleOpenModal(recipe)}>
+                  {/* <button onClick={() => handleOpenModal(recipe)}>
                     <ButtonDiv>
                       <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
                       <DeleteButtonMobile
@@ -149,7 +119,7 @@ const UserRecipeCardList = ({
                         alt="X-box"
                       />
                     </ButtonDiv>
-                  </button>
+                  </button> */}
                 </RecipeCardWrapper>
               ))}
           </RecipeList>
@@ -163,19 +133,17 @@ const UserRecipeCardList = ({
           )}
         </>
       )}
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <StyledConfirmModal
           icon={<AlertImage src="/images/alert.png" alt="alert" />}
           message="레시피를 삭제하시겠습니까?"
           onConfirm={handleDeleteRecipe}
           onCancel={handleCloseModal}
         />
-      )}
+      )} */}
     </RecipeListContainer>
   );
 };
-
-// 레시피 리스트
 
 const RecipeListContainer = styled.div`
   width: 100%;
@@ -183,13 +151,6 @@ const RecipeListContainer = styled.div`
   @media (min-width: 1024px) {
     margin-top: 0;
     margin-bottom: 16rem;
-  }
-`;
-
-const TitleAndNickname = styled.div`
-  padding: 0 0 0.6rem;
-  @media (min-width: 1024px) {
-    padding: 0;
   }
 `;
 
@@ -201,7 +162,7 @@ const RecipeHeading = styled.span`
   color: #4f3d21;
   @media (min-width: 1024px) {
     font-size: 18px;
-    margin: 0 0.5rem 0 1.9rem;
+    margin: 0 0.5rem 0 1rem;
   }
 `;
 
