@@ -21,7 +21,7 @@ import { Recipe, User } from "@/app/types";
 import WriterProfile from "@/app/components/recipe-view/sticky-sidebar/WriterProfile";
 import { axiosBase } from "@/app/api/axios";
 import toast from "react-hot-toast";
-import getCurrentUser from "@/app/api/user";
+import getCurrentUser, { getChefByUserId } from "@/app/api/user";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { useRouter } from "next/navigation";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
@@ -81,7 +81,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
     // 레시피 작성자 아이디, 이미지, 작성된 시각
     user_id,
     created_at,
-    user_img,
+    // user_img,
 
     // 요리 재료
     recipe_ingredients,
@@ -95,12 +95,18 @@ const RecipeDetail = (props: RecipeDataProps) => {
     recipe_like,
 
     // 팔로우, 팔로잉 관련
-    user_fan,
-    user_subscription,
+    // user_fan,
+    // user_subscription,
 
     // 댓글 관련 data
     comments,
   } = recipe;
+
+  // currentChef 정보
+  const { data: currentChef, isLoading: isLoadingChef } = useQuery(
+    ["currentChef", user_id],
+    () => getChefByUserId(user_id)
+  );
 
   // 댓글 개수
   const commentCount =
@@ -227,6 +233,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
     router.push("auth/login");
   };
 
+  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
+  if (isLoadingChef) {
+    return <div>Loading...</div>; //
+  }
+
   return (
     <>
       <ContainerDiv>
@@ -272,7 +283,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
           )}
           <ProfileImageDiv onClick={mobileProfileClickHandler}>
             <Image
-              src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
+              src={
+                currentChef.img
+                  ? currentChef.img
+                  : "/images/recipe-view/기본 프로필.PNG"
+              }
               alt="게시글 작성자 프로필 사진"
               width={150}
               height={150}
