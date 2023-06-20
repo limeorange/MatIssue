@@ -206,8 +206,8 @@ const ProfileContainerDiv = styled.div`
     position: fixed;
     width: 18.5rem;
     height: 32rem;
-    right: 8%;
-    bottom: 14%;
+    right: 3rem;
+    bottom: 10rem;
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
     border-radius: 2rem;
     background-color: #ffffff;

@@ -459,8 +459,8 @@ const StickySideDiv = styled.div`
 /** 프로필 이미지 감싸는 Div */
 const ProfileImageDiv = styled.div`
   position: fixed;
-  bottom: 2%;
-  right: 8%;
+  bottom: 1.5rem;
+  right: 3rem;
   width: 6rem;
   height: 6rem;
   margin-bottom: 1.3rem;
