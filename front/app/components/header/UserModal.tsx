@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import styled from "styled-components";
 
 import toast from "react-hot-toast";
-import { loginState } from "@/app/store/authAtom";
 
 import LoadingModal from "../UI/LoadingModal";
 
@@ -20,7 +19,6 @@ type UserModalProps = {
 /** 유저 메뉴 모달 컴포넌트 */
 const UserModal = (props: UserModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const setIsLoggedIn = useSetRecoilState(loginState);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -33,7 +31,6 @@ const UserModal = (props: UserModalProps) => {
       .post(`users/logout`)
       .then((res) => {
         Cookies.remove("session-id");
-        setIsLoggedIn(false);
         queryClient.removeQueries(["currentUser"]);
         queryClient.removeQueries(["currentUserRecipes"]);
         router.refresh();

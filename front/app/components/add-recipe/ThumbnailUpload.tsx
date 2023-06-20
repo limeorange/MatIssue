@@ -35,7 +35,7 @@ const ThumbnailUpload = ({
   };
 
   return (
-    <ImageSection>
+    <ImageWrapper>
       <Label>썸네일 등록</Label>
       {selectedImage ? (
         <Image src={selectedImage} alt="thumbnail" onClick={handleImageClick} />
@@ -48,7 +48,7 @@ const ThumbnailUpload = ({
         accept="image/*"
         onChange={handleImageChange}
       />
-    </ImageSection>
+    </ImageWrapper>
   );
 };
 
@@ -74,7 +74,7 @@ const Label = styled.label`
   }
 `;
 
-const ImageSection = styled.div`
+const ImageWrapper = styled.div`
   flex-direction: column;
   width: 100%;
 

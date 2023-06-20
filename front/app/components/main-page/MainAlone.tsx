@@ -70,12 +70,7 @@ const MainAlone = () => {
           <NonRecipeCrying />
         ) : (
           <RecipeContainer>
-            {!isDesktop ? (
-              <MainMobileListingRecipe
-                recipes={singleRecipes}
-                url="/recipes/category/honmuk?category=honmuk"
-              />
-            ) : (
+            {isDesktop ? (
               <>
                 <RecipeImageWrapperBase
                   onClick={() =>
@@ -96,7 +91,7 @@ const MainAlone = () => {
                 </RecipeImageWrapperBase>
                 <RecipeImageWrapper2
                   onClick={() =>
-                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                    router.push(`/recipe/${shuffledRecipes?.[1].recipe_id}`)
                   }
                 >
                   <SquareImageWrapper>
@@ -113,7 +108,7 @@ const MainAlone = () => {
                 </RecipeImageWrapper2>
                 <RecipeImageWrapper3
                   onClick={() =>
-                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                    router.push(`/recipe/${shuffledRecipes?.[2].recipe_id}`)
                   }
                 >
                   <SquareImageWrapper>
@@ -130,7 +125,7 @@ const MainAlone = () => {
                 </RecipeImageWrapper3>
                 <RecipeImageWrapper4
                   onClick={() =>
-                    router.push(`/recipe/${shuffledRecipes?.[0].recipe_id}`)
+                    router.push(`/recipe/${shuffledRecipes?.[3].recipe_id}`)
                   }
                 >
                   <SquareImageWrapper>
@@ -146,6 +141,11 @@ const MainAlone = () => {
                   </TitleOnImage>
                 </RecipeImageWrapper4>
               </>
+            ) : (
+              <MainMobileListingRecipe
+                recipes={singleRecipes}
+                url="/recipes/category/honmuk?category=honmuk"
+              />
             )}
           </RecipeContainer>
         )}

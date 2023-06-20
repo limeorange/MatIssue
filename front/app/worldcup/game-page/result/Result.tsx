@@ -11,6 +11,16 @@ import LoadingModal from "@/app/components/UI/LoadingModal";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import WorldcupKakaoShareButton from "@/app/utils/worldcupKakaoShare";
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  LineIcon,
+  LineShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+} from "react-share";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -30,6 +40,13 @@ const ResultPage = () => {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [animation, setAnimation] = useState("opacity-0");
+
+  // 현재 페이지 url 주소 받아옴
+  let currentPageUrl;
+
+  if (typeof window !== "undefined") {
+    currentPageUrl = window.location.href;
+  }
 
   // Url 복사하는 함수
   const copyToClipboard = async () => {
@@ -65,15 +82,15 @@ const ResultPage = () => {
       <WorldcupLayout className={animation}>
         <Logo />
         <GameHeader>레시피 이상형 월드컵!</GameHeader>
-        <GameProgress>
+        <GameProgressBox>
           우승 레시피입니다! <br /> 클릭시 해당 레시피로 이동!
-        </GameProgress>
-        <WorldcupCard>
+        </GameProgressBox>
+        <WorldcupCardContainer>
           <Link href={`/recipe/${recipe.recipe_id}`} passHref>
             <CardLink>
               <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
               <ImageWrapper>
-                <ImageContainer>
+                <ImageBox>
                   <Image
                     src={recipe.recipe_thumbnail}
                     alt={recipe.recipe_title}
@@ -81,7 +98,7 @@ const ResultPage = () => {
                     objectFit="cover"
                     style={{ borderRadius: "1.5rem" }}
                   />
-                </ImageContainer>
+                </ImageBox>
               </ImageWrapper>
             </CardLink>
           </Link>
@@ -96,8 +113,26 @@ const ResultPage = () => {
               />
             </div>
             <WorldcupKakaoShareButton />
+            {currentPageUrl && (
+              <StyledFacebookShareButton url={currentPageUrl}>
+                <FacebookIcon size={60} round />
+              </StyledFacebookShareButton>
+            )}
           </ShareButtonBox>
-        </WorldcupCard>
+          {currentPageUrl && (
+            <ShareButtonBox>
+              <StyledTwitterShareButton url={currentPageUrl}>
+                <TwitterIcon size={60} round />
+              </StyledTwitterShareButton>
+              <StyledLineShareButton url={currentPageUrl}>
+                <LineIcon size={60} round />
+              </StyledLineShareButton>
+              <StyledEmailShareButton url={currentPageUrl}>
+                <EmailIcon size={60} round />
+              </StyledEmailShareButton>
+            </ShareButtonBox>
+          )}
+        </WorldcupCardContainer>
         <RestartButtonBox>
           <Button
             onClick={() => {
@@ -154,7 +189,7 @@ const GameHeader = styled.p<StyledComponentProps>`
   }
 `;
 
-const GameProgress = styled.div`
+const GameProgressBox = styled.div`
   font-size: 35px;
   color: #4f3d21;
   margin-bottom: 1rem;
@@ -194,7 +229,7 @@ const RecipeTitleBox = styled.div`
   opacity: 1;
 `;
 
-const WorldcupCard = styled.div`
+const WorldcupCardContainer = styled.div`
   font-family: "Dongle-Bold";
   display: flex;
   flex-direction: column;
@@ -228,7 +263,7 @@ const ImageWrapper = styled.div`
   cursor: pointer;
 `;
 
-const ImageContainer = styled.div`
+const ImageBox = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
@@ -245,7 +280,7 @@ const ShareText = styled.p`
 
 const ShareButtonBox = styled.div`
   width: 100%;
-  max-width: 20rem;
+  max-width: 36rem;
   gap: 1rem;
   display: flex;
   align-items: center;
@@ -288,5 +323,45 @@ const RestartButtonBox = styled.div`
     &:hover {
       transform: translateY(-3px);
     }
+  }
+`;
+
+const StyledFacebookShareButton = styled(FacebookShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledTwitterShareButton = styled(TwitterShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledLineShareButton = styled(LineShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+`;
+
+const StyledEmailShareButton = styled(EmailShareButton)`
+  border-radius: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
   }
 `;

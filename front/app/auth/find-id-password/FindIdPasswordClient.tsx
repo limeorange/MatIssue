@@ -126,6 +126,7 @@ const FindIdPasswordClient = () => {
     setValue("day", day);
   };
 
+  /** 아이디, 비밀번호 찾기 제출 핸들러 */
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 

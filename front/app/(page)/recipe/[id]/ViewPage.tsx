@@ -281,7 +281,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
         <div>
           {isProfileModal && (
             <MiniWriterProfile
-              user_nickname={user_nickname}
               user_id={user_id}
               loggedInUserId={loggedInUserId}
             />

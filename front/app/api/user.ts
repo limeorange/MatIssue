@@ -2,23 +2,20 @@ import Cookies from "js-cookie";
 import { axiosBase } from "../api/axios";
 
 export default async function getCurrentUser() {
-  const session_id = Cookies.get("session-id");
+  const sessionId = Cookies.get("session-id");
 
-  if (session_id) {
+  if (sessionId) {
     try {
       const response = await axiosBase.get(`users/me`);
-      if (response.data === undefined) {
-        return null;
-      }
       return response.data;
     } catch (err: any) {
       Cookies.remove("session-id");
+      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
       return null;
     }
-  } else {
-    Cookies.remove("session-id");
-    return null;
   }
+
+  return null;
 }
 
 export async function getFollowStatus(user_id: string) {

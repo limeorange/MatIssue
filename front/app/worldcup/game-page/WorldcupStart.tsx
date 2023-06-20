@@ -83,7 +83,7 @@ const WorldcupGame = () => {
     <WorldcupLayout>
       <Logo />
       <GameHeader>레시피 이상형 월드컵!</GameHeader>
-      <GameProgress>
+      <GameProgressBox>
         {stage === 2 ? (
           "결승전"
         ) : (
@@ -93,12 +93,12 @@ const WorldcupGame = () => {
             {`/${stage / 2})`}
           </>
         )}
-      </GameProgress>
+      </GameProgressBox>
       <CardContainer>
         {displays.map((recipe, index) =>
           stage === 1 && displays.length === 1 ? (
             <>
-              {index !== 0 && <VS>VS</VS>}
+              {index !== 0 && <VSBox>VS</VSBox>}
               <Link
                 href={`/recipes/${recipe.recipe_id}`}
                 key={recipe.recipe_id}
@@ -107,7 +107,7 @@ const WorldcupGame = () => {
                 <Card onClick={clickHandler(recipe)}>
                   <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
                   <ImageWrapper>
-                    <ImageContainer>
+                    <ImageBox>
                       <Image
                         src={recipe.recipe_thumbnail}
                         alt={recipe.recipe_title}
@@ -115,18 +115,18 @@ const WorldcupGame = () => {
                         objectFit="cover"
                         style={{ borderRadius: "1.5rem" }}
                       />
-                    </ImageContainer>
+                    </ImageBox>
                   </ImageWrapper>
                 </Card>
               </Link>
             </>
           ) : (
             <>
-              {index !== 0 && <VS>VS</VS>}
+              {index !== 0 && <VSBox>VS</VSBox>}
               <Card onClick={clickHandler(recipe)} key={recipe.recipe_id}>
                 <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
                 <ImageWrapper>
-                  <ImageContainer>
+                  <ImageBox>
                     <Image
                       src={recipe.recipe_thumbnail}
                       alt={recipe.recipe_title}
@@ -134,7 +134,7 @@ const WorldcupGame = () => {
                       objectFit="cover"
                       style={{ borderRadius: "1.5rem" }}
                     />
-                  </ImageContainer>
+                  </ImageBox>
                 </ImageWrapper>
               </Card>
             </>
@@ -192,7 +192,7 @@ const GameHeader = styled.p<StyledComponentProps>`
   }
 `;
 
-const GameProgress = styled.div`
+const GameProgressBox = styled.div`
   font-size: 35px;
   color: #4f3d21;
   margin-bottom: 0.5rem;
@@ -231,7 +231,7 @@ const CardContainer = styled.div`
   }
 `;
 
-const VS = styled.div`
+const VSBox = styled.div`
   font-size: 25px;
   color: #4f3d21;
   font-family: "Dongle-Bold";
@@ -310,7 +310,7 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
+const ImageBox = styled.div`
   width: 100%;
   height: 100%;
   position: relative;

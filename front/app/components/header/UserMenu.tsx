@@ -2,11 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { loginState } from "@/app/store/authAtom";
 import { User } from "@/app/types";
 
 import UserModal from "./UserModal";
@@ -14,7 +12,6 @@ import UserModal from "./UserModal";
 /** 유저 메뉴 컴포넌트  */
 const UserMenu = ({ currentUser }: { currentUser: User }) => {
   const [isUserModal, setIsUserModal] = useState<boolean>(false);
-  const isLoggedIn = useRecoilValue(loginState);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const router = useRouter();
@@ -29,7 +26,7 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
 
   return (
     <UserMenuContainer>
-      {isLoggedIn ? (
+      {currentUser ? (
         <>
           <IconButton
             onClick={() => {

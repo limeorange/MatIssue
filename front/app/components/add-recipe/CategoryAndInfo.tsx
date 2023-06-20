@@ -33,8 +33,8 @@ const CategoryAndInfo = ({
 }: Props): FunctionComponentElement<Props> => {
   return (
     <InfoSectionContainer>
-      <InfoSection>
-        <LabelWithInfo>
+      <InfoSectionWrapper>
+        <LabelWithInfoBox>
           <Label>카테고리</Label>
           <Info>
             <Select value={selectedCategory} onChange={handleCategoryChange}>
@@ -48,10 +48,10 @@ const CategoryAndInfo = ({
               ))}
             </Select>
           </Info>
-        </LabelWithInfo>
-      </InfoSection>
-      <InfoSection>
-        <LabelWithInfo>
+        </LabelWithInfoBox>
+      </InfoSectionWrapper>
+      <InfoSectionWrapper>
+        <LabelWithInfoBox>
           <Label>요리정보</Label>
           <Info>
             <Select value={selectedPeople} onChange={handlePeopleChange}>
@@ -88,8 +88,8 @@ const CategoryAndInfo = ({
               ))}
             </Select>
           </Info>
-        </LabelWithInfo>
-      </InfoSection>
+        </LabelWithInfoBox>
+      </InfoSectionWrapper>
     </InfoSectionContainer>
   );
 };
@@ -151,7 +151,7 @@ const Select = styled.select`
   }
 `;
 
-const InfoSection = styled.div`
+const InfoSectionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -162,7 +162,7 @@ const InfoSection = styled.div`
   }
 `;
 
-const LabelWithInfo = styled.div`
+const LabelWithInfoBox = styled.div`
   @media (min-width: 1024px) {
     display: flex;
     align-items: flex-start;
