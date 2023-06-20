@@ -82,15 +82,15 @@ const ResultPage = () => {
       <WorldcupLayout className={animation}>
         <Logo />
         <GameHeader>레시피 이상형 월드컵!</GameHeader>
-        <GameProgress>
+        <GameProgressBox>
           우승 레시피입니다! <br /> 클릭시 해당 레시피로 이동!
-        </GameProgress>
-        <WorldcupCard>
+        </GameProgressBox>
+        <WorldcupCardContainer>
           <Link href={`/recipe/${recipe.recipe_id}`} passHref>
             <CardLink>
               <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
               <ImageWrapper>
-                <ImageContainer>
+                <ImageBox>
                   <Image
                     src={recipe.recipe_thumbnail}
                     alt={recipe.recipe_title}
@@ -98,7 +98,7 @@ const ResultPage = () => {
                     objectFit="cover"
                     style={{ borderRadius: "1.5rem" }}
                   />
-                </ImageContainer>
+                </ImageBox>
               </ImageWrapper>
             </CardLink>
           </Link>
@@ -132,7 +132,7 @@ const ResultPage = () => {
               </StyledEmailShareButton>
             </ShareButtonBox>
           )}
-        </WorldcupCard>
+        </WorldcupCardContainer>
         <RestartButtonBox>
           <Button
             onClick={() => {
@@ -189,7 +189,7 @@ const GameHeader = styled.p<StyledComponentProps>`
   }
 `;
 
-const GameProgress = styled.div`
+const GameProgressBox = styled.div`
   font-size: 35px;
   color: #4f3d21;
   margin-bottom: 1rem;
@@ -229,7 +229,7 @@ const RecipeTitleBox = styled.div`
   opacity: 1;
 `;
 
-const WorldcupCard = styled.div`
+const WorldcupCardContainer = styled.div`
   font-family: "Dongle-Bold";
   display: flex;
   flex-direction: column;
@@ -263,7 +263,7 @@ const ImageWrapper = styled.div`
   cursor: pointer;
 `;
 
-const ImageContainer = styled.div`
+const ImageBox = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
