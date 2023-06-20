@@ -34,9 +34,9 @@ const IngredientSection = ({
   return (
     <IngredientContainer>
       <Label>재료 등록</Label>
-      <IngredientBox>
+      <IngredientWrapper>
         {ingredients.map((_, index) => (
-          <IngredientRow key={index}>
+          <IngredientRowBox key={index}>
             <IngredientInput
               type="text"
               value={ingredients[index].ingredient}
@@ -51,17 +51,17 @@ const IngredientSection = ({
               onKeyPress={handleIngredientKeyPress}
               placeholder="재료의 양"
             />
-            <ButtonPlaceholder>
+            <ButtonPlaceBox>
               {showRemoveButton && (
                 <RemoveIngredientButton
                   type="button"
                   onClick={() => handleRemoveIngredient(index)}
                 />
               )}
-            </ButtonPlaceholder>
-          </IngredientRow>
+            </ButtonPlaceBox>
+          </IngredientRowBox>
         ))}
-        <CenteredAddButtonRow>
+        <CenteredAddButtonRowBox>
           <AddIngredientButton
             type="button"
             onClick={(event) => {
@@ -72,8 +72,8 @@ const IngredientSection = ({
           >
             + 재료 추가하기
           </AddIngredientButton>
-        </CenteredAddButtonRow>
-      </IngredientBox>
+        </CenteredAddButtonRowBox>
+      </IngredientWrapper>
     </IngredientContainer>
   );
 };
@@ -93,7 +93,7 @@ const IngredientContainer = styled.div`
   }
 `;
 
-const IngredientBox = styled.div`
+const IngredientWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -156,19 +156,19 @@ const QuantityInput = styled.input`
   }
 `;
 
-const IngredientRow = styled.div`
+const IngredientRowBox = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 1.5rem;
 `;
 
-const ButtonPlaceholder = styled.div`
+const ButtonPlaceBox = styled.div`
   width: 2.5rem;
   height: 2.5rem;
 `;
 
-const CenteredAddButtonRow = styled.div`
+const CenteredAddButtonRowBox = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
