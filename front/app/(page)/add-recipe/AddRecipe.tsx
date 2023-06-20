@@ -361,7 +361,7 @@ const RecipeForm = () => {
     <FormLayout>
       {isLoading && <LoadingModal />}
       <Title>레시피 등록하기</Title>
-      <MainContainer>
+      <ThumbnailAndCategoryAndInfoContainer>
         <ImageWrapper>
           <ThumbnailUpload
             selectedImage={state.selectedImage}
@@ -382,7 +382,7 @@ const RecipeForm = () => {
           times={times}
           difficulties={difficulties}
         />
-      </MainContainer>
+      </ThumbnailAndCategoryAndInfoContainer>
       <RecipeTitleWrapper>
         <Label>레시피 제목</Label>
         <Input
@@ -563,7 +563,7 @@ const Title = styled.h2`
   margin: 0;
 `;
 
-const MainContainer = styled.div`
+const ThumbnailAndCategoryAndInfoContainer = styled.div`
   flex-direction: column;
 
   @media (min-width: 1024px) {
