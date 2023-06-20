@@ -20,7 +20,7 @@ const extractVideoId = (url: string): string | null => {
 };
 
 /** 레시피 비디오 컴포넌트 */
-const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipe_video }) => {
+const RecipeVideo = ({ recipe_video }: RecipeVideoProps) => {
   return (
     <>
       <VideoContainer>
