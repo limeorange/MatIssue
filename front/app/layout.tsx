@@ -1,6 +1,5 @@
 import ToasterContext from "./context/ToasterContext";
 import StyledComponentsRegistry from "./libs/registry";
-
 import "./globals.css";
 import Recoil from "./context/RecoilContext";
 import ReactQuery from "./context/ReactQueryContext";

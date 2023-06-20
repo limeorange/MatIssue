@@ -115,10 +115,6 @@ const CancelButton = styled.div`
   width: 7.5rem;
 `;
 
-const ErrorMessage = styled.p`
-  color: red;
-  margin-top: 0.5rem;
-`;
 
 const PasswordInput = styled.input`
   width: 100%;
@@ -136,4 +132,7 @@ const PasswordInput = styled.input`
     outline: 0.3rem solid #fbd26a;
     border: none;
   }
+  -webkit-autocomplete: off;
+  -moz-autocomplete: off;
+  autocomplete: off;
 `;

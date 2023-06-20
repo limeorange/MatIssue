@@ -11,7 +11,7 @@ export const Container = styled.div`
   }
 `;
 
-export const Header = styled.h1`
+export const Heading = styled.h1`
   padding:0;
   font-size: 20px;
   font-weight: 700;
@@ -67,14 +67,13 @@ export const AccountDeletion = styled.div`
     color: #e11717;
     margin-left: 0;
   }
-
 `;
 
 //지우기
-export const AlertImage = styled.img`
-  width: 3rem;
-  height: 3rem;
-`;
+// export const AlertImage = styled.img`
+//   width: 3rem;
+//   height: 3rem;
+// `;
 
 export const WrapperInfo = styled.div`
   position: relative;
@@ -330,7 +329,7 @@ export const EmailWrapper = styled.div`
 `;
 
 // 모바일 버전 추가
-export const TitleAndPassword = styled.div`
+export const TitleAndPasswordWrapper = styled.div`
 display:flex;
 justify-content:space-between;
 margin:1.5rem 0 4.5rem 0; 
