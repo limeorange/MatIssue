@@ -365,34 +365,34 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
 
   return (
     <>
-      <PageWrapper className={animation}>
+      <ResultPageLayout className={animation}>
         <Logo />
         <PageTitle>
           나의 M<span>uk</span>BTI는?
         </PageTitle>
-        <MBTIimage>
+        <MBTIimageWrapper>
           <Image
             src={resultData[MBTI]?.img}
             alt="MBTI 이미지"
             width={200}
             height={200}
           />
-        </MBTIimage>
-        <MBTIResultText>{resultData[MBTI]?.text2}</MBTIResultText>
-        <MBTIResult>{MBTI}</MBTIResult>
-        <MBTIcard>
-          <Percent>전체 결과 중 {resultData[MBTI]?.per}</Percent>
-          <Rank>전체 순위 {resultData[MBTI]?.rank}위</Rank>
+        </MBTIimageWrapper>
+        <MBTIResultTextWrapper>{resultData[MBTI]?.text2}</MBTIResultTextWrapper>
+        <MBTIResultWrapper>{MBTI}</MBTIResultWrapper>
+        <MBTIcardContainer>
+          <PercentWrapper>전체 결과 중 {resultData[MBTI]?.per}</PercentWrapper>
+          <RankWrapper>전체 순위 {resultData[MBTI]?.rank}위</RankWrapper>
           <DivBar>-</DivBar>
-          <TextTitle>이런 장점을 가졌어요!</TextTitle>
-          <Text>{resultData[MBTI]?.talk.join(", ")}</Text>
-          <TextTitle style={{ marginTop: "2rem" }}>
+          <TextTitleWrapper>이런 장점을 가졌어요!</TextTitleWrapper>
+          <TextWrapper>{resultData[MBTI]?.talk.join(", ")}</TextWrapper>
+          <TextTitleWrapper style={{ marginTop: "2rem" }}>
             이런 고민도 있어요
-          </TextTitle>
-          <Text>{resultData[MBTI]?.text}</Text>
-          <FoodTitle>나에게 어울리는 소울푸드는?</FoodTitle>
-          <FoodDiv>
-            <Text>{recipeToShow?.recipe_title}</Text>
+          </TextTitleWrapper>
+          <TextWrapper>{resultData[MBTI]?.text}</TextWrapper>
+          <FoodTitleWrapper>나에게 어울리는 소울푸드는?</FoodTitleWrapper>
+          <FoodContainer>
+            <TextWrapper>{recipeToShow?.recipe_title}</TextWrapper>
             {recipeToShow && (
               <Image
                 src={recipeToShow.recipe_thumbnail}
@@ -401,19 +401,19 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
                 height={300}
               />
             )}
-          </FoodDiv>
-          <ButtonBox>
+          </FoodContainer>
+          <ButtonWrapper>
             <Button
               onClick={() => router.push(`/recipe/${recipeToShow?.recipe_id}`)}
             >
               레시피 보러 가기
             </Button>
-          </ButtonBox>
+          </ButtonWrapper>
           <DivBar>-</DivBar>
-          <MBTICompatibility>
-            <CompatibilityText style={{ color: "#9AC5F4" }}>
+          <MBTICompatibilityContainer>
+            <CompatibilityTextContainer style={{ color: "#9AC5F4" }}>
               💙찰떡 궁합💙
-              <CompatibilityResult>
+              <CompatibilityResultContainer>
                 <Image
                   src={resultData[compatibilityData[MBTI]?.compatible]?.img}
                   alt="찰떡 궁합 MBTI 이미지"
@@ -423,12 +423,12 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
                 {`${resultData[compatibilityData[MBTI]?.compatible]?.food}, ${
                   compatibilityData[MBTI]?.compatible
                 }`}
-              </CompatibilityResult>
-            </CompatibilityText>
+              </CompatibilityResultContainer>
+            </CompatibilityTextContainer>
 
-            <CompatibilityText style={{ color: "#EA906C" }}>
+            <CompatibilityTextContainer style={{ color: "#EA906C" }}>
               💔환장 궁합💔
-              <CompatibilityResult>
+              <CompatibilityResultContainer>
                 <Image
                   src={resultData[compatibilityData[MBTI]?.incompatible]?.img}
                   alt="환장 궁합 MBTI 이미지"
@@ -438,12 +438,12 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
                 {`${resultData[compatibilityData[MBTI]?.incompatible]?.food}, ${
                   compatibilityData[MBTI]?.incompatible
                 }`}
-              </CompatibilityResult>
-            </CompatibilityText>
-          </MBTICompatibility>
+              </CompatibilityResultContainer>
+            </CompatibilityTextContainer>
+          </MBTICompatibilityContainer>
           <DivBar>-</DivBar>
           <ShareText>테스트 공유하기</ShareText>
-          <ShareButtonBox>
+          <ShareButtonContainer>
             <div onClick={copyToClipboard}>
               <Image
                 src="/images/link.png"
@@ -458,9 +458,9 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
                 <FacebookIcon size={60} round />
               </StyledFacebookShareButton>
             )}
-          </ShareButtonBox>
+          </ShareButtonContainer>
           {currentPageUrl && (
-            <ShareButtonBox>
+            <ShareButtonContainer>
               <StyledTwitterShareButton url={currentPageUrl}>
                 <TwitterIcon size={60} round />
               </StyledTwitterShareButton>
@@ -470,10 +470,10 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
               <StyledEmailShareButton url={currentPageUrl}>
                 <EmailIcon size={60} round />
               </StyledEmailShareButton>
-            </ShareButtonBox>
+            </ShareButtonContainer>
           )}
-        </MBTIcard>
-        <ButtonBox>
+        </MBTIcardContainer>
+        <ButtonWrapper>
           <Button
             onClick={() => {
               router.push("/mbti");
@@ -487,15 +487,15 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
             />
             테스트 다시하기
           </Button>
-        </ButtonBox>
-      </PageWrapper>
+        </ButtonWrapper>
+      </ResultPageLayout>
     </>
   );
 };
 
 export default ResultPageClient;
 
-const PageWrapper = styled.div`
+const ResultPageLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -533,12 +533,12 @@ const PageTitle = styled.p`
   }
 `;
 
-const MBTIimage = styled.div`
+const MBTIimageWrapper = styled.div`
   font-size: 40px;
   margin: 3rem auto;
 `;
 
-const MBTIResultText = styled.div`
+const MBTIResultTextWrapper = styled.div`
   font-family: "Dongle-Bold";
   font-size: 32px;
   color: #4f3d21;
@@ -548,7 +548,7 @@ const MBTIResultText = styled.div`
   }
 `;
 
-const MBTIResult = styled.div`
+const MBTIResultWrapper = styled.div`
   font-family: "Dongle-Bold";
   font-size: 50px;
   color: #4f3d21;
@@ -562,7 +562,7 @@ const DivBar = styled.div`
   background-color: rgb(147, 112, 98, 0.5);
 `;
 
-const MBTIcard = styled.div`
+const MBTIcardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -577,25 +577,25 @@ const MBTIcard = styled.div`
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
-const Percent = styled.div`
+const PercentWrapper = styled.div`
   font-size: 40px;
   font-family: "Dongle-Bold";
   color: #4f3d21;
 `;
 
-const Rank = styled.div`
+const RankWrapper = styled.div`
   font-size: 38px;
   font-family: "Dongle-Bold";
   color: rgb(154, 110, 96);
 `;
 
-const TextTitle = styled.div`
+const TextTitleWrapper = styled.div`
   font-size: 30px;
   font-family: "Dongle-Bold";
   color: #f8b551;
 `;
 
-const Text = styled.div`
+const TextWrapper = styled.div`
   font-size: 22px;
   font-family: "Dongle-Bold";
   color: grey;
@@ -607,14 +607,14 @@ const Text = styled.div`
   }
 `;
 
-const FoodTitle = styled.div`
+const FoodTitleWrapper = styled.div`
   font-size: 30px;
   font-family: "Dongle-Bold";
   color: rgb(154, 110, 96);
   margin-top: 3.5rem;
 `;
 
-const FoodDiv = styled.div`
+const FoodContainer = styled.div`
   padding: 1.5rem;
   max-width: 30rem;
   font-family: "Dongle-Bold";
@@ -631,7 +631,7 @@ const ShareText = styled.p`
   color: #5c8984;
 `;
 
-const ShareButtonBox = styled.div`
+const ShareButtonContainer = styled.div`
   width: 100%;
   max-width: 36rem;
   gap: 1rem;
@@ -692,7 +692,7 @@ const StyledEmailShareButton = styled(EmailShareButton)`
   }
 `;
 
-const ButtonBox = styled.div`
+const ButtonWrapper = styled.div`
   width: 100%;
   max-width: 20rem;
   gap: 1rem;
@@ -719,7 +719,7 @@ const ButtonBox = styled.div`
   }
 `;
 
-const MBTICompatibility = styled.div`
+const MBTICompatibilityContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -728,14 +728,14 @@ const MBTICompatibility = styled.div`
   gap: 4rem;
 `;
 
-const CompatibilityText = styled.div`
+const CompatibilityTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 30px;
 `;
 
-const CompatibilityResult = styled.div`
+const CompatibilityResultContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

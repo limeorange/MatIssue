@@ -248,22 +248,26 @@ const TestPageClient = () => {
 
   return (
     <>
-      <PageWrapper className={animation}>
+      <TestPageLayout className={animation}>
         <Logo />
         <PageTitle>
           M<span>uk</span>BTI 테스트
         </PageTitle>
-        <ProgressSection>
+        <ProgressSectionContainer>
           <BackButton onClick={goBack}>←</BackButton>
           <ProgressBar progress={(progressStep / 13) * 100} />
           <ProgressNumber>{`${count}/12`}</ProgressNumber>
-        </ProgressSection>
-        <QuestionNum className={answerButtonAnimation ? "shrink" : "normal"}>
+        </ProgressSectionContainer>
+        <QuestionNumWrapper
+          className={answerButtonAnimation ? "shrink" : "normal"}
+        >
           Q{count}.
-        </QuestionNum>
-        <Question className={answerButtonAnimation ? "shrink" : "normal"}>
+        </QuestionNumWrapper>
+        <QuestionWrapper
+          className={answerButtonAnimation ? "shrink" : "normal"}
+        >
           {data[count].ques}
-        </Question>
+        </QuestionWrapper>
         <AnswerButtonContainer
           className={answerButtonAnimation ? "shrink" : "normal"}
         >
@@ -284,14 +288,14 @@ const TestPageClient = () => {
             {data[count].ans2}
           </Button>
         </AnswerButtonContainer>
-      </PageWrapper>
+      </TestPageLayout>
     </>
   );
 };
 
 export default TestPageClient;
 
-const PageWrapper = styled.div`
+const TestPageLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -325,7 +329,7 @@ const PageTitle = styled.p`
   }
 `;
 
-const QuestionNum = styled.div`
+const QuestionNumWrapper = styled.div`
   font-size: 50px;
   color: #4f3d21;
   margin-bottom: 5rem;
@@ -344,7 +348,7 @@ const QuestionNum = styled.div`
   }
 `;
 
-const Question = styled.div`
+const QuestionWrapper = styled.div`
   font-size: 15px;
   color: #4f3d21;
   white-space: pre-line;
@@ -404,7 +408,7 @@ const AnswerButtonContainer = styled.div`
   }
 `;
 
-const ProgressSection = styled.div`
+const ProgressSectionContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
