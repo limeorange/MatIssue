@@ -8,12 +8,12 @@ type CommentModalProps = {
   deleteClickHandler: () => void;
 };
 
-const CommentModal: React.FC<CommentModalProps> = ({
+const CommentModal = ({
   isModal,
   modalCloseHandler,
   editClickHandler,
   deleteClickHandler,
-}) => {
+}: CommentModalProps) => {
   // 모달 컨테이너의 ref 생성
   const modalRef = useRef<HTMLDivElement>(null);
 
