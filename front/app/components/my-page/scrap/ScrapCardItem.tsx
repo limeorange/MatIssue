@@ -77,14 +77,14 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
 
   return (
     <>
-      <ScrapCardContainerDiv>
+      <ScrapCardContainer>
         <div
           className="cursor-pointer"
           onClick={() => {
             router.push(`/recipe/${recipe_id}`);
           }}
         >
-          <RecipeTitleDiv>
+          <ScrapTitleWrapper>
             <Image
               src="/images/recipe-view/note.svg"
               alt="스크랩 노트 이모티콘"
@@ -92,14 +92,14 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
               height={35}
               style={{ objectFit: "cover" }}
             />
-            <ScrapTitleSpan>
+            <ScrapTitle>
               {recipe_title.length > 15
                 ? `${recipe_title.slice(0, 15)}...`
                 : recipe_title}
-            </ScrapTitleSpan>
-          </RecipeTitleDiv>
+            </ScrapTitle>
+          </ScrapTitleWrapper>
           {/* 레시피 썸네일 */}
-          <RecipeImageDiv>
+          <RecipeImage>
             <Image
               src={recipe_thumbnail}
               alt="스크랩 레시피 썸네일"
@@ -112,16 +112,16 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
                 borderRadius: 15,
               }}
             />
-          </RecipeImageDiv>
+          </RecipeImage>
           {/* 레시피 제목, 작성자, 좋아요 수 */}
-          <RecipeDescriptionDiv>
-            <RecipeTitleH2>{recipe_title}</RecipeTitleH2>
-            <NicknameLikeDiv>
+          <RecipeDescriptionWrapper>
+            <RecipeTitle>{recipe_title}</RecipeTitle>
+            <NicknameLikeBox>
               <div className="text-[1.35rem] text-[#6F6F6F]">
                 {user_nickname}
               </div>
-              <LikesWrapperButton>
-                <IconDiv>
+              <LikesButtonWrapper>
+                <LikesIcon>
                   <Image
                     src="/images/recipe-view/heart_full.svg"
                     alt="게시글 좋아요 하트"
@@ -129,31 +129,31 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
                     height={24}
                     style={{ objectFit: "cover", cursor: "pointer" }}
                   />
-                </IconDiv>
+                </LikesIcon>
                 <LikesCount>{recipe_like.length}</LikesCount>
-              </LikesWrapperButton>
-            </NicknameLikeDiv>
-          </RecipeDescriptionDiv>
+              </LikesButtonWrapper>
+            </NicknameLikeBox>
+          </RecipeDescriptionWrapper>
         </div>
         {/* 스크랩 메모 내용 */}
-        <MemoContainerDiv>
-          <ScrapTextDiv hasMemo={hasMemo}>
+        <MemoWrapper>
+          <ScrapText hasMemo={hasMemo}>
             {hasMemo ? memoText : "게시글에서 메모를 입력해보세요!"}
-          </ScrapTextDiv>
-        </MemoContainerDiv>
+          </ScrapText>
+        </MemoWrapper>
         {/* 스크랩 삭제 버튼 */}
-        <ButtonDiv>
+        <DeleteButtonBox>
           <DeleteButton onClick={() => scrapDeleteHandler(recipe_id)}>
             삭제
           </DeleteButton>
-        </ButtonDiv>
-      </ScrapCardContainerDiv>
+        </DeleteButtonBox>
+      </ScrapCardContainer>
     </>
   );
 };
 
 /** 스크랩 카드 전체 Div */
-const ScrapCardContainerDiv = styled.div`
+const ScrapCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 28rem;
@@ -165,39 +165,39 @@ const ScrapCardContainerDiv = styled.div`
 `;
 
 /** 스크랩 카드 제목 Div */
-const RecipeTitleDiv = styled.div`
+const ScrapTitleWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 1.7rem;
 `;
 
 /** 스크랩 썸네일 이미지 Div */
-const RecipeImageDiv = styled.div`
+const RecipeImage = styled.div`
   width: 24rem;
   height: 18rem;
   margin-bottom: 1rem;
 `;
 
 /** 스크랩 설명 Div */
-const RecipeDescriptionDiv = styled.div`
+const RecipeDescriptionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 1.2rem;
 `;
 
 /** 레시피 제목 H2 */
-const RecipeTitleH2 = styled.h2`
+const RecipeTitle = styled.h2`
   font-size: 1.45rem;
 `;
 
 /** 닉네임, 좋아요 감싸는 Div */
-const NicknameLikeDiv = styled.div`
+const NicknameLikeBox = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
 /** 스크랩 메모하기 제목 Span */
-const ScrapTitleSpan = styled.span`
+const ScrapTitle = styled.span`
   font-size: 16px;
   font-weight: 500;
   margin-left: 0.6rem;
@@ -205,7 +205,7 @@ const ScrapTitleSpan = styled.span`
 `;
 
 /** 좋아요 아이콘과 카운트 묶는 Button */
-const LikesWrapperButton = styled.button`
+const LikesButtonWrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -213,7 +213,7 @@ const LikesWrapperButton = styled.button`
 `;
 
 /** 좋아요 아이콘 Div */
-const IconDiv = styled.div`
+const LikesIcon = styled.div`
   width: 1.6rem;
   height: 1.2rem;
   margin-right: 0.6rem;
@@ -226,14 +226,14 @@ const LikesCount = styled.span`
 `;
 
 /** 메모 입력칸 전체 감싸는 Div */
-const MemoContainerDiv = styled.div`
+const MemoWrapper = styled.div`
   width: 24rem;
   height: 15rem;
   font-size: 15.5px;
 `;
 
 /** 메모 입력하는 Textarea */
-const ScrapTextDiv = styled.div<{ hasMemo: boolean }>`
+const ScrapText = styled.div<{ hasMemo: boolean }>`
   outline: none;
   width: 100%;
   height: 100%;
@@ -259,7 +259,7 @@ const ScrapTextDiv = styled.div<{ hasMemo: boolean }>`
 `;
 
 /** 삭제 버튼 감싸는 Div */
-const ButtonDiv = styled.div`
+const DeleteButtonBox = styled.div`
   display: flex;
   gap: 0.8rem;
   margin-top: 2rem;

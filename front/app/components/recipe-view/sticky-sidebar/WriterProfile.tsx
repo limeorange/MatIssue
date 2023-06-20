@@ -10,7 +10,6 @@ import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { User } from "@/app/types";
 
 type WriterProfileProps = {
   user_id: string;
@@ -23,13 +22,15 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
   loggedInUserId,
 }) => {
   // currentChef에 user 정보가 담김
-  const { data: currentChef } = useQuery(["currentChef", user_id], () =>
-    getChefByUserId(user_id)
+  const { data: currentChef, isLoading } = useQuery(
+    ["currentChef", user_id],
+    () => getChefByUserId(user_id)
   );
 
   const client = useQueryClient();
-
   const isHeaderVisible = useMovingContentByScrolling();
+
+  // 팔로우, 팔로잉 동작 시 업데이트해서 보여주기 위한 상태 관리
   const [isFollowing, setIsFollowing] = useState(false);
 
   // 로그인 유도 모달 상태 관리
@@ -135,6 +136,11 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
     router.push("auth/login");
   };
 
+  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
+  if (isLoading) {
+    return <div>Loading...</div>; //
+  }
+
   return (
     <>
       {/* 팔로우 취소 모달 */}
@@ -157,14 +163,14 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
         />
       )}
 
-      <ProfileContainerDiv isHeaderVisible={isHeaderVisible}>
-        <ProfileHeaderDiv>오늘의 쉐프</ProfileHeaderDiv>
-        <ProfileContentsDiv>
+      <ProfileContainer isHeaderVisible={isHeaderVisible}>
+        <ProfileHeader>오늘의 쉐프</ProfileHeader>
+        <ProfileContentsWrapper>
           {/* 프로필 사진 */}
-          <ProfileImageDiv>
+          <ProfileImage>
             <Image
               src={
-                currentChef
+                currentChef.img
                   ? currentChef.img
                   : "/images/recipe-view/기본 프로필.PNG"
               }
@@ -173,32 +179,32 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
               height={130}
               style={{ objectFit: "cover", cursor: "pointer" }}
             />
-          </ProfileImageDiv>
+          </ProfileImage>
 
           {/* 닉네임 */}
-          <NicknameSpan>{currentChef?.username}</NicknameSpan>
+          <Nickname>{currentChef?.username}</Nickname>
 
           {/* 팔로잉, 팔로워 */}
-          <FollowDiv>
+          <FollowBox>
             <span>팔로워</span>
-            <BoldSpan>{currentChef?.fans.length}</BoldSpan>
+            <BoldCount>{currentChef?.fans.length}</BoldCount>
             <span>|</span>
             <span>팔로잉</span>
-            <BoldSpan>{currentChef?.subscriptions.length}</BoldSpan>
-          </FollowDiv>
+            <BoldCount>{currentChef?.subscriptions.length}</BoldCount>
+          </FollowBox>
 
           {/* 팔로우 버튼 */}
           <FollowButton onClick={followButtonHandler}>
             {followButtonText}
           </FollowButton>
-        </ProfileContentsDiv>
-      </ProfileContainerDiv>
+        </ProfileContentsWrapper>
+      </ProfileContainer>
     </>
   );
 };
 
 /** 프로필 박스 전체 감싸는 Div */
-const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
+const ProfileContainer = styled.div<{ isHeaderVisible: boolean }>`
   display: none;
 
   @media (min-width: 1200px) {
@@ -221,7 +227,7 @@ const ProfileContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
 `;
 
 /** 프로필 헤더 박스 Div */
-const ProfileHeaderDiv = styled.div`
+const ProfileHeader = styled.div`
   width: 18.5rem;
   height: 4.3rem;
   background: #fbe2a1;
@@ -234,7 +240,7 @@ const ProfileHeaderDiv = styled.div`
 `;
 
 /** 프로필 내용 담는 Div */
-const ProfileContentsDiv = styled.div`
+const ProfileContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -242,7 +248,7 @@ const ProfileContentsDiv = styled.div`
 `;
 
 /** 프로필 이미지 감싸는 Div */
-const ProfileImageDiv = styled.div`
+const ProfileImage = styled.div`
   display: flex;
   width: 12rem;
   height: 12rem;
@@ -253,7 +259,7 @@ const ProfileImageDiv = styled.div`
 `;
 
 /** 닉네임 Span */
-const NicknameSpan = styled.span`
+const Nickname = styled.span`
   font-size: 1.8rem;
   font-weight: 500;
   color: #4f3d21;
@@ -261,7 +267,7 @@ const NicknameSpan = styled.span`
 `;
 
 /** 팔로잉, 팔로워 Div */
-const FollowDiv = styled.div`
+const FollowBox = styled.div`
   display: flex;
   color: #4f3d21;
   font-size: 1.5rem;
@@ -270,7 +276,7 @@ const FollowDiv = styled.div`
 `;
 
 /** 팔로잉, 팔로워수 강조 Span */
-const BoldSpan = styled.span`
+const BoldCount = styled.span`
   font-weight: 500;
 `;
 

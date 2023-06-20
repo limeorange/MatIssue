@@ -265,8 +265,8 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
   return (
     <>
-      <MainWrapper>
-        <FilterBarBox>
+      <MainLayout>
+        <div>
           <FilterBar
             setFilter={setFilter}
             removeTag={removeTag}
@@ -280,7 +280,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
             duration={duration}
             difficulty={difficulty}
           />
-        </FilterBarBox>
+        </div>
         <FilterTag
           search={searchQuery}
           filter={filter}
@@ -375,7 +375,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
         ) : (
           <NonRecipePage />
         )}
-      </MainWrapper>
+      </MainLayout>
     </>
   );
 };
@@ -383,7 +383,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 export default ListingRecipe;
 
 // styled-components
-const MainWrapper = styled.div`
+const MainLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -466,5 +466,3 @@ const SortButton = styled.button<{ selected: boolean }>`
     }
   }
 `;
-
-const FilterBarBox = styled.div``;

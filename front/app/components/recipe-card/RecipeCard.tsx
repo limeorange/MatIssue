@@ -11,7 +11,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
 
   // 댓글 수 설정 상태
-  const [commentCount, setCommentCount] = useState<number>(0);
+  // const [commentCount, setCommentCount] = useState<number>(0);
 
   // 레시피 클릭 시 상세페이지 이동 함수
   const handleRecipeClick = () => {
@@ -19,61 +19,61 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   };
 
   // 레시피 데이터의 댓글 수 계산
-  useEffect(() => {
-    const fetchComments = async () => {
-      const recipeData = await getRecipeById(recipe.recipe_id);
-      setCommentCount(recipeData.comments.length || 0);
-    };
+  // useEffect(() => {
+  //   const fetchComments = async () => {
+  //     const recipeData = await getRecipeById(recipe.recipe_id);
+  //     setCommentCount(recipeData.comments.length || 0);
+  //   };
 
-    fetchComments();
-  }, [recipe.recipe_id]);
+  //   fetchComments();
+  // }, [recipe.recipe_id]);
 
   return (
     <>
-      <RecipeCardWrapper onClick={handleRecipeClick}>
-        <RecipeImg>
-          <ImgWrapper>
+      <RecipeCardLayout onClick={handleRecipeClick}>
+        <RecipeImgContainer>
+          <RecipeImgWrapper>
             <Image
               fill
               src={recipe.recipe_thumbnail}
               style={{ objectFit: "cover" }}
               alt="게시물 썸네일 이미지"
             />
-          </ImgWrapper>
-        </RecipeImg>
-        <RecipeTitle>
+          </RecipeImgWrapper>
+        </RecipeImgContainer>
+        <RecipeTitleWrapper>
           <p>{recipe.recipe_title}</p>
-        </RecipeTitle>
-        <RecipeInfo>
-          <RecipeAuthor>
+        </RecipeTitleWrapper>
+        <RecipeInfoContainer>
+          <RecipeAuthorWrapper>
             <p>{recipe.user_nickname}</p>
-          </RecipeAuthor>
-          <RecipeRank>
-            <RecipeRankItem>
-              <RecipeRankImg>
+          </RecipeAuthorWrapper>
+          <RecipeRankContainer>
+            <RecipeRankItemContainer>
+              <RecipeRankImgWrapper>
                 <Image
                   src="/images/recipe-view/heart_full.svg"
                   alt="게시물 좋아요 이미지"
                   width={30}
                   height={26}
                 />
-              </RecipeRankImg>
+              </RecipeRankImgWrapper>
               <Count>{recipe.recipe_like.length.toLocaleString()}</Count>
-            </RecipeRankItem>
-            <RecipeRankItem>
-              <RecipeRankImg style={{ marginBottom: "0.25rem" }}>
+            </RecipeRankItemContainer>
+            <RecipeRankItemContainer>
+              <RecipeRankImgWrapper style={{ marginBottom: "0.25rem" }}>
                 <Image
                   src="/images/recipe-view/comment.svg"
                   alt="게시물 댓글 이미지"
                   width={30}
                   height={26}
                 />
-              </RecipeRankImg>
-              <Count>{commentCount.toLocaleString()}</Count>
-            </RecipeRankItem>
-          </RecipeRank>
-        </RecipeInfo>
-      </RecipeCardWrapper>
+              </RecipeRankImgWrapper>
+              <Count>{recipe.comments.length.toLocaleString()}</Count>
+            </RecipeRankItemContainer>
+          </RecipeRankContainer>
+        </RecipeInfoContainer>
+      </RecipeCardLayout>
     </>
   );
 };
@@ -81,7 +81,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 export default RecipeCard;
 
 // styled-components
-const RecipeCardWrapper = styled.div`
+const RecipeCardLayout = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -94,14 +94,14 @@ const RecipeCardWrapper = styled.div`
   }
 `;
 
-const RecipeImg = styled.div`
+const RecipeImgContainer = styled.div`
   position: relative;
   padding-top: 90%;
   border-radius: 0.8rem;
   overflow: hidden;
 `;
 
-const ImgWrapper = styled.div`
+const RecipeImgWrapper = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -116,7 +116,7 @@ const ImgWrapper = styled.div`
   }
 `;
 
-const RecipeInfo = styled.div`
+const RecipeInfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -126,7 +126,7 @@ const RecipeInfo = styled.div`
   }
 `;
 
-const RecipeTitle = styled.div`
+const RecipeTitleWrapper = styled.div`
   width: 100%;
   font-size: 16px;
   font-weight: 500;
@@ -141,17 +141,17 @@ const RecipeTitle = styled.div`
   }
 `;
 
-const RecipeAuthor = styled.div`
+const RecipeAuthorWrapper = styled.div`
   font-size: 14px;
   font-weight: 400;
   color: #6f6f6f;
 `;
 
-const RecipeRank = styled.div`
+const RecipeRankContainer = styled.div`
   display: flex;
 `;
 
-const RecipeRankItem = styled.div`
+const RecipeRankItemContainer = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
@@ -162,7 +162,7 @@ const RecipeRankItem = styled.div`
   }
 `;
 
-const RecipeRankImg = styled.div`
+const RecipeRankImgWrapper = styled.div`
   margin-right: 0.5rem;
   max-width: 1.3rem;
   max-height: 1.1rem;
