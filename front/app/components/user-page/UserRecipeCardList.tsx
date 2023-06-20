@@ -6,54 +6,39 @@ import React from "react";
 import RecipeCard from "../recipe-card/RecipeCard";
 import { axiosBase } from "@/app/api/axios";
 import NonRecipe from "../UI/NonRecipe";
-import { Recipe } from "@/app/types";
+import { Recipe, User } from "@/app/types";
 import ConfirmModal from "../UI/ConfirmModal";
 import Pagination from "../pagination/Pagination";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { getChefByUserId } from "@/app/api/user";
+
+type UserProfileCardsProps = {
+  ProfileUserRecipes: Recipe[];
+  userProfileId: string;
+  initialCurrentChef: User;
+};
 
 const UserRecipeCardList = ({
   ProfileUserRecipes,
-}: {
-  ProfileUserRecipes: Recipe;
-}) => {
-  const client = useQueryClient();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
+  userProfileId,
+  initialCurrentChef,
+}: UserProfileCardsProps) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const recipesPerPage = 16;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
 
-  const handleOpenModal = (recipe: Recipe) => {
-    setRecipeToDelete(recipe);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setRecipeToDelete(null);
-  };
-
-  const handleDeleteRecipe = async () => {
-    if (!recipeToDelete) return;
-
-    const id = recipeToDelete.recipe_id;
-
-    try {
-      await axiosBase.delete(`recipes/${id}`);
-      console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
-      client.invalidateQueries(["currentRecipe"]);
-      // setIsModalOpen(false);
-    } catch (error) {
-      console.error(
-        "레시피 삭제 요청을 보내는 중에 오류가 발생했습니다:",
-        error
-      );
+  // currentChef에 게시글 작성자 정보가 담김
+  const { data: currentChef } = useQuery<User>(
+    ["currentChef", userProfileId],
+    () => getChefByUserId(userProfileId),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: initialCurrentChef,
     }
-    setIsModalOpen(false);
-  };
+  );
 
   useEffect(() => {
     function handleResize() {
@@ -70,10 +55,7 @@ const UserRecipeCardList = ({
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  // const currentRecipes = currentRecipe?.slice(
-  //   indexOfFirstRecipe,
-  //   indexOfLastRecipe
-  // );
+
   const currentRecipe = isMobile
     ? ProfileUserRecipes?.slice(0, indexOfLastRecipe)
     : ProfileUserRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -85,7 +67,6 @@ const UserRecipeCardList = ({
 
     // 데이터 로딩 시간 설정
     await new Promise((resolve) => setTimeout(resolve, 1500));
-
     setIsLoading(false);
   };
 
@@ -93,7 +74,7 @@ const UserRecipeCardList = ({
 
   return (
     <RecipeListContainer>
-      <RecipeHeading>나의 레시피</RecipeHeading>
+      <RecipeHeading>{currentChef.username}님의 레시피</RecipeHeading>
       <RecipeHeadingCount>{currentRecipe?.length}</RecipeHeadingCount>
       {currentRecipe?.length === 0 ? (
         <NonRecipeMsg />
@@ -121,13 +102,6 @@ const UserRecipeCardList = ({
             {currentRecipe?.map((recipe: Recipe) => (
               <RecipeCardWrapper key={recipe.recipe_id}>
                 <StyledRecipeCard recipe={recipe} />
-
-                <button onClick={() => handleOpenModal(recipe)}>
-                  <ButtonDiv>
-                    <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
-                    <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
-                  </ButtonDiv>
-                </button>
               </RecipeCardWrapper>
             ))}
           </RecipeList>
@@ -140,16 +114,6 @@ const UserRecipeCardList = ({
               .map((recipe: Recipe) => (
                 <RecipeCardWrapper key={recipe.recipe_id}>
                   <StyledRecipeCard recipe={recipe} />
-
-                  <button onClick={() => handleOpenModal(recipe)}>
-                    <ButtonDiv>
-                      <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
-                      <DeleteButtonMobile
-                        src="/images/final-x.svg"
-                        alt="X-box"
-                      />
-                    </ButtonDiv>
-                  </button>
                 </RecipeCardWrapper>
               ))}
           </RecipeList>
@@ -163,19 +127,9 @@ const UserRecipeCardList = ({
           )}
         </>
       )}
-      {isModalOpen && (
-        <StyledConfirmModal
-          icon={<AlertImage src="/images/alert.png" alt="alert" />}
-          message="레시피를 삭제하시겠습니까?"
-          onConfirm={handleDeleteRecipe}
-          onCancel={handleCloseModal}
-        />
-      )}
     </RecipeListContainer>
   );
 };
-
-// 레시피 리스트
 
 const RecipeListContainer = styled.div`
   width: 100%;
@@ -183,13 +137,6 @@ const RecipeListContainer = styled.div`
   @media (min-width: 1024px) {
     margin-top: 0;
     margin-bottom: 16rem;
-  }
-`;
-
-const TitleAndNickname = styled.div`
-  padding: 0 0 0.6rem;
-  @media (min-width: 1024px) {
-    padding: 0;
   }
 `;
 
@@ -201,7 +148,7 @@ const RecipeHeading = styled.span`
   color: #4f3d21;
   @media (min-width: 1024px) {
     font-size: 18px;
-    margin: 0 0.5rem 0 1.9rem;
+    margin: 0 0.5rem 0 1rem;
   }
 `;
 
@@ -232,58 +179,13 @@ const RecipeCardWrapper = styled.div`
 
 const StyledRecipeCard = styled(RecipeCard)``;
 
-const DeleteButtonImage = styled.img`
-  @media (min-width: 1024px) {
-    position: absolute;
-    transition: transform 0.1s ease-in-out;
-    top: 25rem;
-    right: 0.7rem;
-    width: 1.8rem;
-    height: 1.8rem;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    &:hover {
-      transform: scale(1.2);
-    }
-  }
-
-  @media (max-width: 1023px) {
-    display: none;
-  }
-`;
-
-const DeleteButtonMobile = styled.img`
-  position: absolute;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  top: 0.7rem;
-  right: 0.7rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  transition: transform 0.1s ease-in-out;
-  @media (min-width: 1024px) {
-    display: none;
-  }
-`;
-
 const NonRecipeMsg = styled(NonRecipe)``;
-const StyledConfirmModal = styled(ConfirmModal)``;
-const AlertImage = styled.img`
-  width: 3rem;
-  height: 3rem;
-`;
 
 const PaginationComponent = styled(Pagination)`
   display: none;
   @media (min-width: 1024px) {
     display: block;
   }
-`;
-
-const ButtonDiv = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 3rem;
-  height: 3rem;
 `;
 
 export default UserRecipeCardList;

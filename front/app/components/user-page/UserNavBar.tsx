@@ -3,28 +3,29 @@
 import styled from "styled-components";
 import { useRouter, usePathname } from "next/navigation";
 
-const UserNavBar = () => {
+const UserNavBar = ({ userProfileId }: { userProfileId: string }) => {
   const currentPath = usePathname();
   const router = useRouter();
+  console.log("router...", router);
 
   return (
     <>
       <NavList>
         <NavItem
-          onClick={() => router.push("/my-page")}
-          clicked={currentPath === "/my-page"}
+          onClick={() => router.push(`/user/${userProfileId}`)}
+          clicked={currentPath === `/user/${userProfileId}`}
         >
           레시피
         </NavItem>
         <NavItem
-          onClick={() => router.push("/my-page/modify-user-info")}
-          clicked={currentPath === "/my-page/modify-user-info"}
+          onClick={() => router.push(`/user/${userProfileId}/followers`)}
+          clicked={currentPath === `/user/${userProfileId}/followers`}
         >
           팔로워
         </NavItem>
         <NavItem
-          onClick={() => router.push("/my-page/scrap")}
-          clicked={currentPath === "/my-page/scrap"}
+          onClick={() => router.push(`/user/${userProfileId}/following`)}
+          clicked={currentPath === `/user/${userProfileId}/following`}
         >
           팔로잉
         </NavItem>

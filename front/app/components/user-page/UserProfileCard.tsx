@@ -12,21 +12,29 @@ import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ConfirmModal from "../UI/ConfirmModal";
 import LoginConfirmModal from "../UI/LoginConfirmModal";
+import { User } from "@/app/types";
 
 type UserProfileProps = {
   userProfileId: string;
   loggedInUserId: string | undefined;
+  initialCurrentChef: User;
 };
 
 /** 작성자 프로필 컴포넌트 */
 const UserProfileCard = ({
   userProfileId,
   loggedInUserId,
+  initialCurrentChef,
 }: UserProfileProps) => {
   // currentChef에 게시글 작성자 정보가 담김
-  const { data: currentChef, isLoading } = useQuery(
+  const { data: currentChef } = useQuery<User>(
     ["currentChef", userProfileId],
-    () => getChefByUserId(userProfileId)
+    () => getChefByUserId(userProfileId),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: initialCurrentChef,
+    }
   );
 
   const client = useQueryClient();
@@ -138,11 +146,6 @@ const UserProfileCard = ({
     router.push("auth/login");
   };
 
-  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
-  if (isLoading) {
-    return <div>Loading...</div>; //
-  }
-
   return (
     <>
       {/* 팔로우 취소 모달 */}
@@ -184,15 +187,15 @@ const UserProfileCard = ({
           </ProfileImage>
 
           {/* 닉네임 */}
-          <Nickname>{currentChef?.username}</Nickname>
+          <Nickname>{currentChef.username}</Nickname>
 
           {/* 팔로잉, 팔로워 */}
           <FollowBox>
             <span>팔로워</span>
-            <BoldCount>{currentChef?.fans.length}</BoldCount>
+            <BoldCount>{currentChef.fans.length}</BoldCount>
             <span>|</span>
             <span>팔로잉</span>
-            <BoldCount>{currentChef?.subscriptions.length}</BoldCount>
+            <BoldCount>{currentChef.subscriptions.length}</BoldCount>
           </FollowBox>
 
           {/* 팔로우 버튼 */}
@@ -212,13 +215,11 @@ const ProfileContainer = styled.div<{ isHeaderVisible: boolean }>`
   @media (min-width: 1024px) {
     display: flex;
     flex-direction: column;
-    // position: fixed;
-    // width: 18.5rem;
-    width: 26.8rem;
-    height: 38rem;
-    // right: 12.5rem;
-    // top: 16.5rem;
+    width: 24rem;
+    height: 37.6rem;
     margin-bottom: 10rem;
+    margin-right: 4rem;
+    margin-top: 4.1rem;
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
     border-radius: 2rem;
     background-color: #ffffff;
@@ -232,7 +233,7 @@ const ProfileContainer = styled.div<{ isHeaderVisible: boolean }>`
 
 /** 프로필 헤더 박스 Div */
 const ProfileHeader = styled.div`
-  width: 26.8rem;
+  width: 24rem;
   height: 4.3rem;
   background: #fbe2a1;
   border-radius: 20px 20px 0px 0px;
@@ -256,7 +257,7 @@ const ProfileImage = styled.div`
   display: flex;
   width: 12rem;
   height: 12rem;
-  margin: 2.2rem 0 1.8rem 0;
+  margin: 2.8rem 0 1.8rem 0;
   box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   overflow: hidden;
@@ -287,9 +288,9 @@ const BoldCount = styled.span`
 /** 팔로우 버튼 */
 const FollowButton = styled.button`
   width: 20rem;
-  height: 4.5rem;
+  height: 4rem;
   margin-bottom: 2rem;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 500;
   background-color: #fbe2a1;
   color: #4f3d21;
