@@ -133,58 +133,59 @@ const UserMenuContainer = styled.div`
 
 const ProfileButton = styled.div`
   display: none;
-  padding: 0.6rem 0.2rem;
-  cursor: pointer;
-  width: 4rem;
-  height: 4.8rem;
-
-  &:hover {
-    img {
-      box-shadow: 0px 0px 1px 4px rgb(230, 230, 230);
-    }
-    transform: scale(1.1);
-
-    transition: all 0.3s;
-  }
 
   @media (min-width: 1024px) {
     display: flex;
+    padding: 0.6rem 0.2rem;
+    cursor: pointer;
+    width: 4rem;
+    height: 4.8rem;
+
+    &:hover {
+      img {
+        box-shadow: 0px 0px 1px 4px rgb(230, 230, 230);
+      }
+      transform: scale(1.1);
+
+      transition: all 0.3s;
+    }
   }
 `;
 
 const LoginButton = styled.button<{ isDarkMode: boolean }>`
   display: none;
-  padding: 0.8rem 1.6rem;
-  border-radius: 10rem;
-  &:hover {
-    background-color: ${(props) =>
-      props.isDarkMode ? props.theme.lightNavy : props.theme.lightGrey};
-  }
-  color: ${(props) =>
-    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
 
   @media (min-width: 1024px) {
     display: flex;
+    padding: 0.8rem 1.6rem;
+    border-radius: 10rem;
+    &:hover {
+      background-color: ${(props) =>
+        props.isDarkMode ? props.theme.lightNavy : props.theme.lightGrey};
+    }
+    color: ${(props) =>
+      props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
+    transition: all 0.3s;
   }
 `;
 
 const SignupButton = styled.button<{ isDarkMode: boolean }>`
   display: none;
-  padding: 0.8rem 1.6rem;
-  border-radius: 10rem;
-  background-color: ${(props) =>
-    props.isDarkMode ? props.theme.lightYellow : props.theme.yellow};
-  color: ${(props) =>
-    props.isDarkMode ? props.theme.deepNavy : props.theme.brown};
-  &:hover {
-    background-color: ${(props) =>
-      props.isDarkMode ? props.theme.yellow : props.theme.deepYellow};
-  }
-
-  transition: background-color 0.3s;
 
   @media (min-width: 1024px) {
     display: flex;
+    padding: 0.8rem 1.6rem;
+    border-radius: 10rem;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.lightYellow : props.theme.yellow};
+    color: ${(props) =>
+      props.isDarkMode ? props.theme.deepNavy : props.theme.brown};
+    &:hover {
+      background-color: ${(props) =>
+        props.isDarkMode ? props.theme.yellow : props.theme.deepYellow};
+    }
+
+    transition: background-color 0.3s;
   }
 `;
 
