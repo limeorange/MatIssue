@@ -2,6 +2,7 @@ import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
+/** 페이지 전체 진행바 컴포넌트 */
 const ProgressBar = () => {
   // 스크롤 진행 퍼센트 상태 관리
   const [scrollPercentage, setScrollPercentage] = useState(0);
