@@ -12,8 +12,10 @@ const DarkmodeBtn = () => {
   useEffect(() => {
     if (isDarkMode) {
       document.body.style.backgroundColor = "#2A2E41";
+      document.body.style.color = "#fff";
     } else {
       document.body.style.backgroundColor = "#fff";
+      document.body.style.color = "#000";
     }
   }, [isDarkMode]);
 
