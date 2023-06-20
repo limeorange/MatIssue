@@ -383,22 +383,20 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
             handleThumbnailChange={handleThumbnailChange}
           />
         </ImageWrapper>
-        <div>
-          <CategoryAndInfo
-            selectedCategory={state.selectedCategory}
-            handleCategoryChange={handleCategoryChange}
-            selectedPeople={state.selectedPeople.toString()}
-            handlePeopleChange={handlePeopleChange}
-            selectedTime={state.selectedTime.toString()}
-            handleTimeChange={handleTimeChange}
-            selectedDifficulty={state.selectedDifficulty}
-            handleDifficultyChange={handleDifficultyChange}
-            categories={categories}
-            peopleCount={peopleCount}
-            times={times}
-            difficulties={difficulties}
-          />
-        </div>
+        <CategoryAndInfo
+          selectedCategory={state.selectedCategory}
+          handleCategoryChange={handleCategoryChange}
+          selectedPeople={state.selectedPeople.toString()}
+          handlePeopleChange={handlePeopleChange}
+          selectedTime={state.selectedTime.toString()}
+          handleTimeChange={handleTimeChange}
+          selectedDifficulty={state.selectedDifficulty}
+          handleDifficultyChange={handleDifficultyChange}
+          categories={categories}
+          peopleCount={peopleCount}
+          times={times}
+          difficulties={difficulties}
+        />
       </MainContainer>
       <RecipeTitleWrapper>
         <Label>레시피 제목</Label>
