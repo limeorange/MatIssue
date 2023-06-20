@@ -27,7 +27,7 @@ const StartPage = () => {
 
   return (
     <>
-      <StratPageWrapper>
+      <StratPageLayout>
         <Logo />
         <StartPageTitle isAnimateOut={isAnimateOut}>
           M<span>uk</span>BTI 테스트
@@ -35,7 +35,7 @@ const StartPage = () => {
         <StartPageMessage isAnimateOut={isAnimateOut}>
           나에게 어울리는 음식은?
         </StartPageMessage>
-        <ImageBox isAnimateOut={isAnimateOut}>
+        <StartPageImgWrapper isAnimateOut={isAnimateOut}>
           <Image
             src={"/images/mbti/foodIcon.png"}
             alt="음식 아이콘 이미지"
@@ -43,8 +43,8 @@ const StartPage = () => {
             height={200}
             style={{ marginRight: "2rem", marginTop: "15rem" }}
           />
-        </ImageBox>
-        <ButtonBox isAnimateOut={isAnimateOut}>
+        </StartPageImgWrapper>
+        <StartButtonWrapper isAnimateOut={isAnimateOut}>
           <Button
             isBgColor={true}
             isBorderColor={false}
@@ -62,15 +62,15 @@ const StartPage = () => {
           >
             테스트 시작하기
           </Button>
-        </ButtonBox>
-      </StratPageWrapper>
+        </StartButtonWrapper>
+      </StratPageLayout>
     </>
   );
 };
 
 export default StartPage;
 
-const StratPageWrapper = styled.div`
+const StratPageLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -126,7 +126,7 @@ const StartPageMessage = styled.p<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
 
-const ImageBox = styled.div<StyledComponentProps>`
+const StartPageImgWrapper = styled.div<StyledComponentProps>`
   animation: ${(props) =>
     props.isAnimateOut
       ? "slideOut 1.5s ease-in-out"
@@ -134,7 +134,7 @@ const ImageBox = styled.div<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.4s")};
 `;
 
-const ButtonBox = styled.div<StyledComponentProps>`
+const StartButtonWrapper = styled.div<StyledComponentProps>`
   margin-top: 6rem;
 
   & Button {

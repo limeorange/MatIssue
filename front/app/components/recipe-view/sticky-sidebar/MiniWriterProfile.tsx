@@ -22,8 +22,9 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
   loggedInUserId,
 }) => {
   // currentChef에 user 정보가 담김
-  const { data: currentChef } = useQuery(["currentChef", user_id], () =>
-    getChefByUserId(user_id)
+  const { data: currentChef, isLoading } = useQuery(
+    ["currentChef", user_id],
+    () => getChefByUserId(user_id)
   );
 
   const client = useQueryClient();
@@ -132,6 +133,11 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
     router.push("auth/login");
   };
 
+  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
+  if (isLoading) {
+    return <div>Loading...</div>; //
+  }
+
   return (
     <>
       {/* 팔로우 취소 모달 */}
@@ -160,7 +166,7 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
           <ProfileImageDiv>
             <Image
               src={
-                currentChef
+                currentChef.img
                   ? currentChef.img
                   : "/images/recipe-view/기본 프로필.PNG"
               }

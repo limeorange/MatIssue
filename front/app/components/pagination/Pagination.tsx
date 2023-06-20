@@ -80,9 +80,9 @@ const Pagination = (props: PaginationProps) => {
 
   return (
     <>
-      <PaginationWrapper>
-        <PaginationUl>
-          <PaginationPrevButtonBox onClick={handlePrevClick}>
+      <PaginationLayout>
+        <PaginationList>
+          <PaginationPrevButtonContainer onClick={handlePrevClick}>
             <PaginationPrevButton onClick={handlePrevClick}>
               <Image
                 src="/images/prevButtonIcon.png"
@@ -91,10 +91,10 @@ const Pagination = (props: PaginationProps) => {
                 height={15}
               />
             </PaginationPrevButton>
-          </PaginationPrevButtonBox>
+          </PaginationPrevButtonContainer>
           {pageNumbers.slice(startIndex, endIndex).map((number) => (
-            <PaginationLi key={number}>
-              <PaginationButtonBox
+            <PaginationItem key={number}>
+              <PaginationButtonWrapper
                 onClick={() => props.paginate(number)}
                 className={props.currentPage === number ? "active" : ""}
               >
@@ -104,10 +104,10 @@ const Pagination = (props: PaginationProps) => {
                 >
                   {number}
                 </PaginationButton>
-              </PaginationButtonBox>
-            </PaginationLi>
+              </PaginationButtonWrapper>
+            </PaginationItem>
           ))}
-          <PaginationNextButtonBox onClick={handleNextClick}>
+          <PaginationNextButtonContainer onClick={handleNextClick}>
             <PaginationNextButton onClick={handleNextClick}>
               <Image
                 src="/images/nextButtonIcon.png"
@@ -116,10 +116,10 @@ const Pagination = (props: PaginationProps) => {
                 height={15}
               />
             </PaginationNextButton>
-          </PaginationNextButtonBox>
-        </PaginationUl>
-      </PaginationWrapper>
-      <PaginationInputDiv>
+          </PaginationNextButtonContainer>
+        </PaginationList>
+      </PaginationLayout>
+      <PaginationInputWrapper>
         <div>
           <Image
             src="/images/bookicon.png"
@@ -135,27 +135,27 @@ const Pagination = (props: PaginationProps) => {
           onKeyDown={handlePageInput}
           placeholder="페이지 번호를 입력하세요."
         />
-      </PaginationInputDiv>
+      </PaginationInputWrapper>
     </>
   );
 };
 
 export default Pagination;
 
-const PaginationWrapper = styled.div`
+const PaginationLayout = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding: 3rem 0;
 `;
 
-const PaginationUl = styled.ul`
+const PaginationList = styled.ul`
   display: flex;
 `;
 
-const PaginationLi = styled.li``;
+const PaginationItem = styled.li``;
 
-const PaginationButtonBox = styled.div`
+const PaginationButtonWrapper = styled.div`
   display: flex;
   width: 4.25rem;
   height: 4rem;
@@ -182,7 +182,7 @@ const PaginationButton = styled.button`
 
 const PaginationPrevButton = styled.button``;
 
-const PaginationPrevButtonBox = styled.div`
+const PaginationPrevButtonContainer = styled.div`
   display: flex;
   width: 4.25rem;
   height: 4rem;
@@ -201,7 +201,7 @@ const PaginationPrevButtonBox = styled.div`
 
 const PaginationNextButton = styled.button``;
 
-const PaginationNextButtonBox = styled.div`
+const PaginationNextButtonContainer = styled.div`
   display: flex;
   width: 4.25rem;
   height: 4rem;
@@ -218,7 +218,7 @@ const PaginationNextButtonBox = styled.div`
   }
 `;
 
-const PaginationInputDiv = styled.div`
+const PaginationInputWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 0.8rem 1.6rem;

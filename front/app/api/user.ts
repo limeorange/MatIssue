@@ -9,6 +9,8 @@ export default async function getCurrentUser() {
       const response = await axiosBase.get(`users/me`);
       return response.data;
     } catch (err: any) {
+      Cookies.remove("session-id");
+      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
       return null;
     }
   }
