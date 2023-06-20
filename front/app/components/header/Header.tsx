@@ -31,12 +31,12 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
     retry: 0,
     // 서버사이드에서 받아온 미리 유저정보를 기본값으로 넣어서 새로고침시 유저메뉴 바로띄움
     initialData: initialCurrentUser,
-    // 5초마다 유저정보를 요청해서 세션만료시 로그아웃
-    refetchInterval: 5000,
+    // 5분마다 유저정보를 요청해서 세션만료시 로그아웃
+    refetchInterval: 300000,
   });
 
   return (
-    <HeaderWrapper isHeaderVisible={isHeaderVisible}>
+    <HeaderLayout isHeaderVisible={isHeaderVisible}>
       <HeaderContainer>
         <TopNavBar>
           <HamburgerBtn currentUser={currentUser} />
@@ -50,13 +50,13 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
         <CategoryBar />
       </HeaderContainer>
       <UnderLine />
-    </HeaderWrapper>
+    </HeaderLayout>
   );
 };
 
 export default Header;
 
-const HeaderWrapper = styled.div<{ isHeaderVisible: boolean }>`
+const HeaderLayout = styled.div<{ isHeaderVisible: boolean }>`
   position: fixed;
   width: 100%;
   background-color: #ffffff;
