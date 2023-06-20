@@ -81,7 +81,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
     // 레시피 작성자 아이디, 이미지, 작성된 시각
     user_id,
     created_at,
-    // user_img,
 
     // 요리 재료
     recipe_ingredients,
@@ -93,10 +92,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
     recipe_id,
     recipe_view,
     recipe_like,
-
-    // 팔로우, 팔로잉 관련
-    // user_fan,
-    // user_subscription,
 
     // 댓글 관련 data
     comments,

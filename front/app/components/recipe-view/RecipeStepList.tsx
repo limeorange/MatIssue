@@ -9,7 +9,7 @@ type StepListProps = {
 };
 
 /** 요리 과정 컴포넌트 */
-const RecipeSteps: React.FC<StepListProps> = ({ recipe_sequence }) => {
+const RecipeSteps = ({ recipe_sequence }: StepListProps) => {
   return (
     <>
       <div>

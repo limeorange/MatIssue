@@ -8,7 +8,7 @@ type ShareModalProps = {
 };
 
 /** 공유하기 모달 컴포넌트 */
-const ShareModal: React.FC<ShareModalProps> = ({ recipe_thumbnail }) => {
+const ShareModal = ({ recipe_thumbnail }: ShareModalProps) => {
   /** url 복사하는 함수 */
   const copyToClipboard = async () => {
     const currentPageUrl = window.location.href;
