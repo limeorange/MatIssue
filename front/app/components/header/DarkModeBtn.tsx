@@ -26,7 +26,7 @@ const ToggleContainer = styled.div<{ darkMode: boolean }>`
   @media (min-width: 1024px) {
     display: flex;
     align-items: center;
-    width: 5rem;
+    width: 5.5rem;
     height: 3rem;
     border-radius: 10rem;
     background-color: ${(props) =>
@@ -44,7 +44,7 @@ const ToggleBtn = styled.div<{ darkMode: boolean }>`
   background-color: white;
   border-radius: 5rem;
   transition: transform 0.2s ease-in-out;
-  transform: translateX(${(props) => (props.darkMode ? "2rem" : "0")});
+  transform: translateX(${(props) => (props.darkMode ? "2.5rem" : "0")});
 `;
 
 const Icon = styled(Image)`
@@ -54,10 +54,9 @@ const Icon = styled(Image)`
   width: 1.5rem;
   height: 1.5rem;
   &:first-child {
-    left: 0.5rem;
+    left: 0.75rem;
   }
   &:last-child {
-    right: 0.5rem;
-    fill: white;
+    right: 0.75rem;
   }
 `;
