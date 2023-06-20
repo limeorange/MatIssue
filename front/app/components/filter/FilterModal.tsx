@@ -34,24 +34,24 @@ const FilterModal = (props: FilterModalProps) => {
   }, [onClose]);
 
   return (
-    <FilterModalContainer ref={modalRef}>
-      <FilterModalUl>
+    <FilterModalLayout ref={modalRef}>
+      <FilterModalList>
         {options.map((option) => (
-          <FilterModalLi
+          <FilterModalItem
             key={option.value}
             onClick={() => {
               setState(option);
             }}
           >
             {option.name}
-          </FilterModalLi>
+          </FilterModalItem>
         ))}
-      </FilterModalUl>
-    </FilterModalContainer>
+      </FilterModalList>
+    </FilterModalLayout>
   );
 };
 
-const FilterModalContainer = styled.div`
+const FilterModalLayout = styled.div`
   position: absolute;
   top: 4.4rem;
   z-index: 90;
@@ -66,12 +66,12 @@ const FilterModalContainer = styled.div`
   color: #4f3d21;
 `;
 
-const FilterModalUl = styled.ul`
+const FilterModalList = styled.ul`
   display: flex;
   flex-direction: column;
 `;
 
-const FilterModalLi = styled.li`
+const FilterModalItem = styled.li`
   padding: 1rem;
   text-align: center;
 
@@ -80,7 +80,5 @@ const FilterModalLi = styled.li`
     cursor: pointer;
   }
 `;
-
-const Backdrop = styled.div``;
 
 export default FilterModal;
