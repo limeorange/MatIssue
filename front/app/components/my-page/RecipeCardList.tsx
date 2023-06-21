@@ -121,6 +121,10 @@ const RecipeCards = ({
                 <button onClick={() => handleOpenModal(recipe)}>
                   <DeleteButtonWrapper>
                     <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
+                  </DeleteButtonWrapper>
+                </button>
+                <button onClick={() => handleOpenModal(recipe)}>
+                  <DeleteButtonWrapper>
                     <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
                   </DeleteButtonWrapper>
                 </button>
@@ -234,18 +238,21 @@ const DeleteButtonImage = styled.img`
   @media (min-width: 1024px) {
     position: absolute;
     transition: transform 0.1s ease-in-out;
-    top: 25rem;
-    right: 0.7rem;
-    width: 1.8rem;
-    height: 1.8rem;
+    // top: 25rem;
+    // right: 0.7rem;
+    // width: 1.8rem;
+    // height: 1.8rem;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     &:hover {
       transform: scale(1.2);
     }
   }
-
+  @media (min-width: 768px) {
+    background-color:red;
+  }
   @media (max-width: 1023px) {
     display: none;
+    
   }
 `;
 
