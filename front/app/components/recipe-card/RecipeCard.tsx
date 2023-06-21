@@ -69,7 +69,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   height={26}
                 />
               </RecipeRankImgWrapper>
-              <Count>{recipe.comments.length.toLocaleString()}</Count>
+              {/* <Count>{recipe.comments.length.toLocaleString()}</Count> */}
             </RecipeRankItemContainer>
           </RecipeRankContainer>
         </RecipeInfoContainer>

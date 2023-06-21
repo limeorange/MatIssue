@@ -19,7 +19,7 @@ const MobileRecipeCard = ({ recipe }: { recipe: Recipe }) => {
   useEffect(() => {
     const fetchComments = async () => {
       const recipeData = await getRecipeById(recipe.recipe_id);
-      setCommentCount(recipeData.comments.length || 0);
+      // setCommentCount(recipeData.comments.length || 0);
     };
 
     fetchComments();
