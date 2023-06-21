@@ -117,9 +117,9 @@ const RecipeCards = ({
             {currentRecipe?.map((recipe: Recipe) => (
               <RecipeCardWrapper key={recipe.recipe_id}>
                 <StyledRecipeCard recipe={recipe} />
-                  <DeleteButtonWrapper onClick={() => handleOpenModal(recipe)}>
-                    <DeleteButtonImage src="/images/egg-x.svg" alt="X-box" />
-                  </DeleteButtonWrapper>
+                <DeleteButtonWrapper onClick={() => handleOpenModal(recipe)}>
+                  <DeleteButtonImage src="/images/egg-x.svg" alt="X-box" />
+                </DeleteButtonWrapper>
               </RecipeCardWrapper>
             ))}
           </RecipeList>
@@ -132,9 +132,9 @@ const RecipeCards = ({
               .map((recipe: Recipe) => (
                 <RecipeCardWrapper key={recipe.recipe_id}>
                   <StyledRecipeCard recipe={recipe} />
-                    <DeleteButtonWrapper onClick={() => handleOpenModal(recipe)}>
-                      <DeleteButtonImage src="/images/egg-x.svg" alt="X-box" />
-                    </DeleteButtonWrapper>
+                  <DeleteButtonWrapper onClick={() => handleOpenModal(recipe)}>
+                    <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
+                  </DeleteButtonWrapper>
                 </RecipeCardWrapper>
               ))}
           </RecipeList>
@@ -168,14 +168,12 @@ const RecipeListContainer = styled.div`
   margin-top: 1.8rem;
   @media (min-width: 768px) {
     margin-bottom: 7rem;
-      }
-
+  }
   @media (min-width: 1024px) {
     margin-top: 0;
     margin-bottom: 16rem;
   }
 `;
-
 
 const RecipeHeading = styled.span`
   font-size: 15px;

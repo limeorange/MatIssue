@@ -16,6 +16,8 @@ export type Theme = {
   grey: string;
   lightGrey: string;
   white: string;
+  blue: string;
+  red: string;
 };
 
 const theme = {
@@ -29,6 +31,8 @@ const theme = {
   grey: "#ccc",
   lightGrey: "#ddd",
   white: "#fff",
+  blue: "rgb(32, 28, 224)",
+  red: "#e11717",
 
   // 여기에 추가적으로 사용할 색상들을 정의할 수 있습니다.
 };

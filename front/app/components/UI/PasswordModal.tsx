@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type PasswordModalProps = {
   icon: React.ReactNode;
@@ -21,14 +23,15 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
   enteredPassword,
   onPasswordChange,
 }) => {
+  const isDarkMode = useRecoilValue(darkModeAtom);
   return (
-    <ModalWrapper>
-      <ModalContent>
+    <ModalWrapper isDarkMode={isDarkMode}>
+      <ModalContent isDarkMode={isDarkMode}>
         <div>{icon}</div>
         <ModalMessage>{message}</ModalMessage>
         <PasswordInput
           type="password"
-          placeholder="탈퇴를 원하시면 비밀번호를 입력해주세요."
+          placeholder="입력 후 확인 버튼을 누르면 탈퇴 처리됩니다."
           value={enteredPassword}
           onChange={onPasswordChange}
         />
@@ -69,35 +72,36 @@ const PasswordModal: React.FC<PasswordModalProps> = ({
 
 export default PasswordModal;
 
-const ModalWrapper = styled.div`
+const ModalWrapper = styled.div<{ isDarkMode: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : "rgba(0, 0, 0, 0.5)"};
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 99;
 `;
 
-const ModalContent = styled.div`
+const ModalContent = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : props.theme.white};
   padding: 2rem;
   border-radius: 1.3rem;
   padding: 2rem 4rem;
 `;
 
-const ModalMessage = styled.p`
+const ModalMessage = styled.h2`
   margin-top: 1rem;
   font-size: 19px;
   font-weight: 600;
-  color: #4f3d21;
 `;
 
 const ModalActions = styled.div`
@@ -115,7 +119,6 @@ const CancelButton = styled.div`
   width: 7.5rem;
 `;
 
-
 const PasswordInput = styled.input`
   width: 100%;
   margin-top: 1.5rem;
@@ -123,14 +126,9 @@ const PasswordInput = styled.input`
   border: 1px solid #e5e5e5;
   border-radius: 1rem;
   font-size: 2.6rem;
-  color: #4f3d21;
   &::placeholder {
     color: #c4c4c4;
     font-size: 1.6rem;
-  }
-  &:focus {
-    outline: 0.3rem solid #fbd26a;
-    border: none;
   }
   -webkit-autocomplete: off;
   -moz-autocomplete: off;
