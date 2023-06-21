@@ -67,6 +67,9 @@ function StyledTheme({ children }: Props) {
       props.isDarkMode ? "0.1rem solid #404353" : "0.1rem solid #ccc"};
     color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
   }
+  label {
+    color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
+  }
 `;
 
   return (
