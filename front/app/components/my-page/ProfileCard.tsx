@@ -69,7 +69,7 @@ const ProfileCard = () => {
           <ImageAndNickNameWrapper>
             <RoundImage>
               <Image
-                src={currentUser?.img || "images/dongs-logo.png"}
+                src={currentUser?.img || "/images/dongs-logo.png"}
                 height={120}
                 width={120}
                 style={{ objectFit: "cover" }}
