@@ -10,6 +10,8 @@ import { axiosBase } from "@/app/api/axios";
 import { User } from "../../../types/index";
 import VerificationEmail from "@/app/components/my-page/VerificationEmail";
 import { toast } from "react-hot-toast";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilValue } from "recoil";
 import AccountDeletionComponent from "@/app/components/my-page/AccountDeletion";
 import {
   Container,
@@ -44,7 +46,7 @@ const ModifyUserInfo = () => {
   const queryClient = useQueryClient();
   const defaultImage =
     "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png";
-  console.log("currentUser:", currentUser);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   useEffect(() => {
     // 받아온 data 객체로 상태 저장
@@ -159,14 +161,14 @@ const ModifyUserInfo = () => {
     });
   };
 
-
   return (
     <>
       <Container>
         <TitleAndPasswordWrapper>
-          <Heading>회원정보수정</Heading>
-          <Divider />
+          <Heading isDarkMode={isDarkMode}>회원정보수정</Heading>
+          <Divider isDarkMode={isDarkMode} />
           <StyledChangePassword
+            isDarkMode={isDarkMode}
             onClick={() =>
               router.push("/my-page/modify-user-info/change-password")
             }
@@ -285,8 +287,3 @@ const LabelForFile = styled.label<LabelForFileProps>`
     margin-top: 0;
   }
 `;
-
-
-
-
-
