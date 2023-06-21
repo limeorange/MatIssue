@@ -46,7 +46,7 @@ const Header = ({ initialCurrentUser }: { initialCurrentUser: User }) => {
           </LogoWrapper>
           <SearchBar />
           <ButtonsWrapper>
-            <DarkmodeBtn />
+            <DarkmodeBtn isMobile={false} />
             {isLoading ? null : <UserMenu currentUser={currentUser} />}
           </ButtonsWrapper>
           <SearchBtn />

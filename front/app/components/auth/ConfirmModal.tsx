@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Button from "../../components/UI/Button";
 import Image from "next/image";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type ConfirmModalProps = {
   message: string;
@@ -16,9 +18,11 @@ const ConfirmModal = ({
   btnValue,
   onClose,
 }: ConfirmModalProps) => {
+  const isDarkMode = useRecoilValue(darkModeAtom);
+
   return (
-    <ModalWrapper>
-      <ModalContent>
+    <ModalWrapper isDarkMode={isDarkMode}>
+      <ModalContent isDarkMode={isDarkMode}>
         <CloseBtn onClick={onClose}>
           <Image
             src="/images/xBtn.png"
@@ -43,27 +47,31 @@ const ConfirmModal = ({
   );
 };
 
-const ModalWrapper = styled.div`
+const ModalWrapper = styled.div<{ isDarkMode: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : "rgba(0, 0, 0, 0.5)"};
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 99;
 `;
 
-const ModalContent = styled.div`
+const ModalContent = styled.div<{ isDarkMode: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 2rem;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : props.theme.white};
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.white : props.theme.brown};
   padding: 4rem 8rem;
   border-radius: 1.3rem;
 `;
@@ -71,7 +79,6 @@ const ModalContent = styled.div`
 const ModalMessage = styled.p`
   font-size: 18px;
   font-weight: 500;
-  color: #4f3d21;
 `;
 
 const CloseBtn = styled.div`
@@ -90,3 +97,4 @@ const CloseBtn = styled.div`
 `;
 
 export default ConfirmModal;
+

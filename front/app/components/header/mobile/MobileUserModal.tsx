@@ -15,6 +15,9 @@ import { axiosBase } from "@/app/api/axios";
 import { toast } from "react-hot-toast";
 
 import LoadingModal from "../../UI/LoadingModal";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import DarkmodeBtn from "../DarkModeBtn";
 
 type MobileUserModalProps = {
   isModal: boolean;
@@ -27,6 +30,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
   const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isShowAdditional, setIsShowAdditional] = useState<boolean>(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -83,8 +87,11 @@ const MobileUserModal = (props: MobileUserModalProps) => {
       {isLoading && <LoadingModal />}
 
       <Backdrop isModal={props.isModal} onClick={closeModalHandler} />
-      <ModalContainer isModal={props.isModal}>
-        <Logo />
+      <ModalContainer isModal={props.isModal} isDarkMode={isDarkMode}>
+        <LogoAndDarkModeBox>
+          <Logo />
+          <DarkmodeBtn isMobile={true} />
+        </LogoAndDarkModeBox>
         {props.currentUser ? (
           <ProfileWrapper>
             <ProfileImgWrapper>
@@ -101,6 +108,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
         ) : (
           <AuthWraaper>
             <LoginButton
+              isDarkMode={isDarkMode}
               onClick={() => {
                 routerHandler("/auth/login");
               }}
@@ -108,6 +116,7 @@ const MobileUserModal = (props: MobileUserModalProps) => {
               로그인
             </LoginButton>
             <SignButton
+              isDarkMode={isDarkMode}
               onClick={() => {
                 routerHandler("/auth/signup");
               }}
@@ -162,9 +171,9 @@ const MobileUserModal = (props: MobileUserModalProps) => {
           </MenuItem>
           <MenuItem onClick={() => setIsShowAdditional(!isShowAdditional)}>
             <div>카테고리</div>
-            <IconWrapper>
+            <IconWrapper isDarkMode={isDarkMode}>
               <Image
-                src="/images/header/listIcon.svg"
+                src="/images/category/listIcon.svg"
                 alt="list_icon"
                 width={16}
                 height={16}
@@ -226,7 +235,7 @@ const Backdrop = styled.div<{ isModal: boolean }>`
   transition: opacity 0.3s ease-in-out;
 `;
 
-const ModalContainer = styled.div<{ isModal: boolean }>`
+const ModalContainer = styled.div<{ isModal: boolean; isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -235,7 +244,8 @@ const ModalContainer = styled.div<{ isModal: boolean }>`
   top: 0;
   width: 25rem;
   height: 100vh;
-  background-color: white;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : props.theme.white};
   padding: 2rem;
   gap: 1rem;
   font-size: 16px;
@@ -253,19 +263,32 @@ const AuthWraaper = styled.div`
   border-bottom: 1px solid #ccc;
 `;
 
-const LoginButton = styled.button`
+const LogoAndDarkModeBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const LoginButton = styled.button<{ isDarkMode: boolean }>`
   text-align: center;
   padding: 0.8rem 1.6rem;
   border-radius: 0.5rem;
-  border: 0.1rem solid #fbd26a;
+  border: 0.1rem solid
+    ${(props) =>
+      props.isDarkMode ? props.theme.lightYellow : props.theme.yellow};
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
   width: 50%;
 `;
 
-const SignButton = styled.button`
+const SignButton = styled.button<{ isDarkMode: boolean }>`
   text-align: center;
   padding: 0.8rem 1.6rem;
   border-radius: 0.5rem;
-  background-color: #fbd26a;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.yellow};
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : props.theme.brown};
   width: 50%;
 `;
 
@@ -326,7 +349,11 @@ const LogoutButton = styled.button`
   text-align: left;
 `;
 
-const IconWrapper = styled.div`
+const IconWrapper = styled.div<{ isDarkMode: boolean }>`
   width: 1.6rem;
   height: 0.8rem;
+  filter: ${(props) =>
+    props.isDarkMode
+      ? "invert(89%) sepia(27%) saturate(436%) hue-rotate(334deg) brightness(105%) contrast(104%)"
+      : "invert(18%) sepia(10%) saturate(2848%) hue-rotate(357deg) brightness(103%) contrast(82%)"};
 `;
