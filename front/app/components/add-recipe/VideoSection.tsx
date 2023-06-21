@@ -1,4 +1,6 @@
+import darkModeAtom from "@/app/store/darkModeAtom";
 import React, { ChangeEvent } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 type VideoSectionProps = {
@@ -10,10 +12,13 @@ const VideoSection = ({
   videoLink,
   handleVideoLinkChange,
 }: VideoSectionProps) => {
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   return (
     <VideoContainer>
       <Label>동영상</Label>
       <VideoTextArea
+        isDarkMode={isDarkMode}
         value={videoLink}
         onChange={handleVideoLinkChange}
         placeholder="유튜브 동영상 링크를 입력해주세요."
@@ -28,7 +33,7 @@ const VideoSection = ({
             />
           </IframBox>
         ) : (
-          <EmptyThumbnailBox />
+          <EmptyThumbnailBox isDarkMode={isDarkMode} />
         )}
       </ThumbnailWrapper>
     </VideoContainer>
@@ -43,7 +48,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
 
@@ -67,11 +71,11 @@ const VideoContainer = styled.div`
   }
 `;
 
-const VideoTextArea = styled.textarea`
+const VideoTextArea = styled.textarea<{ isDarkMode: boolean }>`
   box-sizing: border-box;
   width: 100%;
   height: 11.6rem;
-  border: 0.1rem solid #d9d9d9;
+
   border-radius: 1.5rem;
   padding: 1rem;
   font-family: "Pretendard";
@@ -84,6 +88,10 @@ const VideoTextArea = styled.textarea`
   ::placeholder {
     color: #a9a9a9;
   }
+
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : props.theme.white};
+
   &:focus {
     border: 0.1rem solid #fbd26a;
     outline: none;
@@ -119,11 +127,15 @@ const IframBox = styled.div`
   }
 `;
 
-const EmptyThumbnailBox = styled.div`
+const EmptyThumbnailBox = styled.div<{ isDarkMode: boolean }>`
   position: relative;
   width: 100%;
   height: 18.6rem;
-  background: #f6f5f5 url("/images/videoIcon.png") no-repeat center top 6.8rem;
+  border: ${(props) => (props.isDarkMode ? "0.05rem" : "none")} solid #d9d9d9;
+  background: ${(props) =>
+    props.isDarkMode
+      ? "#212739 url('/images/videoIconDark.png') no-repeat center top 6.8rem"
+      : "#f6f5f5 url('/images/videoIcon.png') no-repeat center top 6.8rem"};
   background-size: auto;
   border-radius: 1.5rem;
 
@@ -145,7 +157,10 @@ const EmptyThumbnailBox = styled.div`
   @media (min-width: 1024px) {
     width: 17.4rem;
     height: 11.6rem;
-    background: #f6f5f5 url("/images/videoIcon.png") no-repeat center top 3.5rem;
+    background: ${(props) =>
+      props.isDarkMode
+        ? "#212739 url('/images/videoIconDark.png') no-repeat center top 3.5rem"
+        : "#f6f5f5 url('/images/videoIcon.png') no-repeat center top 3.5rem"};
 
     ::before {
       content: "동영상 섬네일";

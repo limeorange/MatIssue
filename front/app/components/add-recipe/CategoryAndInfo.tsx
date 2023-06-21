@@ -1,4 +1,3 @@
-// CategoryAndInfo.tsx
 import React, { ChangeEvent, FunctionComponentElement } from "react";
 import styled from "styled-components";
 import CustomSelectBox from "@/app/components/UI/CustomSelectBox";
@@ -128,41 +127,12 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
   margin-left: 0.5rem;
 
   @media (min-width: 1024px) {
     margin-left: 0;
-  }
-`;
-
-const Select = styled.select`
-  box-sizing: border-box;
-  width: 12.5rem;
-  height: 3.6rem;
-  border: 0.1rem solid #d9d9d9;
-  border-radius: 5rem;
-  padding-left: 1rem;
-  margin: 0.5rem 0;
-  font-family: "Pretendard";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.9rem;
-  appearance: none;
-  background: #ffffff url("/images/listIcon.png") no-repeat;
-  background-position: right 1rem center;
-  -webkit-appearance: none; /* for chrome /
-  -moz-appearance:none; /for firefox*/
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
-  }
-
-  @media (min-width: 1024px) {
   }
 `;
 

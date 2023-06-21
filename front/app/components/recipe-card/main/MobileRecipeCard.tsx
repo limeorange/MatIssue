@@ -9,21 +9,11 @@ import { getRecipeById } from "@/app/api/recipe";
 
 /** 메인 레시피 카드 */
 const MobileRecipeCard = ({ recipe }: { recipe: Recipe }) => {
-  const [commentCount, setCommentCount] = useState<number>(0);
   const router = useRouter();
 
   const handleRecipeClick = () => {
     router.push(`/recipe/${recipe.recipe_id}`);
   };
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      const recipeData = await getRecipeById(recipe.recipe_id);
-      // setCommentCount(recipeData.comments.length || 0);
-    };
-
-    fetchComments();
-  }, [recipe.recipe_id]);
 
   return (
     <>
@@ -69,7 +59,7 @@ const MobileRecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   height={26}
                 />
               </RecipeRankImg>
-              <Count>{commentCount.toLocaleString()}</Count>
+              <Count>{recipe.comments.length.toLocaleString()}</Count>
             </RecipeRankItem>
           </RecipeRank>
         </RecipeInfo>

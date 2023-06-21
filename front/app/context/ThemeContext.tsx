@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { ThemeProvider } from "styled-components";
 import { createGlobalStyle } from "styled-components";
@@ -54,7 +54,7 @@ function StyledTheme({ children }: Props) {
   input {
     background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
     border : ${(props) =>
-      props.isDarkMode ? "0.1rem solid #404353" : "0.1rem solid #ddd"};
+      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ddd"};
     color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
     &:focus {
       box-shadow: inset 0 0 0.1rem 0.1rem #fbd26a;
@@ -64,10 +64,28 @@ function StyledTheme({ children }: Props) {
     input {
     background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
     border : ${(props) =>
-      props.isDarkMode ? "0.1rem solid #404353" : "0.1rem solid #ccc"};
+      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
     color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
   }
+  label {
+    color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
+  }
+  textarea {
+    background-color: ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
+    border : ${(props) =>
+      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
+  }
 `;
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.style.backgroundColor = "#212739";
+      document.body.style.color = "#fff";
+    } else {
+      document.body.style.backgroundColor = "#fff";
+      document.body.style.color = "#4F3D21";
+    }
+  }, [isDarkMode]);
 
   return (
     <ThemeProvider theme={theme}>

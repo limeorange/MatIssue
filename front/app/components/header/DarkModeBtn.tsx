@@ -2,22 +2,11 @@
 
 import darkModeAtom from "@/app/store/darkModeAtom";
 import Image from "next/image";
-import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
-const DarkmodeBtn = () => {
+const DarkmodeBtn = ({ isMobile }: { isMobile: boolean }) => {
   const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.style.backgroundColor = "#212739";
-      document.body.style.color = "#fff";
-    } else {
-      document.body.style.backgroundColor = "#fff";
-      document.body.style.color = "#4F3D21";
-    }
-  }, [isDarkMode]);
 
   const toggleDarkModeHandler = () => {
     setIsDarkMode(!isDarkMode);
@@ -25,7 +14,11 @@ const DarkmodeBtn = () => {
   };
 
   return (
-    <ToggleContainer onClick={toggleDarkModeHandler} isDarkMode={isDarkMode}>
+    <ToggleContainer
+      onClick={toggleDarkModeHandler}
+      isMobile={isMobile}
+      isDarkMode={isDarkMode}
+    >
       <Icon src="/images/darkMode/moon.svg" alt="Moon" width={15} height={15} />
       <ToggleBtn isDarkMode={isDarkMode} />
       <Icon src="/images/darkMode/sun.svg" alt="Sun" width={15} height={15} />
@@ -35,19 +28,19 @@ const DarkmodeBtn = () => {
 
 export default DarkmodeBtn;
 
-const ToggleContainer = styled.div<{ isDarkMode: boolean }>`
-  display: none;
+const ToggleContainer = styled.div<{ isMobile: boolean; isDarkMode: boolean }>`
+  display: ${(props) => (props.isMobile ? "flex" : "none")};
+  align-items: center;
+  width: 5.5rem;
+  height: 3rem;
+  border-radius: 10rem;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#aaa"};
+  padding: 0.25rem;
+  cursor: pointer;
+  position: relative;
   @media (min-width: 1024px) {
     display: flex;
-    align-items: center;
-    width: 5.5rem;
-    height: 3rem;
-    border-radius: 10rem;
-    background-color: ${(props) =>
-      props.isDarkMode ? props.theme.lightNavy : "#aaa"};
-    padding: 0.25rem;
-    cursor: pointer;
-    position: relative;
   }
 `;
 

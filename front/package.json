@@ -37,6 +37,7 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.8.0",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-kakao-maps-sdk": "^1.1.9",
     "react-router-dom": "^6.11.2",
     "react-scroll": "^1.8.9",
     "react-share": "^4.4.1",

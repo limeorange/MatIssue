@@ -15,9 +15,10 @@ export const AuthContainer = styled.div<{ isDarkMode: boolean }>`
   margin-right: auto;
   width: 100%;
   max-width: 40rem;
-  box-shadow: 0 0 0.2rem 0
-    ${(props) => (props.isDarkMode ? "rgb(255 255 255)" : "rgb(0 0 0 / 0.25)")};
-  border-radius: 1.5rem;
+  // box-shadow: 0 0 0.2rem 0
+  //   ${(props) =>
+    props.isDarkMode ? "rgb(255 255 255)" : "rgb(0 0 0 / 0.25)"};
+  // border-radius: 1.5rem;
 
   color: ${(props) =>
     props.isDarkMode ? props.theme.white : props.theme.brown};
