@@ -88,7 +88,8 @@ const SelectBox = styled.div<{ isDarkMode: boolean }>`
   box-sizing: border-box;
   width: 12.5rem;
   height: 3.6rem;
-  border: 0.1rem solid #d9d9d9;
+  border: ${(props) =>
+    props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
   border-radius: 5rem;
   padding-left: 1rem;
   padding-top: 0.7rem;

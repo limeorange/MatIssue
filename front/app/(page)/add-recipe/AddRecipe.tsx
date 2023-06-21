@@ -489,7 +489,7 @@ const Input = styled.input`
   box-sizing: border-box;
   width: 100%;
   height: 3.6rem;
-  border: 0.1rem solid #d9d9d9;
+
   border-radius: 1.5rem;
   padding-left: 1rem;
   font-family: "Pretendard";
@@ -512,7 +512,7 @@ const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
   height: 10rem;
-  border: 0.1rem solid #d9d9d9;
+
   border-radius: 1.5rem;
   padding: 1rem;
   font-family: "Pretendard";
