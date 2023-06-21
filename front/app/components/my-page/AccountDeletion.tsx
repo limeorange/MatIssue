@@ -8,7 +8,7 @@ import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowImage } from "@/app/styles/my-page/modify-user-info.style";
+import { ArrowImage, AlertImage} from "@/app/styles/my-page/modify-user-info.style";
 
 const AccountDeletion = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -95,7 +95,4 @@ const Title = styled.div`
   }
 `;
 
-const AlertImage = styled.img`
-  width: 3rem;
-  height: 3rem;
-`;
+
