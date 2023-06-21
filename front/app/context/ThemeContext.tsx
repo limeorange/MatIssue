@@ -61,12 +61,16 @@ function StyledTheme({ children }: Props) {
       border : 0.1rem solid #fbd26a;
     }
   }
-    input {
-    background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
-    border : ${(props) =>
-      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
-    color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: none;
+    -webkit-text-fill-color: ${(props) =>
+      props.isDarkMode ? "#fff" : "#4F3D21"};
   }
+
+
   label {
     color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
   }
