@@ -80,7 +80,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
 
   @media (min-width: 1024px) {
     width: 9.8rem;

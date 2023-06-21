@@ -1,4 +1,6 @@
+import darkModeAtom from "@/app/store/darkModeAtom";
 import React, { useEffect, useRef, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 type CustomSelectProps = {
@@ -15,6 +17,7 @@ const CustomSelectBox = ({
   placeholder,
 }: CustomSelectProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
   const selectBoxRef = useRef<HTMLDivElement>(null);
 
   const selectedOptionObject = options.find(
@@ -47,7 +50,12 @@ const CustomSelectBox = ({
 
   return (
     <SelectBoxWrapper ref={selectBoxRef}>
-      <SelectBox ref={selectBoxRef} onClick={handleSelectBoxClick} tabIndex={0}>
+      <SelectBox
+        isDarkMode={isDarkMode}
+        ref={selectBoxRef}
+        onClick={handleSelectBoxClick}
+        tabIndex={0}
+      >
         {selectedOptionObject ? selectedOptionObject.label : placeholder}
       </SelectBox>
       {isOpen && (
@@ -76,7 +84,7 @@ const SelectBoxWrapper = styled.div`
   width: 12.5rem;
 `;
 
-const SelectBox = styled.div`
+const SelectBox = styled.div<{ isDarkMode: boolean }>`
   box-sizing: border-box;
   width: 12.5rem;
   height: 3.6rem;
@@ -85,14 +93,19 @@ const SelectBox = styled.div`
   padding-left: 1rem;
   padding-top: 0.7rem;
   margin-bottom: 1rem;
-  color: #6f6f6f;
+  color: ${(props) => (props.isDarkMode ? "#ccc" : "#6f6f6f")};
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
   appearance: none;
-  background: #ffffff url("/images/listIcon.png") no-repeat;
+
+  background: ${(props) =>
+    props.isDarkMode
+      ? "#404353 url('/images/listIcon.png') no-repeat"
+      : "#ffffff url('/images/listIcon.png') no-repeat"};
+
   background-position: right 1rem center;
   -webkit-appearance: none; /* for chrome /
 -moz-appearance:none; /for firefox*/

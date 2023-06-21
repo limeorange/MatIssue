@@ -1,4 +1,6 @@
+import darkModeAtom from "@/app/store/darkModeAtom";
 import React, { ChangeEvent } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 type IngredientSectionProps = {
@@ -22,6 +24,8 @@ const IngredientSection = ({
   handleAddIngredient,
   handleRemoveIngredient,
 }: IngredientSectionProps) => {
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   const showRemoveButton = ingredients.length > 1;
   // 재료 추가를 위한 엔터키 핸들러
   const handleIngredientKeyPress = (e: React.KeyboardEvent) => {
@@ -63,6 +67,7 @@ const IngredientSection = ({
         ))}
         <CenteredAddButtonRowBox>
           <AddIngredientButton
+            isDarkMode={isDarkMode}
             type="button"
             onClick={(event) => {
               event.preventDefault();
@@ -105,7 +110,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
 
@@ -174,13 +178,16 @@ const CenteredAddButtonRowBox = styled.div`
   width: 100%;
 `;
 
-const AddIngredientButton = styled.button`
+const AddIngredientButton = styled.button<{ isDarkMode: boolean }>`
   font-family: "Pretendard", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 2.8rem;
-  color: #4f3d21;
+
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.white : props.theme.brown};
+
   border: none;
   cursor: pointer;
   background: transparent;

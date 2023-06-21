@@ -2,6 +2,8 @@ import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import uploadImage from "@/app/api/aws";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilState } from "recoil";
 
 type Step = {
   stepDetail: string;
@@ -27,6 +29,8 @@ const CookingStepsSection = ({
   handleAddStep,
   handleRemoveStep,
 }: CookingStepsSectionProps) => {
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   const handleImageChange = async (
     e: ChangeEvent<HTMLInputElement>,
     index: number
@@ -126,7 +130,11 @@ const CookingStepsSection = ({
           </StepContainer>
         </div>
       ))}
-      <AddStepButton type="button" onClick={handleAddStep}>
+      <AddStepButton
+        isDarkMode={isDarkMode}
+        type="button"
+        onClick={handleAddStep}
+      >
         + 순서 추가하기
       </AddStepButton>
     </CookingStepContainer>
@@ -141,7 +149,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
 
@@ -165,6 +172,7 @@ const TextArea = styled.textarea`
   font-size: 16px;
   line-height: 1.9rem;
   resize: none;
+
   ::placeholder {
     color: #a9a9a9;
   }
@@ -254,14 +262,17 @@ const StepTextArea = styled(TextArea)`
   }
 `;
 
-const AddStepButton = styled.button`
+const AddStepButton = styled.button<{ isDarkMode: boolean }>`
   width: 100%;
   font-family: "Pretendard", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 2.8rem;
-  color: #4f3d21;
+
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.white : props.theme.brown};
+
   border: none;
   cursor: pointer;
   background: transparent;
