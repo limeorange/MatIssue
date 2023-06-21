@@ -13,6 +13,8 @@ import { postRecipe } from "@/app/api/recipe";
 import { toast } from "react-hot-toast";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type RecipeFormState = {
   selectedCategory: string;
@@ -66,6 +68,7 @@ const RecipeForm = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -360,7 +363,7 @@ const RecipeForm = () => {
   return (
     <FormLayout>
       {isLoading && <LoadingModal />}
-      <Title>레시피 등록하기</Title>
+      <Title isDarkMode={isDarkMode}>레시피 등록하기</Title>
       <ThumbnailAndCategoryAndInfoContainer>
         <ImageWrapper>
           <ThumbnailUpload
@@ -471,7 +474,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
 
@@ -519,6 +521,7 @@ const TextArea = styled.textarea`
   font-size: 16px;
   line-height: 1.9rem;
   resize: none;
+
   ::placeholder {
     color: #a9a9a9;
   }
@@ -551,7 +554,7 @@ const FormLayout = styled.form`
   }
 `;
 
-const Title = styled.h2`
+const Title = styled.h2<{ isDarkMode: boolean }>`
   width: 16.8rem;
   height: 2.7rem;
   font-family: "Inter";
@@ -559,7 +562,8 @@ const Title = styled.h2`
   font-weight: 600;
   font-size: 22px;
   line-height: 2.7rem;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.white : props.theme.brown};
   margin: 0;
 `;
 

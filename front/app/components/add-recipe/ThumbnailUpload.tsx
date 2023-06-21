@@ -22,25 +22,42 @@ const ThumbnailUpload = ({
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-
-      try {
-        const response = await uploadImage(file);
-        const imageUrl = response.imageUrl;
-
-        handleThumbnailChange(imageUrl);
-      } catch (error) {
-        console.error("Image upload failed:", error);
-      }
+      await uploadFile(file);
     }
   };
 
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    await uploadFile(file);
+  };
+
+  const uploadFile = async (file: File) => {
+    try {
+      const response = await uploadImage(file);
+      const imageUrl = response.imageUrl;
+
+      handleThumbnailChange(imageUrl);
+    } catch (error) {
+      console.error("Image upload failed:", error);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
   return (
-    <ImageWrapper>
+    <ImageWrapper
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onClick={handleImageClick}
+    >
       <Label>썸네일 등록</Label>
       {selectedImage ? (
-        <Image src={selectedImage} alt="thumbnail" onClick={handleImageClick} />
+        <Image src={selectedImage} alt="thumbnail" />
       ) : (
-        <EmptyBox onClick={handleImageClick} />
+        <EmptyBox />
       )}
       <FileInput
         ref={fileInputRef}
@@ -63,7 +80,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
 
   @media (min-width: 1024px) {
     width: 9.8rem;

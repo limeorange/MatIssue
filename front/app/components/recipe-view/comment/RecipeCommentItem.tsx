@@ -18,7 +18,7 @@ import ConfirmModal from "../../UI/ConfirmModal";
 type RecipeCommentProps = Comments;
 
 /** 요리 댓글 단일 컴포넌트 */
-const RecipeComment: React.FC<RecipeCommentProps> = ({
+const RecipeComment = ({
   comment_author,
   comment_text,
   comment_id,
@@ -28,7 +28,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   updated_at,
   comment_nickname,
   comment_profile_img,
-}) => {
+}: RecipeCommentProps) => {
   // 수정 버튼 눌렀을 때 textarea로 변경하기 위한 상태 관리
   const [isEditing, setIsEditing] = useState(false);
 

@@ -11,10 +11,7 @@ type RecipeInfoProps = {
 };
 
 /** 요리 정보 (인원, 시간, 난이도, 종류) 컴포넌트 */
-const RecipeInfo: React.FC<RecipeInfoProps> = ({
-  recipe_info,
-  recipe_category,
-}) => {
+const RecipeInfo = ({ recipe_info, recipe_category }: RecipeInfoProps) => {
   const { serving, time, level } = recipe_info;
 
   // level에 따른 라벨링 작업

@@ -1,4 +1,6 @@
+import darkModeAtom from "@/app/store/darkModeAtom";
 import React, { ChangeEvent } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 type VideoSectionProps = {
@@ -10,10 +12,13 @@ const VideoSection = ({
   videoLink,
   handleVideoLinkChange,
 }: VideoSectionProps) => {
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   return (
     <VideoContainer>
       <Label>동영상</Label>
       <VideoTextArea
+        isDarkMode={isDarkMode}
         value={videoLink}
         onChange={handleVideoLinkChange}
         placeholder="유튜브 동영상 링크를 입력해주세요."
@@ -43,7 +48,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
 
@@ -67,7 +71,7 @@ const VideoContainer = styled.div`
   }
 `;
 
-const VideoTextArea = styled.textarea`
+const VideoTextArea = styled.textarea<{ isDarkMode: boolean }>`
   box-sizing: border-box;
   width: 100%;
   height: 11.6rem;
@@ -84,6 +88,10 @@ const VideoTextArea = styled.textarea`
   ::placeholder {
     color: #a9a9a9;
   }
+
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : props.theme.white};
+
   &:focus {
     border: 0.1rem solid #fbd26a;
     outline: none;

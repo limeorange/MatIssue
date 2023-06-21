@@ -64,6 +64,12 @@ function StyledTheme({ children }: Props) {
   label {
     color : ${(props) => (props.isDarkMode ? "white" : "#4F3D21")};
   }
+  label {
+    color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
+  }
+  textarea {
+    background-color: ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
+  }
 `;
 
   useEffect(() => {
