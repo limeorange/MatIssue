@@ -24,6 +24,7 @@ import toast from "react-hot-toast";
 import getCurrentUser, { getChefByUserId } from "@/app/api/user";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { useRouter } from "next/navigation";
+import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
 import ShareModal from "@/app/components/recipe-view/likes-share/ShareModal";
 import MiniWriterProfile from "@/app/components/recipe-view/sticky-sidebar/MiniWriterProfile";
