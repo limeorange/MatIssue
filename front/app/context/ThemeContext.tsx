@@ -61,12 +61,6 @@ function StyledTheme({ children }: Props) {
       border : 0.1rem solid #fbd26a;
     }
   }
-    input {
-    background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
-    border : ${(props) =>
-      props.isDarkMode ? "0.1rem solid #404353" : "0.1rem solid #ccc"};
-    color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
-  }
   label {
     color : ${(props) => (props.isDarkMode ? "white" : "#4F3D21")};
   }
