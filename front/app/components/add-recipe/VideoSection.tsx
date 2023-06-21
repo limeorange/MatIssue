@@ -75,7 +75,7 @@ const VideoTextArea = styled.textarea<{ isDarkMode: boolean }>`
   box-sizing: border-box;
   width: 100%;
   height: 11.6rem;
-  border: 0.1rem solid #d9d9d9;
+
   border-radius: 1.5rem;
   padding: 1rem;
   font-family: "Pretendard";
