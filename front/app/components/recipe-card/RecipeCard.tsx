@@ -89,6 +89,10 @@ const RecipeCardLayout = styled.div`
   overflow: hidden;
   gap: 0.2rem;
 
+  @media (min-width: 768px) {
+    max-width: none;
+  }
+
   &: hover {
     cursor: pointer;
   }
