@@ -13,7 +13,7 @@ type CommentProps = {
 };
 
 /** 댓글 입력 컴포넌트 */
-const RecipeCommentInput: React.FC<CommentProps> = ({ recipe_id }) => {
+const RecipeCommentInput = ({ recipe_id }: CommentProps) => {
   const [isCommenting, setIsCommenting] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [activatedButton, setActivatedButton] = useState(false);

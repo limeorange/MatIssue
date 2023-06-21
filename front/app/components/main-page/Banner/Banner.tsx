@@ -138,6 +138,7 @@ const BannerContainer = styled.div`
   display: block;
   width: 100%;
   padding: 1.5rem 1.5rem 0 1.5rem;
+  color: #4f3d21;
 
   @media (min-width: 1024px) {
     display: block;

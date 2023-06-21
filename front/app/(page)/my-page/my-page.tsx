@@ -5,7 +5,7 @@ import RecipeCards from "../../components/my-page/RecipeCardList";
 import ProfileCard from "../../components/my-page/ProfileCard";
 import { useQuery } from "@tanstack/react-query";
 import { Recipe } from "@/app/types";
-import { getRecipeByUserId } from "@/app/api/recipe";
+import { getRecipeByCurrentId } from "@/app/api/recipe";
 
 const MyPage = ({
   initialCurrentUserRecipes,
@@ -16,7 +16,7 @@ const MyPage = ({
   초기값으로 서버에서 받아온 데이터를 넣고, 캐시를 초기화하면 데이터를 다시 패치함 */
   const { data: currentUserRecipes } = useQuery(
     ["currentUserRecipes"],
-    () => getRecipeByUserId(),
+    () => getRecipeByCurrentId(),
     {
       refetchOnWindowFocus: false,
       retry: 0,

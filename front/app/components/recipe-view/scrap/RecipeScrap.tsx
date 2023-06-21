@@ -31,14 +31,14 @@ type ScrapItemProps = {
 };
 
 /** 게시글 스크랩 컴포넌트 */
-const RecipeScrap: React.FC<UserScrapProps> = ({
+const RecipeScrap = ({
   currentUserID,
   scrapClickHandler,
   isBooked,
   isSaved,
   setIsSaved,
   recipe_id,
-}) => {
+}: UserScrapProps) => {
   // 처음 렌더링 시 클라이언트 사이드에서 로컬스토리지 받아오기 위한 의존성 관리
   // 스크랩 된 메모가 있으면 색칠되어있음
   useEffect(() => {

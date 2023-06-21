@@ -6,15 +6,18 @@ import styled from "styled-components";
 import Image from "next/image";
 
 import CategoryModal from "./CategoryModal";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 /** 헤더 카테고리바 컴포넌트 */
 const CategoryBar = () => {
   const [isModal, setIsModal] = useState<boolean>(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const router = useRouter();
 
   return (
-    <CategoryBarWrapper>
+    <CategoryBarWrapper isDarkMode={isDarkMode}>
       <CategoryList>
         <CategoryItem
           onClick={() => setIsModal(!isModal)}
@@ -22,8 +25,8 @@ const CategoryBar = () => {
           onMouseOut={() => setIsModal(false)}
         >
           {isModal && <CategoryModal isModal={isModal} />}
-          <IconWrapper>
-            <Image src="/images/header/listIcon.svg" alt="list_icon" fill />
+          <IconWrapper isDarkMode={isDarkMode}>
+            <Image src="/images/category/listIcon.svg" alt="list_icon" fill />
           </IconWrapper>
           음식 카테고리
         </CategoryItem>
@@ -60,11 +63,12 @@ const CategoryBar = () => {
 
 export default CategoryBar;
 
-const CategoryBarWrapper = styled.div`
+const CategoryBarWrapper = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   align-items: center;
   width: 100%;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
 
   justify-content: start;
 
@@ -94,12 +98,11 @@ const CategoryItem = styled.li`
     font-size: 16px;
     position: relative;
 
-    background-color: white;
     border-radius: 0;
     box-sizing: content-box;
     align-items: center;
     gap: 0.8rem;
-    border-bottom: 0.4rem solid #ffffff;
+    border-bottom: 0.4rem solid rgb(255, 255, 255, 0);
     padding: 0.8rem 1rem 0.4rem 1rem;
     &:hover {
       cursor: pointer;
@@ -111,12 +114,16 @@ const CategoryItem = styled.li`
   transition: all 0.3s;
 `;
 
-const IconWrapper = styled.div`
+const IconWrapper = styled.div<{ isDarkMode: boolean }>`
   display: none;
   @media (min-width: 1024px) {
     display: block;
     position: relative;
     width: 1.4rem;
     height: 0.9rem;
+    filter: ${(props) =>
+      props.isDarkMode
+        ? "invert(89%) sepia(27%) saturate(436%) hue-rotate(334deg) brightness(105%) contrast(104%)"
+        : "invert(18%) sepia(10%) saturate(2848%) hue-rotate(357deg) brightness(103%) contrast(82%)"};
   }
 `;

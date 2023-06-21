@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { axiosBase } from "@/app/api/axios";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 
 import LoadingModal from "../UI/LoadingModal";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type UserModalProps = {
   isAdmin: boolean;
@@ -19,6 +20,7 @@ type UserModalProps = {
 /** 유저 메뉴 모달 컴포넌트 */
 const UserModal = (props: UserModalProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -55,21 +57,28 @@ const UserModal = (props: UserModalProps) => {
   };
 
   return (
-    <UserModalContainer visible={props.isUserModal}>
+    <UserModalContainer visible={props.isUserModal} isDarkMode={isDarkMode}>
       {isLoading && <LoadingModal />}
       <UserModalList>
         {props.isAdmin && (
           <>
-            <UserModalItem onClick={() => routerHandler("/admin/user")}>
+            <UserModalItem
+              isDarkMode={isDarkMode}
+              onClick={() => routerHandler("/admin/user")}
+            >
               관리자페이지
-            </UserModalItem>{" "}
+            </UserModalItem>
             <UnderLine />
           </>
         )}
-        <UserModalItem onClick={() => routerHandler("/my-page")}>
+        <UserModalItem
+          isDarkMode={isDarkMode}
+          onClick={() => routerHandler("/my-page")}
+        >
           마이페이지
         </UserModalItem>
         <UserModalItem
+          isDarkMode={isDarkMode}
           onClick={() => {
             routerHandler("/my-page/modify-user-info");
           }}
@@ -77,6 +86,7 @@ const UserModal = (props: UserModalProps) => {
           회원정보 수정
         </UserModalItem>
         <UserModalItem
+          isDarkMode={isDarkMode}
           onClick={() => {
             routerHandler("/add-recipe");
           }}
@@ -84,6 +94,7 @@ const UserModal = (props: UserModalProps) => {
           글쓰기
         </UserModalItem>
         <UserModalItem
+          isDarkMode={isDarkMode}
           onClick={() => {
             routerHandler("/my-page/scrap");
           }}
@@ -91,7 +102,9 @@ const UserModal = (props: UserModalProps) => {
           스크랩
         </UserModalItem>
         <UnderLine />
-        <UserModalItem onClick={logoutHandler}>로그아웃</UserModalItem>
+        <UserModalItem onClick={logoutHandler} isDarkMode={isDarkMode}>
+          로그아웃
+        </UserModalItem>
       </UserModalList>
     </UserModalContainer>
   );
@@ -99,19 +112,29 @@ const UserModal = (props: UserModalProps) => {
 
 export default UserModal;
 
-const UserModalContainer = styled.div<{ visible: boolean }>`
+const UserModalContainer = styled.div<{
+  visible: boolean;
+  isDarkMode: boolean;
+}>`
   position: absolute;
   z-index: 90;
   top: 4.3rem;
   right: 0;
   width: 13.4rem;
   padding: 0.6rem 0;
-  background-color: white;
-  box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
+  box-shadow: ${(props) =>
+    props.isDarkMode
+      ? "0 0 0.1rem 0.1rem rgba(255, 255, 255, 0.25);"
+      : "0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);"}
   border-radius: 0.5rem;
   font-size: 13px;
   font-weight: 400;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : props.theme.white};
+
+  
 
   opacity: ${(props) => (props.visible ? "1" : "0")};
   visibility: ${(props) => (props.visible ? "visible" : "hidden")};
@@ -125,14 +148,15 @@ const UserModalList = styled.ul`
   align-items: center;
 `;
 
-const UserModalItem = styled.li`
+const UserModalItem = styled.li<{ isDarkMode: boolean }>`
   display: flex;
   width: 100%;
   padding: 0.6rem 1.2rem;
 
   &:hover {
     cursor: pointer;
-    background-color: #fbe2a1;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.lightNavy : props.theme.lightYellow};
   }
 `;
 
