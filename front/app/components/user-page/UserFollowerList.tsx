@@ -1,6 +1,6 @@
 import UserFollowSearch from "./UserFollowSearch";
 import UserFollowItem from "./UserFollowItem";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 
 type CurrentChefFansProps = {
@@ -16,40 +16,80 @@ const UserFollowersList = ({
   currentChefFans: CurrentChefFansProps[];
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [searchValue, setSearchValue] = useState("");
 
-  console.log("검색한 유저의 팬 정보..", currentChefFans);
+  // 검색 값에 따라 팬 목록 필터링
+  const filteredFans = currentChefFans.filter(
+    (fan) =>
+      fan.user_id.includes(searchValue) || fan.username.includes(searchValue)
+  );
   return (
     <>
       <Container>
-        {/* 검색 입력창 */}
-        <UserFollowSearch />
-        <FollowerList
-          ref={containerRef}
-          style={{ maxHeight: "400px", overflowY: "auto" }}
-        >
-          {/* 팬이 빈 배열인 경우에 대한 예외 처리 */}
-          {Array.isArray(currentChefFans) &&
-            currentChefFans.length > 0 &&
-            currentChefFans.map((fan, index) => (
-              <UserFollowItem
-                key={index}
-                userId={fan.user_id}
-                userNickname={fan.username}
-                userImg={fan.img}
-              ></UserFollowItem>
-            ))}
-        </FollowerList>
+        {/* 팔로워, 팔로워 수 Title */}
+        <TitleCountBox>
+          <h2>팔로워</h2>
+          <BoldCount>{currentChefFans.length}</BoldCount>
+        </TitleCountBox>
+
+        <SearchListBox>
+          {/* 검색 입력창 */}
+          <UserFollowSearch onChange={(value) => setSearchValue(value)} />
+
+          {/* 팔로워 목록 */}
+          <FollowerList
+            ref={containerRef}
+            style={{ maxHeight: "400px", overflowY: "auto" }}
+          >
+            {Array.isArray(filteredFans) &&
+              filteredFans.length > 0 &&
+              filteredFans.map((fan, index) => (
+                <UserFollowItem
+                  key={index}
+                  userId={fan.user_id}
+                  userNickname={fan.username}
+                  userImg={fan.img}
+                ></UserFollowItem>
+              ))}
+          </FollowerList>
+        </SearchListBox>
       </Container>
     </>
   );
 };
 
 const Container = styled.div`
+  margin-bottom: 5rem;
   @media (min-width: 1024px) {
     margin-left: 13rem;
   }
 `;
 
+const TitleCountBox = styled.div`
+  display: flex;
+  font-size: 16px;
+  gap: 0.3rem;
+  margin-top: 1.5rem;
+  font-weight: 500;
+  margin-left: 0.7rem;
+
+  @media (min-width: 1024px) {
+    font-size: 17px;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    margin-left: 0.5rem;
+  }
+`;
+
+const SearchListBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const BoldCount = styled.div`
+  font-weight: 600;
+`;
 const FollowerList = styled.div`
   ::-webkit-scrollbar {
     width: 1rem;
