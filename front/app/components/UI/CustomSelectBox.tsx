@@ -59,7 +59,7 @@ const CustomSelectBox = ({
         {selectedOptionObject ? selectedOptionObject.label : placeholder}
       </SelectBox>
       {isOpen && (
-        <OptionList>
+        <OptionList isDarkMode={isDarkMode}>
           {options.map((option) => (
             <OptionItem
               key={option.value}
@@ -88,7 +88,8 @@ const SelectBox = styled.div<{ isDarkMode: boolean }>`
   box-sizing: border-box;
   width: 12.5rem;
   height: 3.6rem;
-  border: 0.1rem solid #d9d9d9;
+  border: ${(props) =>
+    props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
   border-radius: 5rem;
   padding-left: 1rem;
   padding-top: 0.7rem;
@@ -103,7 +104,7 @@ const SelectBox = styled.div<{ isDarkMode: boolean }>`
 
   background: ${(props) =>
     props.isDarkMode
-      ? "#404353 url('/images/listIcon.png') no-repeat"
+      ? "#404353 url('/images/listIconDark.png') no-repeat"
       : "#ffffff url('/images/listIcon.png') no-repeat"};
 
   background-position: right 1rem center;
@@ -119,21 +120,21 @@ const SelectBox = styled.div<{ isDarkMode: boolean }>`
   }
 `;
 
-const OptionList = styled.ul`
+const OptionList = styled.ul<{ isDarkMode: boolean }>`
   position: absolute;
   top: 3.45rem;
   left: -0.2rem;
   width: 12.9rem;
   border: 3px solid #fbe2a1;
   border-top: none;
-  background-color: #ffffff;
-  border-bottom-left-radius: 1.5rem;
-  border-bottom-right-radius: 1.5rem;
+  background-color: ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
   font-family: "Pretendard";
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
-  color: #6f6f6f;
+  color: ${(props) => (props.isDarkMode ? "#ccc" : "#6f6f6f")};
   list-style: none;
   padding: 0;
   margin: 0;
@@ -144,14 +145,9 @@ const OptionItem = styled.li`
   padding: 1rem;
   cursor: pointer;
 
-  // &:first-child {
-  //   border-top-left-radius: 1.3rem;
-  //   border-top-right-radius: 1.3rem;
-  // }
-
   &:last-child {
-    border-bottom-left-radius: 1.1rem;
-    border-bottom-right-radius: 1.1rem;
+    border-bottom-left-radius: 0.15rem;
+    border-bottom-right-radius: 0.15rem;
   }
 
   &:hover {
