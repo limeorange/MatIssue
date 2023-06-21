@@ -101,6 +101,8 @@ const BoldCount = styled.div`
 
 /** 팔로잉 목록 Div */
 const FollowingList = styled.div`
+  padding-right: 1rem;
+
   ::-webkit-scrollbar {
     width: 1rem;
   }
