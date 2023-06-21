@@ -7,6 +7,7 @@ type UserFollowItemProps = {
   userImg: string;
 };
 
+/** 팔로워 or 팔로잉 컴포넌트에서 쓰이는 단일 유저 아이템 */
 const UserFollowItem = ({
   userId,
   userNickname,
@@ -15,7 +16,7 @@ const UserFollowItem = ({
   return (
     <>
       <UserContainer>
-        <div className="flex">
+        <UserInfoWrapper>
           {/* 프로필 이미지 */}
           <ProfileImage>
             <Image
@@ -32,15 +33,16 @@ const UserFollowItem = ({
           </ProfileImage>
 
           {/* 유저 아이디, 유저 닉네임 */}
-          <div className="flex flex-col justify-center">
-            <span className="text-[14px] font-[600]">{userId}</span>
-            <span className="text-[14px]">{userNickname}</span>
-          </div>
-        </div>
-        {/* 팔로우 or 프로필 버튼 */}
-        <div className="flex justify-end">
+          <UserInfo>
+            <UserId>{userId}</UserId>
+            <UserNickname>{userNickname}</UserNickname>
+          </UserInfo>
+        </UserInfoWrapper>
+
+        {/* 팔로우 or 팔로잉 버튼 */}
+        <ButtonWrapper>
           <FollowButton>팔로우</FollowButton>
-        </div>
+        </ButtonWrapper>
       </UserContainer>
     </>
   );
@@ -57,6 +59,11 @@ const UserContainer = styled.div`
   align-items: center;
 `;
 
+/** 유저 프로필, 아이디, 닉네임 감싸는 Div */
+const UserInfoWrapper = styled.div`
+  display: flex;
+`;
+
 /** 프로필 이미지 감싸는 Div */
 const ProfileImage = styled.div`
   display: flex;
@@ -68,7 +75,31 @@ const ProfileImage = styled.div`
   margin
 `;
 
-/** 팔로우 버튼 */
+/** 유저 아이디, 닉네임 감싸는 Div */
+const UserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+/** 유저 아이디 Span */
+const UserId = styled.span`
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+/** 유저 닉네임 Span */
+const UserNickname = styled.span`
+  font-size: 14px;
+`;
+
+/** 팔로우 or 팔로잉 버튼 우측 정렬 시키기 위한 Div */
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+/** 팔로우 or 팔로잉 버튼 */
 const FollowButton = styled.button`
   width: 7.5rem;
   height: 2.8rem;
