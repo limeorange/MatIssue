@@ -71,6 +71,7 @@ function StyledTheme({ children }: Props) {
         : "0 0 0 1000px #fff inset"};
     -webkit-text-fill-color: ${(props) =>
       props.isDarkMode ? "#fff" : "#4F3D21"};
+      font-size: 16px; 
   }
 
 
