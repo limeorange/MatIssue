@@ -177,11 +177,6 @@ const TextArea = styled.textarea`
   ::placeholder {
     color: #a9a9a9;
   }
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
-  }
 
   @media (min-width: 1024px) {
     width: 57.2rem;
