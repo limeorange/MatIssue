@@ -66,7 +66,6 @@ const Wrapper = styled.div`
   margin: 0 auto;
   @media (min-width: 1024px) {
     display: flex;
-    justify-content: flex-start;
     padding-top: 5rem;
   }
 `;
