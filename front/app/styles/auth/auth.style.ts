@@ -1,4 +1,3 @@
-import { FieldErrors } from "react-hook-form";
 import styled from "styled-components";
 
 type StyledInputProps = {
@@ -10,14 +9,18 @@ type BirthdayInputProps = {
   isYear?: boolean;
 };
 
-export const AuthContainer = styled.div`
+export const AuthContainer = styled.div<{ isDarkMode: boolean }>`
   margin-top: 3.2rem;
   margin-left: auto;
   margin-right: auto;
   width: 100%;
   max-width: 40rem;
+  box-shadow: 0 0 0.2rem 0
+    ${(props) => (props.isDarkMode ? "rgb(255 255 255)" : "rgb(0 0 0 / 0.25)")};
+  border-radius: 1.5rem;
 
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.white : props.theme.brown};
 `;
 
 export const AuthFormWrapper = styled.div`
@@ -26,13 +29,8 @@ export const AuthFormWrapper = styled.div`
   align-items: center;
   width: 100%;
   gap: 4rem;
-  background-color: #ffffff;
-  padding-left: 3.2rem;
-  padding-right: 3.2rem;
-  padding-top: 3.2rem;
-  padding-bottom: 3.2rem;
-  box-shadow: 0 0.1rem 0.3rem 0 rgb(0 0 0 / 0.1);
-  border-radius: 1.5rem;
+  padding: 3.2rem;
+
   min-height: 100vh;
 
   form {
@@ -53,9 +51,6 @@ export const StyledLabel = styled.label`
 
 export const StyledInput = styled.input<StyledInputProps>`
   appearance: none;
-  background-color: #fff;
-  border-color: #ddd;
-  border-width: 1px;
   padding: 0.6rem 1.2rem;
   font-size: 16px;
   line-height: 2.4rem;
@@ -63,16 +58,13 @@ export const StyledInput = styled.input<StyledInputProps>`
   width: 100%;
   height: 4.8rem;
   border-radius: 1.5rem;
-  color: #333333;
   outline: none;
   &:focus {
-  border : 0.1rem solid #fb26a;
-  box-shadow: inset 0 0 0.1rem 0.2rem #fbd26a;
   opacity: ${(props) => props.disabled && "0.5"};
   cursor: ${(props) => props.disabled && "default"};
 
   &:placeholder {
-    color: #999999;
+    color: #999;
   }
 `;
 
