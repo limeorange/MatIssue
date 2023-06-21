@@ -248,7 +248,6 @@ const ProfileContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  //   margin-top: 1.9rem;
 `;
 
 /** 프로필 이미지 감싸는 Div */
@@ -267,7 +266,6 @@ const Nickname = styled.span`
   font-size: 25px;
   font-weight: 600;
   color: #4f3d21;
-  //   margin-bottom: 0.4rem;
 `;
 
 /** 팔로잉, 팔로워 Div */
