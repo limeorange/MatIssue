@@ -10,22 +10,12 @@ import { useRecoilValue } from "recoil";
 import styled, { keyframes } from "styled-components";
 
 const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
-  const [commentCount, setCommentCount] = useState<number>(0);
   const [showImage, setShowImage] = useState(false);
   const isDarkMode = useRecoilValue(darkModeAtom);
 
   useEffect(() => {
     setShowImage(true);
   }, [recipe]);
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      const recipeData = await getRecipeById(recipe.recipe_id);
-      setCommentCount(recipeData.comments.length || 0);
-    };
-
-    fetchComments();
-  }, [recipe.recipe_id]);
 
   const router = useRouter();
 
@@ -66,7 +56,7 @@ const LargeRecipeCard = ({ recipe }: { recipe: Recipe }) => {
                 width={16}
                 height={24}
               />
-              <span>{commentCount}</span>
+              <span>{recipe.comments.length.toLocaleString()}</span>
             </IconWrapper>
           </RecipeInfoBox>
         </TextContainer>
