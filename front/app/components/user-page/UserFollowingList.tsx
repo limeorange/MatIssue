@@ -88,6 +88,10 @@ const SearchListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (min-width: 1024px) {
+    align-items: stretch;
+  }
 `;
 
 /** 팔로잉 수 굵은 글씨 Div */

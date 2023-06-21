@@ -61,6 +61,7 @@ const UserFollowersList = ({
 /** 팔로워 전체 정보 감싸는 Div */
 const Container = styled.div`
   margin-bottom: 5rem;
+
   @media (min-width: 1024px) {
     margin-left: 13rem;
   }
@@ -88,6 +89,10 @@ const SearchListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (min-width: 1024px) {
+    align-items: stretch;
+  }
 `;
 
 /** 팔로워 수 굵은 글씨 Div */
