@@ -65,7 +65,10 @@ function StyledTheme({ children }: Props) {
   input:-webkit-autofill,
   input:-webkit-autofill:hover, 
   input:-webkit-autofill:focus {
-    -webkit-box-shadow: none;
+    -webkit-box-shadow: ${(props) =>
+      props.isDarkMode
+        ? "0 0 0 1000px #404353 inset"
+        : "0 0 0 1000px #fff inset"}
     -webkit-text-fill-color: ${(props) =>
       props.isDarkMode ? "#fff" : "#4F3D21"};
   }
