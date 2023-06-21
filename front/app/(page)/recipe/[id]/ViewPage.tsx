@@ -152,7 +152,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
         );
         await axiosBase.patch(`/recipes/${recipe_id}/like`, recipeUpdated);
         setIsLiked(false);
-        setCount(count - 1);
+        setCount((prevCount) => Math.max(prevCount - 1, 0));
         toast.error("좋아요가 취소되었습니다ㅠ.ㅠ");
       }
       // 좋아요를 처음 누른 경우
@@ -160,7 +160,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
         recipe_like.push(loggedInUserId);
         await axiosBase.patch(`/recipes/${recipe_id}/like`, recipe_like);
         setIsLiked(true);
-        setCount(count + 1);
+        setCount((prevCount) => prevCount + 1);
         toast.success("맛이슈와 함께라면 언제든 좋아요!");
       }
       client.invalidateQueries(["currentRecipe"]);
