@@ -57,7 +57,8 @@ function StyledTheme({ children }: Props) {
       props.isDarkMode ? "0.05rem solid #ddd" : "0.1rem solid #ccc"};
     color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
     &:focus {
-      border : 0.1rem solid #fbd26a;
+      border : ${(props) =>
+        props.isDarkMode ? "0.05rem solid #fbd26a" : "0.1rem solid #fbd26a"};
       outline : 0.2rem solid #fbd26a
     }
   }
@@ -83,7 +84,8 @@ function StyledTheme({ children }: Props) {
     border : ${(props) =>
       props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
     &:focus {
-      border : 0.1rem solid #fbd26a;
+      border : ${(props) =>
+        props.isDarkMode ? "0.05rem solid #fbd26a" : "0.1rem solid #fbd26a"};
       outline : 0.2rem solid #fbd26a;
     }
   }
