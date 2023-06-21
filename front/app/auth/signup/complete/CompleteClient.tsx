@@ -1,14 +1,17 @@
 "use client";
 
+import darkModeAtom from "@/app/store/darkModeAtom";
 import { AuthContainer } from "@/app/styles/auth/auth.style";
 import { useRouter } from "next/navigation";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 const CompleteClient = () => {
+  const isDarkMode = useRecoilValue(darkModeAtom);
   const router = useRouter();
 
   return (
-    <AuthContainer>
+    <AuthContainer isDarkMode={isDarkMode}>
       <MessageWrapper>
         <StyledTitleBox>
           <StyledTitle>

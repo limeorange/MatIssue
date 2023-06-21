@@ -497,11 +497,6 @@ const Input = styled.input`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
-  }
 
   @media (min-width: 1024px) {
     width: 57.2rem;
@@ -524,11 +519,6 @@ const TextArea = styled.textarea`
 
   ::placeholder {
     color: #a9a9a9;
-  }
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 
   @media (min-width: 1024px) {

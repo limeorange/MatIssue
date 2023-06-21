@@ -92,12 +92,6 @@ const VideoTextArea = styled.textarea<{ isDarkMode: boolean }>`
   background-color: ${(props) =>
     props.isDarkMode ? props.theme.lightNavy : props.theme.white};
 
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
-  }
-
   @media (min-width: 1024px) {
     width: 37.2rem;
   }

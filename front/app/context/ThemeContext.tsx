@@ -54,19 +54,28 @@ function StyledTheme({ children }: Props) {
   input {
     background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
     border : ${(props) =>
-      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ddd"};
+      props.isDarkMode ? "0.05rem solid #ddd" : "0.1rem solid #ccc"};
     color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
     &:focus {
-      box-shadow: inset 0 0 0.1rem 0.1rem #fbd26a;
-      border : 0.1rem solid #fbd26a;
+      border : ${(props) =>
+        props.isDarkMode ? "0.05rem solid #fbd26a" : "0.1rem solid #fbd26a"};
+      outline : 0.2rem solid #fbd26a
     }
   }
-    input {
-    background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
-    border : ${(props) =>
-      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
-    color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: ${(props) =>
+      props.isDarkMode
+        ? "0 0 0 1000px #404353 inset"
+        : "0 0 0 1000px #fff inset"};
+    -webkit-text-fill-color: ${(props) =>
+      props.isDarkMode ? "#fff" : "#4F3D21"};
+      font-size: 16px; 
   }
+
+
   label {
     color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
   }
@@ -74,6 +83,11 @@ function StyledTheme({ children }: Props) {
     background-color: ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
     border : ${(props) =>
       props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
+    &:focus {
+      border : ${(props) =>
+        props.isDarkMode ? "0.05rem solid #fbd26a" : "0.1rem solid #fbd26a"};
+      outline : 0.2rem solid #fbd26a;
+    }
   }
 `;
 
