@@ -54,11 +54,11 @@ function StyledTheme({ children }: Props) {
   input {
     background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
     border : ${(props) =>
-      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ddd"};
+      props.isDarkMode ? "0.05rem solid #ddd" : "0.1rem solid #ccc"};
     color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
     &:focus {
-      box-shadow: inset 0 0 0.1rem 0.1rem #fbd26a;
       border : 0.1rem solid #fbd26a;
+      outline : 0.2rem solid #fbd26a
     }
   }
 
@@ -82,6 +82,10 @@ function StyledTheme({ children }: Props) {
     background-color: ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
     border : ${(props) =>
       props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
+    &:focus {
+      border : 0.1rem solid #fbd26a;
+      outline : 0.2rem solid #fbd26a;
+    }
   }
 `;
 
