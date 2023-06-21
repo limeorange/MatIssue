@@ -34,16 +34,13 @@ import LoginConfirmModal from "@/app/components/UI/LoginConfirmModal";
 type RecipeDataProps = {
   recipe: Recipe;
   recipe_id: string;
+  initialCurrentChef: User;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
 const RecipeDetail = (props: RecipeDataProps) => {
-  // 캐시에 저장된 현재 레시피 정보를 가져옴
-  const {
-    data: recipe,
-    isLoading,
-    isError,
-  } = useQuery<Recipe>(
+  // currentRecipe : 현재 레시피 정보
+  const { data: recipe } = useQuery<Recipe>(
     ["currentRecipe", props.recipe_id],
     () => getRecipeById(props.recipe_id),
     {
@@ -53,7 +50,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   );
 
-  // 캐시에 저장된 현재 유저정보를 가져옴
+  // currentUser : 현재 로그인 된 유저정보
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
     getCurrentUser()
   );
@@ -97,10 +94,15 @@ const RecipeDetail = (props: RecipeDataProps) => {
     comments,
   } = recipe;
 
-  // currentChef 정보
-  const { data: currentChef, isLoading: isLoadingChef } = useQuery(
+  // currentChef : 현재 게시글의 작성자 정보
+  const { data: currentChef } = useQuery(
     ["currentChef", user_id],
-    () => getChefByUserId(user_id)
+    () => getChefByUserId(user_id),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: props.initialCurrentChef,
+    }
   );
 
   // 댓글 개수
@@ -232,11 +234,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
   const profileClickHandler = () => {
     router.push(`user/${currentChef.user_id}`);
   };
-
-  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
-  if (isLoadingChef) {
-    return <div>Loading...</div>; //
-  }
 
   return (
     <>
