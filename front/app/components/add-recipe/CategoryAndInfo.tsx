@@ -128,7 +128,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
   margin-left: 0.5rem;
