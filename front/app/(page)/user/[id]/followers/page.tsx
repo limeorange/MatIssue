@@ -4,6 +4,8 @@ import Followers from "./FollowersPage";
 const FollowersPage = async ({ params }: { params: { id: string } }) => {
   const userProfileId = params.id;
   const initialCurrentChef = await getChefByUserId(userProfileId);
+
+  /** 프로필 유저의 Fans 배열 */
   const currentChefFans = await getUserFans(userProfileId);
 
   return (

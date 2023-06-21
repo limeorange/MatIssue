@@ -1,6 +1,7 @@
 "use client";
 
 import getCurrentUser from "@/app/api/user";
+import UserFollowingList from "@/app/components/user-page/UserFollowingList";
 import UserProfileCard from "@/app/components/user-page/UserProfileCard";
 import { User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
@@ -10,10 +11,19 @@ import styled from "styled-components";
 type FollowingProps = {
   userProfileId: string;
   initialCurrentChef: User;
+  currentChefSubscriptions: {
+    user_id: string;
+    username: string;
+    img: string;
+  }[];
 };
 
 /** 팔로잉 페이지 컴포넌트 */
-const Following = ({ initialCurrentChef, userProfileId }: FollowingProps) => {
+const Following = ({
+  initialCurrentChef,
+  userProfileId,
+  currentChefSubscriptions,
+}: FollowingProps) => {
   // 캐시에 저장된 현재 로그인한 유저 정보 가져옴
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
     getCurrentUser()
@@ -34,8 +44,10 @@ const Following = ({ initialCurrentChef, userProfileId }: FollowingProps) => {
           userProfileId={userProfileId}
           initialCurrentChef={initialCurrentChef}
         />
-        {/* 유저 레시피 리스트 */}
-        {/* <UserRecipeCardList ProfileUserRecipes={ProfileUserRecipes} /> */}
+        {/* 유저 팔로잉 리스트 */}
+        <UserFollowingList
+          currentChefSubscriptions={currentChefSubscriptions}
+        />
       </Wrapper>
     </Container>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import getCurrentUser from "@/app/api/user";
-import UserFollowList from "@/app/components/user-page/UserFollowerList";
+import UserFollowersList from "@/app/components/user-page/UserFollowerList";
 import UserProfileCard from "@/app/components/user-page/UserProfileCard";
 import { User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
@@ -45,7 +45,7 @@ const Followers = ({
           initialCurrentChef={initialCurrentChef}
         />
         {/* 유저 팔로워 리스트 */}
-        <UserFollowList currentChefFans={currentChefFans} />
+        <UserFollowersList currentChefFans={currentChefFans} />
       </Wrapper>
     </Container>
   );
@@ -66,7 +66,6 @@ const Wrapper = styled.div`
   margin: 0 auto;
   @media (min-width: 1024px) {
     display: flex;
-    justify-content: flex-start;
     padding-top: 5rem;
   }
 `;

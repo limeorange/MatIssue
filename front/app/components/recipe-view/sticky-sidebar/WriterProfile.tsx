@@ -133,6 +133,11 @@ const WriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
     router.push("auth/login");
   };
 
+  /** 프로필 클릭 핸들러 - 유저 페이지로 이동 */
+  const profileClickHandler = () => {
+    router.push(`user/${currentChef.user_id}`);
+  };
+
   // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
   if (isLoading) {
     return <div>Loading...</div>; //
@@ -163,33 +168,34 @@ const WriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
       <ProfileContainer isHeaderVisible={isHeaderVisible}>
         <ProfileHeader>오늘의 쉐프</ProfileHeader>
         <ProfileContentsWrapper>
-          {/* 프로필 사진 */}
-          <ProfileImage>
-            <Image
-              src={
-                currentChef.img
-                  ? currentChef.img
-                  : "/images/recipe-view/기본 프로필.PNG"
-              }
-              alt="게시글 작성자 프로필 사진"
-              width={130}
-              height={130}
-              style={{ objectFit: "cover", cursor: "pointer" }}
-            />
-          </ProfileImage>
+          <UserProfileClickWrapper onClick={profileClickHandler}>
+            {/* 프로필 사진 */}
+            <ProfileImage>
+              <Image
+                src={
+                  currentChef.img
+                    ? currentChef.img
+                    : "/images/recipe-view/기본 프로필.PNG"
+                }
+                alt="게시글 작성자 프로필 사진"
+                width={130}
+                height={130}
+                style={{ objectFit: "cover", cursor: "pointer" }}
+              />
+            </ProfileImage>
 
-          {/* 닉네임 */}
-          <Nickname>{currentChef?.username}</Nickname>
+            {/* 닉네임 */}
+            <Nickname>{currentChef?.username}</Nickname>
 
-          {/* 팔로잉, 팔로워 */}
-          <FollowBox>
-            <span>팔로워</span>
-            <BoldCount>{currentChef?.fans.length}</BoldCount>
-            <span>|</span>
-            <span>팔로잉</span>
-            <BoldCount>{currentChef?.subscriptions.length}</BoldCount>
-          </FollowBox>
-
+            {/* 팔로잉, 팔로워 */}
+            <FollowBox>
+              <span>팔로워</span>
+              <BoldCount>{currentChef?.fans.length}</BoldCount>
+              <span>|</span>
+              <span>팔로잉</span>
+              <BoldCount>{currentChef?.subscriptions.length}</BoldCount>
+            </FollowBox>
+          </UserProfileClickWrapper>
           {/* 팔로우 버튼 */}
           <FollowButton onClick={followButtonHandler}>
             {followButtonText}
@@ -221,6 +227,11 @@ const ProfileContainer = styled.div<{ isHeaderVisible: boolean }>`
       props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
     transition: transform 0.3s ease-in-out;
   }
+`;
+
+/** 클릭 시 유저 페이지로 이동하는 영역 Div */
+const UserProfileClickWrapper = styled.div`
+  cursor: pointer;
 `;
 
 /** 프로필 헤더 박스 Div */
