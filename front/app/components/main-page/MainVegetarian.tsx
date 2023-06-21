@@ -145,7 +145,7 @@ const MainVegetarianWrapper = styled.div<{ isDarkMode: boolean }>`
     text-align: center;
     width: 100%;
     background-color: ${(props) =>
-      props.isDarkMode ? props.theme.lightNavy : "#e8ffe8"};
+      props.isDarkMode ? props.theme.navy : "#e8ffe8"};
   }
 `;
 
