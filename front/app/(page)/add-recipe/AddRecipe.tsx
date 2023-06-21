@@ -398,7 +398,6 @@ const RecipeForm = () => {
       <CookingIntroWrapper>
         <Label>요리 소개</Label>
         <TextArea
-          isDarkMode={isDarkMode}
           value={state.cookingIntro}
           onChange={handleCookingIntroChange}
           placeholder="요리 소개를 입력해주세요."
@@ -426,7 +425,6 @@ const RecipeForm = () => {
       <CookingTipsWrapper>
         <TipsLabel>요리팁</TipsLabel>
         <TipsTextArea
-          isDarkMode={isDarkMode}
           value={state.cookingTips}
           onChange={handleCookingTipsChange}
           placeholder="나만의 요리팁을 입력해주세요."
@@ -510,7 +508,7 @@ const Input = styled.input`
   }
 `;
 
-const TextArea = styled.textarea<{ isDarkMode: boolean }>`
+const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
   height: 10rem;
@@ -523,9 +521,6 @@ const TextArea = styled.textarea<{ isDarkMode: boolean }>`
   font-size: 16px;
   line-height: 1.9rem;
   resize: none;
-
-  background-color: ${(props) =>
-    props.isDarkMode ? props.theme.lightNavy : props.theme.white};
 
   ::placeholder {
     color: #a9a9a9;

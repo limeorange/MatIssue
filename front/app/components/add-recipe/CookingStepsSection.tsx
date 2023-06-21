@@ -85,7 +85,6 @@ const CookingStepsSection = ({
             <StepLabel>Step {index + 1}</StepLabel>
             <StepContentsWrapper>
               <StepTextArea
-                isDarkMode={isDarkMode}
                 value={step.stepDetail}
                 onChange={(e) => handleStepDetailChange(e, index)}
                 placeholder="단계별 요리 방법을 입력해주세요."
@@ -160,7 +159,7 @@ const Label = styled.label`
   }
 `;
 
-const TextArea = styled.textarea<{ isDarkMode: boolean }>`
+const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
   height: 10rem;
@@ -173,9 +172,6 @@ const TextArea = styled.textarea<{ isDarkMode: boolean }>`
   font-size: 16px;
   line-height: 1.9rem;
   resize: none;
-
-  background-color: ${(props) =>
-    props.isDarkMode ? props.theme.lightNavy : props.theme.white};
 
   ::placeholder {
     color: #a9a9a9;
