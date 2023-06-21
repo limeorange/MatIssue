@@ -257,15 +257,6 @@ const DeleteButtonMobile = styled.img`
   width: 1.5rem;
   height: 1.5rem;
   transition: transform 0.1s ease-in-out;
-  @media (min-width: 768px) {
-    background-color:red;
-    padding:1rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    position: relative;
-    top: 0;
-    right: 0;
-  }
   @media (min-width: 1024px) {
     display: none;
   }

@@ -69,7 +69,8 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   height={26}
                 />
               </RecipeRankImgWrapper>
-              {/* <Count>{recipe.comments.length.toLocaleString()}</Count> */}
+
+              <Count>{console.log("😘",recipe.comments)}</Count>
             </RecipeRankItemContainer>
           </RecipeRankContainer>
         </RecipeInfoContainer>
@@ -80,6 +81,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
 export default RecipeCard;
 
+//😘껄껄 이 컴포넌트는 제가 털어갑니다 -이나현-
 // styled-components
 const RecipeCardLayout = styled.div`
   display: flex;
@@ -89,6 +91,9 @@ const RecipeCardLayout = styled.div`
   overflow: hidden;
   gap: 0.2rem;
 
+  @media (min-width: 768px) {
+    max-width:none;
+  }
   &: hover {
     cursor: pointer;
   }
