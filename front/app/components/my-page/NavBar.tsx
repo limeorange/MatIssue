@@ -9,7 +9,7 @@ const NavBar = () => {
 
   return (
     <>
-      <NavUl>
+      <NavContainer>
         <NavItem
           onClick={() => router.push("/my-page")}
           clicked={currentPath === "/my-page"}
@@ -29,14 +29,14 @@ const NavBar = () => {
           스크랩
         </NavItem>
         
-      </NavUl>
+      </NavContainer>
     </>
   );
 };
 
 export default NavBar;
 
-const NavUl = styled.ul`
+const NavContainer = styled.ul`
   display: flex;
   height: 4rem;
   justify-content: center;
