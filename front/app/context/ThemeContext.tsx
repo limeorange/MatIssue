@@ -54,21 +54,26 @@ function StyledTheme({ children }: Props) {
   input {
     background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
     border : ${(props) =>
-      props.isDarkMode ? "0.1rem solid #404353" : "0.1rem solid #ddd"};
+      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ddd"};
     color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
     &:focus {
       box-shadow: inset 0 0 0.1rem 0.1rem #fbd26a;
       border : 0.1rem solid #fbd26a;
     }
   }
-  label {
-    color : ${(props) => (props.isDarkMode ? "white" : "#4F3D21")};
+    input {
+    background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
+    border : ${(props) =>
+      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
+    color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
   }
   label {
     color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
   }
   textarea {
     background-color: ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
+    border : ${(props) =>
+      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
   }
 `;
 

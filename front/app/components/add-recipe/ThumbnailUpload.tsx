@@ -1,6 +1,8 @@
 import React, { useRef, ChangeEvent, ReactElement } from "react";
 import styled from "styled-components";
 import uploadImage from "@/app/api/aws";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type Props = {
   selectedImage: string;
@@ -12,6 +14,7 @@ const ThumbnailUpload = ({
   handleThumbnailChange,
 }: Props): ReactElement => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -57,7 +60,7 @@ const ThumbnailUpload = ({
       {selectedImage ? (
         <Image src={selectedImage} alt="thumbnail" />
       ) : (
-        <EmptyBox />
+        <EmptyBox isDarkMode={isDarkMode} />
       )}
       <FileInput
         ref={fileInputRef}
@@ -113,11 +116,15 @@ const Image = styled.img`
   }
 `;
 
-const EmptyBox = styled.div`
+const EmptyBox = styled.div<{ isDarkMode: boolean }>`
   width: 100%;
   height: 21rem;
+  border: ${(props) => (props.isDarkMode ? "0.05rem" : "none")} solid #d9d9d9;
   border-radius: 1.5rem;
-  background: #f6f5f5 url("/images/cameraIcon.png") no-repeat center;
+  background: ${(props) =>
+    props.isDarkMode
+      ? "#212739 url('/images/cameraIconDark.png') no-repeat center"
+      : "#f6f5f5 url('/images/cameraIcon.png') no-repeat center"};
   background-size: auto;
 
   @media (min-width: 1024px) {

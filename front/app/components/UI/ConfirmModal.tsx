@@ -10,13 +10,13 @@ type ConfirmModalProps = {
   showCancelButton?: boolean; // 추가: 취소 버튼을 보여줄지 여부를 결정하는 prop
 };
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({
+const ConfirmModal = ({
   icon,
   message,
   onCancel,
   onConfirm,
   showCancelButton = true, // 추가: 기본값은 true로 설정
-}) => {
+}: ConfirmModalProps) => {
   return (
     <ModalWrapper>
       <ModalContent>

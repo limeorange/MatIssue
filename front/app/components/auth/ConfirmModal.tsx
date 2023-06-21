@@ -12,12 +12,12 @@ type ConfirmModalProps = {
   onClose: () => void;
 };
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({
+const ConfirmModal = ({
   message,
   onConfirm,
   btnValue,
   onClose,
-}) => {
+}: ConfirmModalProps) => {
   const isDarkMode = useRecoilValue(darkModeAtom);
 
   return (
@@ -97,3 +97,4 @@ const CloseBtn = styled.div`
 `;
 
 export default ConfirmModal;
+

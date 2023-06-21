@@ -33,7 +33,7 @@ const VideoSection = ({
             />
           </IframBox>
         ) : (
-          <EmptyThumbnailBox />
+          <EmptyThumbnailBox isDarkMode={isDarkMode} />
         )}
       </ThumbnailWrapper>
     </VideoContainer>
@@ -75,7 +75,7 @@ const VideoTextArea = styled.textarea<{ isDarkMode: boolean }>`
   box-sizing: border-box;
   width: 100%;
   height: 11.6rem;
-  border: 0.1rem solid #d9d9d9;
+
   border-radius: 1.5rem;
   padding: 1rem;
   font-family: "Pretendard";
@@ -127,11 +127,15 @@ const IframBox = styled.div`
   }
 `;
 
-const EmptyThumbnailBox = styled.div`
+const EmptyThumbnailBox = styled.div<{ isDarkMode: boolean }>`
   position: relative;
   width: 100%;
   height: 18.6rem;
-  background: #f6f5f5 url("/images/videoIcon.png") no-repeat center top 6.8rem;
+  border: ${(props) => (props.isDarkMode ? "0.05rem" : "none")} solid #d9d9d9;
+  background: ${(props) =>
+    props.isDarkMode
+      ? "#212739 url('/images/videoIconDark.png') no-repeat center top 6.8rem"
+      : "#f6f5f5 url('/images/videoIcon.png') no-repeat center top 6.8rem"};
   background-size: auto;
   border-radius: 1.5rem;
 
@@ -153,7 +157,10 @@ const EmptyThumbnailBox = styled.div`
   @media (min-width: 1024px) {
     width: 17.4rem;
     height: 11.6rem;
-    background: #f6f5f5 url("/images/videoIcon.png") no-repeat center top 3.5rem;
+    background: ${(props) =>
+      props.isDarkMode
+        ? "#212739 url('/images/videoIconDark.png') no-repeat center top 3.5rem"
+        : "#f6f5f5 url('/images/videoIcon.png') no-repeat center top 3.5rem"};
 
     ::before {
       content: "동영상 섬네일";
