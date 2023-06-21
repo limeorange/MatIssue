@@ -60,8 +60,6 @@ const RecipeCommentInput = ({ recipe_id }: CommentProps) => {
         placeholder="댓글을 입력해주세요"
       />
       {/* 제출 버튼 아이콘 */}
-      {/* 제출하는 함수에 props로 넘어온 댓글 정보가 있으면 API에 수정 요청,
-      없으면 등록 요청 예정 */}
       <SubmitButton disabled={!activatedButton} onClick={commentSubmitHandler}>
         <Image
           src={"/images/recipe-view/commentsubmitblack.svg"}

@@ -6,7 +6,6 @@ import { useRouter, usePathname } from "next/navigation";
 const UserNavBar = ({ userProfileId }: { userProfileId: string }) => {
   const currentPath = usePathname();
   const router = useRouter();
-  console.log("router...", router);
 
   return (
     <>

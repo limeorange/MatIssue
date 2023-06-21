@@ -4,12 +4,10 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import React from "react";
 import RecipeCard from "../recipe-card/RecipeCard";
-import { axiosBase } from "@/app/api/axios";
 import NonRecipe from "../UI/NonRecipe";
 import { Recipe, User } from "@/app/types";
-import ConfirmModal from "../UI/ConfirmModal";
 import Pagination from "../pagination/Pagination";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getChefByUserId } from "@/app/api/user";
 

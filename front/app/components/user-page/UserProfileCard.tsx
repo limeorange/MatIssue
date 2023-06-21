@@ -5,9 +5,7 @@ import { getChefByUserId } from "@/app/api/user";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { axiosBase } from "@/app/api/axios";
-// import ConfirmModal from "../../UI/ConfirmModal";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
-// import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ConfirmModal from "../UI/ConfirmModal";
@@ -26,7 +24,7 @@ const UserProfileCard = ({
   loggedInUserId,
   initialCurrentChef,
 }: UserProfileProps) => {
-  // currentChef에 게시글 작성자 정보가 담김
+  // currentChef에 프로필 유저 정보가 담김
   const { data: currentChef } = useQuery<User>(
     ["currentChef", userProfileId],
     () => getChefByUserId(userProfileId),
@@ -36,6 +34,7 @@ const UserProfileCard = ({
       initialData: initialCurrentChef,
     }
   );
+  console.log("currentChef...", currentChef);
 
   const client = useQueryClient();
   const isHeaderVisible = useMovingContentByScrolling();
@@ -92,7 +91,7 @@ const UserProfileCard = ({
               `/users/subscription/${userProfileId}?subscribe=true`
             );
             toast.success("팔로우가 완료되었습니다!");
-            // 요청 성공 시 query key를 무효화해서 현재 작성자 데이터 최신화
+            // 요청 성공 시 query key를 무효화해서 현재 프로필 데이터 최신화
             client.invalidateQueries(["currentChef", userProfileId]);
 
             // 팔로우 -> 팔로잉으로 변경
@@ -115,7 +114,7 @@ const UserProfileCard = ({
         `/users/subscription/${userProfileId}?subscribe=false`
       );
 
-      // 요청 성공 시 query key를 무효화해서 현재 작성자 데이터 최신화
+      // 요청 성공 시 query key를 무효화해서 현재 프로필 데이터 최신화
       client.invalidateQueries(["currentChef", userProfileId]);
 
       toast.success("팔로우가 취소되었습니다!");
