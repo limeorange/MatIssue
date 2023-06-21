@@ -166,6 +166,10 @@ export default RecipeCards;
 const RecipeListContainer = styled.div`
   width: 100%;
   margin-top: 1.8rem;
+  @media (min-width: 768px) {
+    margin-bottom: 7rem;
+      }
+
   @media (min-width: 1024px) {
     margin-top: 0;
     margin-bottom: 16rem;
@@ -233,6 +237,7 @@ const StyledConfirmModal = styled(ConfirmModal)``;
 
 const PaginationComponent = styled(Pagination)`
   display: none;
+
   @media (min-width: 1024px) {
     display: block;
   }
