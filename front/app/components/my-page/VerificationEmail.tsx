@@ -3,20 +3,18 @@
 import { axiosBase } from "@/app/api/axios";
 import Button from "../UI/Button";
 import { useState } from "react";
-import styled from "styled-components";
 import { toast } from "react-hot-toast";
 import {
   Title,
   InputBox,
   EmailDescription,
   Wrapper,
-  EmailWrapper,
-  EmailContainer,
-  FlexBox,
-  ContentSection,
-  InputBoxCode,
+  InputWrapper,
+  InputContainer,
+  InputButtonDecBox,
+  InputCodeBox,
   SendingCodeButton,
-  FlexSmallBox,
+  InputAndButtonBox,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 const VerificationEmail = ({
@@ -49,18 +47,16 @@ const VerificationEmail = ({
         );
       }
     } catch (error) {
-      ``;
-      console.error(error);
       toast.error("서버 에러가 발생했습니다. 다시 시도해 주세요.");
     }
   };
 
   return (
-    <EmailContainer>
-      <EmailWrapper>
+    <InputContainer>
+      <InputWrapper>
         <Title>이메일 *</Title>
-          <FlexBox>
-            <FlexSmallBox>
+          <InputButtonDecBox>
+            <InputAndButtonBox>
             <InputBox
               type="email"
               name="email"
@@ -102,21 +98,21 @@ const VerificationEmail = ({
               </Button>
             </SendingCodeButton>
           )}
-          </FlexSmallBox>
+          </InputAndButtonBox>
             {isEdit && (
               <EmailDescription>
                 변경 할 이메일을 입력 후 메일 인증 버튼을 클릭하세요.
               </EmailDescription>
             )}
-          </FlexBox>
-      </EmailWrapper>
+          </InputButtonDecBox>
+      </InputWrapper>
       {isButtonClicked && (
         <Wrapper>
-          <EmailContainer>
-            <EmailWrapper>
+          <InputContainer>
+            <InputWrapper>
               <Title>인증코드 *</Title>
-                <FlexBox>
-                  <InputBoxCode
+                <InputButtonDecBox>
+                  <InputCodeBox
                     type="text"
                     name="email_code"
                     value={userData?.email_code}
@@ -125,12 +121,12 @@ const VerificationEmail = ({
                   <EmailDescription>
                     인증코드를 입력 후 회원 정보 수정 버튼을 클릭하세요.
                   </EmailDescription>
-                </FlexBox>
-            </EmailWrapper>
-          </EmailContainer>
+                </InputButtonDecBox>
+            </InputWrapper>
+          </InputContainer>
         </Wrapper>
       )}
-    </EmailContainer>
+    </InputContainer>
   );
 };
 

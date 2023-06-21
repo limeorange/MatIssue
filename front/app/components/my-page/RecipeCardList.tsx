@@ -70,10 +70,6 @@ const RecipeCards = ({
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  // const currentRecipes = currentRecipe?.slice(
-  //   indexOfFirstRecipe,
-  //   indexOfLastRecipe
-  // );
   const currentRecipe = isMobile
     ? currentUserRecipes?.slice(0, indexOfLastRecipe)
     : currentUserRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -123,10 +119,10 @@ const RecipeCards = ({
                 <StyledRecipeCard recipe={recipe} />
 
                 <button onClick={() => handleOpenModal(recipe)}>
-                  <ButtonDiv>
+                  <DeleteButtonWrapper>
                     <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
                     <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
-                  </ButtonDiv>
+                  </DeleteButtonWrapper>
                 </button>
               </RecipeCardWrapper>
             ))}
@@ -142,13 +138,13 @@ const RecipeCards = ({
                   <StyledRecipeCard recipe={recipe} />
 
                   <button onClick={() => handleOpenModal(recipe)}>
-                    <ButtonDiv>
+                    <DeleteButtonWrapper>
                       <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
                       <DeleteButtonMobile
                         src="/images/final-x.svg"
                         alt="X-box"
                       />
-                    </ButtonDiv>
+                    </DeleteButtonWrapper>
                   </button>
                 </RecipeCardWrapper>
               ))}
@@ -187,12 +183,6 @@ const RecipeListContainer = styled.div`
   }
 `;
 
-const TitleAndNickname = styled.div`
-  padding: 0 0 0.6rem;
-  @media (min-width: 1024px) {
-    padding: 0;
-  }
-`;
 
 const RecipeHeading = styled.span`
   font-size: 15px;
@@ -215,6 +205,8 @@ const RecipeHeadingCount = styled.span`
   }
 `;
 
+const NonRecipeMsg = styled(NonRecipe)``;
+
 const RecipeList = styled.div`
   display: grid;
   margin-top: 0.5rem;
@@ -232,6 +224,14 @@ const RecipeCardWrapper = styled.div`
 `;
 
 const StyledRecipeCard = styled(RecipeCard)``;
+
+const DeleteButtonWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3rem;
+  height: 3rem;
+`;
 
 const DeleteButtonImage = styled.img`
   @media (min-width: 1024px) {
@@ -265,12 +265,7 @@ const DeleteButtonMobile = styled.img`
   }
 `;
 
-const NonRecipeMsg = styled(NonRecipe)``;
 const StyledConfirmModal = styled(ConfirmModal)``;
-const AlertImage = styled.img`
-  width: 3rem;
-  height: 3rem;
-`;
 
 const PaginationComponent = styled(Pagination)`
   display: none;
@@ -279,10 +274,7 @@ const PaginationComponent = styled(Pagination)`
   }
 `;
 
-const ButtonDiv = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
+const AlertImage = styled.img`
   width: 3rem;
   height: 3rem;
 `;

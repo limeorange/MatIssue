@@ -22,14 +22,8 @@ const ChangePassword = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // const handleChangePassword = () => {
-  //   setIsModalOpen(true);
-  // };
-
   const handleConfirm = () => {
     setIsModalOpen(false);
-    // 비밀번호 변경 로직 처리
-    console.log("비밀번호가 성공적으로 변경되었습니다.");
   };
 
   const handleCancel = () => {
@@ -67,13 +61,12 @@ const ChangePassword = () => {
       ...currentUserInfo,
       password: password.password,
     };
-    console.log("modifyUserInfo : ", modifyUserInfo);
     try {
       const response = await axiosBase.patch("users", modifyUserInfo);
       toast.success("비밀번호가 변경되었습니다.");
       router.push("/my-page/modify-user-info");
     } catch (error) {
-      console.error(error);
+      toast.error("비밀번호 변경에 실패했습니다.");
     }
   }
 
