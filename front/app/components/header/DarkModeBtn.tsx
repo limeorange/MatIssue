@@ -9,16 +9,6 @@ import styled from "styled-components";
 const DarkmodeBtn = () => {
   const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.style.backgroundColor = "#212739";
-      document.body.style.color = "#fff";
-    } else {
-      document.body.style.backgroundColor = "#fff";
-      document.body.style.color = "#4F3D21";
-    }
-  }, [isDarkMode]);
-
   const toggleDarkModeHandler = () => {
     setIsDarkMode(!isDarkMode);
     localStorage.setItem("darkMode", JSON.stringify(!isDarkMode));
