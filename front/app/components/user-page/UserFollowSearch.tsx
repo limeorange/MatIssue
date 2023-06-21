@@ -2,8 +2,12 @@ import styled, { css } from "styled-components";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 
+type UserFollowSearchProps = {
+  onChange: (value: string) => void;
+};
+
 /** 유저 검색창 컴포넌트 */
-const UserFollowSearch = () => {
+const UserFollowSearch = ({ onChange }: UserFollowSearchProps) => {
   const [isSearching, setIsSearching] = useState(false);
   const [activatedButton, setActivatedButton] = useState(false);
   const [commentText, setCommentText] = useState("");
@@ -24,22 +28,15 @@ const UserFollowSearch = () => {
       } else {
         setActivatedButton(true);
       }
+      onChange(text);
     }
   };
 
   return (
     <>
       <SearchContainer isSearching={isSearching} onClick={boxClickHandler}>
-        <InputTextArea
-          value={commentText}
-          onChange={commentInputHandler}
-          placeholder="닉네임, 아이디로 검색해보세요"
-        />
         {/* 검색 버튼 아이콘 */}
-        <SearchButton
-          disabled={!activatedButton}
-          // onClick={commentSubmitHandler}
-        >
+        <SearchButton disabled={!activatedButton}>
           <Image
             src={"/images/user-page/search.svg"}
             alt="검색 아이콘"
@@ -47,6 +44,13 @@ const UserFollowSearch = () => {
             height={25}
           />
         </SearchButton>
+
+        {/* 검색 입력창 */}
+        <InputTextArea
+          value={commentText}
+          onChange={commentInputHandler}
+          placeholder="닉네임, 아이디로 검색해보세요"
+        />
       </SearchContainer>
     </>
   );
@@ -58,49 +62,51 @@ const SearchContainer = styled.div<{ isSearching: boolean }>`
   border-radius: 2rem;
   padding: 1rem 0 1rem 1.5rem;
   margin-bottom: 2rem;
-  margin-top: 1.7rem;
+  margin-top: 1.2rem;
   align-items: center;
   box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.25);
   width: 100%;
-  max-width: 36rem;
+  max-width: 34rem;
   height: 4.4rem;
 
   color: #9ca3af;
   cursor: pointer;
-  border: 0.15rem solid #ffffff;
+  border: 0.2rem solid #ffffff;
 
   ${({ isSearching }) =>
     isSearching &&
     css`
-      // border-color: #fbd26a;
-      border: 0.15rem solid #fbd26a;
+      border: 0.2rem solid #fbd26a;
       box-shadow: none;
       color: #fbd26a;
     `}
 
   @media (min-width: 1024px) {
-    width: 36rem;
+    width: 34rem;
     margin-top: 0;
   }
 `;
 
 /** 검색 내용 입력 텍스트 */
 const InputTextArea = styled.textarea`
-  outline: none;
-  width: 100%;
+  width: 26rem;
   height: 100%;
   color: #9ca3af;
   font-size: 15px;
   resize: none;
-  padding-right: 0.5rem;
   border: none;
+  outline: none;
   overflow-y: hidden;
+
+  &:focus {
+    border: none;
+    outline: none;
+  }
 `;
 
 /** 제출 버튼 */
 const SearchButton = styled.button`
-  padding-right: 1.5rem;
-  padding-left: 1.5rem;
+  padding-right: 1rem;
 
   &:disabled {
     filter: invert(95%) sepia(16%) saturate(99%) hue-rotate(356deg)
