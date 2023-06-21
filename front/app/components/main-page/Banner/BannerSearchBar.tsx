@@ -56,7 +56,12 @@ const SearchBarInput = styled.input`
   border: none;
   font-size: 22px;
   font-weight: 400;
+  background-color: white;
+  border: none;
+  color: #4f3d21;
   &:focus {
+    box-shadow: none;
+    border: none;
     outline: none;
   }
 `;
