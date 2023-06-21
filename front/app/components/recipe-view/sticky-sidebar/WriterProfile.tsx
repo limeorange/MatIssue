@@ -18,7 +18,7 @@ type WriterProfileProps = {
 
 /** 작성자 프로필 컴포넌트 */
 const WriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
-  // currentChef에 게시글 작성자 정보가 담김
+  // currentChef : 게시글 작성자 정보
   const { data: currentChef, isLoading } = useQuery(
     ["currentChef", user_id],
     () => getChefByUserId(user_id)
@@ -67,9 +67,8 @@ const WriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
       }
       // 작성자와 다른 로그인 유저가 팔로우 요청하는 경우
       else {
-        // 이미 팔로우를 한 경우
+        // 이미 팔로우를 한 경우 팔로우 취소 모달창 띄워줌
         if (isFollowing === true) {
-          // 팔로우 취소 모달창 띄워줌
           setFollowDeleteConfirmModal(true);
         }
         // 로그인된 유저가 팔로우 요청 하는 경우
