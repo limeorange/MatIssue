@@ -45,7 +45,7 @@ const RecipeCards = ({
       await axiosBase.delete(`recipes/${id}`);
       console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
       client.invalidateQueries(["currentRecipe"]);
-      // setIsModalOpen(false);
+   
     } catch (error) {
       console.error(
         "레시피 삭제 요청을 보내는 중에 오류가 발생했습니다:",
@@ -70,10 +70,6 @@ const RecipeCards = ({
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  // const currentRecipes = currentRecipe?.slice(
-  //   indexOfFirstRecipe,
-  //   indexOfLastRecipe
-  // );
   const currentRecipe = isMobile
     ? currentUserRecipes?.slice(0, indexOfLastRecipe)
     : currentUserRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -123,10 +119,10 @@ const RecipeCards = ({
                 <StyledRecipeCard recipe={recipe} />
 
                 <button onClick={() => handleOpenModal(recipe)}>
-                  <ButtonDiv>
+                  <DeleteButtonWrapper>
                     <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
                     <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
-                  </ButtonDiv>
+                  </DeleteButtonWrapper>
                 </button>
               </RecipeCardWrapper>
             ))}
@@ -142,13 +138,13 @@ const RecipeCards = ({
                   <StyledRecipeCard recipe={recipe} />
 
                   <button onClick={() => handleOpenModal(recipe)}>
-                    <ButtonDiv>
+                    <DeleteButtonWrapper>
                       <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
                       <DeleteButtonMobile
                         src="/images/final-x.svg"
                         alt="X-box"
                       />
-                    </ButtonDiv>
+                    </DeleteButtonWrapper>
                   </button>
                 </RecipeCardWrapper>
               ))}
@@ -187,12 +183,12 @@ const RecipeListContainer = styled.div`
   }
 `;
 
-const TitleAndNickname = styled.div`
-  padding: 0 0 0.6rem;
-  @media (min-width: 1024px) {
-    padding: 0;
-  }
-`;
+// const TitleAndNickname = styled.div`
+//   padding: 0 0 0.6rem;
+//   @media (min-width: 1024px) {
+//     padding: 0;
+//   }
+// `;
 
 const RecipeHeading = styled.span`
   font-size: 15px;
@@ -216,6 +212,7 @@ const RecipeHeadingCount = styled.span`
 `;
 
 const RecipeList = styled.div`
+
   display: grid;
   margin-top: 0.5rem;
   grid-template-columns: repeat(2, 1fr);
@@ -260,6 +257,15 @@ const DeleteButtonMobile = styled.img`
   width: 1.5rem;
   height: 1.5rem;
   transition: transform 0.1s ease-in-out;
+  @media (min-width: 768px) {
+    background-color:red;
+    padding:1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    position: relative;
+    top: 0;
+    right: 0;
+  }
   @media (min-width: 1024px) {
     display: none;
   }
@@ -279,7 +285,7 @@ const PaginationComponent = styled(Pagination)`
   }
 `;
 
-const ButtonDiv = styled.div`
+const DeleteButtonWrapper = styled.div`
   position: absolute;
   top: 0;
   right: 0;

@@ -74,7 +74,7 @@ const ChangePassword = () => {
     <>
       <Container>
         <Wrapper>
-          <Header>비밀번호 변경</Header>
+          <Heading>비밀번호 변경</Heading>
           <form onSubmit={handleFormSubmit}>
             <NewPassword>새 비밀번호</NewPassword>
             <PasswordInstruction>
@@ -150,7 +150,7 @@ width: 100%;
   }
   `;
 
-const Header = styled.h1`
+const Heading = styled.h1`
 font-size: 23px;
   font-weight: 600;
   

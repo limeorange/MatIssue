@@ -33,10 +33,6 @@ const ProfileCard = () => {
     getCurrentUser()
   );
 
-  useEffect(() => {
-    console.log("currentUser", currentUser?.user_id);
-  }, [currentUser]);
-
   // 캐시에 저장된 현재 유저가 작성한 레시피들을 가져옴
   const { data: currentUserRecipes } = useQuery<Recipe[]>(
     ["currentUserRecipes"],
@@ -62,23 +58,11 @@ const ProfileCard = () => {
   return (
     <ProfileContainer>
       <ProfileWrapper>
-        <LinkBtn
-          onClick={() => {
-            router.push("/my-page/notification");
-          }}
-        >
-          <NotificationIcon
-            src="/images/my-page/notification.svg"
-            alt="알림 아이콘"
-          />
-          <NotificationDot />
-        </LinkBtn>
-
         <ProfileBox>
           <ImageAndNickName>
             <RoundImage>
               <Image
-                src={currentUser?.img || "images/dongs-logo.png"}
+                src={currentUser?.img || "/images/dongs-logo.png"}
                 height={120}
                 width={120}
                 style={{ objectFit: "cover" }}
@@ -87,19 +71,19 @@ const ProfileCard = () => {
             </RoundImage>
             <NickName>{currentUser?.username}</NickName>
           </ImageAndNickName>
-          <ProfileBigBox>
+          <ProfileContentsBox>
             <FollowAndFollowing>
-              <FollowerDiv>
+              <FollowerAndCount>
                 <Follower>팔로워</Follower>
                 <FollowerCount>{currentUser?.fans.length}</FollowerCount>
-              </FollowerDiv>
+              </FollowerAndCount>
               <FollowDivider />
-              <FollowingDiv>
+              <FollowingAndCount>
                 <Following>팔로잉</Following>
                 <FollowingCount>
                   {currentUser?.subscriptions.length}
                 </FollowingCount>
-              </FollowingDiv>
+              </FollowingAndCount>
             </FollowAndFollowing>
 
             <LinkBtn
@@ -107,7 +91,7 @@ const ProfileCard = () => {
                 router.push("/my-page/modify-user-info");
               }}
             >
-              <ModifyUserDiv>
+              <ModifyUserButtonWrapper>
                 <Button
                   isBorderColor={true}
                   fullWidth={true}
@@ -117,12 +101,12 @@ const ProfileCard = () => {
                 >
                   회원정보수정
                 </Button>
-              </ModifyUserDiv>
+              </ModifyUserButtonWrapper>
             </LinkBtn>
             <Divider />
 
             {/* 나의 레시피 버튼 */}
-            <ButtonWrapper>
+            <RecipeAndScrapButtonWrapper>
               <LinkBtn
                 onClick={() => {
                   router.push("/my-page");
@@ -149,8 +133,8 @@ const ProfileCard = () => {
                 <MyRecipeTitle>My 스크랩</MyRecipeTitle>
                 <MyRecipeCount>{parsedMemo.length}</MyRecipeCount>
               </LinkBtn>
-            </ButtonWrapper>
-          </ProfileBigBox>
+            </RecipeAndScrapButtonWrapper>
+          </ProfileContentsBox>
         </ProfileBox>
 
         <LinkBtn
@@ -158,7 +142,7 @@ const ProfileCard = () => {
             router.push("/add-recipe");
           }}
         >
-          <UploadRecipeButton>
+          <UploadRecipeButtonWrapper>
             <Button
               type="button"
               isBgColor={true}
@@ -168,7 +152,7 @@ const ProfileCard = () => {
             >
               레시피 올리기
             </Button>
-          </UploadRecipeButton>
+          </UploadRecipeButtonWrapper>
         </LinkBtn>
       </ProfileWrapper>
     </ProfileContainer>
@@ -180,7 +164,6 @@ export default ProfileCard;
 const ProfileContainer = styled.div`
   height: 23.7rem;
   border-bottom: 0.1rem solid rgb(200, 200, 200);
-
   @media (min-width: 1024px) {
     border: 0.1rem solid rgb(200, 200, 200);
     border-radius: 2.3rem;
@@ -195,7 +178,6 @@ const ProfileContainer = styled.div`
 const ProfileWrapper = styled.div`
   width: 100%;
   padding: 2.9rem 0 1.5rem;
-
   @media (min-width: 1024px) {
     position: relative;
     padding: 3rem 2.5rem 1.8rem;
@@ -207,28 +189,17 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-const NotificationIcon = styled.img`
-  display: none;
+const ProfileBox = styled.div`
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  align-items: end;
+  margin-bottom: 0.5rem;
   @media (min-width: 1024px) {
-    position: absolute;
-    top: 2rem;
-    right: 2.1rem;
-    width: 1.95rem;
-    height: 2.2rem;
-    color: #4f3d21;
-  }
-`;
-
-const NotificationDot = styled.div`
-  display: none;
-  @media (min-width: 1024px) {
-    position: absolute;
-    top: 2.265rem;
-    right: 2.265rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    background-color: #fe642e;
-    border-radius: 50%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 0;
   }
 `;
 
@@ -255,11 +226,25 @@ const RoundImage = styled.div`
   }
 `;
 
-const ProfileImage = styled.img`
-  width: 100%
-  height: 100%
-  object-fit: cover;
-  background-color: #fff9ea;
+const NickName = styled.h1`
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #4f3d21;
+  @media (min-width: 1024px) {
+    font-size: 26px;
+    margin: 1rem;
+  }
+`;
+
+const ProfileContentsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  @media (min-width: 1024px) {
+    align-items: center;
+  }
 `;
 
 const FollowAndFollowing = styled.div`
@@ -268,7 +253,7 @@ const FollowAndFollowing = styled.div`
   margin-bottom: 0.8rem;
 `;
 
-const FollowerDiv = styled.div`
+const FollowerAndCount = styled.div`
   display: flex;
   gap: 0.4rem;
 `;
@@ -293,7 +278,7 @@ const FollowDivider = styled.div`
   color: #4f3d21;
 `;
 
-const FollowingDiv = styled.div`
+const FollowingAndCount = styled.div`
   display: flex;
   gap: 0.4rem;
 `;
@@ -310,18 +295,7 @@ const FollowingCount = styled.h4`
   color: #4f3d21;
 `;
 
-const NickName = styled.h1`
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  color: #4f3d21;
-  @media (min-width: 1024px) {
-    font-size: 26px;
-    margin: 1rem;
-  }
-`;
-
-const ModifyUserDiv = styled.div`
+const ModifyUserButtonWrapper = styled.div`
   display: none;
   @media (min-width: 1024px) {
     display: flex;
@@ -340,6 +314,16 @@ const Divider = styled.div`
 
   @media (max-width: 1023px) {
     display: none;
+  }
+`;
+
+const RecipeAndScrapButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 1.8rem;
+  margin-bottom: 2rem;
+  @media (min-width: 1024px) {
+    margin: 0;
   }
 `;
 
@@ -364,9 +348,8 @@ const MyRecipeCount = styled.h4`
   }
 `;
 
-const UploadRecipeButton = styled.div`
+const UploadRecipeButtonWrapper = styled.div`
   width: 100%;
-
   @media (min-width: 1024px) {
     margin-top: 1.8rem;
     width: 14rem;
@@ -380,36 +363,8 @@ const LinkBtn = styled.div`
   flex-direction: column;
 `;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 1.8rem;
-  margin-bottom: 2rem;
-  @media (min-width: 1024px) {
-    margin: 0;
-  }
-`;
 
-const ProfileBox = styled.div`
-  display: flex;
-  gap: 2.5rem;
-  justify-content: center;
-  align-items: end;
-  margin-bottom: 0.5rem;
-  @media (min-width: 1024px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-    margin-bottom: 0;
-  }
-`;
 
-const ProfileBigBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
 
-  @media (min-width: 1024px) {
-    align-items: center;
-  }
-`;
+
+

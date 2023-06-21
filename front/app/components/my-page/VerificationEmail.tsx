@@ -3,17 +3,15 @@
 import { axiosBase } from "@/app/api/axios";
 import Button from "../UI/Button";
 import { useState } from "react";
-import styled from "styled-components";
 import { toast } from "react-hot-toast";
 import {
   Title,
   InputBox,
   EmailDescription,
   Wrapper,
-  EmailWrapper,
-  EmailContainer,
+  InputWrapper,
+  InputContainer,
   FlexBox,
-  ContentSection,
   InputBoxCode,
   SendingCodeButton,
   FlexSmallBox,
@@ -56,8 +54,8 @@ const VerificationEmail = ({
   };
 
   return (
-    <EmailContainer>
-      <EmailWrapper>
+    <InputContainer>
+      <InputWrapper>
         <Title>이메일 *</Title>
           <FlexBox>
             <FlexSmallBox>
@@ -109,11 +107,11 @@ const VerificationEmail = ({
               </EmailDescription>
             )}
           </FlexBox>
-      </EmailWrapper>
+      </InputWrapper>
       {isButtonClicked && (
         <Wrapper>
-          <EmailContainer>
-            <EmailWrapper>
+          <InputContainer>
+            <InputWrapper>
               <Title>인증코드 *</Title>
                 <FlexBox>
                   <InputBoxCode
@@ -126,11 +124,11 @@ const VerificationEmail = ({
                     인증코드를 입력 후 회원 정보 수정 버튼을 클릭하세요.
                   </EmailDescription>
                 </FlexBox>
-            </EmailWrapper>
-          </EmailContainer>
+            </InputWrapper>
+          </InputContainer>
         </Wrapper>
       )}
-    </EmailContainer>
+    </InputContainer>
   );
 };
 

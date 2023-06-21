@@ -8,28 +8,30 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import uploadImage from "@/app/api/aws";
 import { axiosBase } from "@/app/api/axios";
 import { User } from "../../../types/index";
-import VerificationEmail from "@/app/components/my-page/VerificationEmail";
+import VerificationEmailComponent from "@/app/components/my-page/VerificationEmail";
 import { toast } from "react-hot-toast";
 import AccountDeletionComponent from "@/app/components/my-page/AccountDeletion";
 import {
   Container,
+  TitleAndPasswordWrapper,
   Heading,
   Divider,
+  StyledChangePassword,
+  ArrowImage,
   WrapperInfo,
   Wrapper,
+  InputContainer,
+  InputWrapper,
   Title,
+  InputBox,
+  InputDateBox,
+  SpaceDiv,
   ProfileImageWrapper,
-  InputFile,
+  ProfileImageTitle,
   StyledImage,
   DeleteImage,
-  InputDateBox,
+  InputFile,
   UserModifyButton,
-  SpaceDiv,
-  StyledChangePassword,
-  EmailWrapper,
-  EmailContainer,
-  TitleAndPasswordWrapper,
-  InputBox,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 type LabelForFileProps = {
@@ -178,15 +180,15 @@ const ModifyUserInfo = () => {
         <form onSubmit={handleFormSubmit}>
           <WrapperInfo>
             <Wrapper>
-              <VerificationEmail
+              <VerificationEmailComponent
                 userData={userData}
                 handleChangeInput={handleChangeInput}
               />
             </Wrapper>
 
             <Wrapper>
-              <EmailContainer>
-                <EmailWrapper>
+              <InputContainer>
+                <InputWrapper>
                   <Title>별명 *</Title>
 
                   {/* <FlexBox> */}
@@ -198,12 +200,12 @@ const ModifyUserInfo = () => {
                     onChange={handleChangeInput}
                   />
                   {/* </FlexBox> */}
-                </EmailWrapper>
-              </EmailContainer>
+                </InputWrapper>
+              </InputContainer>
             </Wrapper>
             <Wrapper>
-              <EmailContainer>
-                <EmailWrapper>
+              <InputContainer>
+                <InputWrapper>
                   {" "}
                   <Title>생년월일</Title>
                   <InputDateBox
@@ -213,8 +215,8 @@ const ModifyUserInfo = () => {
                     required
                     onChange={handleChangeInput}
                   />
-                </EmailWrapper>
-              </EmailContainer>
+                </InputWrapper>
+              </InputContainer>
             </Wrapper>
             <SpaceDiv />
           </WrapperInfo>
@@ -254,18 +256,6 @@ const ModifyUserInfo = () => {
               회원 정보 수정
             </Button>
           </UserModifyButton>
-          {/* <DeletionAndArrow>
-          <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
-          <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
-          {isModalOpen && (
-            <ConfirmModal
-              icon={<AlertImage src="/images/alert.png" alt="alert" />}
-              message="정말 탈퇴 하시겠습니까?"
-              onCancel={closeModal}
-              onConfirm={handleDeleteAccount}
-            />
-          )}
-      </DeletionAndArrow> */}
           <AccountDeletionComponent
             id={userData?.user_id}
           ></AccountDeletionComponent>
@@ -298,31 +288,5 @@ const LabelForFile = styled.label<LabelForFileProps>`
   @media (min-width: 1024px) {
     margin-left: 4.1rem;
     margin-top: 0;
-  }
-`;
-
-const ArrowImage = styled.img`
-width:2.5rem;
-height:3rem;
-}
-@media (min-width: 1024px) {
-display: none;
-}
-`;
-
-// const DeletionAndArrow = styled.div`
-// display:flex;
-// align-items: center;
-// margin-bottom: 2rem;
-// `;
-
-const ProfileImageTitle = styled.div`
-  font-size: 16px;
-  cursor: pointer;
-  color: #4f3d21;
-  margin-left: 0.1rem;
-  @media (min-width: 1024px) {
-    font-size: 17px;
-    width: 10rem;
   }
 `;

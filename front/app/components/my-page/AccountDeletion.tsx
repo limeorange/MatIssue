@@ -2,7 +2,6 @@
 
 import styled from "styled-components";
 import React, { useState } from "react";
-import PasswordModalComponent from "../UI/PasswordModal";
 import { useRouter } from "next/navigation";
 import PasswordModal from "../UI/PasswordModal";
 import { axiosBase } from "@/app/api/axios";
@@ -55,8 +54,8 @@ const AccountDeletion = ({ id }: { id: string }) => {
 
   return (
     <>
-      <DeletionAndArrow>
-        <AccountDelete onClick={openModal}>회원 탈퇴</AccountDelete>
+      <TitleAndArrowWrapper>
+        <Title onClick={openModal}>회원 탈퇴</Title>
         <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
         {isModalOpen && (
           <PasswordModal
@@ -68,14 +67,20 @@ const AccountDeletion = ({ id }: { id: string }) => {
             enteredPassword={enteredPassword}
           />
         )}
-      </DeletionAndArrow>
+      </TitleAndArrowWrapper>
     </>
   );
 };
 
 export default AccountDeletion;
 
-const AccountDelete = styled.div`
+const TitleAndArrowWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+`;
+
+const Title = styled.div`
   font-size: 14px;
   cursor: pointer;
   margin-left: 0.3rem;
@@ -98,11 +103,6 @@ display: none;
 }
 `;
 
-const DeletionAndArrow = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-`;
 
 const AlertImage = styled.img`
   width: 3rem;
