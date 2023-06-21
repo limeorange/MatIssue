@@ -10,12 +10,12 @@ type ConfirmModalProps = {
   onClose: () => void;
 };
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({
+const ConfirmModal = ({
   message,
   onConfirm,
   btnValue,
   onClose,
-}) => {
+}: ConfirmModalProps) => {
   return (
     <ModalWrapper>
       <ModalContent>

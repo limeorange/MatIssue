@@ -15,6 +15,7 @@ import {
   Container,
   Heading,
   Divider,
+  ArrowImage,
   WrapperInfo,
   Wrapper,
   Title,
@@ -26,10 +27,11 @@ import {
   UserModifyButton,
   SpaceDiv,
   StyledChangePassword,
-  EmailWrapper,
-  EmailContainer,
+  InputWrapper,
+  InputContainer,
   TitleAndPasswordWrapper,
   InputBox,
+  ProfileImageTitle,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 type LabelForFileProps = {
@@ -110,7 +112,6 @@ const ModifyUserInfo = () => {
 
     try {
       const response = await axiosBase.patch("users", modifyUserInfo);
-      console.log(response);
       toast.success("회원정보가 수정되었습니다.");
       router.push("/my-page");
     } catch (error) {
@@ -185,11 +186,9 @@ const ModifyUserInfo = () => {
             </Wrapper>
 
             <Wrapper>
-              <EmailContainer>
-                <EmailWrapper>
+              <InputContainer>
+                <InputWrapper>
                   <Title>별명 *</Title>
-
-                  {/* <FlexBox> */}
                   <InputBox
                     type="text"
                     name="username"
@@ -197,14 +196,12 @@ const ModifyUserInfo = () => {
                     required
                     onChange={handleChangeInput}
                   />
-                  {/* </FlexBox> */}
-                </EmailWrapper>
-              </EmailContainer>
+                </InputWrapper>
+              </InputContainer>
             </Wrapper>
             <Wrapper>
-              <EmailContainer>
-                <EmailWrapper>
-                  {" "}
+              <InputContainer>
+                <InputWrapper>
                   <Title>생년월일</Title>
                   <InputDateBox
                     type="date"
@@ -213,8 +210,8 @@ const ModifyUserInfo = () => {
                     required
                     onChange={handleChangeInput}
                   />
-                </EmailWrapper>
-              </EmailContainer>
+                </InputWrapper>
+              </InputContainer>
             </Wrapper>
             <SpaceDiv />
           </WrapperInfo>
@@ -254,18 +251,6 @@ const ModifyUserInfo = () => {
               회원 정보 수정
             </Button>
           </UserModifyButton>
-          {/* <DeletionAndArrow>
-          <AccountDeletion onClick={openModal}>회원 탈퇴</AccountDeletion>
-          <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
-          {isModalOpen && (
-            <ConfirmModal
-              icon={<AlertImage src="/images/alert.png" alt="alert" />}
-              message="정말 탈퇴 하시겠습니까?"
-              onCancel={closeModal}
-              onConfirm={handleDeleteAccount}
-            />
-          )}
-      </DeletionAndArrow> */}
           <AccountDeletionComponent
             id={userData?.user_id}
           ></AccountDeletionComponent>
@@ -301,28 +286,7 @@ const LabelForFile = styled.label<LabelForFileProps>`
   }
 `;
 
-const ArrowImage = styled.img`
-width:2.5rem;
-height:3rem;
-}
-@media (min-width: 1024px) {
-display: none;
-}
-`;
 
-// const DeletionAndArrow = styled.div`
-// display:flex;
-// align-items: center;
-// margin-bottom: 2rem;
-// `;
 
-const ProfileImageTitle = styled.div`
-  font-size: 16px;
-  cursor: pointer;
-  color: #4f3d21;
-  margin-left: 0.1rem;
-  @media (min-width: 1024px) {
-    font-size: 17px;
-    width: 10rem;
-  }
-`;
+
+
