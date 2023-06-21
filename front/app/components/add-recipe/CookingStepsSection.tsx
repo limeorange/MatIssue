@@ -47,6 +47,31 @@ const CookingStepsSection = ({
       }
     }
   };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+
+    try {
+      const response = await uploadImage(file);
+      let imageUrl = response.imageUrl;
+
+      const timestamp = new Date().getTime();
+      imageUrl += `?${timestamp}`;
+
+      handleStepImageChange(imageUrl, index);
+    } catch (error) {
+      console.error("Image upload failed:", error);
+    }
+  };
+
   return (
     <CookingStepContainer>
       <Label>요리 순서</Label>
@@ -60,7 +85,11 @@ const CookingStepsSection = ({
                 onChange={(e) => handleStepDetailChange(e, index)}
                 placeholder="단계별 요리 방법을 입력해주세요."
               />
-              <ImageUploadBox imgExists={Boolean(stepImages[index])}>
+              <ImageUploadBox
+                imgExists={Boolean(stepImages[index])}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, index)}
+              >
                 <FileInput
                   id={`step-image-input-${index}`}
                   type="file"
