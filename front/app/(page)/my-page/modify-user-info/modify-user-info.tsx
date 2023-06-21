@@ -34,10 +34,12 @@ import {
   TitleAndPasswordWrapper,
   InputBox,
   ProfileImageTitle,
+  DarkModeDeleteImage,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 type LabelForFileProps = {
   backgroundImageUrl?: string;
+  isDarkMode: boolean;
 };
 
 const ModifyUserInfo = () => {
@@ -100,7 +102,6 @@ const ModifyUserInfo = () => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     uploadProfileImage();
   };
 
@@ -165,7 +166,7 @@ const ModifyUserInfo = () => {
     <>
       <Container>
         <TitleAndPasswordWrapper>
-          <Heading isDarkMode={isDarkMode}>회원정보수정</Heading>
+          <Heading>회원정보수정</Heading>
           <Divider isDarkMode={isDarkMode} />
           <StyledChangePassword
             isDarkMode={isDarkMode}
@@ -211,6 +212,7 @@ const ModifyUserInfo = () => {
                     value={userData?.birth_date}
                     required
                     onChange={handleChangeInput}
+                    isDarkMode={isDarkMode}
                   />
                 </InputWrapper>
               </InputContainer>
@@ -220,12 +222,26 @@ const ModifyUserInfo = () => {
 
           <ProfileImageWrapper>
             <ProfileImageTitle>프로필 이미지</ProfileImageTitle>
-            <LabelForFile htmlFor="upload-button" onClick={handleLabelClick}>
+            <LabelForFile
+              isDarkMode={isDarkMode}
+              htmlFor="upload-button"
+              onClick={handleLabelClick}
+            >
               {previewImage !== defaultImage && (
                 <>
                   <StyledImage src={previewImage} alt="Preview" />
                   <button type="button" onClick={handleDeleteImage}>
-                    <DeleteImage src="/images/delete-button.svg" alt="delete" />
+                    {isDarkMode ? (
+                      <DarkModeDeleteImage
+                        src="/images/dark_mode_delete-button.svg"
+                        alt="delete"
+                      />
+                    ) : (
+                      <DeleteImage
+                        src="/images/delete-button.svg"
+                        alt="delete"
+                      />
+                    )}
                   </button>
                 </>
               )}
@@ -270,7 +286,7 @@ const LabelForFile = styled.label<LabelForFileProps>`
   height: 19.8rem;
   margin-top: 0.3rem;
   border-radius: 0.8rem;
-  background-color: #fff9ea;
+  background-color: ${(props) => (props.isDarkMode ? "#ddd" : "#fff9ea")};
   display: flex;
   align-items: center;
   justify-content: center;

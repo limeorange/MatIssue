@@ -21,13 +21,10 @@ export const TitleAndPasswordWrapper = styled.div`
   }
 `;
 
-export const Heading = styled.h2<{ isDarkMode: boolean }>`
+export const Heading = styled.h2`
   padding: 0;
   font-size: 20px;
   font-weight: 700;
-  color: ${(props) =>
-    props.isDarkMode ? props.theme.white : props.theme.brown};
-
   @media (min-width: 1024px) {
     font-size: 26px;
     padding-left: 2.5rem;
@@ -35,7 +32,7 @@ export const Heading = styled.h2<{ isDarkMode: boolean }>`
   }
 `;
 
-export const Divider = styled.span<{ isDarkMode: boolean }>`
+export const Divider = styled.div<{ isDarkMode: boolean }>`
   display: none;
   @media (min-width: 1024px) {
     display: block;
@@ -54,7 +51,7 @@ export const StyledChangePassword = styled.div<{ isDarkMode: boolean }>`
   padding-top: 0.3rem;
   text-decoration: none;
   color: ${(props) =>
-    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
+    props.isDarkMode ? props.theme.lightYellow : props.theme.blue};
   cursor: pointer;
   font-size: 14px;
   @media (min-width: 1024px) {
@@ -63,18 +60,17 @@ export const StyledChangePassword = styled.div<{ isDarkMode: boolean }>`
     top: 13.5rem;
     text-decoration: underline;
     padding-top: 0;
-    color: #201ce0;
     z-index: 99;
   }
 `;
 
 export const ArrowImage = styled.img`
-width:2.5rem;
-height:3rem;
-}
-@media (min-width: 1024px) {
-display: none;
-}
+ width:2.5rem;
+ height:3rem;
+ }
+ @media (min-width: 1024px) {
+ display: none;
+ }
 `;
 
 export const WrapperInfo = styled.div`
@@ -135,7 +131,7 @@ export const InputBox = styled.input<{ isEdit?: boolean }>`
   }
 `;
 
-export const InputDateBox = styled.input`
+export const InputDateBox = styled.input<{ isDarkMode: boolean }>`
   position: relative;
   width: 100%;
   max-width: 40rem;
@@ -145,11 +141,14 @@ export const InputDateBox = styled.input`
   border-radius: 0.8rem;
   padding: 0 1.6rem;
   margin-top: 0.3rem;
-  background: url(/images/calendar.png) no-repeat right 1.6rem center / 2rem
-    auto;
+  background: ${(props) =>
+    props.isDarkMode
+      ? `url(/images/dark_mode_calendar.svg) no-repeat right 1.6rem center / 2rem auto`
+      : `url(/images/calendar.png) no-repeat right 1.6rem center / 2rem auto`};
   font-size: 15px;
-  color: #4f3d21;
   cursor: pointer;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : props.theme.white};
   &:hover {
     outline: 0.3rem solid #fbd26a;
     border: none;
@@ -197,6 +196,14 @@ export const StyledImage = styled.img`
 `;
 
 export const DeleteImage = styled.img`
+  position: absolute;
+  top: 0.7rem;
+  right: 0.6rem;
+  width: auto;
+  height: auto;
+`;
+
+export const DarkModeDeleteImage = styled.img`
   position: absolute;
   top: 0.7rem;
   right: 0.6rem;
