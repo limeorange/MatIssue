@@ -27,6 +27,8 @@ import {
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const SignupClient = () => {
   const {
@@ -52,6 +54,7 @@ const SignupClient = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordConfirm, setShowPasswordConfirm] =
     useState<boolean>(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const router = useRouter();
   const yearInputRef = useRef<HTMLInputElement>(null);
@@ -166,7 +169,7 @@ const SignupClient = () => {
   };
 
   return (
-    <AuthContainer>
+    <AuthContainer isDarkMode={isDarkMode}>
       {isLoading && <LoadingModal />}
       <AuthFormWrapper>
         <Logo />

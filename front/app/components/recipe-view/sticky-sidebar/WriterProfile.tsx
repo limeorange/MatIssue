@@ -17,11 +17,8 @@ type WriterProfileProps = {
 };
 
 /** 작성자 프로필 컴포넌트 */
-const WriterProfile: React.FC<WriterProfileProps> = ({
-  user_id,
-  loggedInUserId,
-}) => {
-  // currentChef에 user 정보가 담김
+const WriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
+  // currentChef에 게시글 작성자 정보가 담김
   const { data: currentChef, isLoading } = useQuery(
     ["currentChef", user_id],
     () => getChefByUserId(user_id)
@@ -36,16 +33,16 @@ const WriterProfile: React.FC<WriterProfileProps> = ({
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
-  // userid => 닉네임, 팔로잉, 팔로워, 프로필 사진 받아오는 API
   // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
   useEffect(() => {
     if (loggedInUserId !== undefined) {
-      const fans = currentChef?.fans;
-      const isFollowing = fans?.includes(loggedInUserId);
+      const fans = new Set(currentChef?.fans);
+      const isFollowing = fans?.has(loggedInUserId);
       setIsFollowing(isFollowing);
     }
   }, [loggedInUserId]);
 
+  // 상태에 따른 팔로우, 팔로잉 버튼
   const followButtonText =
     loggedInUserId === user_id
       ? "언제나 팔로잉"

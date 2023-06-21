@@ -16,10 +16,7 @@ type WriterProfileProps = {
 };
 
 /** 작성자 프로필 컴포넌트 */
-const MiniWriterProfile: React.FC<WriterProfileProps> = ({
-  user_id,
-  loggedInUserId,
-}) => {
+const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
   // currentChef에 user 정보가 담김
   const { data: currentChef, isLoading } = useQuery(
     ["currentChef", user_id],

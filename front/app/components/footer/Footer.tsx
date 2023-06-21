@@ -2,10 +2,14 @@
 
 import styled from "styled-components";
 import Logo from "../header/Logo";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const Footer = () => {
+  const isDarkMode = useRecoilValue(darkModeAtom);
+
   return (
-    <FooterContainer>
+    <FooterContainer isDarkMode={isDarkMode}>
       <FooterWrapper>
         <Logo />
         <FooterTextBox>
@@ -31,9 +35,10 @@ const Footer = () => {
 
 export default Footer;
 
-const FooterContainer = styled.div`
+const FooterContainer = styled.div<{ isDarkMode: boolean }>`
   width: 100%;
-  background-color: #fbe2a1;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#fbe2a1"};
 `;
 
 const FooterWrapper = styled.div`

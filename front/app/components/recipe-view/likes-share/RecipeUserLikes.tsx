@@ -8,11 +8,11 @@ type UserLikesProps = {
 };
 
 /** 게시글 좋아요 컴포넌트 */
-const RecipeUserLikes: React.FC<UserLikesProps> = ({
+const RecipeUserLikes = ({
   isLiked,
   countText,
   heartClickHandler,
-}) => {
+}: UserLikesProps) => {
   return (
     <>
       <LikesButtonWrapper onClick={heartClickHandler}>
