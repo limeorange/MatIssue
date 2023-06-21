@@ -11,19 +11,21 @@ const DarkmodeBtn = () => {
 
   useEffect(() => {
     if (isDarkMode) {
-      document.body.style.backgroundColor = "#2A2E41";
+      document.body.style.backgroundColor = "#212739";
       document.body.style.color = "#fff";
     } else {
       document.body.style.backgroundColor = "#fff";
-      document.body.style.color = "#000";
+      document.body.style.color = "#4F3D21";
     }
   }, [isDarkMode]);
 
+  const toggleDarkModeHandler = () => {
+    setIsDarkMode(!isDarkMode);
+    localStorage.setItem("darkMode", JSON.stringify(!isDarkMode));
+  };
+
   return (
-    <ToggleContainer
-      onClick={() => setIsDarkMode(!isDarkMode)}
-      isDarkMode={isDarkMode}
-    >
+    <ToggleContainer onClick={toggleDarkModeHandler} isDarkMode={isDarkMode}>
       <Icon src="/images/darkMode/moon.svg" alt="Moon" width={15} height={15} />
       <ToggleBtn isDarkMode={isDarkMode} />
       <Icon src="/images/darkMode/sun.svg" alt="Sun" width={15} height={15} />
