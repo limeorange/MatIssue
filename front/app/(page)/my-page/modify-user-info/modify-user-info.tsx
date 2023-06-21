@@ -10,6 +10,8 @@ import { axiosBase } from "@/app/api/axios";
 import { User } from "../../../types/index";
 import VerificationEmail from "@/app/components/my-page/VerificationEmail";
 import { toast } from "react-hot-toast";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilValue } from "recoil";
 import AccountDeletionComponent from "@/app/components/my-page/AccountDeletion";
 import {
   Container,
@@ -32,10 +34,12 @@ import {
   TitleAndPasswordWrapper,
   InputBox,
   ProfileImageTitle,
+  DarkModeDeleteImage,
 } from "@/app/styles/my-page/modify-user-info.style";
 
 type LabelForFileProps = {
   backgroundImageUrl?: string;
+  isDarkMode: boolean;
 };
 
 const ModifyUserInfo = () => {
@@ -44,7 +48,7 @@ const ModifyUserInfo = () => {
   const queryClient = useQueryClient();
   const defaultImage =
     "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png";
-  console.log("currentUser:", currentUser);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   useEffect(() => {
     // 받아온 data 객체로 상태 저장
@@ -98,7 +102,6 @@ const ModifyUserInfo = () => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     uploadProfileImage();
   };
 
@@ -159,14 +162,14 @@ const ModifyUserInfo = () => {
     });
   };
 
-
   return (
     <>
       <Container>
         <TitleAndPasswordWrapper>
           <Heading>회원정보수정</Heading>
-          <Divider />
+          <Divider isDarkMode={isDarkMode} />
           <StyledChangePassword
+            isDarkMode={isDarkMode}
             onClick={() =>
               router.push("/my-page/modify-user-info/change-password")
             }
@@ -209,6 +212,7 @@ const ModifyUserInfo = () => {
                     value={userData?.birth_date}
                     required
                     onChange={handleChangeInput}
+                    isDarkMode={isDarkMode}
                   />
                 </InputWrapper>
               </InputContainer>
@@ -218,12 +222,26 @@ const ModifyUserInfo = () => {
 
           <ProfileImageWrapper>
             <ProfileImageTitle>프로필 이미지</ProfileImageTitle>
-            <LabelForFile htmlFor="upload-button" onClick={handleLabelClick}>
+            <LabelForFile
+              isDarkMode={isDarkMode}
+              htmlFor="upload-button"
+              onClick={handleLabelClick}
+            >
               {previewImage !== defaultImage && (
                 <>
                   <StyledImage src={previewImage} alt="Preview" />
                   <button type="button" onClick={handleDeleteImage}>
-                    <DeleteImage src="/images/delete-button.svg" alt="delete" />
+                    {isDarkMode ? (
+                      <DarkModeDeleteImage
+                        src="/images/dark_mode_delete-button.svg"
+                        alt="delete"
+                      />
+                    ) : (
+                      <DeleteImage
+                        src="/images/delete-button.svg"
+                        alt="delete"
+                      />
+                    )}
                   </button>
                 </>
               )}
@@ -268,7 +286,7 @@ const LabelForFile = styled.label<LabelForFileProps>`
   height: 19.8rem;
   margin-top: 0.3rem;
   border-radius: 0.8rem;
-  background-color: #fff9ea;
+  background-color: ${(props) => (props.isDarkMode ? "#ddd" : "#fff9ea")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -285,8 +303,3 @@ const LabelForFile = styled.label<LabelForFileProps>`
     margin-top: 0;
   }
 `;
-
-
-
-
-
