@@ -228,6 +228,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
     router.push("auth/login");
   };
 
+  /** 프로필 클릭 핸들러 - 유저 페이지로 이동 */
+  const profileClickHandler = () => {
+    router.push(`user/${currentChef.user_id}`);
+  };
+
   // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
   if (isLoadingChef) {
     return <div>Loading...</div>; //
@@ -300,10 +305,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
         <div>
           <TitleContentsWrapper>
             <RecipeTitle>{recipe_title}</RecipeTitle>
-            <div className="flex justify-between items-center">
+            <InfoButtonWrapper>
               <div>
-                <Author>by {user_nickname}</Author>
-                <Author>&nbsp;• {created_at.slice(0, 10)}</Author>
+                <Time>by </Time>
+                <Author onClick={profileClickHandler}>{user_nickname}</Author>
+                <Time>&nbsp;• {created_at.slice(0, 10)}</Time>
               </div>
               {user_id === loggedInUserId && (
                 <WriterButtonBox isHeaderVisible={isHeaderVisible}>
@@ -319,7 +325,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
                   </DeleteButton>
                 </WriterButtonBox>
               )}
-            </div>
+            </InfoButtonWrapper>
           </TitleContentsWrapper>
           <Description>{recipe_description}</Description>
         </div>
@@ -440,6 +446,13 @@ const ViewPageContainer = styled.div`
     margin-top: 1.5rem;
     padding: 0;
   }
+`;
+
+/** 반응형에서 작성자 정보와 수정, 삭제 버튼 묶는 Div */
+const InfoButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 /** 사이드 목차바 묶는 Div */
@@ -588,8 +601,16 @@ const Author = styled.span`
   color: #6f6f6f;
   font-size: 1.4rem;
 
-  @media (min-width: 1024px) {
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
+`;
+
+/** 작성시간 Span */
+const Time = styled.span`
+  color: #6f6f6f;
+  font-size: 1.4rem;
 `;
 
 /** 요리 간단 소개 Div */
