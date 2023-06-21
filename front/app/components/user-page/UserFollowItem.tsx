@@ -222,6 +222,8 @@ const UserContainer = styled.div`
 /** 유저 프로필, 아이디, 닉네임 감싸는 Div */
 const UserInfoWrapper = styled.div`
   display: flex;
+  cursor: pointer;
+  width: 23rem;
 `;
 
 /** 프로필 이미지 감싸는 Div */
