@@ -117,13 +117,9 @@ const RecipeCards = ({
             {currentRecipe?.map((recipe: Recipe) => (
               <RecipeCardWrapper key={recipe.recipe_id}>
                 <StyledRecipeCard recipe={recipe} />
-
-                <button onClick={() => handleOpenModal(recipe)}>
-                  <DeleteButtonWrapper>
-                    <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
-                    <DeleteButtonMobile src="/images/final-x.svg" alt="X-box" />
+                  <DeleteButtonWrapper onClick={() => handleOpenModal(recipe)}>
+                    <DeleteButtonImage src="/images/egg-x.svg" alt="X-box" />
                   </DeleteButtonWrapper>
-                </button>
               </RecipeCardWrapper>
             ))}
           </RecipeList>
@@ -136,16 +132,9 @@ const RecipeCards = ({
               .map((recipe: Recipe) => (
                 <RecipeCardWrapper key={recipe.recipe_id}>
                   <StyledRecipeCard recipe={recipe} />
-
-                  <button onClick={() => handleOpenModal(recipe)}>
-                    <DeleteButtonWrapper>
-                      <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
-                      <DeleteButtonMobile
-                        src="/images/final-x.svg"
-                        alt="X-box"
-                      />
+                    <DeleteButtonWrapper onClick={() => handleOpenModal(recipe)}>
+                      <DeleteButtonImage src="/images/egg-x.svg" alt="X-box" />
                     </DeleteButtonWrapper>
-                  </button>
                 </RecipeCardWrapper>
               ))}
           </RecipeList>
@@ -227,41 +216,16 @@ const StyledRecipeCard = styled(RecipeCard)``;
 
 const DeleteButtonWrapper = styled.div`
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 3rem;
-  height: 3rem;
+  top: 1rem;
+  right: 1rem;
 `;
 
 const DeleteButtonImage = styled.img`
-  @media (min-width: 1024px) {
-    position: absolute;
     transition: transform 0.1s ease-in-out;
-    top: 25rem;
-    right: 0.7rem;
-    width: 1.8rem;
-    height: 1.8rem;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     &:hover {
       transform: scale(1.2);
     }
-  }
-
-  @media (max-width: 1023px) {
-    display: none;
-  }
-`;
-
-const DeleteButtonMobile = styled.img`
-  position: absolute;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-  top: 0.7rem;
-  right: 0.7rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  transition: transform 0.1s ease-in-out;
-  @media (min-width: 1024px) {
-    display: none;
   }
 `;
 
