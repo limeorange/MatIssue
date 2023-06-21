@@ -5,6 +5,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import Button from "@/app/components/UI/Button";
 import Logo from "@/app/components/header/Logo";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "../store/darkModeAtom";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -13,6 +15,7 @@ type StyledComponentProps = {
 const StartPage = () => {
   const [isAnimateOut, setIsAnimateOut] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0); // window width state
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const StartPage = () => {
     <WorldcupLayout>
       <Logo />
       <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
-      <StartPageMessage isAnimateOut={isAnimateOut}>
+      <StartPageMessage isDarkMode={isDarkMode} isAnimateOut={isAnimateOut}>
         뭐 먹을지 고민이 될 때!!
       </StartPageMessage>
       <ImageBox isAnimateOut={isAnimateOut}>
@@ -151,9 +154,11 @@ const GameHeader = styled.p<StyledComponentProps>`
   }
 `;
 
-const StartPageMessage = styled.p<StyledComponentProps>`
+const StartPageMessage = styled.p<
+  { isDarkMode: boolean } & StyledComponentProps
+>`
   font-size: 17px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
   margin-top: 2rem;
 
   animation: ${(props) =>
