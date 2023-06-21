@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { ThemeProvider } from "styled-components";
 import { createGlobalStyle } from "styled-components";
@@ -67,7 +67,20 @@ function StyledTheme({ children }: Props) {
       props.isDarkMode ? "0.1rem solid #404353" : "0.1rem solid #ccc"};
     color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
   }
+  label {
+    color : ${(props) => (props.isDarkMode ? "white" : "#4F3D21")};
+  }
 `;
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.style.backgroundColor = "#212739";
+      document.body.style.color = "#fff";
+    } else {
+      document.body.style.backgroundColor = "#fff";
+      document.body.style.color = "#4F3D21";
+    }
+  }, [isDarkMode]);
 
   return (
     <ThemeProvider theme={theme}>
