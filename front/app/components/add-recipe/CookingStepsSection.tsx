@@ -90,6 +90,7 @@ const CookingStepsSection = ({
                 placeholder="단계별 요리 방법을 입력해주세요."
               />
               <ImageUploadBox
+                isDarkMode={isDarkMode}
                 imgExists={Boolean(stepImages[index])}
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, index)}
@@ -215,14 +216,16 @@ const StepContentsWrapper = styled.div`
   }
 `;
 
-const ImageUploadBox = styled.div<{ imgExists: boolean }>`
+const ImageUploadBox = styled.div<{ isDarkMode: boolean; imgExists: boolean }>`
   width: 100%;
   height: 18.6rem;
   background: ${(props) =>
     props.imgExists
       ? "#f7f5f5"
-      : '#f6f5f5 url("/images/cameraIcon.png") no-repeat center'};
-  background-size: ${(props) => (props.imgExists ? "auto" : "6rem 6rem")};
+      : props.isDarkMode
+      ? "#212739 url('/images/cameraIconDark.png') no-repeat center / 4.2rem 3.5rem"
+      : '#f6f5f5 url("/images/cameraIcon.png") no-repeat center / 6rem 6rem'};
+  border: ${(props) => (props.isDarkMode ? "0.05rem" : "none")} solid #d9d9d9;
   border-radius: 1.5rem;
   display: flex;
   justify-content: center;
