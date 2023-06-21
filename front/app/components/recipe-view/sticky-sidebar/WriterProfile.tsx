@@ -231,6 +231,9 @@ const ProfileContainer = styled.div<{ isHeaderVisible: boolean }>`
 /** 클릭 시 유저 페이지로 이동하는 영역 Div */
 const UserProfileClickWrapper = styled.div`
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 /** 프로필 헤더 박스 Div */
