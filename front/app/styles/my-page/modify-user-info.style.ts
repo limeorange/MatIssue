@@ -340,3 +340,8 @@ margin-top: 0.3rem;
 width:100%;
 }
 `;
+
+export const AlertImage = styled.img`
+  width: 3rem;
+  height: 3rem;
+`;
