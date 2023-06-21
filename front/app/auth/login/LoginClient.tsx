@@ -75,7 +75,6 @@ const LoginClient = () => {
             id="user_id"
             type="text"
             disabled={isLoading}
-            isDarkMode={isDarkMode}
             {...register("user_id", {
               required: true,
             })}
@@ -85,7 +84,6 @@ const LoginClient = () => {
             id="password"
             type="password"
             disabled={isLoading}
-            isDarkMode={isDarkMode}
             {...register("password", {
               required: true,
             })}
