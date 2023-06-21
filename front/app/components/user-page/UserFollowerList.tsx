@@ -27,12 +27,12 @@ const UserFollowersList = ({
     <>
       <Container>
         {/* 팔로워, 팔로워 수 Title */}
-        <TitleCountBox>
+        <TitleCountWrapper>
           <h2>팔로워</h2>
           <BoldCount>{currentChefFans.length}</BoldCount>
-        </TitleCountBox>
+        </TitleCountWrapper>
 
-        <SearchListBox>
+        <SearchListWrapper>
           {/* 검색 입력창 */}
           <UserFollowSearch onChange={(value) => setSearchValue(value)} />
 
@@ -52,12 +52,13 @@ const UserFollowersList = ({
                 ></UserFollowItem>
               ))}
           </FollowerList>
-        </SearchListBox>
+        </SearchListWrapper>
       </Container>
     </>
   );
 };
 
+/** 팔로워 전체 정보 감싸는 Div */
 const Container = styled.div`
   margin-bottom: 5rem;
   @media (min-width: 1024px) {
@@ -65,7 +66,8 @@ const Container = styled.div`
   }
 `;
 
-const TitleCountBox = styled.div`
+/** 팔로워, 팔로워 수 Div */
+const TitleCountWrapper = styled.div`
   display: flex;
   font-size: 16px;
   gap: 0.3rem;
@@ -81,15 +83,19 @@ const TitleCountBox = styled.div`
   }
 `;
 
-const SearchListBox = styled.div`
+/** 검색창, 팔로워 목록 Div */
+const SearchListWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
+/** 팔로워 수 굵은 글씨 Div */
 const BoldCount = styled.div`
   font-weight: 600;
 `;
+
+/** 팔로우 목록 Div */
 const FollowerList = styled.div`
   ::-webkit-scrollbar {
     width: 1rem;
