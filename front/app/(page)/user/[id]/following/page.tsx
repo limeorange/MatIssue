@@ -1,12 +1,12 @@
 import { getChefByUserId } from "@/app/api/user";
-import Followers from "../followers/FollowersPage";
+import Following from "./FollowingPage";
 
 const FollowingPage = async ({ params }: { params: { id: string } }) => {
   const userProfileId = params.id;
   const initialCurrentChef = await getChefByUserId(userProfileId);
 
   return (
-    <Followers
+    <Following
       userProfileId={userProfileId}
       initialCurrentChef={initialCurrentChef}
     />
