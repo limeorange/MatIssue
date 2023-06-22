@@ -201,7 +201,7 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
             </FollowBox>
 
             {/* 팔로우 버튼 */}
-            <FollowButton onClick={followButtonHandler}>
+            <FollowButton isDarkMode={isDarkMode} onClick={followButtonHandler}>
               {followButtonText}
             </FollowButton>
           </UserProfileClickWrapper>
@@ -245,16 +245,15 @@ const UserProfileClickWrapper = styled.div`
 const ProfileHeader = styled.div<{ isDarkMode: boolean }>`
   width: 18.5rem;
   height: 4.3rem;
-  background: #fbe2a1;
   border-radius: 20px 20px 0px 0px;
   font-weight: 500;
   font-size: 17px;
-  color: #4f3d21;
   padding: 1rem;
   padding-left: 1.5rem;
 
-  background: ${(props) =>
+  background-color: ${(props) =>
     props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4f3d21")};
 `;
 
 /** 프로필 내용 담는 Div */
@@ -305,7 +304,7 @@ const BoldCount = styled.span<{ isDarkMode: boolean }>`
 `;
 
 /** 팔로우 버튼 */
-const FollowButton = styled.button`
+const FollowButton = styled.button<{ isDarkMode: boolean }>`
   width: 14rem;
   height: 3.5rem;
   font-size: 16px;
@@ -314,7 +313,9 @@ const FollowButton = styled.button`
   color: #4f3d21;
   border-radius: 1rem;
   transition: background-color 0.2s ease-in-out;
-
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4F3D21")};
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
   &:hover {
     background-color: #fbd26a;
   }
