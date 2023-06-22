@@ -46,7 +46,7 @@ const SearchBar = () => {
   const searchSubmitHandler: React.KeyboardEventHandler<HTMLInputElement> = (
     e
   ) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && searchQuery.length !== 0) {
       setShowRecentSearches(false);
       const newSearches = [searchQuery, ...recentSearches]
         .slice(0, 10)
