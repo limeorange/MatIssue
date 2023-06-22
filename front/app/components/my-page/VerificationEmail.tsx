@@ -31,7 +31,7 @@ const VerificationEmail = ({
 
   useEffect(() => {
     function handleResize() {
-      setIsMobile(window.innerWidth <= 375);
+      setIsMobile(window.innerWidth <= 1024);
     }
 
     window.addEventListener("resize", handleResize);
