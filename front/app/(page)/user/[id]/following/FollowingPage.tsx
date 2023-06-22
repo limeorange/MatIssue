@@ -41,7 +41,7 @@ const Following = ({
   }
 
   // 로그인된 유저가 팔로잉하는 유저 목록
-  const loggedInUserSubscriptions: string[] = currentUser.subscriptions;
+  const loggedInUserSubscriptions: string[] = currentUser?.subscriptions;
 
   return (
     <Container>
