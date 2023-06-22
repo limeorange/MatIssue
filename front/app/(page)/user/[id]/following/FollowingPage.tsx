@@ -38,7 +38,7 @@ const Following = ({
     { initialData: initialCurrentChefSubscriptions }
   );
 
-  const loggedInUserId: string = currentUser.user_id;
+  const loggedInUserId: string = currentUser?.user_id;
 
   // 로그인된 유저가 자신의 유저페이지에 접근하는 경우 마이페이지로 이동
   const router = useRouter();
