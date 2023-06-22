@@ -83,6 +83,7 @@ const UserProfileCard = ({
           // 팔로우 취소 모달창 띄워줌
           setFollowDeleteConfirmModal(true);
         }
+
         // 로그인된 유저가 팔로우 요청 하는 경우
         else {
           try {
@@ -92,6 +93,11 @@ const UserProfileCard = ({
             toast.success("팔로우가 완료되었습니다!");
             // 요청 성공 시 query key를 무효화해서 현재 프로필 데이터 최신화
             client.invalidateQueries(["currentChef", userProfileId]);
+            client.invalidateQueries(["currentChefFans", userProfileId]);
+            client.invalidateQueries([
+              "currentChefSubscriptions",
+              userProfileId,
+            ]);
 
             // 팔로우 -> 팔로잉으로 변경
             setIsFollowing(true);
@@ -115,6 +121,8 @@ const UserProfileCard = ({
 
       // 요청 성공 시 query key를 무효화해서 현재 프로필 데이터 최신화
       client.invalidateQueries(["currentChef", userProfileId]);
+      client.invalidateQueries(["currentChefFans", userProfileId]);
+      client.invalidateQueries(["currentChefSubscriptions", userProfileId]);
 
       toast.success("팔로우가 취소되었습니다!");
     } catch (error) {

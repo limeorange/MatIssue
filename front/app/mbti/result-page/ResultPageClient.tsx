@@ -577,8 +577,7 @@ const MBTIResultTextWrapper = styled.div<{ isDarkMode: boolean }>`
 const MBTIResultWrapper = styled.div<{ isDarkMode: boolean }>`
   font-family: "Dongle-Bold";
   font-size: 50px;
-  color: ${(props) =>
-    props.isDarkMode ? props.theme.lightGrey : props.theme.brown};
+  color: ${(props) => (props.isDarkMode ? "pink" : props.theme.brown)};
 `;
 
 const DivBar = styled.div<{ isDarkMode: boolean }>`
@@ -588,7 +587,7 @@ const DivBar = styled.div<{ isDarkMode: boolean }>`
   color: ${(props) =>
     props.isDarkMode ? "rgba(255, 255, 255, 0)" : "rgb(147, 112, 98, 0)"};
   background-color: ${(props) =>
-    props.isDarkMode ? props.theme.deepNavy : "rgb(147, 112, 98, 0.5)"};
+    props.isDarkMode ? props.theme.lightNavy : "rgb(147, 112, 98, 0.5)"};
 `;
 
 const MBTIcardContainer = styled.div<{ isDarkMode: boolean }>`

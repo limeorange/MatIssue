@@ -2,27 +2,42 @@
 
 import { whiteBrownToggle } from "@/app/constants/darkMode.constants";
 import darkModeAtom from "@/app/store/darkModeAtom";
+import recentSearchAtom from "@/app/store/recentSearchAtom";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 type RecentSearchItemProps = {
   index: number;
   search: string;
   recentSearchDeleteHandler: (e: React.MouseEvent) => void;
+  setShowRecentSearches?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const RecentSearchItem = (props: RecentSearchItemProps) => {
   const { index, search, recentSearchDeleteHandler } = props;
+  const [recentSearches, setRecentSearches] = useRecoilState(recentSearchAtom);
   const isDarkMode = useRecoilValue(darkModeAtom);
   const router = useRouter();
+
+  const recentRecipeClickHandler = () => {
+    if (props.setShowRecentSearches) {
+      props.setShowRecentSearches(false);
+    }
+    const newSearches = [search, ...recentSearches]
+      .slice(0, 10)
+      .filter((item, index, self) => self.indexOf(item) === index);
+    localStorage.setItem("searches", JSON.stringify(newSearches));
+    setRecentSearches(newSearches);
+    router.push(`/recipes/search?query=${encodeURIComponent(search)}`);
+  };
 
   return (
     <RecentSearchItemContainer
       isDarkMode={isDarkMode}
       key={index}
-      onClick={() => router.push(`/recipes/search?query=${search}`)}
+      onClick={recentRecipeClickHandler}
     >
       <IconWrapper isDarkMode={isDarkMode}>
         <Image

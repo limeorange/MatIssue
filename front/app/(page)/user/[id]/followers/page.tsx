@@ -9,7 +9,7 @@ const FollowersPage = async ({ params }: { params: { id: string } }) => {
   const initialCurrentChef = await getChefByUserId(userProfileId);
 
   /** 프로필 유저의 Fans 배열 */
-  const currentChefFans = await getUserFans(userProfileId);
+  const initialCurrentChefFans = await getUserFans(userProfileId);
 
   /** 로그인된 유저정보 */
   const initialCurrentUser = await getCurrentUserSS();
@@ -18,7 +18,7 @@ const FollowersPage = async ({ params }: { params: { id: string } }) => {
     <Followers
       userProfileId={userProfileId}
       initialCurrentChef={initialCurrentChef}
-      currentChefFans={currentChefFans}
+      initialCurrentChefFans={initialCurrentChefFans}
       initialCurrentUser={initialCurrentUser}
     />
   );
