@@ -109,7 +109,7 @@ const SelectBox = styled.div<{ isDarkMode: boolean }>`
 
   background-position: right 1rem center;
   -webkit-appearance: none; /* for chrome /
--moz-appearance:none; /for firefox*/
+  -moz-appearance:none; /for firefox*/
 
   &:focus {
     border: 0.1rem solid #fbe2a1;
@@ -139,6 +139,10 @@ const OptionList = styled.ul<{ isDarkMode: boolean }>`
   padding: 0;
   margin: 0;
   z-index: 1;
+
+  li:hover {
+    color: ${(props) => (props.isDarkMode ? props.theme.deepNavy : "#6f6f6f")};
+  }
 `;
 
 const OptionItem = styled.li`
