@@ -50,7 +50,7 @@ const UserFollowingList = (props: UserFollowingListProps) => {
               filteredSubscriptions.length > 0 &&
               filteredSubscriptions.map((fan, index) => {
                 // 목록 속 유저를 팔로우 하는지 여부
-                const isFollowing = loggedInUserSubscriptions.includes(
+                const isFollowing = loggedInUserSubscriptions?.includes(
                   fan.user_id
                 );
 

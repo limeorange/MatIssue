@@ -39,7 +39,7 @@ const Followers = ({
   );
 
   console.log(currentChefFans);
-  const loggedInUserId: string = currentUser.user_id;
+  const loggedInUserId: string = currentUser?.user_id;
 
   // 로그인된 유저가 자신의 유저페이지에 접근하는 경우 마이페이지로 이동
   const router = useRouter();
@@ -48,7 +48,7 @@ const Followers = ({
   }
 
   // 로그인된 유저가 팔로잉하는 유저 목록
-  const loggedInUserSubscriptions: string[] = currentUser.subscriptions;
+  const loggedInUserSubscriptions: string[] = currentUser?.subscriptions;
 
   return (
     <Container>
