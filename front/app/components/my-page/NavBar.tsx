@@ -55,7 +55,7 @@ const NavContainer = styled.ul`
   height: 4rem;
   justify-content: center;
   border-bottom: 0.1rem solid rgb(200, 200, 200);
-  gap: 3rem;
+  gap: 0.1rem;
   @media (min-width: 1024px) {
     height: 6rem;
     gap: 6rem;

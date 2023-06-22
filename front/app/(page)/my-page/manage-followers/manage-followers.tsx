@@ -5,14 +5,14 @@ import Button from "../../../components/UI/Button";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProfileCard from "@/app/components/my-page/ProfileCard";
-import UserFollowersList from "@/app/components/user-page/UserFollowerList";
-import UserFollowingList from "@/app/components/user-page/UserFollowingList";
 import { User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser, {
   getUserFans,
   getUserSubscriptions,
 } from "@/app/api/user";
+import UserFollowingList from "@/app/components/user-page/UserFollowingList";
+import UserFollowerList from "@/app/components/user-page/UserFollowerList";
 
 type FollowersProps = {
   userProfileId: string;
@@ -63,18 +63,22 @@ const ManageFollowers = ({
     <Container>
       <Wrapper>
         <ProfileCard />
-        <UserFollowersList
-          currentChefFans={currentChefFans}
-          loggedInUserSubscriptions={loggedInUserSubscriptions}
-          loggedInUserId={loggedInUserId}
-          initialCurrentChef={initialCurrentChef}
-        />
-        <UserFollowingList
-          currentChefSubscriptions={currentChefSubscriptions}
-          loggedInUserSubscriptions={loggedInUserSubscriptions}
-          loggedInUserId={loggedInUserId}
-          initialCurrentChef={initialCurrentChef}
-        />
+        <FollowerWrapper>
+          <UserFollowerList
+            currentChefFans={currentChefFans}
+            loggedInUserSubscriptions={loggedInUserSubscriptions}
+            loggedInUserId={loggedInUserId}
+            initialCurrentChef={initialCurrentChef}
+          />
+        </FollowerWrapper>
+        <FollowingWrapper>
+          <UserFollowingList
+            currentChefSubscriptions={currentChefSubscriptions}
+            loggedInUserSubscriptions={loggedInUserSubscriptions}
+            loggedInUserId={loggedInUserId}
+            initialCurrentChef={initialCurrentChef}
+          />
+        </FollowingWrapper>
       </Wrapper>
     </Container>
   );
@@ -103,5 +107,19 @@ const Wrapper = styled.div`
     padding: 5rem 0 0 1.5rem;
     margin: 0 0 16rem;
     max-width: 100vw;
+  }
+`;
+
+const FollowerWrapper = styled.div`
+  margin: 2rem 0 0 0;
+  @media (min-width: 1024px) {
+    margin: 0 0 0 -10rem;
+  }
+`;
+
+const FollowingWrapper = styled.div`
+  margin: -2rem 0 0 0;
+  @media (min-width: 1024px) {
+    margin: 0 0 0 -5.5rem;
   }
 `;
