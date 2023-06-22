@@ -195,7 +195,7 @@ const RecipeHeading = styled.span<{ isDarkMode: boolean }>`
 const RecipeHeadingCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 700;
-  color: ${(props) => (props.isDarkMode ? "#ccc" : "#fff")};
+  color: ${(props) => (props.isDarkMode ? "#ccc" : "#666")};
   @media (min-width: 1024px) {
     font-size: 17px;
   }
@@ -230,6 +230,7 @@ const DeleteButtonWrapper = styled.div`
 const DeleteButtonImage = styled.img`
     transition: transform 0.1s ease-in-out;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    cursor: pointer;
     &:hover {
       transform: scale(1.2);
     }
