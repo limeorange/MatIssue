@@ -13,6 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useRecoilValue } from "recoil";
 import darkModeAtom from "@/app/store/darkModeAtom";
+import { toast } from "react-hot-toast";
 
 const RecipeCards = ({
   currentUserRecipes,
@@ -45,14 +46,10 @@ const RecipeCards = ({
 
     try {
       await axiosBase.delete(`recipes/${id}`);
-      console.log("레시피 삭제 요청이 성공적으로 전송되었습니다.");
-      client.invalidateQueries(["currentRecipe"]);
-      // setIsModalOpen(false);
+      toast.success("레시피가 성공적으로 삭제되었습니다.");
+      client.invalidateQueries(["currentUserRecipes"]);
     } catch (error) {
-      console.error(
-        "레시피 삭제 요청을 보내는 중에 오류가 발생했습니다:",
-        error
-      );
+      toast.error("레시피 삭제를 실패했습니다.");
     }
     setIsModalOpen(false);
   };
