@@ -9,6 +9,8 @@ import FollowDeleteModal from "../../UI/FollowDeleteModal";
 import { useRouter } from "next/navigation";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type WriterProfileProps = {
   user_id: string;
@@ -28,6 +30,9 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
 
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // userid => 닉네임, 팔로잉, 팔로워, 프로필 사진 받아오는 API
   // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
@@ -160,8 +165,8 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
           onCancel={loginModalCloseHandler}
         />
       )}
-      <ProfileContainer>
-        <ProfileHeader>오늘의 쉐프</ProfileHeader>
+      <ProfileContainer isDarkMode={isDarkMode}>
+        <ProfileHeader isDarkMode={isDarkMode}>오늘의 쉐프</ProfileHeader>
         <ProfileContentsWrapper>
           <UserProfileClickWrapper onClick={profileClickHandler}>
             {/* 프로필 사진 */}
@@ -180,15 +185,19 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
             </ProfileImage>
 
             {/* 닉네임 */}
-            <Nickname>{currentChef?.username}</Nickname>
+            <Nickname isDarkMode={isDarkMode}>{currentChef?.username}</Nickname>
 
             {/* 팔로잉, 팔로워 */}
             <FollowBox>
-              <span>팔로워</span>
-              <BoldCount>{currentChef?.fans.length}</BoldCount>
-              <span>|</span>
-              <span>팔로잉</span>
-              <BoldCount>{currentChef?.subscriptions.length}</BoldCount>
+              <Span isDarkMode={isDarkMode}>팔로워</Span>
+              <BoldCount isDarkMode={isDarkMode}>
+                {currentChef?.fans.length}
+              </BoldCount>
+              <Span isDarkMode={isDarkMode}>|</Span>
+              <Span isDarkMode={isDarkMode}>팔로잉</Span>
+              <BoldCount isDarkMode={isDarkMode}>
+                {currentChef?.subscriptions.length}
+              </BoldCount>
             </FollowBox>
 
             {/* 팔로우 버튼 */}
@@ -203,7 +212,9 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
 };
 
 /** 프로필 박스 전체 감싸는 Div */
-const ProfileContainer = styled.div`
+const ProfileContainer = styled.div<{
+  isDarkMode: boolean;
+}>`
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -213,10 +224,9 @@ const ProfileContainer = styled.div`
     bottom: 10rem;
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
     border-radius: 2rem;
-    background-color: #ffffff;
     z-index: 30;
-
-    
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
     }
 
   @media (min-width: 1024px) {
@@ -232,7 +242,7 @@ const UserProfileClickWrapper = styled.div`
 `;
 
 /** 프로필 헤더 박스 Div */
-const ProfileHeader = styled.div`
+const ProfileHeader = styled.div<{ isDarkMode: boolean }>`
   width: 18.5rem;
   height: 4.3rem;
   background: #fbe2a1;
@@ -242,6 +252,9 @@ const ProfileHeader = styled.div`
   color: #4f3d21;
   padding: 1rem;
   padding-left: 1.5rem;
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
 `;
 
 /** 프로필 내용 담는 Div */
@@ -264,11 +277,16 @@ const ProfileImage = styled.div`
 `;
 
 /** 닉네임 Span */
-const Nickname = styled.span`
+const Nickname = styled.span<{ isDarkMode: boolean }>`
   font-size: 1.8rem;
   font-weight: 500;
-  color: #4f3d21;
   margin-bottom: 0.4rem;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
+`;
+
+/** 팔로워, 팔로잉 Span */
+const Span = styled.span<{ isDarkMode: boolean }>`
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
 /** 팔로잉, 팔로워 Div */
@@ -281,8 +299,9 @@ const FollowBox = styled.div`
 `;
 
 /** 팔로잉, 팔로워수 강조 Span */
-const BoldCount = styled.span`
+const BoldCount = styled.span<{ isDarkMode: boolean }>`
   font-weight: 500;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
 /** 팔로우 버튼 */
