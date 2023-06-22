@@ -13,6 +13,8 @@ import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import { useRouter } from "next/navigation";
 import ConfirmModal from "../../UI/ConfirmModal";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 /** 요리 댓글 단일 Props */
 type RecipeCommentProps = Comments;
@@ -73,6 +75,9 @@ const RecipeComment = ({
   // 댓글 삭제 확인 모달 상태 관리
   const [commentDeleteConfirmModal, setCommentDeleteConfirmModal] =
     useState(false);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   /** 댓글창 클릭시 상태 업데이트 핸들러 */
   const boxClickHandler = () => {
@@ -231,7 +236,9 @@ const RecipeComment = ({
           <AuthorDotsWrapper>
             {/* 작성자, 작성 시간 */}
             <AuthorTimeBox>
-              <AuthorName>{comment_nickname}</AuthorName>
+              <AuthorName isDarkMode={isDarkMode}>
+                {comment_nickname}
+              </AuthorName>
               <CreatedTime>
                 {koreanCreatedAt.split(":").slice(0, -1).join(":")}
               </CreatedTime>
@@ -295,7 +302,9 @@ const RecipeComment = ({
               </ButtonWrapper>
             </>
           ) : (
-            <CommentText>{editedCommentText}</CommentText>
+            <CommentText isDarkMode={isDarkMode}>
+              {editedCommentText}
+            </CommentText>
           )}
         </CommentContentsWrapper>
       </CommentContainer>
@@ -368,11 +377,11 @@ const CommentContentsWrapper = styled.div`
 `;
 
 /** 작성자 닉네임 Span */
-const AuthorName = styled.span`
+const AuthorName = styled.span<{ isDarkMode: boolean }>`
   font-size: 14.8px;
-  color: #6f6f6f;
   font-weight: 500;
   margin-right: 0.8rem;
+  color: ${(props) => (props.isDarkMode ? props.theme.grey : "#6f6f6f")};
 
   @media (min-width: 1024px) {
     font-size: 16px;
@@ -415,10 +424,11 @@ const ThreeDotsImageWrapper = styled.div`
 `;
 
 /** 댓글 내용 Div */
-const CommentText = styled.div`
+const CommentText = styled.div<{ isDarkMode: boolean }>`
   font-size: 14.5px;
   color: #6f6f6f;
   width: 100%;
+  color: ${(props) => (props.isDarkMode ? props.theme.grey : "#6f6f6f")};
 
   @media (min-width: 1024px) {
     font-size: 15.5px;
