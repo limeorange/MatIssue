@@ -1,4 +1,4 @@
-import getCurrentUser, {
+import {
   getChefByUserId,
   getUserSubscriptions,
   getUserFans,
@@ -18,9 +18,9 @@ const PostManageFollowers = async ({ params }: { params: { id: string } }) => {
     <ManageFollowers
       userProfileId={initialCurrentUser.user_id}
       initialCurrentChef={initialCurrentUser}
-      currentChefSubscriptions={currentChefSubscriptions}
+      initialCurrentChefSubscriptions={currentChefSubscriptions}
       initialCurrentUser={initialCurrentUser}
-      currentChefFans={currentChefFans}
+      initialCurrentChefFans={currentChefFans}
     />
   );
 };

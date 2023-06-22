@@ -9,18 +9,21 @@ import UserFollowersList from "@/app/components/user-page/UserFollowerList";
 import UserFollowingList from "@/app/components/user-page/UserFollowingList";
 import { User } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
-import getCurrentUser from "@/app/api/user";
+import getCurrentUser, {
+  getUserFans,
+  getUserSubscriptions,
+} from "@/app/api/user";
 
 type FollowersProps = {
   userProfileId: string;
   initialCurrentChef: User;
-  currentChefFans: {
+  initialCurrentChefFans: {
     user_id: string;
     username: string;
     img: string;
   }[];
   initialCurrentUser: User;
-  currentChefSubscriptions: {
+  initialCurrentChefSubscriptions: {
     user_id: string;
     username: string;
     img: string;
@@ -31,8 +34,8 @@ type FollowersProps = {
 const ManageFollowers = ({
   initialCurrentChef,
   userProfileId,
-  currentChefFans,
-  currentChefSubscriptions,
+  initialCurrentChefFans,
+  initialCurrentChefSubscriptions,
   initialCurrentUser,
 }: FollowersProps) => {
   // currentUser : 현재 로그인한 유저 정보
@@ -41,6 +44,17 @@ const ManageFollowers = ({
     () => getCurrentUser(),
     { initialData: initialCurrentUser }
   );
+  const { data: currentChefFans } = useQuery(
+    ["currentChefFans", userProfileId],
+    () => getUserFans(userProfileId),
+    { initialData: initialCurrentChefFans }
+  );
+  const { data: currentChefSubscriptions } = useQuery(
+    ["currentChefSubscriptions", userProfileId],
+    () => getUserSubscriptions(userProfileId),
+    { initialData: initialCurrentChefSubscriptions }
+  );
+
   const loggedInUserId: string = currentUser.user_id;
 
   // 로그인된 유저가 팔로잉하는 유저 목록
