@@ -1,5 +1,6 @@
-import getCurrentUser, { getChefByUserId, getUserFans } from "@/app/api/user";
+import { getChefByUserId, getUserFans } from "@/app/api/user";
 import Followers from "./FollowersPage";
+import { getCurrentUserSS } from "@/app/action/getCurrentUser";
 
 const FollowersPage = async ({ params }: { params: { id: string } }) => {
   const userProfileId = params.id;
@@ -11,7 +12,7 @@ const FollowersPage = async ({ params }: { params: { id: string } }) => {
   const currentChefFans = await getUserFans(userProfileId);
 
   /** 로그인된 유저정보 */
-  const initialCurrentUser = await getCurrentUser();
+  const initialCurrentUser = await getCurrentUserSS();
 
   return (
     <Followers
