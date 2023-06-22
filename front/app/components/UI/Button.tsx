@@ -78,25 +78,31 @@ const StyledButton = styled.button<ButtonProps>`
         ? `0.2rem solid ${props.theme.yellow}`
         : "none"
       : props.isBorderColor
-      ? `0.2rem solid ${props.theme.lightYellow}`
+      ? `0.2rem solid ${props.theme.yellow}`
       : "none"};
   background-color: ${(props) =>
     props.isDarkMode
       ? props.isBgColor
         ? props.theme.lightYellow
-        : props.theme.white
+        : props.theme.lightNavy
       : props.isBgColor
       ? props.theme.yellow
       : props.theme.white};
   color: ${(props) =>
-    props.isDarkMode ? props.theme.deepNavy : props.theme.brown};
+    props.isDarkMode
+      ? props.isBgColor
+        ? props.theme.deepNavy
+        : props.theme.lightYellow
+      : props.isBgColor
+      ? props.theme.brown
+      : props.theme.brown};
 
     &:hover {
       transition: all 0.2s ease-in-out;
       background-color: ${(props) =>
         props.isDarkMode
           ? props.isHoverColor
-            ? props.theme.lightYellow
+            ? props.theme.navy
             : props.theme.yellow
           : props.isHoverColor
           ? props.theme.yellow
