@@ -1,46 +1,59 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { getChefByUserId } from "@/app/api/user";
-import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
-import { axiosBase } from "@/app/api/axios";
-import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
-import FollowDeleteModal from "../../UI/FollowDeleteModal";
-import { useRouter } from "next/navigation";
-import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { User } from "@/app/types";
+import getCurrentUser, { getChefByUserId } from "@/app/api/user";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { axiosBase } from "@/app/api/axios";
+import { useRouter } from "next/navigation";
+import ConfirmModal from "../UI/ConfirmModal";
+import LoginConfirmModal from "../UI/LoginConfirmModal";
+import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 
-type WriterProfileProps = {
-  user_id: string;
-  loggedInUserId: string | undefined;
+type UserFollowItemProps = {
+  userId: string;
+  userNickname: string;
+  userImg: string;
 };
 
-/** 작성자 프로필 컴포넌트 */
-const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
-  // currentChef에 user 정보가 담김
-  const { data: currentChef, isLoading } = useQuery(
-    ["currentChef", user_id],
-    () => getChefByUserId(user_id)
+/** 팔로워 or 팔로잉 컴포넌트에서 쓰이는 단일 유저 컴포넌트 */
+const UserFollowItem = ({
+  userId,
+  userNickname,
+  userImg,
+}: UserFollowItemProps) => {
+  // currentChef : 팔로우 or 팔로잉 목록의 특정 유저 정보
+  const { data: currentChef } = useQuery(["currentChef", userId], () =>
+    getChefByUserId(userId)
   );
 
+  // currentUser : 현재 로그인 된 유저정보
+  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
+    getCurrentUser()
+  );
+  const loggedInUserId: string | undefined = currentUser?.user_id;
+
   const client = useQueryClient();
+
+  // 팔로우, 팔로잉 동작 시 업데이트해서 보여주기 위한 상태 관리
   const [isFollowing, setIsFollowing] = useState(false);
 
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
-  // userid => 닉네임, 팔로잉, 팔로워, 프로필 사진 받아오는 API
   // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
   useEffect(() => {
     if (loggedInUserId !== undefined) {
-      const fans = currentChef?.fans;
-      const isFollowing = fans?.includes(loggedInUserId);
+      const fans = new Set(currentChef?.fans);
+      const isFollowing = fans?.has(loggedInUserId);
       setIsFollowing(isFollowing);
     }
   }, [loggedInUserId]);
 
+  // 상태에 따른 팔로우, 팔로잉 버튼
   const followButtonText =
-    loggedInUserId === user_id
+    loggedInUserId === userId
       ? "언제나 팔로잉"
       : isFollowing
       ? "팔로잉"
@@ -54,7 +67,7 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
   const followButtonHandler = async () => {
     try {
       // 작성자가 자신의 게시글을 보는 경우
-      if (loggedInUserId === user_id) {
+      if (loggedInUserId === userId) {
         toast.success(`소중한 당신을 언제나 응원해요!`);
       }
       // 로그인되지 않은 유저가 팔로우 요청하는 경우
@@ -63,20 +76,19 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
       }
       // 작성자와 다른 로그인 유저가 팔로우 요청하는 경우
       else {
-        // 이미 팔로우를 한 경우
+        // 이미 팔로우를 한 경우 팔로우 취소 모달창 띄워줌
         if (isFollowing === true) {
-          // 팔로우 취소 모달창 띄워줌
           setFollowDeleteConfirmModal(true);
         }
         // 로그인된 유저가 팔로우 요청 하는 경우
         else {
           try {
             const response = await axiosBase.post(
-              `/users/subscription/${user_id}?subscribe=true`
+              `/users/subscription/${userId}?subscribe=true`
             );
             toast.success("팔로우가 완료되었습니다!");
             // 요청 성공 시 query key를 무효화해서 현재 작성자 데이터 최신화
-            client.invalidateQueries(["currentChef", user_id]);
+            client.invalidateQueries(["currentChef", userId]);
 
             // 팔로우 -> 팔로잉으로 변경
             setIsFollowing(true);
@@ -95,11 +107,11 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
   const deleteConfirmHandler = async () => {
     try {
       const res = await axiosBase.post(
-        `/users/subscription/${user_id}?subscribe=false`
+        `/users/subscription/${userId}?subscribe=false`
       );
 
       // 요청 성공 시 query key를 무효화해서 현재 작성자 데이터 최신화
-      client.invalidateQueries(["currentChef", user_id]);
+      client.invalidateQueries(["currentChef", userId]);
 
       toast.success("팔로우가 취소되었습니다!");
     } catch (error) {
@@ -134,11 +146,6 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
     router.push(`user/${currentChef.user_id}`);
   };
 
-  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
-  if (isLoading) {
-    return <div>Loading...</div>; //
-  }
-
   return (
     <>
       {/* 팔로우 취소 모달 */}
@@ -160,151 +167,123 @@ const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
           onCancel={loginModalCloseHandler}
         />
       )}
-      <ProfileContainer>
-        <ProfileHeader>오늘의 쉐프</ProfileHeader>
-        <ProfileContentsWrapper>
-          <UserProfileClickWrapper onClick={profileClickHandler}>
-            {/* 프로필 사진 */}
-            <ProfileImage>
-              <Image
-                src={
-                  currentChef.img
-                    ? currentChef.img
-                    : "/images/recipe-view/기본 프로필.PNG"
-                }
-                alt="게시글 작성자 프로필 사진"
-                width={130}
-                height={130}
-                style={{ objectFit: "cover", cursor: "pointer" }}
-              />
-            </ProfileImage>
 
-            {/* 닉네임 */}
-            <Nickname>{currentChef?.username}</Nickname>
+      <UserContainer>
+        <UserInfoWrapper onClick={profileClickHandler}>
+          {/* 프로필 이미지 */}
+          <ProfileImage>
+            <Image
+              src={userImg ? userImg : "/images/recipe-view/기본 프로필.PNG"}
+              alt={`${userNickname}님의 프로필 이미지`}
+              width={40}
+              height={40}
+              style={{
+                objectFit: "cover",
+                cursor: "pointer",
+                borderRadius: "50%",
+              }}
+            />
+          </ProfileImage>
 
-            {/* 팔로잉, 팔로워 */}
-            <FollowBox>
-              <span>팔로워</span>
-              <BoldCount>{currentChef?.fans.length}</BoldCount>
-              <span>|</span>
-              <span>팔로잉</span>
-              <BoldCount>{currentChef?.subscriptions.length}</BoldCount>
-            </FollowBox>
+          {/* 유저 아이디, 유저 닉네임 */}
+          <UserInfo>
+            <UserId>{userId}</UserId>
+            <UserNickname>{userNickname}</UserNickname>
+          </UserInfo>
+        </UserInfoWrapper>
 
-            {/* 팔로우 버튼 */}
-            <FollowButton onClick={followButtonHandler}>
+        {/* 팔로우 or 팔로잉 버튼 */}
+        <ButtonWrapper>
+          {followButtonText !== "언제나 팔로잉" && (
+            <FollowButton
+              isFollowing={isFollowing}
+              onClick={followButtonHandler}
+            >
               {followButtonText}
             </FollowButton>
-          </UserProfileClickWrapper>
-        </ProfileContentsWrapper>
-      </ProfileContainer>
+          )}
+        </ButtonWrapper>
+      </UserContainer>
     </>
   );
 };
 
-/** 프로필 박스 전체 감싸는 Div */
-const ProfileContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    width: 18.5rem;
-    height: 32rem;
-    right: 3rem;
-    bottom: 10rem;
-    box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
-    border-radius: 2rem;
-    background-color: #ffffff;
-    z-index: 30;
-
-    
-    }
-
-  @media (min-width: 1024px) {
-    display: none;
+/** 유저 아이템 전체 감싸는 Div */
+const UserContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 0.15rem solid #e6e6e6;
+  color: #888888;
+  width: 32rem;
+  height: 5.7rem;
+  align-items: center;
 `;
 
-/** 클릭 시 유저 페이지로 이동하는 영역 Div */
-const UserProfileClickWrapper = styled.div`
+/** 유저 프로필, 아이디, 닉네임 감싸는 Div */
+const UserInfoWrapper = styled.div`
+  display: flex;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-/** 프로필 헤더 박스 Div */
-const ProfileHeader = styled.div`
-  width: 18.5rem;
-  height: 4.3rem;
-  background: #fbe2a1;
-  border-radius: 20px 20px 0px 0px;
-  font-weight: 500;
-  font-size: 17px;
-  color: #4f3d21;
-  padding: 1rem;
-  padding-left: 1.5rem;
-`;
-
-/** 프로필 내용 담는 Div */
-const ProfileContentsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1.9rem;
+  width: 23rem;
 `;
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImage = styled.div`
   display: flex;
-  width: 12rem;
-  height: 12rem;
-  margin-bottom: 1.3rem;
-  box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
-  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
   overflow: hidden;
 `;
 
-/** 닉네임 Span */
-const Nickname = styled.span`
-  font-size: 1.8rem;
-  font-weight: 500;
-  color: #4f3d21;
-  margin-bottom: 0.4rem;
-`;
-
-/** 팔로잉, 팔로워 Div */
-const FollowBox = styled.div`
+/** 유저 아이디, 닉네임 감싸는 Div */
+const UserInfo = styled.div`
   display: flex;
-  color: #4f3d21;
-  font-size: 1.5rem;
-  gap: 0.3rem;
-  margin-bottom: 1.65rem;
+  flex-direction: column;
+  justify-content: center;
 `;
 
-/** 팔로잉, 팔로워수 강조 Span */
-const BoldCount = styled.span`
-  font-weight: 500;
+/** 유저 아이디 Span */
+const UserId = styled.span`
+  font-size: 14px;
+  font-weight: 600;
 `;
 
-/** 팔로우 버튼 */
-const FollowButton = styled.button`
-  width: 14rem;
-  height: 3.5rem;
-  font-size: 16px;
+/** 유저 닉네임 Span */
+const UserNickname = styled.span`
+  font-size: 14px;
+`;
+
+/** 팔로우 or 팔로잉 버튼 우측 정렬 시키기 위한 Div */
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+/** 팔로우 or 팔로잉 버튼 */
+const FollowButton = styled.button<{ isFollowing: boolean }>`
+  width: 7.5rem;
+  height: 2.8rem;
+  font-size: 14.5px;
   font-weight: 500;
   background-color: #fbe2a1;
   color: #4f3d21;
   border-radius: 1rem;
   transition: background-color 0.2s ease-in-out;
+  margin-right: 1rem;
+
+  /* 팔로잉일 경우 회색 배경색 적용 */
+  background-color: ${(props) => (props.isFollowing ? "#dddddd" : "#fbe2a1")};
 
   &:hover {
-    background-color: #fbd26a;
+    background-color: ${(props) => (props.isFollowing ? "#dddddd" : "#fbd26a")};
   }
 `;
 
 /** 팔로우 취소 컨펌 모달창 */
-const StyledConfirmModal = styled(FollowDeleteModal)``;
+const StyledConfirmModal = styled(ConfirmModal)``;
 
 /** 로그인 유도 모달창 */
 const StyledLoginConfirmModal = styled(LoginConfirmModal)``;
 
-export default MiniWriterProfile;
+export default UserFollowItem;
