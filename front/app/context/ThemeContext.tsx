@@ -53,23 +53,38 @@ function StyledTheme({ children }: Props) {
     color: ${(props) => (props.isDarkMode ? "#ccc" : "#666")};
   }
 
-  h5 {
-    color: ${(props) => (props.isDarkMode ? "#FFF1C0" : "#4F3D21")};
-  }
-  span {
-    color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
-  }
-  input {
-    background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
-    border : ${(props) =>
-      props.isDarkMode ? "0.05rem solid #ddd" : "0.1rem solid #ccc"};
-    color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
-    &:focus {
-      border : ${(props) =>
-        props.isDarkMode ? "0.05rem solid #fbd26a" : "0.1rem solid #fbd26a"};
-      outline : 0.2rem solid #fbd26a
-    }
-  }
+      h5 {
+        color : ${isDarkMode ? lightYellow : brown}
+      }
+
+      span {
+        color : ${isDarkMode ? white : brown};
+      }
+
+      label {
+        color : ${isDarkMode ? white : brown};
+      }
+
+      input {
+        background-color : ${isDarkMode ? lightNavy : white};
+        border : ${
+          isDarkMode ? `0.05rem solid ${lightGrey}` : `0.1rem solid ${grey}`
+        };
+        color : ${isDarkMode ? white : brown};
+        &:focus {
+          border : ${isDarkMode ? "0.05rem" : "0.1rem"} solid ${yellow};
+          outline : 0.2rem solid ${yellow}
+        }
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover, 
+        &:-webkit-autofill:focus {
+          -webkit-box-shadow: 0 0 0 1000px ${
+            isDarkMode ? lightNavy : white
+          } inset;
+          -webkit-text-fill-color: ${isDarkMode ? white : brown};
+          font-size: 16px; 
+        }
+      }
 
   input:-webkit-autofill,
   input:-webkit-autofill:hover, 
