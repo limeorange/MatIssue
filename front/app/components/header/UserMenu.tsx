@@ -6,11 +6,11 @@ import styled from "styled-components";
 import Image from "next/image";
 
 import { User } from "@/app/types";
-import { Theme } from "@/app/context/ThemeContext";
 
 import UserModal from "./UserModal";
 import { useRecoilValue } from "recoil";
 import darkModeAtom from "@/app/store/darkModeAtom";
+import { Theme } from "@/app/types/darkMode";
 
 /** 유저 메뉴 컴포넌트  */
 const UserMenu = ({ currentUser }: { currentUser: User }) => {
