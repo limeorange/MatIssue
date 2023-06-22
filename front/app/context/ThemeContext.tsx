@@ -54,7 +54,7 @@ function StyledTheme({ children }: Props) {
   }
 
       h5 {
-        color : ${isDarkMode ? lightYellow : brown}
+        color : ${isDarkMode ? lightYellow : brown};
       }
 
       span {
