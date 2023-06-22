@@ -198,7 +198,7 @@ const CookingStepContainer = styled.div`
 const StepLabel = styled(Label)`
   margin-bottom: 1rem;
   align-self: flex-start;
-  margin-right: -2rem;
+  margin-right: -0.5rem;
 `;
 
 const StepContentsWrapper = styled.div`
