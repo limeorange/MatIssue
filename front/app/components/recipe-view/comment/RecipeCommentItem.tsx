@@ -290,15 +290,27 @@ const RecipeComment = ({
               <CommentInputWrapper
                 isCommenting={isCommenting}
                 onClick={boxClickHandler}
+                isDarkMode={isDarkMode}
               >
                 <InputTextArea
                   value={editedCommentText}
                   onChange={commentChangeHandler}
+                  isDarkMode={isDarkMode}
                 />
               </CommentInputWrapper>
               <ButtonWrapper>
-                <DeleteButton onClick={commentCancelHandler}>취소</DeleteButton>
-                <EditButton onClick={commentSaveHandler}>수정</EditButton>
+                <CancelButton
+                  isDarkMode={isDarkMode}
+                  onClick={commentCancelHandler}
+                >
+                  취소
+                </CancelButton>
+                <EditButton
+                  isDarkMode={isDarkMode}
+                  onClick={commentSaveHandler}
+                >
+                  수정
+                </EditButton>
               </ButtonWrapper>
             </>
           ) : (
@@ -322,7 +334,10 @@ const CommentContainer = styled.div`
 `;
 
 /** 댓글 입력칸 전체 감싸는 Div */
-const CommentInputWrapper = styled.div<{ isCommenting: boolean }>`
+const CommentInputWrapper = styled.div<{
+  isCommenting: boolean;
+  isDarkMode: boolean;
+}>`
   display: flex;
   width: 100%;
   border-radius: 1rem;
@@ -336,22 +351,31 @@ const CommentInputWrapper = styled.div<{ isCommenting: boolean }>`
   cursor: pointer;
   border: 0.2rem solid #dbd8d0;
 
-  ${({ isCommenting }) =>
+  ${({ isCommenting, isDarkMode, theme }) =>
     isCommenting &&
     css`
-      border-color: #fbd26a;
       color: #fbd26a;
+      border-color: ${(props) => (isDarkMode ? theme.lightGrey : "#fbd26a")};
     `}
 `;
 
 /** 댓글 입력 텍스트 */
-const InputTextArea = styled.textarea`
+const InputTextArea = styled.textarea<{ isDarkMode: boolean }>`
   outline: none;
   width: 99%;
   color: #9ca3af;
   font-size: 15.5px;
   resize: none;
   padding-right: 0.5rem;
+  border: none;
+
+  &:focus {
+    border: none;
+    outline: none;
+  }
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : "#fffff"};
 
   ::-webkit-scrollbar {
     width: 1rem;
@@ -467,7 +491,7 @@ const AuthorTimeBox = styled.div`
   }
 `;
 
-/** 수정, 삭제 버튼 감싸는 Div */
+/** 수정, 취소 버튼 감싸는 Div */
 const ButtonWrapper = styled.div`
   display: flex;
   gap: 0.8rem;
@@ -475,25 +499,30 @@ const ButtonWrapper = styled.div`
 `;
 
 /** 수정 Button */
-const EditButton = styled.button`
+const EditButton = styled.button<{ isDarkMode: boolean }>`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
-  background: #fbe2a1;
   font-weight: 500;
   font-size: 15.5px;
-  color: #4f3d21;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4F3D21")};
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
 `;
 
-/** 삭제 Button */
-const DeleteButton = styled.button`
+/** 취소 Button */
+const CancelButton = styled.button<{ isDarkMode: boolean }>`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
-  border: 2px solid #fbe2a1;
+  border: 2px solid;
   font-weight: 500;
   font-size: 15.5px;
-  color: #4f3d21;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
+  border-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
 `;
 
 /** 댓글 삭제 컨펌 모달창 */
