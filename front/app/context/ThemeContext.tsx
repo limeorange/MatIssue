@@ -53,7 +53,7 @@ function StyledTheme({ children }: Props) {
     return `
       body {
         background-color : ${isDarkMode ? deepNavy : white};
-        color : ${isDarkMode ? white : brown};
+        color : ${isDarkMode ? lightGrey : brown};
       }
 
       h2 {
@@ -100,10 +100,6 @@ function StyledTheme({ children }: Props) {
           border : ${isDarkMode ? "0.05rem" : "0.1rem"} solid ${yellow};
           outline : 0.2rem solid ${yellow};
         }
-      }
-
-      div {
-        color: ${isDarkMode ? lightGrey : brown};
       }
     `;
   }}
