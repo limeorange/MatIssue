@@ -1,6 +1,8 @@
 import styled, { css } from "styled-components";
 import Image from "next/image";
 import { ChangeEvent, useState } from "react";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type UserFollowSearchProps = {
   onChange: (value: string) => void;
@@ -11,6 +13,9 @@ const UserFollowSearch = ({ onChange }: UserFollowSearchProps) => {
   const [isSearching, setIsSearching] = useState(false);
   const [activatedButton, setActivatedButton] = useState(false);
   const [commentText, setCommentText] = useState("");
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   /** 검색창 클릭시 상태 업데이트 핸들러 */
   const boxClickHandler = () => {
@@ -34,7 +39,11 @@ const UserFollowSearch = ({ onChange }: UserFollowSearchProps) => {
 
   return (
     <>
-      <SearchContainer isSearching={isSearching} onClick={boxClickHandler}>
+      <SearchContainer
+        isDarkMode={isDarkMode}
+        isSearching={isSearching}
+        onClick={boxClickHandler}
+      >
         {/* 검색 버튼 아이콘 */}
         <SearchButton disabled={!activatedButton}>
           <Image
@@ -50,6 +59,7 @@ const UserFollowSearch = ({ onChange }: UserFollowSearchProps) => {
           value={commentText}
           onChange={commentInputHandler}
           placeholder="닉네임, 아이디로 검색해보세요"
+          isDarkMode={isDarkMode}
         />
       </SearchContainer>
     </>
@@ -57,7 +67,10 @@ const UserFollowSearch = ({ onChange }: UserFollowSearchProps) => {
 };
 
 /** 검색 입력칸 전체 감싸는 Div */
-const SearchContainer = styled.div<{ isSearching: boolean }>`
+const SearchContainer = styled.div<{
+  isSearching: boolean;
+  isDarkMode: boolean;
+}>`
   display: flex;
   border-radius: 2rem;
   padding: 1rem 0 1rem 1.5rem;
@@ -73,12 +86,13 @@ const SearchContainer = styled.div<{ isSearching: boolean }>`
   cursor: pointer;
   border: 0.2rem solid #ffffff;
 
-  ${({ isSearching }) =>
+  ${({ isSearching, isDarkMode, theme }) =>
     isSearching &&
     css`
-      border: 0.2rem solid #fbd26a;
+      border: 0.2rem solid;
       box-shadow: none;
-      color: #fbd26a;
+
+      border-color: ${isDarkMode ? theme.lightGrey : "#fbd26a"};
     `}
 
   @media (min-width: 1024px) {
@@ -88,7 +102,7 @@ const SearchContainer = styled.div<{ isSearching: boolean }>`
 `;
 
 /** 검색 내용 입력 텍스트 */
-const InputTextArea = styled.textarea`
+const InputTextArea = styled.textarea<{ isDarkMode: boolean }>`
   width: 26rem;
   height: 100%;
   color: #9ca3af;
@@ -102,6 +116,9 @@ const InputTextArea = styled.textarea`
     border: none;
     outline: none;
   }
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : "#ffffff"};
 `;
 
 /** 제출 버튼 */
