@@ -11,7 +11,9 @@ const FollowingPage = async ({ params }: { params: { id: string } }) => {
   const initialCurrentChef = await getChefByUserId(userProfileId);
 
   /** 프로필 유저의 Subscriptions 배열 */
-  const currentChefSubscriptions = await getUserSubscriptions(userProfileId);
+  const initialCurrentChefSubscriptions = await getUserSubscriptions(
+    userProfileId
+  );
 
   /** 로그인된 유저정보 */
   const initialCurrentUser = await getCurrentUser();
@@ -20,7 +22,7 @@ const FollowingPage = async ({ params }: { params: { id: string } }) => {
     <Following
       userProfileId={userProfileId}
       initialCurrentChef={initialCurrentChef}
-      currentChefSubscriptions={currentChefSubscriptions}
+      initialCurrentChefSubscriptions={initialCurrentChefSubscriptions}
       initialCurrentUser={initialCurrentUser}
     />
   );

@@ -10,6 +10,8 @@ import Pagination from "../pagination/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getChefByUserId } from "@/app/api/user";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type UserProfileCardsProps = {
   ProfileUserRecipes: Recipe[];
@@ -26,6 +28,9 @@ const UserRecipeCardList = ({
   const recipesPerPage = 16;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // currentChef에 게시글 작성자 정보가 담김
   const { data: currentChef } = useQuery<User>(
@@ -72,8 +77,12 @@ const UserRecipeCardList = ({
 
   return (
     <RecipeListContainer>
-      <RecipeHeading>{currentChef.username}님의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{currentRecipe?.length}</RecipeHeadingCount>
+      <RecipeHeading isDarkMode={isDarkMode}>
+        {currentChef.username}님의 레시피
+      </RecipeHeading>
+      <RecipeHeadingCount isDarkMode={isDarkMode}>
+        {currentRecipe?.length}
+      </RecipeHeadingCount>
       {currentRecipe?.length === 0 ? (
         <NonRecipeMsg />
       ) : isMobile ? (
@@ -138,22 +147,25 @@ const RecipeListContainer = styled.div`
   }
 `;
 
-const RecipeHeading = styled.span`
+const RecipeHeading = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   letter-spacing: 0.01em;
   margin: 0 0.3rem 0 1rem;
   font-weight: 600;
-  color: #4f3d21;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
+
   @media (min-width: 1024px) {
     font-size: 18px;
     margin: 0 0.5rem 0 1rem;
   }
 `;
 
-const RecipeHeadingCount = styled.span`
+const RecipeHeadingCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 700;
-  color: #545454;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#545454")};
   @media (min-width: 1024px) {
     font-size: 17px;
   }

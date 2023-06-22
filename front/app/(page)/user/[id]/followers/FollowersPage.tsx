@@ -1,6 +1,6 @@
 "use client";
 
-import getCurrentUser from "@/app/api/user";
+import getCurrentUser, { getUserFans } from "@/app/api/user";
 import UserFollowersList from "@/app/components/user-page/UserFollowerList";
 import UserProfileCard from "@/app/components/user-page/UserProfileCard";
 import { User } from "@/app/types";
@@ -11,7 +11,7 @@ import styled from "styled-components";
 type FollowersProps = {
   userProfileId: string;
   initialCurrentChef: User;
-  currentChefFans: {
+  initialCurrentChefFans: {
     user_id: string;
     username: string;
     img: string;
@@ -23,7 +23,7 @@ type FollowersProps = {
 const Followers = ({
   initialCurrentChef,
   userProfileId,
-  currentChefFans,
+  initialCurrentChefFans,
   initialCurrentUser,
 }: FollowersProps) => {
   // currentUser : 현재 로그인한 유저 정보
@@ -32,7 +32,14 @@ const Followers = ({
     () => getCurrentUser(),
     { initialData: initialCurrentUser }
   );
-  const loggedInUserId: string = currentUser.user_id;
+  const { data: currentChefFans } = useQuery(
+    ["currentChefFans", userProfileId],
+    () => getUserFans(userProfileId),
+    { initialData: initialCurrentChefFans }
+  );
+
+  console.log(currentChefFans);
+  const loggedInUserId: string = currentUser?.user_id;
 
   // 로그인된 유저가 자신의 유저페이지에 접근하는 경우 마이페이지로 이동
   const router = useRouter();
@@ -41,7 +48,7 @@ const Followers = ({
   }
 
   // 로그인된 유저가 팔로잉하는 유저 목록
-  const loggedInUserSubscriptions: string[] = currentUser.subscriptions;
+  const loggedInUserSubscriptions: string[] = currentUser?.subscriptions;
 
   return (
     <Container>

@@ -6,6 +6,8 @@ import Image from "next/image";
 import { axiosBase } from "@/app/api/axios";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 /** 댓글 props type 지정 => id, text */
 type CommentProps = {
@@ -19,6 +21,9 @@ const RecipeCommentInput = ({ recipe_id }: CommentProps) => {
   const [activatedButton, setActivatedButton] = useState(false);
 
   const client = useQueryClient();
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   /** 댓글창 클릭시 상태 업데이트 핸들러 */
   const boxClickHandler = () => {
@@ -53,11 +58,16 @@ const RecipeCommentInput = ({ recipe_id }: CommentProps) => {
   };
 
   return (
-    <CommentContainer isCommenting={isCommenting} onClick={boxClickHandler}>
+    <CommentContainer
+      isDarkMode={isDarkMode}
+      isCommenting={isCommenting}
+      onClick={boxClickHandler}
+    >
       <InputTextArea
         value={commentText}
         onChange={commentInputHandler}
         placeholder="댓글을 입력해주세요"
+        isDarkMode={isDarkMode}
       />
       {/* 제출 버튼 아이콘 */}
       <SubmitButton disabled={!activatedButton} onClick={commentSubmitHandler}>
@@ -73,7 +83,10 @@ const RecipeCommentInput = ({ recipe_id }: CommentProps) => {
 };
 
 /** 댓글 입력칸 전체 감싸는 Div */
-const CommentContainer = styled.div<{ isCommenting: boolean }>`
+const CommentContainer = styled.div<{
+  isCommenting: boolean;
+  isDarkMode: boolean;
+}>`
   display: flex;
   width: 100%;
   border-radius: 1rem;
@@ -87,12 +100,18 @@ const CommentContainer = styled.div<{ isCommenting: boolean }>`
   font-size: 15.5px;
   padding-left: 1.2rem;
   cursor: pointer;
-  border: 0.2rem solid #dbd8d0;
+  border: 0.2rem solid;
+
+  border-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#dbd8d0"};
 
   ${({ isCommenting }) =>
     isCommenting &&
-    css`
-      border-color: #fbd26a;
+    css<{ isDarkMode: boolean }>`
+      border-color: ${(props) =>
+        props.isDarkMode ? props.theme.lightGrey : "#fbd26a"};
+
+      // border-color: #fbd26a;
       color: #fbd26a;
     `}
 
@@ -102,13 +121,22 @@ const CommentContainer = styled.div<{ isCommenting: boolean }>`
 `;
 
 /** 댓글 입력 텍스트 */
-const InputTextArea = styled.textarea`
+const InputTextArea = styled.textarea<{ isDarkMode: boolean }>`
   outline: none;
   width: 100%;
   color: #9ca3af;
   font-size: 15.5px;
   resize: none;
   padding-right: 0.5rem;
+  border: none;
+
+  &:focus {
+    outline: none;
+    border: none;
+  }
+
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : "#ffffff"};
 
   ::-webkit-scrollbar {
     width: 1rem;
