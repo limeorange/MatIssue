@@ -23,7 +23,6 @@ const VerificationEmail = ({
   handleChangeInput,
 }: {
   userData: any;
-  isMobile: boolean;
   handleChangeInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const [isButtonClicked, setIsButtonClicked] = useState(false);
