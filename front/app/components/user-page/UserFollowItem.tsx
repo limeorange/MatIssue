@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { User } from "@/app/types";
-import getCurrentUser, { getChefByUserId } from "@/app/api/user";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { axiosBase } from "@/app/api/axios";
 import { useRouter } from "next/navigation";
@@ -15,6 +14,9 @@ type UserFollowItemProps = {
   userId: string;
   userNickname: string;
   userImg: string;
+  isFollowing: boolean;
+  loggedInUserId: string;
+  initialCurrentChef: User;
 };
 
 /** 팔로워 or 팔로잉 컴포넌트에서 쓰이는 단일 유저 컴포넌트 */
@@ -22,42 +24,19 @@ const UserFollowItem = ({
   userId,
   userNickname,
   userImg,
+  isFollowing,
+  loggedInUserId,
+  initialCurrentChef,
 }: UserFollowItemProps) => {
-  // currentChef : 팔로우 or 팔로잉 목록의 특정 유저 정보
-  const { data: currentChef } = useQuery(["currentChef", userId], () =>
-    getChefByUserId(userId)
-  );
-
-  // currentUser : 현재 로그인 된 유저정보
-  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
-    getCurrentUser()
-  );
-  const loggedInUserId: string | undefined = currentUser?.user_id;
-
   const client = useQueryClient();
 
-  // 팔로우, 팔로잉 동작 시 업데이트해서 보여주기 위한 상태 관리
-  const [isFollowing, setIsFollowing] = useState(false);
+  console.log(initialCurrentChef);
 
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
-  // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
-  useEffect(() => {
-    if (loggedInUserId !== undefined) {
-      const fans = new Set(currentChef?.fans);
-      const isFollowing = fans?.has(loggedInUserId);
-      setIsFollowing(isFollowing);
-    }
-  }, [loggedInUserId]);
-
   // 상태에 따른 팔로우, 팔로잉 버튼
-  const followButtonText =
-    loggedInUserId === userId
-      ? "언제나 팔로잉"
-      : isFollowing
-      ? "팔로잉"
-      : "팔로우";
+  const followButtonText = isFollowing ? "팔로잉" : "팔로우";
 
   // 팔로우 취소 모달 상태 관리
   const [followDeleteConfirmModal, setFollowDeleteConfirmModal] =
@@ -87,11 +66,13 @@ const UserFollowItem = ({
               `/users/subscription/${userId}?subscribe=true`
             );
             toast.success("팔로우가 완료되었습니다!");
-            // 요청 성공 시 query key를 무효화해서 현재 작성자 데이터 최신화
-            client.invalidateQueries(["currentChef", userId]);
-
-            // 팔로우 -> 팔로잉으로 변경
-            setIsFollowing(true);
+            // 요청 성공 시 현재 로그인 유저 데이터 최신화
+            client.invalidateQueries(["currentUser"]);
+            // 요청 성공 시 현재 프로필 쉐프 데이터 최신화
+            client.invalidateQueries([
+              "currentChef",
+              initialCurrentChef.user_id,
+            ]);
           } catch (error) {
             console.log("팔로우 요청 실패와 관련한 오류는..🧐", error);
             toast.error("팔로우 요청에 실패했습니다 ㅠ.ㅠ");
@@ -110,16 +91,16 @@ const UserFollowItem = ({
         `/users/subscription/${userId}?subscribe=false`
       );
 
-      // 요청 성공 시 query key를 무효화해서 현재 작성자 데이터 최신화
-      client.invalidateQueries(["currentChef", userId]);
+      // 요청 성공 시 현재 로그인 유저 데이터 최신화
+      client.invalidateQueries(["currentUser"]);
+      // 요청 성공 시 현재 프로필 쉐프 데이터 최신화
+      client.invalidateQueries(["currentChef", initialCurrentChef.user_id]);
 
       toast.success("팔로우가 취소되었습니다!");
     } catch (error) {
       console.log("팔로우 취소 실패와 관련한 오류는..🧐", error);
       toast.error("팔로우 취소에 실패했습니다 ㅠ.ㅠ");
     } finally {
-      // 팔로우 -> 팔로잉으로 변경
-      setIsFollowing(false);
       // 모달창 닫기
       setFollowDeleteConfirmModal(false);
     }
@@ -143,7 +124,7 @@ const UserFollowItem = ({
 
   /** 프로필 클릭 핸들러 - 유저 페이지로 이동 */
   const profileClickHandler = () => {
-    router.push(`user/${currentChef.user_id}`);
+    router.push(`user/${userId}`);
   };
 
   return (
@@ -194,7 +175,7 @@ const UserFollowItem = ({
 
         {/* 팔로우 or 팔로잉 버튼 */}
         <ButtonWrapper>
-          {followButtonText !== "언제나 팔로잉" && (
+          {loggedInUserId !== userId && (
             <FollowButton
               isFollowing={isFollowing}
               onClick={followButtonHandler}
