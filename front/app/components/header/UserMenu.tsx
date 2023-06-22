@@ -39,7 +39,11 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
             }}
           >
             <Image
-              src="/images/header/scrapIcon.png"
+              src={
+                isDarkMode
+                  ? "/images/dark_mode_myscrap.svg"
+                  : "/images/header/scrapIcon.png"
+              }
               width={28}
               height={28}
               alt="write_icon"
@@ -53,7 +57,11 @@ const UserMenu = ({ currentUser }: { currentUser: User }) => {
             }}
           >
             <Image
-              src={"/images/header/writeIcon.png"}
+              src={
+                isDarkMode
+                  ? "/images/dark_mode_pencil.svg"
+                  : "/images/header/writeIcon.png"
+              }
               width={28}
               height={28}
               alt="write_icon"
