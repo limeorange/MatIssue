@@ -20,11 +20,10 @@ const RecipeCards = ({
   currentUserRecipes: Recipe[];
 }) => {
   const client = useQueryClient();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState<Recipe | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const recipesPerPage = 16;
+  const recipesPerPage = 15;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
   const isDarkMode = useRecoilValue(darkModeAtom);
@@ -73,6 +72,7 @@ const RecipeCards = ({
   // 현재 페이지 데이터
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
+  const totalRecipes = currentUserRecipes?.length || 0;
   const currentRecipe = isMobile
     ? currentUserRecipes?.slice(0, indexOfLastRecipe)
     : currentUserRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -94,7 +94,7 @@ const RecipeCards = ({
     <RecipeListContainer>
       <RecipeHeading isDarkMode={isDarkMode}>나의 레시피</RecipeHeading>
       <RecipeHeadingCount isDarkMode={isDarkMode}>
-        {currentRecipe?.length}
+        {totalRecipes}
       </RecipeHeadingCount>
       {currentRecipe?.length === 0 ? (
         <NonRecipeMsg />
@@ -146,7 +146,7 @@ const RecipeCards = ({
           {!isMobile && (
             <PaginationComponent
               recipesPerPage={recipesPerPage}
-              totalRecipes={currentRecipe?.length}
+              totalRecipes={totalRecipes}
               paginate={paginate}
               currentPage={currentPage}
             />

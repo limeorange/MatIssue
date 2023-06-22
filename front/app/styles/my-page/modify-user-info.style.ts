@@ -51,7 +51,7 @@ export const StyledChangePassword = styled.div<{ isDarkMode: boolean }>`
   padding-top: 0.3rem;
   text-decoration: none;
   color: ${(props) =>
-    props.isDarkMode ? props.theme.lightYellow : props.theme.blue};
+    props.isDarkMode ? props.theme.lightYellow : "rgb(32, 28, 224)"};
   cursor: pointer;
   font-size: 14px;
   @media (min-width: 1024px) {
