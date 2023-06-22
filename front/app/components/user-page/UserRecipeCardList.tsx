@@ -80,7 +80,9 @@ const UserRecipeCardList = ({
       <RecipeHeading isDarkMode={isDarkMode}>
         {currentChef.username}님의 레시피
       </RecipeHeading>
-      <RecipeHeadingCount>{currentRecipe?.length}</RecipeHeadingCount>
+      <RecipeHeadingCount isDarkMode={isDarkMode}>
+        {currentRecipe?.length}
+      </RecipeHeadingCount>
       {currentRecipe?.length === 0 ? (
         <NonRecipeMsg />
       ) : isMobile ? (
@@ -159,10 +161,11 @@ const RecipeHeading = styled.span<{ isDarkMode: boolean }>`
   }
 `;
 
-const RecipeHeadingCount = styled.span`
+const RecipeHeadingCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 700;
-  color: #545454;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#545454")};
   @media (min-width: 1024px) {
     font-size: 17px;
   }
