@@ -30,8 +30,6 @@ const UserFollowItem = ({
 }: UserFollowItemProps) => {
   const client = useQueryClient();
 
-  console.log(initialCurrentChef);
-
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
@@ -161,7 +159,7 @@ const UserFollowItem = ({
               style={{
                 objectFit: "cover",
                 cursor: "pointer",
-                borderRadius: "50%",
+                borderRadius: "200px",
               }}
             />
           </ProfileImage>
