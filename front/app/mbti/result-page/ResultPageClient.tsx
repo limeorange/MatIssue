@@ -21,6 +21,7 @@ import {
 import { toast } from "react-hot-toast";
 import { Recipe } from "@/app/types";
 import styled from "styled-components";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type ResultData = {
   [key: string]: {
@@ -303,6 +304,9 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
   // 첫 렌더링 애니메이션
   const [animation, setAnimation] = useState("opacity-0");
 
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   // 현재 페이지 url 주소 받아옴
   let currentPageUrl;
 
@@ -365,10 +369,10 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
 
   return (
     <>
-      <ResultPageLayout className={animation}>
+      <ResultPageLayout className={animation} isDarkMode={isDarkMode}>
         <Logo />
         <PageTitle>
-          나의 M<span>uk</span>BTI는?
+          나의 M<span style={{ color: "#fbd26a" }}>uk</span>BTI는?
         </PageTitle>
         <MBTIimageWrapper>
           <Image
@@ -378,21 +382,40 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
             height={200}
           />
         </MBTIimageWrapper>
-        <MBTIResultTextWrapper>{resultData[MBTI]?.text2}</MBTIResultTextWrapper>
-        <MBTIResultWrapper>{MBTI}</MBTIResultWrapper>
-        <MBTIcardContainer>
-          <PercentWrapper>전체 결과 중 {resultData[MBTI]?.per}</PercentWrapper>
-          <RankWrapper>전체 순위 {resultData[MBTI]?.rank}위</RankWrapper>
-          <DivBar>-</DivBar>
-          <TextTitleWrapper>이런 장점을 가졌어요!</TextTitleWrapper>
-          <TextWrapper>{resultData[MBTI]?.talk.join(", ")}</TextWrapper>
-          <TextTitleWrapper style={{ marginTop: "2rem" }}>
+        <MBTIResultTextWrapper isDarkMode={isDarkMode}>
+          {resultData[MBTI]?.text2}
+        </MBTIResultTextWrapper>
+        <MBTIResultWrapper isDarkMode={isDarkMode}>{MBTI}</MBTIResultWrapper>
+        <MBTIcardContainer isDarkMode={isDarkMode}>
+          <PercentWrapper isDarkMode={isDarkMode}>
+            전체 결과 중 {resultData[MBTI]?.per}
+          </PercentWrapper>
+          <RankWrapper isDarkMode={isDarkMode}>
+            전체 순위 {resultData[MBTI]?.rank}위
+          </RankWrapper>
+          <DivBar isDarkMode={isDarkMode}>-</DivBar>
+          <TextTitleWrapper isDarkMode={isDarkMode}>
+            이런 장점을 가졌어요!
+          </TextTitleWrapper>
+          <TextWrapper isDarkMode={isDarkMode}>
+            {resultData[MBTI]?.talk.join(", ")}
+          </TextWrapper>
+          <TextTitleWrapper
+            style={{ marginTop: "2rem" }}
+            isDarkMode={isDarkMode}
+          >
             이런 고민도 있어요
           </TextTitleWrapper>
-          <TextWrapper>{resultData[MBTI]?.text}</TextWrapper>
-          <FoodTitleWrapper>나에게 어울리는 소울푸드는?</FoodTitleWrapper>
+          <TextWrapper isDarkMode={isDarkMode}>
+            {resultData[MBTI]?.text}
+          </TextWrapper>
+          <FoodTitleWrapper isDarkMode={isDarkMode}>
+            나에게 어울리는 소울푸드는?
+          </FoodTitleWrapper>
           <FoodContainer>
-            <TextWrapper>{recipeToShow?.recipe_title}</TextWrapper>
+            <TextWrapper isDarkMode={isDarkMode}>
+              {recipeToShow?.recipe_title}
+            </TextWrapper>
             {recipeToShow && (
               <Image
                 src={recipeToShow.recipe_thumbnail}
@@ -409,7 +432,7 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
               레시피 보러 가기
             </Button>
           </ButtonWrapper>
-          <DivBar>-</DivBar>
+          <DivBar isDarkMode={isDarkMode}>-</DivBar>
           <MBTICompatibilityContainer>
             <CompatibilityTextContainer style={{ color: "#9AC5F4" }}>
               💙찰떡 궁합💙
@@ -441,8 +464,8 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
               </CompatibilityResultContainer>
             </CompatibilityTextContainer>
           </MBTICompatibilityContainer>
-          <DivBar>-</DivBar>
-          <ShareText>테스트 공유하기</ShareText>
+          <DivBar isDarkMode={isDarkMode}>-</DivBar>
+          <ShareText isDarkMode={isDarkMode}>테스트 공유하기</ShareText>
           <ShareButtonContainer>
             <div onClick={copyToClipboard}>
               <Image
@@ -495,7 +518,7 @@ const ResultPageClient = ({ recipes }: { recipes: Recipe[] }) => {
 
 export default ResultPageClient;
 
-const ResultPageLayout = styled.div`
+const ResultPageLayout = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -506,6 +529,8 @@ const ResultPageLayout = styled.div`
   heigth: 100vh;
   padding: 2rem 1.5rem 0 1.5rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: ${(props) =>
+    props.isDarkMode ? "rgba(255, 255, 255, 0.1)" : props.theme.white};
 
   opacity: 0;
   transition: opacity 1s;
@@ -538,31 +563,35 @@ const MBTIimageWrapper = styled.div`
   margin: 3rem auto;
 `;
 
-const MBTIResultTextWrapper = styled.div`
+const MBTIResultTextWrapper = styled.div<{ isDarkMode: boolean }>`
   font-family: "Dongle-Bold";
   font-size: 32px;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : props.theme.brown};
 
   @media (min-width: 768px) {
     font-size: 40px;
   }
 `;
 
-const MBTIResultWrapper = styled.div`
+const MBTIResultWrapper = styled.div<{ isDarkMode: boolean }>`
   font-family: "Dongle-Bold";
   font-size: 50px;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : props.theme.brown};
 `;
 
-const DivBar = styled.div`
+const DivBar = styled.div<{ isDarkMode: boolean }>`
   width: 3.5rem;
   height: 0.5rem;
   margin: 2rem auto;
-  color: rgb(147, 112, 98, 0);
-  background-color: rgb(147, 112, 98, 0.5);
+  color: ${(props) =>
+    props.isDarkMode ? "rgba(255, 255, 255, 0)" : "rgb(147, 112, 98, 0)"};
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : "rgb(147, 112, 98, 0.5)"};
 `;
 
-const MBTIcardContainer = styled.div`
+const MBTIcardContainer = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -575,30 +604,36 @@ const MBTIcardContainer = styled.div`
   max-height: 100%;
   padding: 1.5rem 0rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: ${(props) =>
+    props.isDarkMode ? "rgba(255, 255, 255, 0.2)" : props.theme.white};
 `;
 
-const PercentWrapper = styled.div`
+const PercentWrapper = styled.div<{ isDarkMode: boolean }>`
   font-size: 40px;
   font-family: "Dongle-Bold";
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : props.theme.brown};
 `;
 
-const RankWrapper = styled.div`
+const RankWrapper = styled.div<{ isDarkMode: boolean }>`
   font-size: 38px;
   font-family: "Dongle-Bold";
-  color: rgb(154, 110, 96);
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.deepYellow : "rgb(154, 110, 96)"};
 `;
 
-const TextTitleWrapper = styled.div`
+const TextTitleWrapper = styled.div<{ isDarkMode: boolean }>`
   font-size: 30px;
   font-family: "Dongle-Bold";
-  color: #f8b551;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.yellow : props.theme.deepYellow};
 `;
 
-const TextWrapper = styled.div`
+const TextWrapper = styled.div<{ isDarkMode: boolean }>`
   font-size: 22px;
   font-family: "Dongle-Bold";
-  color: grey;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.white : props.theme.grey};
   text-align: center;
   white-space: pre-line;
 
@@ -607,10 +642,11 @@ const TextWrapper = styled.div`
   }
 `;
 
-const FoodTitleWrapper = styled.div`
+const FoodTitleWrapper = styled.div<{ isDarkMode: boolean }>`
   font-size: 30px;
   font-family: "Dongle-Bold";
-  color: rgb(154, 110, 96);
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.yellow : props.theme.deepYellow};
   margin-top: 3.5rem;
 `;
 
@@ -625,10 +661,10 @@ const FoodContainer = styled.div`
   }
 `;
 
-const ShareText = styled.p`
+const ShareText = styled.p<{ isDarkMode: boolean }>`
   font-family: "Dongle-Bold";
   font-size: 30px;
-  color: #5c8984;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightYellow : "#5c8984")};
 `;
 
 const ShareButtonContainer = styled.div`

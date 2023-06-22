@@ -201,7 +201,7 @@ const GameHeader = styled.p<StyledComponentProps>`
 
 const GameProgressBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 35px;
-  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   margin-bottom: 0.5rem;
   font-family: "Dongle-Bold";
   transform-origin: center;
@@ -240,7 +240,7 @@ const CardContainer = styled.div`
 
 const VSBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 25px;
-  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   font-family: "Dongle-Bold";
   margin-left: 2rem;
   margin-right: 2rem;
@@ -284,7 +284,7 @@ const Card = styled.div`
 
 const RecipeTitleBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 20px;
-  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   margin-bottom: 1rem;
   white-space: pre-line;
   text-align: center;
