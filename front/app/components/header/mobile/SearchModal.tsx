@@ -30,7 +30,7 @@ const SearchModal = (props: SearchModalProps) => {
   const searchSubmitHandler: React.KeyboardEventHandler<HTMLInputElement> = (
     e
   ) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && searchQuery.length !== 0) {
       const newSearches = [searchQuery, ...recentSearches]
         .slice(0, 10)
         .filter((item, index, self) => self.indexOf(item) === index);
