@@ -1,17 +1,22 @@
-import { useRouter } from "next/navigation";
+"use client";
+
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { ChangeEvent, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Image from "next/image";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import darkModeAtom from "@/app/store/darkModeAtom";
-import { whiteBrownToggle } from "@/app/constants/darkMode.constants";
 import RecentSearchItem from "./RecentSearchItem";
+import recentSearchAtom from "@/app/store/recentSearchAtom";
 
 /** 헤더 검색바 컴포넌트 */
 const SearchBar = () => {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const params = useSearchParams();
+  const searchParams = params.get("query");
+  const [searchQuery, setSearchQuery] = useState(searchParams ?? "");
+  const [recentSearches, setRecentSearches] =
+    useRecoilState<string[]>(recentSearchAtom);
   const [showRecentSearches, setShowRecentSearches] = useState(false);
   const isDarkMode = useRecoilValue(darkModeAtom);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -76,6 +81,7 @@ const SearchBar = () => {
         <SearchBarInputWrapper>
           <SearchBarInput
             isDarkMode={isDarkMode}
+            value={searchQuery}
             onKeyUp={searchSubmitHandler}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setSearchQuery(e.target.value)
@@ -106,6 +112,7 @@ const SearchBar = () => {
                 search={search}
                 index={index}
                 recentSearchDeleteHandler={recentSearchDeleteHandler}
+                setShowRecentSearches={setShowRecentSearches}
               />
             ))}
           </RecentSearchesList>
