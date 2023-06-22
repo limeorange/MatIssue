@@ -251,6 +251,9 @@ export const SendingCodeButton = styled.div`
   flex-shrink: 1;
   width: 8rem;
   height: 4rem;
+  @media (min-width: 1024px) {
+    width: 8.7rem;
+  }
 `;
 
 export const EmailDescription = styled.p`
