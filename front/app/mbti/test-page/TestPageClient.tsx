@@ -13,6 +13,7 @@ import {
 import Button from "@/app/components/UI/Button";
 import Logo from "@/app/components/header/Logo";
 import styled from "styled-components";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type QuestionType = {
   ques: string;
@@ -26,6 +27,7 @@ type DataType = {
 
 type StyledComponentProps = {
   progress: number;
+  isDarkMode: boolean;
 };
 
 const TestPageClient = () => {
@@ -54,6 +56,9 @@ const TestPageClient = () => {
   const [lastButtonNumbers, setLastButtonNumbers] = useState<
     Array<number | null>
   >(new Array(12).fill(null));
+
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // MBTI 질문 및 답변 데이터
   let [data] = useState<DataType>({
@@ -103,7 +108,7 @@ const TestPageClient = () => {
       ans2: "요리는 역시 감으로!\n내가 했을 땐 이렇게 하는게 더 맛있던데?",
     },
     10: {
-      ques: "평소에 너무 가고 싶었던\nSNS에서 핫하다는 유명 맛집에 왔어요! 메뉴를 고를 때 나는?",
+      ques: "평소에 너무 가고 싶었던\n유명 맛집에 왔어요! 메뉴를 고를 때 나는?",
       ans1: "오늘을 위해 리뷰까지 하나하나 검토했지.\n일단 스테이크 하나랑..",
       ans2: "와 역시 맛집이라 그런가? 다 맛있어보여.\n이것도 시키고 저것도 시키자!",
     },
@@ -251,20 +256,25 @@ const TestPageClient = () => {
       <TestPageLayout className={animation}>
         <Logo />
         <PageTitle>
-          M<span>uk</span>BTI 테스트
+          M<span style={{ color: "#fbd26a" }}>uk</span>BTI 테스트
         </PageTitle>
         <ProgressSectionContainer>
           <BackButton onClick={goBack}>←</BackButton>
-          <ProgressBar progress={(progressStep / 13) * 100} />
+          <ProgressBar
+            progress={(progressStep / 13) * 100}
+            isDarkMode={isDarkMode}
+          />
           <ProgressNumber>{`${count}/12`}</ProgressNumber>
         </ProgressSectionContainer>
         <QuestionNumWrapper
           className={answerButtonAnimation ? "shrink" : "normal"}
+          isDarkMode={isDarkMode}
         >
           Q{count}.
         </QuestionNumWrapper>
         <QuestionWrapper
           className={answerButtonAnimation ? "shrink" : "normal"}
+          isDarkMode={isDarkMode}
         >
           {data[count].ques}
         </QuestionWrapper>
@@ -329,9 +339,10 @@ const PageTitle = styled.p`
   }
 `;
 
-const QuestionNumWrapper = styled.div`
+const QuestionNumWrapper = styled.div<{ isDarkMode: boolean }>`
   font-size: 50px;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : props.theme.brown};
   margin-bottom: 5rem;
   font-family: "Dongle-Bold";
   transform-origin: center;
@@ -348,9 +359,10 @@ const QuestionNumWrapper = styled.div`
   }
 `;
 
-const QuestionWrapper = styled.div`
+const QuestionWrapper = styled.div<{ isDarkMode: boolean }>`
   font-size: 15px;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : props.theme.brown};
   white-space: pre-line;
   text-align: center;
   transform-origin: center;
@@ -448,7 +460,8 @@ const ProgressBar = styled.div<StyledComponentProps>`
     display: block;
     width: ${({ progress }) => `${progress}%`};
     height: 100%;
-    background-color: #7e6b4d;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.deepYellow : props.theme.brown};
     border-radius: 10px;
     transition: width 0.3s;
   }
