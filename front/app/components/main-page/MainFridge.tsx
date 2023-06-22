@@ -19,6 +19,8 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const Ingredient = [
   {
@@ -70,6 +72,7 @@ const MainFridge = () => {
 
   const [selectedIngredient, setSelectedIngredient] = useState<string>("계란");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   // 레시피 재료에 선택한 재료가 들어간 레시피들 필터링 후 랜덤정렬
   useEffect(() => {
@@ -97,7 +100,7 @@ const MainFridge = () => {
   }
 
   return (
-    <MainFridgeContainer>
+    <MainFridgeContainer isDarkMode={isDarkMode}>
       <StyledTitleBox>
         <StyledTitle>당신을 위한 냉장고털이 레시피</StyledTitle>
         <StyledSubTitle>
@@ -113,10 +116,13 @@ const MainFridge = () => {
             checked={selectedIngredient === item.title}
             onClick={ingredientSelectHandler}
           >
-            <IngredientImageWrapper checked={selectedIngredient === item.title}>
+            <IngredientImageWrapper
+              checked={selectedIngredient === item.title}
+              isDarkMode={isDarkMode}
+            >
               <Image src={item.img} alt="ingredient" width={35} height={35} />
             </IngredientImageWrapper>
-            <h3>{item.title}</h3>
+            <h2>{item.title}</h2>
           </IngredientButton>
         ))}
       </IngredientSelectBox>
@@ -137,7 +143,7 @@ const MainFridge = () => {
 
 export default MainFridge;
 
-const MainFridgeContainer = styled.div`
+const MainFridgeContainer = styled.div<{ isDarkMode: boolean }>`
   display: none;
 
   @media (min-width: 1024px) {
@@ -146,7 +152,8 @@ const MainFridgeContainer = styled.div`
     padding: 6rem 0;
     text-align: center;
     width: 100%;
-    background-color: #fff9de;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.navy : "#fff9de"};
   }
 `;
 
@@ -167,7 +174,10 @@ const IngredientButton = styled.button<{ checked: boolean }>`
   transition: opacity 0.3s;
 `;
 
-const IngredientImageWrapper = styled.div<{ checked: boolean }>`
+const IngredientImageWrapper = styled.div<{
+  checked: boolean;
+  isDarkMode: boolean;
+}>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -176,5 +186,12 @@ const IngredientImageWrapper = styled.div<{ checked: boolean }>`
   height: 5rem;
   margin-bottom: 1rem;
   border-radius: 50rem;
-  background-color: ${(props) => (props.checked ? "#444" : "#aaa")};
+  background-color: ${(props) =>
+    props.isDarkMode
+      ? props.checked
+        ? "#ddd"
+        : "#aaa"
+      : props.checked
+      ? "#444"
+      : "#aaa"};
 `;

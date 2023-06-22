@@ -19,6 +19,8 @@ import {
   StyledTitleBox,
 } from "@/app/styles/main/main.style";
 import { Recipe } from "@/app/types";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type MainListingRecipeProps = {
   title: string;
@@ -40,6 +42,7 @@ const MainListingRecipe = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [filter, setFilter] = useState<"일간" | "주간" | "월간">("월간");
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const contentsPerPage = 8;
   const totalRecipesLength = isFilter ? filteredRecipes.length : recipes.length;
@@ -115,6 +118,7 @@ const MainListingRecipe = ({
           {isFilter && (
             <StyledList>
               <StyledItem
+                isDarkMode={isDarkMode}
                 id="month"
                 onClick={() => {
                   setFilter("월간");
@@ -123,8 +127,11 @@ const MainListingRecipe = ({
               >
                 월간
               </StyledItem>
-              <StyledItem clicked={false}>|</StyledItem>
+              <StyledItem clicked={false} isDarkMode={isDarkMode}>
+                |
+              </StyledItem>
               <StyledItem
+                isDarkMode={isDarkMode}
                 id="week"
                 onClick={() => {
                   setFilter("주간");
@@ -133,8 +140,11 @@ const MainListingRecipe = ({
               >
                 주간
               </StyledItem>
-              <StyledItem clicked={false}>|</StyledItem>
+              <StyledItem clicked={false} isDarkMode={isDarkMode}>
+                |
+              </StyledItem>
               <StyledItem
+                isDarkMode={isDarkMode}
                 id="day"
                 onClick={() => {
                   setFilter("일간");
@@ -171,7 +181,7 @@ const MainListingRecipe = ({
                     .map((item: Recipe) => (
                       <RecipeCard key={item.recipe_id} recipe={item} />
                     ))}
-              {filteredRecipes.length === 0 && <NonRecipeCrying />}
+              {isFilter && filteredRecipes.length === 0 && <NonRecipeCrying />}
             </ListingRecipeContainer>
             <MainMobileListingRecipe
               recipes={isFilter ? filteredRecipes : recipes}
@@ -235,8 +245,15 @@ const RightSlideBtn = styled.button<{ currentPage: number; totalPage: number }>`
   }
 `;
 
-const StyledItem = styled.li<{ clicked: boolean }>`
+const StyledItem = styled.li<{ clicked: boolean; isDarkMode: boolean }>`
   cursor: pointer;
   font-weight: ${(props) => (props.clicked ? "600" : "400")};
-  color: ${(props) => (props.clicked ? "#4F3D21" : "#aaa")};
+  color: ${(props) =>
+    props.isDarkMode
+      ? props.clicked
+        ? "#fff"
+        : "#999"
+      : props.clicked
+      ? "#4F3D21"
+      : "#aaa"};
 `;

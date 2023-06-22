@@ -4,6 +4,7 @@ import "./globals.css";
 import Recoil from "./context/RecoilContext";
 import ReactQuery from "./context/ReactQueryContext";
 import Script from "next/script";
+import StyledTheme from "./context/ThemeContext";
 
 export const metadata = {
   title: "맛이슈",
@@ -44,7 +45,9 @@ export default async function RootLayout({
         <body>
           <ToasterContext />
           <Recoil>
-            <ReactQuery>{children}</ReactQuery>
+            <ReactQuery>
+              <StyledTheme>{children}</StyledTheme>
+            </ReactQuery>
           </Recoil>
         </body>
         <Script src="https://developers.kakao.com/sdk/js/kakao.js" async />

@@ -4,7 +4,6 @@ export const StyledContainer = styled.div`
   display: flex;
   width: 100%;
   padding: 1.5rem;
-  background-color: white;
 
   @media (min-width: 1024px) {
     display: flex;
@@ -58,7 +57,6 @@ export const StyledSubTitle = styled.h3`
   @media (min-width: 1024px) {
     display: block;
     font-size: 16px;
-    color: #666;
   }
 `;
 

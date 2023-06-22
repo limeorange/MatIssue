@@ -34,16 +34,13 @@ import LoginConfirmModal from "@/app/components/UI/LoginConfirmModal";
 type RecipeDataProps = {
   recipe: Recipe;
   recipe_id: string;
+  initialCurrentChef: User;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
 const RecipeDetail = (props: RecipeDataProps) => {
-  // 캐시에 저장된 현재 레시피 정보를 가져옴
-  const {
-    data: recipe,
-    isLoading,
-    isError,
-  } = useQuery<Recipe>(
+  // currentRecipe : 현재 레시피 정보
+  const { data: recipe } = useQuery<Recipe>(
     ["currentRecipe", props.recipe_id],
     () => getRecipeById(props.recipe_id),
     {
@@ -53,7 +50,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   );
 
-  // 캐시에 저장된 현재 유저정보를 가져옴
+  // currentUser : 현재 로그인 된 유저정보
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
     getCurrentUser()
   );
@@ -97,10 +94,15 @@ const RecipeDetail = (props: RecipeDataProps) => {
     comments,
   } = recipe;
 
-  // currentChef 정보
-  const { data: currentChef, isLoading: isLoadingChef } = useQuery(
+  // currentChef : 현재 게시글의 작성자 정보
+  const { data: currentChef } = useQuery(
     ["currentChef", user_id],
-    () => getChefByUserId(user_id)
+    () => getChefByUserId(user_id),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: props.initialCurrentChef,
+    }
   );
 
   // 댓글 개수
@@ -150,7 +152,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
         );
         await axiosBase.patch(`/recipes/${recipe_id}/like`, recipeUpdated);
         setIsLiked(false);
-        setCount(count - 1);
+        setCount((prevCount) => Math.max(prevCount - 1, 0));
         toast.error("좋아요가 취소되었습니다ㅠ.ㅠ");
       }
       // 좋아요를 처음 누른 경우
@@ -158,7 +160,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
         recipe_like.push(loggedInUserId);
         await axiosBase.patch(`/recipes/${recipe_id}/like`, recipe_like);
         setIsLiked(true);
-        setCount(count + 1);
+        setCount((prevCount) => prevCount + 1);
         toast.success("맛이슈와 함께라면 언제든 좋아요!");
       }
       client.invalidateQueries(["currentRecipe"]);
@@ -228,10 +230,10 @@ const RecipeDetail = (props: RecipeDataProps) => {
     router.push("auth/login");
   };
 
-  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
-  if (isLoadingChef) {
-    return <div>Loading...</div>; //
-  }
+  /** 프로필 클릭 핸들러 - 유저 페이지로 이동 */
+  const profileClickHandler = () => {
+    router.push(`user/${currentChef.user_id}`);
+  };
 
   return (
     <>
@@ -300,10 +302,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
         <div>
           <TitleContentsWrapper>
             <RecipeTitle>{recipe_title}</RecipeTitle>
-            <div className="flex justify-between items-center">
+            <InfoButtonWrapper>
               <div>
-                <Author>by {user_nickname}</Author>
-                <Author>&nbsp;• {created_at.slice(0, 10)}</Author>
+                <Time>by </Time>
+                <Author onClick={profileClickHandler}>{user_nickname}</Author>
+                <Time>&nbsp;• {created_at.slice(0, 10)}</Time>
               </div>
               {user_id === loggedInUserId && (
                 <WriterButtonBox isHeaderVisible={isHeaderVisible}>
@@ -319,7 +322,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
                   </DeleteButton>
                 </WriterButtonBox>
               )}
-            </div>
+            </InfoButtonWrapper>
           </TitleContentsWrapper>
           <Description>{recipe_description}</Description>
         </div>
@@ -440,6 +443,13 @@ const ViewPageContainer = styled.div`
     margin-top: 1.5rem;
     padding: 0;
   }
+`;
+
+/** 반응형에서 작성자 정보와 수정, 삭제 버튼 묶는 Div */
+const InfoButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 /** 사이드 목차바 묶는 Div */
@@ -588,8 +598,16 @@ const Author = styled.span`
   color: #6f6f6f;
   font-size: 1.4rem;
 
-  @media (min-width: 1024px) {
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
+`;
+
+/** 작성시간 Span */
+const Time = styled.span`
+  color: #6f6f6f;
+  font-size: 1.4rem;
 `;
 
 /** 요리 간단 소개 Div */

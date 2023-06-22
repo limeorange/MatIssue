@@ -21,6 +21,8 @@ import {
   TwitterIcon,
   TwitterShareButton,
 } from "react-share";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -40,6 +42,7 @@ const ResultPage = () => {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [animation, setAnimation] = useState("opacity-0");
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 현재 페이지 url 주소 받아옴
   let currentPageUrl;
@@ -82,13 +85,15 @@ const ResultPage = () => {
       <WorldcupLayout className={animation}>
         <Logo />
         <GameHeader>레시피 이상형 월드컵!</GameHeader>
-        <GameProgressBox>
+        <GameProgressBox isDarkMode={isDarkMode}>
           우승 레시피입니다! <br /> 클릭시 해당 레시피로 이동!
         </GameProgressBox>
         <WorldcupCardContainer>
           <Link href={`/recipe/${recipe.recipe_id}`} passHref>
             <CardLink>
-              <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+              <RecipeTitleBox isDarkMode={isDarkMode}>
+                {recipe.recipe_title}
+              </RecipeTitleBox>
               <ImageWrapper>
                 <ImageBox>
                   <Image
@@ -189,9 +194,9 @@ const GameHeader = styled.p<StyledComponentProps>`
   }
 `;
 
-const GameProgressBox = styled.div`
+const GameProgressBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 35px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
   margin-bottom: 1rem;
   margin-top: 2rem;
   font-family: "Dongle-Bold";
@@ -219,9 +224,9 @@ const GameProgressBox = styled.div`
   }
 `;
 
-const RecipeTitleBox = styled.div`
+const RecipeTitleBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 30px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
   white-space: pre-line;
   text-align: center;
   transform-origin: center;

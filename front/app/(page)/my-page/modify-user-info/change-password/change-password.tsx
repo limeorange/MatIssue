@@ -8,6 +8,8 @@ import { axiosBase } from "@/app/api/axios";
 import { useRouter } from "next/navigation";
 import ConfirmModal from "../../../../components/UI/ConfirmModal";
 import { toast } from "react-hot-toast";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilValue } from "recoil";
 
 type User = {
   password: string;
@@ -21,15 +23,10 @@ const ChangePassword = () => {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const handleChangePassword = () => {
-  //   setIsModalOpen(true);
-  // };
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const handleConfirm = () => {
     setIsModalOpen(false);
-    // 비밀번호 변경 로직 처리
-    console.log("비밀번호가 성공적으로 변경되었습니다.");
   };
 
   const handleCancel = () => {
@@ -67,20 +64,19 @@ const ChangePassword = () => {
       ...currentUserInfo,
       password: password.password,
     };
-    console.log("modifyUserInfo : ", modifyUserInfo);
     try {
       const response = await axiosBase.patch("users", modifyUserInfo);
       toast.success("비밀번호가 변경되었습니다.");
       router.push("/my-page/modify-user-info");
     } catch (error) {
-      console.error(error);
+      toast.error("비밀번호 변경에 실패했습니다.");
     }
   }
 
   return (
     <>
       <Container>
-        <Wrapper>
+        <Wrapper isDarkMode={isDarkMode}>
           <Header>비밀번호 변경</Header>
           <form onSubmit={handleFormSubmit}>
             <NewPassword>새 비밀번호</NewPassword>
@@ -141,43 +137,41 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Wrapper = styled.div`
-width: 100%;
+const Wrapper = styled.div<{ isDarkMode: boolean }>`
+  width: 100%;
   padding: 5rem 1.5rem 16rem;
-  background-color: #ffffff;
+  background-color: ${(props) => (props.isDarkMode ? "#212739" : "#fff")};
   color: #4f3d21;
   @media (min-width: 1024px) {
     width: 49rem;
-  height: 43.5rem;
-  padding: 4rem;
+    height: 43.5rem;
+    padding: 4rem;
     margin: 5.4rem 0 16rem;
     border-radius: 1.8rem;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   }
-  `;
+`;
 
-const Header = styled.h1`
-font-size: 23px;
+const Header = styled.h2`
+  font-size: 23px;
   font-weight: 600;
-  
+
   @media (min-width: 1024px) {
     font-size: 26px;
-
   }
 `;
 
 const NewPassword = styled.h2`
-font-size: 15px;
-padding-top: 1rem;
+  font-size: 15px;
+  padding-top: 1rem;
   font-weight: 700;
   @media (min-width: 1024px) {
-    
     padding-top: 1.8rem;
   }
 `;
 
-const PasswordInstruction = styled.p`
+const PasswordInstruction = styled.h3`
   font-size: 14px;
   margin-top: 0.2rem;
   @media (min-width: 1024px) {
@@ -187,7 +181,7 @@ const PasswordInstruction = styled.p`
 `;
 
 const InputBox = styled.input`
-width: 100%;
+  width: 100%;
   max-width: 40rem;
   height: 4.5rem;
   border: 0.1rem solid #d2d2d2;
@@ -195,10 +189,6 @@ width: 100%;
   margin-top: 1.8rem;
   padding: 0 1.6rem;
   font-size: 30px;
-  &:focus {
-    outline: 0.3rem solid #fbd26a;
-    border: none;
-  }
   @media (min-width: 1024px) {
     height: 4.8rem;
   }

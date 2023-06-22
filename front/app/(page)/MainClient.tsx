@@ -40,14 +40,11 @@ const MainWrapper = styled.div`
   align-items: center;
   width: 100%;
   margin: 0 auto;
-  color: rgb(75, 75, 75);
 
   @media (min-width: 768px) {
     margin: 0 auto;
     padding: 2rem 0;
     gap: 1rem;
-    background-color: white;
-  }
 
   @media (min-width: 1024px) {
     gap: 4rem;

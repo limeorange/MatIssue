@@ -4,17 +4,23 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import PasswordModalComponent from "../UI/PasswordModal";
 import { useRouter } from "next/navigation";
-import PasswordModal from "../UI/PasswordModal";
 import { axiosBase } from "@/app/api/axios";
 import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import {
+  ArrowImage,
+  AlertImage,
+} from "@/app/styles/my-page/modify-user-info.style";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilValue } from "recoil";
 
 const AccountDeletion = ({ id }: { id: string }) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [enteredPassword, setEnteredPassword] = useState<string>("");
   const queryClient = useQueryClient();
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -55,27 +61,35 @@ const AccountDeletion = ({ id }: { id: string }) => {
 
   return (
     <>
-      <DeletionAndArrow>
-        <AccountDelete onClick={openModal}>회원 탈퇴</AccountDelete>
+      <DeletionAndArrowBox>
+        <Title onClick={openModal} isDarkMode={isDarkMode}>
+          회원 탈퇴
+        </Title>
         <ArrowImage src="/images/right-arrow.svg" alt="arrow-right" />
         {isModalOpen && (
-          <PasswordModal
+          <PasswordModalComponent
             icon={<AlertImage src="/images/alert.png" alt="alert" />}
-            message="탈퇴하시려면 비밀번호를 입력해주세요."
+            message="탈퇴하시려면 비밀번호를 입력해 주세요."
             onCancel={closeModal}
             onConfirm={handleDeleteAccount}
             onPasswordChange={handlePasswordChange}
             enteredPassword={enteredPassword}
           />
         )}
-      </DeletionAndArrow>
+      </DeletionAndArrowBox>
     </>
   );
 };
 
 export default AccountDeletion;
 
-const AccountDelete = styled.div`
+const DeletionAndArrowBox = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+`;
+
+const Title = styled.div<{ isDarkMode: boolean }>`
   font-size: 14px;
   cursor: pointer;
   margin-left: 0.3rem;
@@ -84,27 +98,8 @@ const AccountDelete = styled.div`
     right: 16.1rem;
     top: 13.5rem;
     text-decoration: underline;
-    color: #e11717;
+    color: ${(props) =>
+      props.isDarkMode ? props.theme.lightYellow : props.theme.red};
     margin-left: 0;
   }
-`;
-
-const ArrowImage = styled.img`
-width:2.5rem;
-height:3rem;
-}
-@media (min-width: 1024px) {
-display: none;
-}
-`;
-
-const DeletionAndArrow = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-`;
-
-const AlertImage = styled.img`
-  width: 3rem;
-  height: 3rem;
 `;
