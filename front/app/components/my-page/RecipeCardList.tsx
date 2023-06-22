@@ -11,6 +11,8 @@ import ConfirmModal from "../UI/ConfirmModal";
 import Pagination from "../pagination/Pagination";
 import { useQueryClient } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const RecipeCards = ({
   currentUserRecipes,
@@ -25,6 +27,7 @@ const RecipeCards = ({
   const recipesPerPage = 16;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const handleOpenModal = (recipe: Recipe) => {
     setRecipeToDelete(recipe);
@@ -89,8 +92,10 @@ const RecipeCards = ({
 
   return (
     <RecipeListContainer>
-      <RecipeHeading>나의 레시피</RecipeHeading>
-      <RecipeHeadingCount>{currentRecipe?.length}</RecipeHeadingCount>
+      <RecipeHeading isDarkMode={isDarkMode}>나의 레시피</RecipeHeading>
+      <RecipeHeadingCount isDarkMode={isDarkMode}>
+        {currentRecipe?.length}
+      </RecipeHeadingCount>
       {currentRecipe?.length === 0 ? (
         <NonRecipeMsg />
       ) : isMobile ? (
@@ -175,22 +180,22 @@ const RecipeListContainer = styled.div`
   }
 `;
 
-const RecipeHeading = styled.span`
+const RecipeHeading = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   letter-spacing: 0.01em;
   margin: 0 0.3rem 0 1rem;
   font-weight: 600;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
   @media (min-width: 1024px) {
     font-size: 18px;
     margin: 0 0.5rem 0 1.9rem;
   }
 `;
 
-const RecipeHeadingCount = styled.span`
+const RecipeHeadingCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 700;
-  color: #545454;
+  color: ${(props) => (props.isDarkMode ? "#ccc" : "#fff")};
   @media (min-width: 1024px) {
     font-size: 17px;
   }

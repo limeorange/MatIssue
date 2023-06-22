@@ -52,6 +52,10 @@ function StyledTheme({ children }: Props) {
   h3 {
     color: ${(props) => (props.isDarkMode ? "#ccc" : "#666")};
   }
+
+  h5 {
+    color: ${(props) => (props.isDarkMode ? "#FFF1C0" : "#4F3D21")};
+  }
   span {
     color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
   }
