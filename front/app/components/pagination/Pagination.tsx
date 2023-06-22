@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilState } from "recoil";
 
 type PaginationProps = {
   recipesPerPage: number;
@@ -17,6 +19,9 @@ const Pagination = (props: PaginationProps) => {
 
   // 화면 너비 상태
   const [windowWidth, setWindowWidth] = useState(0);
+
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 화면 너비에 따른 스크롤 이벤트
   useEffect(() => {
@@ -97,6 +102,7 @@ const Pagination = (props: PaginationProps) => {
               <PaginationButtonWrapper
                 onClick={() => props.paginate(number)}
                 className={props.currentPage === number ? "active" : ""}
+                isDarkMode={isDarkMode}
               >
                 <PaginationButton
                   onClick={() => props.paginate(number)}
@@ -134,6 +140,7 @@ const Pagination = (props: PaginationProps) => {
           onChange={(e) => setPageInput(e.target.value)}
           onKeyDown={handlePageInput}
           placeholder="페이지 번호를 입력하세요."
+          isDarkMode={isDarkMode}
         />
       </PaginationInputWrapper>
     </>
@@ -155,7 +162,7 @@ const PaginationList = styled.ul`
 
 const PaginationItem = styled.li``;
 
-const PaginationButtonWrapper = styled.div`
+const PaginationButtonWrapper = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   width: 4.25rem;
   height: 4rem;
@@ -164,20 +171,23 @@ const PaginationButtonWrapper = styled.div`
   justify-content: center;
   border-radius: 1rem;
   margin: 0.3rem;
+  color: #ababab;
 
   &: hover {
-    background-color: #e0e0e0;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.white : "#e0e0e0"};
+    color: ${(props) => (props.isDarkMode ? props.theme.deepNavy : "#ababab")};
     cursor: pointer;
+  }
+
+  &.active {
+    color: ${(props) =>
+      props.isDarkMode ? props.theme.deepYellow : "#4f3d21"};
   }
 `;
 
 const PaginationButton = styled.button`
-  font-size: 1.6rem;
-  color: #ababab;
-
-  &.active {
-    color: #4f3d21;
-  }
+  font-size: 16px;
 `;
 
 const PaginationPrevButton = styled.button``;
@@ -236,11 +246,14 @@ const PaginationInputWrapper = styled.div`
   }
 `;
 
-const PaginationInput = styled.input`
+const PaginationInput = styled.input<{ isDarkMode: boolean }>`
   width: 100%;
   border: none;
   font-size: 16px;
   font-weight: 400;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : props.theme.white};
+
   &:focus {
     outline: none;
   }
