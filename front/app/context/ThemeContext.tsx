@@ -64,6 +64,10 @@ function StyledTheme({ children }: Props) {
         color: ${isDarkMode ? grey : deepGrey};
       }
 
+      h5 {
+        color : ${isDarkMode ? lightYellow : brown};
+      }
+
       span {
         color : ${isDarkMode ? white : brown};
       }

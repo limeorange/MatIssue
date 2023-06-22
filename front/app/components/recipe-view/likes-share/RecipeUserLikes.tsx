@@ -1,4 +1,6 @@
+import darkModeAtom from "@/app/store/darkModeAtom";
 import Image from "next/image";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 type UserLikesProps = {
@@ -13,9 +15,12 @@ const RecipeUserLikes = ({
   countText,
   heartClickHandler,
 }: UserLikesProps) => {
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   return (
     <>
-      <LikesButtonWrapper onClick={heartClickHandler}>
+      <LikesButtonWrapper isDarkMode={isDarkMode} onClick={heartClickHandler}>
         <LikesIcon>
           <Image
             src={
@@ -29,21 +34,22 @@ const RecipeUserLikes = ({
             style={{ objectFit: "cover", cursor: "pointer" }}
           />
         </LikesIcon>
-        <LikesCount>{countText}</LikesCount>
+        <LikesCount isDarkMode={isDarkMode}>{countText}</LikesCount>
       </LikesButtonWrapper>
     </>
   );
 };
 
 /** 좋아요 아이콘과 카운트 묶는 Button */
-const LikesButtonWrapper = styled.button`
+const LikesButtonWrapper = styled.button<{ isDarkMode: boolean }>`
   display: flex;
   width: 7rem;
   height: 4.2rem;
   border-radius: 1.5rem;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
 
   @media (min-width: 1024px) {
@@ -66,8 +72,9 @@ const LikesIcon = styled.div`
 `;
 
 /** 좋아요 개수 Span */
-const LikesCount = styled.span`
+const LikesCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 16px;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 
   @media (min-width: 1024px) {
     font-size: 18px;

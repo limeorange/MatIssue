@@ -5,9 +5,10 @@ import darkModeAtom from "@/app/store/darkModeAtom";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 import RecentSearchItem from "../RecentSearchItem";
+import recentSearchAtom from "@/app/store/recentSearchAtom";
 
 type SearchModalProps = {
   isModal: boolean;
@@ -18,7 +19,8 @@ type SearchModalProps = {
 const SearchModal = (props: SearchModalProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrollPosition, setScrollPosition] = useState<number>(0);
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] =
+    useRecoilState<string[]>(recentSearchAtom);
   const isDarkMode = useRecoilValue(darkModeAtom);
 
   const router = useRouter();
@@ -28,7 +30,7 @@ const SearchModal = (props: SearchModalProps) => {
   const searchSubmitHandler: React.KeyboardEventHandler<HTMLInputElement> = (
     e
   ) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && searchQuery.length !== 0) {
       const newSearches = [searchQuery, ...recentSearches]
         .slice(0, 10)
         .filter((item, index, self) => self.indexOf(item) === index);

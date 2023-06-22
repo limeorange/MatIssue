@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type CheckboxInputProps = {
   isChecked: boolean;
@@ -35,8 +37,11 @@ const IngredientList = ({ recipe_ingredients }: IngredientListProps) => {
     setIsCheckedList(updatedList);
   };
 
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   return (
-    <IngredientsContainer>
+    <IngredientsContainer isDarkMode={isDarkMode}>
       <IngredientsList>
         {recipe_ingredients.map((item, index) => (
           <IngredientItem key={index}>
@@ -65,12 +70,16 @@ const IngredientList = ({ recipe_ingredients }: IngredientListProps) => {
 };
 
 /** 재료 목록 전체 감싸는 Div */
-const IngredientsContainer = styled.div`
+const IngredientsContainer = styled.div<{ isDarkMode: boolean }>`
   width: 100%;
   height: 100%;
-  border: 1rem solid #fff6df;
   border-radius: 2rem;
   padding: 1.7rem;
+
+  border: ${(props) =>
+    props.isDarkMode
+      ? `1rem solid ${props.theme.lightNavy}`
+      : "1rem solid #fff6df"};
 
   @media (min-width: 1024px) {
     width: 40rem;
@@ -136,6 +145,7 @@ const CheckboxWrapper = styled.div`
 /** 체크박스 Input */
 const CheckboxInput = styled.input<CheckboxInputProps>`
   visibility: hidden;
+
   ${({ isChecked }) =>
     isChecked
       ? css`

@@ -29,6 +29,8 @@ import ConfirmModal from "@/app/components/UI/ConfirmModal";
 import ShareModal from "@/app/components/recipe-view/likes-share/ShareModal";
 import MiniWriterProfile from "@/app/components/recipe-view/sticky-sidebar/MiniWriterProfile";
 import LoginConfirmModal from "@/app/components/UI/LoginConfirmModal";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
@@ -138,6 +140,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   /** 좋아요 버튼 클릭 핸들러 */
   const heartClickHandler = async () => {
@@ -329,7 +334,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 요리 정보 (인원, 시간, 난이도, 종류) */}
         <div id="heading1">
-          <Subtitle>요리 정보</Subtitle>
+          <Subtitle isDarkMode={isDarkMode}>요리 정보</Subtitle>
           <RecipeInfo
             recipe_category={recipe_category}
             recipe_info={recipe_info}
@@ -338,25 +343,25 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 재료 준비 목록 */}
         <div id="heading2">
-          <Subtitle>재료 준비</Subtitle>
+          <Subtitle isDarkMode={isDarkMode}>재료 준비</Subtitle>
           <IngredientList recipe_ingredients={recipe_ingredients} />
         </div>
 
         {/* 요리 과정 */}
         <div id="heading3">
-          <Subtitle>요리 과정</Subtitle>
+          <Subtitle isDarkMode={isDarkMode}>요리 과정</Subtitle>
           <RecipeSteps recipe_sequence={recipe_sequence}></RecipeSteps>
         </div>
 
         {/* 요리팁 */}
         <div id="heading4">
-          <Subtitle>요리팁</Subtitle>
+          <Subtitle isDarkMode={isDarkMode}>요리팁</Subtitle>
           <RecipeTip>{recipe_tip}</RecipeTip>
         </div>
 
         {/* 요리 동영상 */}
         <div id="heading5">
-          <Subtitle>요리 동영상</Subtitle>
+          <Subtitle isDarkMode={isDarkMode}>요리 동영상</Subtitle>
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
@@ -390,7 +395,10 @@ const RecipeDetail = (props: RecipeDataProps) => {
           </div>
 
           {/* 링크, 카카오 공유하기 */}
-          <ShareButtonBox onClick={shareButtonClickHandler}>
+          <ShareButtonBox
+            isDarkMode={isDarkMode}
+            onClick={shareButtonClickHandler}
+          >
             <ShareIcon>
               <Image
                 src="/images/recipe-view/share_goldbrown.png"
@@ -407,7 +415,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 댓글 */}
         <div>
-          <Subtitle>
+          <Subtitle isDarkMode={isDarkMode}>
             댓글
             <CommentIcon>
               <Image
@@ -619,19 +627,16 @@ const Description = styled.div`
 `;
 
 /** 레시피 소제목 H2 */
-const Subtitle = styled.h2`
+const Subtitle = styled.h2<{ isDarkMode: boolean }>`
   display: flex;
   font-size: 18px;
-  color: #b08038;
+  color: ${(props) => (props.isDarkMode ? props.theme.yellow : "#b08038")};
   font-weight: 500;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
 
   @media (min-width: 1024px) {
-    font-size: 2rem;
-    color: #b08038;
-    font-weight: 500;
-    \
+    font-size: 20px;
   }
 `;
 
@@ -652,7 +657,7 @@ const CommentIcon = styled.div`
 `;
 
 /** 공유하기 아이콘 Button */
-const ShareButtonBox = styled.button`
+const ShareButtonBox = styled.button<{ isDarkMode: boolean }>`
   position: relative;
   display: flex;
   width: 4.2rem;
@@ -660,7 +665,8 @@ const ShareButtonBox = styled.button`
   border-radius: 1.5rem;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
 
   @media (min-width: 1024px) {

@@ -68,7 +68,7 @@ const HeaderLayout = styled.div<{
   width: 100%;
   background-color: ${(props) =>
     props.isDarkMode ? props.theme.deepNavy : "#fff"};
-  z-index: 999;
+  z-index: 9990;
   font-size: 16px;
   }
 
