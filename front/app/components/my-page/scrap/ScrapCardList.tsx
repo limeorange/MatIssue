@@ -6,6 +6,8 @@ import Pagination from "../../pagination/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser from "@/app/api/user";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type MemoItemProps = {
   created_at: string;
@@ -34,6 +36,7 @@ const ScrapCardList: React.FC = () => {
   const scrapsPerPage = 16;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   // localStorage is not defined 에러 해결
   // 페이지가 client에 마운트될 때까지 기다렸다가 localStorage에 접근
@@ -86,8 +89,8 @@ const ScrapCardList: React.FC = () => {
   return (
     <ScrapListContainer>
       <TitleAndNickname>
-        <ScrapTitle>나의 스크랩</ScrapTitle>
-        <ScrapCount>{currentScrap?.length}</ScrapCount>
+        <ScrapTitle isDarkMode={isDarkMode}>나의 스크랩</ScrapTitle>
+        <ScrapCount isDarkMode={isDarkMode}>{currentScrap?.length}</ScrapCount>
       </TitleAndNickname>
       {currentScrap?.length === 0 ? (
         <NonScrapMsg />
@@ -177,12 +180,12 @@ const TitleAndNickname = styled.div`
 `;
 
 /** 스크랩 제목 Span */
-const ScrapTitle = styled.span`
+const ScrapTitle = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.01em;
   margin: 0 0.3rem 0 1rem;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
   @media (min-width: 1024px) {
     font-size: 18px;
     margin: 0 0.5rem 0 1.9rem;
@@ -190,10 +193,10 @@ const ScrapTitle = styled.span`
 `;
 
 /** 스크랩 개수 Span */
-const ScrapCount = styled.span`
+const ScrapCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 700;
-  color: #545454;
+  color: ${(props) => (props.isDarkMode ? "#ccc" : "#fff")};
   @media (min-width: 1024px) {
     font-size: 17px;
   }
