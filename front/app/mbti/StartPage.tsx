@@ -6,12 +6,19 @@ import Image from "next/image";
 import styled from "styled-components";
 import Button from "@/app/components/UI/Button";
 import Logo from "../components/header/Logo";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { EIState, JPState, SNState, TFState } from "@/app/store/mbtiAtom";
+import darkModeAtom from "../store/darkModeAtom";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
 };
+
+type isDarkModeProps = {
+  isDarkMode: boolean;
+};
+
+type CombinedProps = StyledComponentProps & isDarkModeProps;
 
 const StartPage = () => {
   const router = useRouter();
@@ -25,14 +32,17 @@ const StartPage = () => {
   // 첫 렌더링 애니메이션 상태
   const [isAnimateOut, setIsAnimateOut] = useState(false);
 
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   return (
     <>
       <StratPageLayout>
         <Logo />
         <StartPageTitle isAnimateOut={isAnimateOut}>
-          M<span>uk</span>BTI 테스트
+          M<span style={{ color: "#fbd26a" }}>uk</span>BTI 테스트
         </StartPageTitle>
-        <StartPageMessage isAnimateOut={isAnimateOut}>
+        <StartPageMessage isAnimateOut={isAnimateOut} isDarkMode={isDarkMode}>
           나에게 어울리는 음식은?
         </StartPageMessage>
         <StartPageImgWrapper isAnimateOut={isAnimateOut}>
@@ -115,9 +125,10 @@ const StartPageTitle = styled.p<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
 
-const StartPageMessage = styled.p<StyledComponentProps>`
+const StartPageMessage = styled.p<CombinedProps>`
   font-size: 17px;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
 
   animation: ${(props) =>
     props.isAnimateOut

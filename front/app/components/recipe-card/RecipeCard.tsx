@@ -1,32 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import Image from "next/image";
-import { getRecipeById } from "@/app/api/recipe";
-import { Comments, Recipe } from "@/app/types";
+import { Recipe } from "@/app/types";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
   const router = useRouter();
-
-  // 댓글 수 설정 상태
-  // const [commentCount, setCommentCount] = useState<number>(0);
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 레시피 클릭 시 상세페이지 이동 함수
   const handleRecipeClick = () => {
     router.push(`/recipe/${recipe.recipe_id}`);
   };
-
-  // 레시피 데이터의 댓글 수 계산
-  // useEffect(() => {
-  //   const fetchComments = async () => {
-  //     const recipeData = await getRecipeById(recipe.recipe_id);
-  //     setCommentCount(recipeData.comments.length || 0);
-  //   };
-
-  //   fetchComments();
-  // }, [recipe.recipe_id]);
 
   return (
     <>
@@ -45,7 +33,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
           <p>{recipe.recipe_title}</p>
         </RecipeTitleWrapper>
         <RecipeInfoContainer>
-          <RecipeAuthorWrapper>
+          <RecipeAuthorWrapper isDarkMode={isDarkMode}>
             <p>{recipe.user_nickname}</p>
           </RecipeAuthorWrapper>
           <RecipeRankContainer>
@@ -69,7 +57,7 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
                   height={26}
                 />
               </RecipeRankImgWrapper>
-              {/* <Count>{recipe.comments.length.toLocaleString()}</Count> */}
+              <Count>{recipe.comments.length.toLocaleString()}</Count>
             </RecipeRankItemContainer>
           </RecipeRankContainer>
         </RecipeInfoContainer>
@@ -80,7 +68,6 @@ const RecipeCard = ({ recipe }: { recipe: Recipe }) => {
 
 export default RecipeCard;
 
-// styled-components
 const RecipeCardLayout = styled.div`
   display: flex;
   flex-direction: column;
@@ -145,10 +132,10 @@ const RecipeTitleWrapper = styled.div`
   }
 `;
 
-const RecipeAuthorWrapper = styled.div`
+const RecipeAuthorWrapper = styled.div<{ isDarkMode: boolean }>`
   font-size: 14px;
   font-weight: 400;
-  color: #6f6f6f;
+  color: ${(props) => (props.isDarkMode ? props.theme.grey : "#6f6f6f")};
 `;
 
 const RecipeRankContainer = styled.div`
