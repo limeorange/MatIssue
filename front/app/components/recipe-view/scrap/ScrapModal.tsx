@@ -7,6 +7,8 @@ import { Recipe } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser from "@/app/api/user";
 import React from "react";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type ScrapModalProps = {
   modalCloseHandler: () => void;
@@ -56,6 +58,9 @@ const ScrapModal = ({
 
   // 스크랩 메모 내용 유무에 따른 배경, 글자색 변경을 위한 상태 관리
   const hasMemo = memo ? true : false;
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 스크랩 모달창 자유 이동 설정
   const modalRef = useRef<HTMLDivElement>(null);
@@ -145,6 +150,7 @@ const ScrapModal = ({
         onMouseDown={mouseDownHandler}
         onMouseMove={mouseMoveHandler}
         onMouseUp={mouseUpHandler}
+        isDarkMode={isDarkMode}
       >
         <ScrapContentsWrapper>
           {/* 스크랩 메모하기 Title */}
@@ -156,7 +162,7 @@ const ScrapModal = ({
               height={35}
               style={{ objectFit: "cover" }}
             />
-            <ScrapTitle>스크랩 메모하기</ScrapTitle>
+            <ScrapTitle isDarkMode={isDarkMode}>스크랩 메모하기</ScrapTitle>
           </ScrapTitleIconBox>
           <MemoBox>
             <ScrapTextArea
@@ -164,11 +170,16 @@ const ScrapModal = ({
               value={memo}
               onChange={memoChangeHandler}
               hasMemo={hasMemo}
+              isDarkMode={isDarkMode}
             ></ScrapTextArea>
           </MemoBox>
           <ButtonBox>
-            <CancelButton onClick={memoCancelHandler}>취소</CancelButton>
-            <SaveButton onClick={memoSaveHandler}>저장</SaveButton>
+            <CancelButton isDarkMode={isDarkMode} onClick={memoCancelHandler}>
+              취소
+            </CancelButton>
+            <SaveButton isDarkMode={isDarkMode} onClick={memoSaveHandler}>
+              저장
+            </SaveButton>
           </ButtonBox>
         </ScrapContentsWrapper>
       </ScrapContainer>
@@ -177,7 +188,7 @@ const ScrapModal = ({
 };
 
 /** 스크랩 메모 전체 감싸는 Div */
-const ScrapContainer = styled.div`
+const ScrapContainer = styled.div<{ isDarkMode: boolean }>`
   position: fixed;
   top: 35%;
   left: 6%;
@@ -185,11 +196,12 @@ const ScrapContainer = styled.div`
   justify-content: center;
   width: 33rem;
   height: 34.5rem;
-  background: #ffffff;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   z-index: 90;
   cursor: pointer;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
 
   @media (min-width: 1024px) {
     top: 39.1%;
@@ -214,9 +226,11 @@ const ScrapTitleIconBox = styled.div`
 `;
 
 /** 스크랩 메모하기 제목 Span */
-const ScrapTitle = styled.span`
+const ScrapTitle = styled.span<{ isDarkMode: boolean }>`
   font-size: 16px;
   font-weight: 500;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 
   @media (min-width: 1024px) {
     font-size: 17px;
@@ -232,17 +246,43 @@ const MemoBox = styled.div`
 `;
 
 /** 메모 입력하는 Textarea */
-const ScrapTextArea = styled.textarea<{ hasMemo: boolean }>`
+const ScrapTextArea = styled.textarea<{
+  hasMemo: boolean;
+  isDarkMode: boolean;
+}>`
   outline: none;
+  border: none;
   width: 100%;
   height: 100%;
-  background: ${({ hasMemo }) => (hasMemo ? "#fbe2a1" : "#fdeec7")};
-  color: ${({ hasMemo }) => (hasMemo ? "#4f3d21" : "#9ca3af")};
   font-size: 15.5px;
   resize: none;
   border-radius: 1.5rem;
   padding: 1.5rem;
 
+  background-color: ${({ hasMemo, isDarkMode, theme }) =>
+    hasMemo
+      ? isDarkMode
+        ? theme.lightGrey
+        : "#fdeec7"
+      : isDarkMode
+      ? theme.lightGrey
+      : "#fdeec7"};
+
+  color: ${({ hasMemo, isDarkMode, theme }) =>
+    hasMemo
+      ? isDarkMode
+        ? theme.navy
+        : "#4f3d21"
+      : isDarkMode
+      ? theme.navy
+      : "#9ca3af"};
+
+  &:focus {
+    border: none;
+    outline: none;
+  }
+
+  // 스크롤바 관련 설정
   ::-webkit-scrollbar {
     width: 1rem;
   }
@@ -266,25 +306,30 @@ const ButtonBox = styled.div`
 `;
 
 /** 저장 Button */
-const SaveButton = styled.button`
+const SaveButton = styled.button<{ isDarkMode: boolean }>`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
-  background: #fbe2a1;
   font-weight: 500;
   font-size: 16px;
-  color: #4f3d21;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4F3D21")};
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
 `;
 
 /** 취소 Button */
-const CancelButton = styled.button`
+const CancelButton = styled.button<{ isDarkMode: boolean }>`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
-  border: 2px solid #fbe2a1;
+  border: 2px solid;
   font-weight: 500;
   font-size: 16px;
-  color: #4f3d21;
+
+  border-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
 export default React.memo(ScrapModal);
