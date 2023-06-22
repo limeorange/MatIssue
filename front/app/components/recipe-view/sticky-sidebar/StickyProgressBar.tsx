@@ -1,11 +1,16 @@
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
+import darkModeAtom from "@/app/store/darkModeAtom";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 /** 목차 사이드바용 스크롤 진행바 컴포넌트 */
 const StickyProgressBar = () => {
   // 스크롤 진행 퍼센트 상태 관리
   const [scrollPercentage, setScrollPercentage] = useState(0);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   const isHeaderVisible = useMovingContentByScrolling();
 
@@ -31,8 +36,11 @@ const StickyProgressBar = () => {
   return (
     <>
       {
-        <ProgressBarWrapper isHeaderVisible={isHeaderVisible}>
-          <ProgressBarBox progress={scrollPercentage} />
+        <ProgressBarWrapper
+          isDarkMode={isDarkMode}
+          isHeaderVisible={isHeaderVisible}
+        >
+          <ProgressBarBox isDarkMode={isDarkMode} progress={scrollPercentage} />
         </ProgressBarWrapper>
       }
     </>
@@ -40,15 +48,20 @@ const StickyProgressBar = () => {
 };
 
 /** 스크롤 진행바 전체 박스 */
-const ProgressBarWrapper = styled.div<{ isHeaderVisible: boolean }>`
+const ProgressBarWrapper = styled.div<{
+  isHeaderVisible: boolean;
+  isDarkMode: boolean;
+}>`
   position: fixed;
   top: 21rem;
   left: 16.5rem;
   height: 29rem;
   width: 1rem;
-  background-color: #f2f2f2;
   border-radius: 1rem;
   z-index: 40;
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#f2f2f2"};
 
   transform: ${(props) =>
     props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
@@ -56,11 +69,13 @@ const ProgressBarWrapper = styled.div<{ isHeaderVisible: boolean }>`
 `;
 
 /** 스크롤 진행바 */
-const ProgressBarBox = styled.div<{ progress: number }>`
+const ProgressBarBox = styled.div<{ progress: number; isDarkMode: boolean }>`
   width: 100%;
   height: ${({ progress }) => `${progress}%`};
-  background-color: #fbd26a;
   border-radius: 1rem;
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbd26a"};
 `;
 
 export default StickyProgressBar;
