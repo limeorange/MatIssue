@@ -82,13 +82,13 @@ const ResultPage = () => {
 
   return (
     <>
-      <WorldcupLayout className={animation}>
+      <WorldcupLayout isDarkMode={isDarkMode} className={animation}>
         <Logo />
         <GameHeader>레시피 이상형 월드컵!</GameHeader>
         <GameProgressBox isDarkMode={isDarkMode}>
           우승 레시피입니다! <br /> 클릭시 해당 레시피로 이동!
         </GameProgressBox>
-        <WorldcupCardContainer>
+        <WorldcupCardContainer isDarkMode={isDarkMode}>
           <Link href={`/recipe/${recipe.recipe_id}`} passHref>
             <CardLink>
               <RecipeTitleBox isDarkMode={isDarkMode}>
@@ -107,7 +107,7 @@ const ResultPage = () => {
               </ImageWrapper>
             </CardLink>
           </Link>
-          <ShareText>테스트 공유하기</ShareText>
+          <ShareText isDarkMode={isDarkMode}>테스트 공유하기</ShareText>
           <ShareButtonBox>
             <div onClick={copyToClipboard}>
               <Image
@@ -160,7 +160,7 @@ const ResultPage = () => {
 
 export default ResultPage;
 
-const WorldcupLayout = styled.div`
+const WorldcupLayout = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -177,6 +177,9 @@ const WorldcupLayout = styled.div`
   &.opacity-1 {
     opacity: 1;
   }
+
+  background-color: ${(props) =>
+    props.isDarkMode ? "rgba(255, 255, 255, 0.1)" : "#fff"};
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
@@ -196,7 +199,7 @@ const GameHeader = styled.p<StyledComponentProps>`
 
 const GameProgressBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 35px;
-  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   margin-bottom: 1rem;
   margin-top: 2rem;
   font-family: "Dongle-Bold";
@@ -226,7 +229,7 @@ const GameProgressBox = styled.div<{ isDarkMode: boolean }>`
 
 const RecipeTitleBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 30px;
-  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   white-space: pre-line;
   text-align: center;
   transform-origin: center;
@@ -234,7 +237,7 @@ const RecipeTitleBox = styled.div<{ isDarkMode: boolean }>`
   opacity: 1;
 `;
 
-const WorldcupCardContainer = styled.div`
+const WorldcupCardContainer = styled.div<{ isDarkMode: boolean }>`
   font-family: "Dongle-Bold";
   display: flex;
   flex-direction: column;
@@ -248,6 +251,9 @@ const WorldcupCardContainer = styled.div`
   max-height: 100%;
   padding: 1.5rem 0rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  background-color: ${(props) =>
+    props.isDarkMode ? "rgba(255, 255, 255, 0.2)" : "#fff"};
 `;
 
 const CardLink = styled.div`
@@ -276,11 +282,12 @@ const ImageBox = styled.div`
   opacity: 1;
 `;
 
-const ShareText = styled.p`
+const ShareText = styled.p<{ isDarkMode: boolean }>`
   font-family: "Dongle-Bold";
   font-size: 30px;
   margin-top: 2rem;
   color: #5c8984;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightYellow : "#5c8984")};
 `;
 
 const ShareButtonBox = styled.div`

@@ -158,7 +158,7 @@ const StartPageMessage = styled.p<
   { isDarkMode: boolean } & StyledComponentProps
 >`
   font-size: 17px;
-  color: ${(props) => (props.isDarkMode ? "#fff" : "#4f3d21")};
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   margin-top: 2rem;
 
   animation: ${(props) =>
