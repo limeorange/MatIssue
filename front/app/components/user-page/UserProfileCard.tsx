@@ -11,6 +11,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ConfirmModal from "../UI/ConfirmModal";
 import LoginConfirmModal from "../UI/LoginConfirmModal";
 import { User } from "@/app/types";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type UserProfileProps = {
   userProfileId: string;
@@ -43,6 +45,9 @@ const UserProfileCard = ({
 
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
   useEffect(() => {
@@ -174,8 +179,11 @@ const UserProfileCard = ({
         />
       )}
 
-      <ProfileContainer isHeaderVisible={isHeaderVisible}>
-        <ProfileHeader>프로필 정보</ProfileHeader>
+      <ProfileContainer
+        isDarkMode={isDarkMode}
+        isHeaderVisible={isHeaderVisible}
+      >
+        <ProfileHeader isDarkMode={isDarkMode}>프로필 정보</ProfileHeader>
         <ProfileContentsWrapper>
           {/* 프로필 사진 */}
           <ProfileImage>
@@ -193,7 +201,7 @@ const UserProfileCard = ({
           </ProfileImage>
 
           {/* 닉네임 */}
-          <Nickname>{currentChef.username}</Nickname>
+          <Nickname isDarkMode={isDarkMode}>{currentChef.username}</Nickname>
 
           {/* 팔로잉, 팔로워 */}
           <FollowBox>
@@ -205,7 +213,7 @@ const UserProfileCard = ({
           </FollowBox>
 
           {/* 팔로우 버튼 */}
-          <FollowButton onClick={followButtonHandler}>
+          <FollowButton isDarkMode={isDarkMode} onClick={followButtonHandler}>
             {followButtonText}
           </FollowButton>
         </ProfileContentsWrapper>
@@ -215,7 +223,10 @@ const UserProfileCard = ({
 };
 
 /** 프로필 박스 전체 감싸는 Div */
-const ProfileContainer = styled.div<{ isHeaderVisible: boolean }>`
+const ProfileContainer = styled.div<{
+  isHeaderVisible: boolean;
+  isDarkMode: boolean;
+}>`
   display: none;
 
   @media (min-width: 1024px) {
@@ -228,8 +239,10 @@ const ProfileContainer = styled.div<{ isHeaderVisible: boolean }>`
     margin-top: 4.1rem;
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
     border-radius: 2rem;
-    background-color: #ffffff;
     z-index: 30;
+
+    background: ${(props) =>
+      props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
 
     transform: ${(props) =>
       props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
@@ -238,16 +251,18 @@ const ProfileContainer = styled.div<{ isHeaderVisible: boolean }>`
 `;
 
 /** 프로필 헤더 박스 Div */
-const ProfileHeader = styled.div`
+const ProfileHeader = styled.div<{ isDarkMode: boolean }>`
   width: 24rem;
   height: 4.3rem;
-  background: #fbe2a1;
   border-radius: 20px 20px 0px 0px;
   font-weight: 500;
   font-size: 17px;
-  color: #4f3d21;
   padding: 1rem;
   padding-left: 1.5rem;
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4f3d21")};
 `;
 
 /** 프로필 내용 담는 Div */
@@ -269,10 +284,10 @@ const ProfileImage = styled.div`
 `;
 
 /** 닉네임 Span */
-const Nickname = styled.span`
+const Nickname = styled.span<{ isDarkMode: boolean }>`
   font-size: 25px;
   font-weight: 600;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
 `;
 
 /** 팔로잉, 팔로워 Div */
@@ -290,20 +305,18 @@ const BoldCount = styled.span`
 `;
 
 /** 팔로우 버튼 */
-const FollowButton = styled.button`
+const FollowButton = styled.button<{ isDarkMode: boolean }>`
   width: 20rem;
   height: 4rem;
   margin-bottom: 2rem;
   font-size: 17px;
   font-weight: 500;
-  background-color: #fbe2a1;
   color: #4f3d21;
   border-radius: 1rem;
   transition: background-color 0.2s ease-in-out;
 
-  &:hover {
-    background-color: #fbd26a;
-  }
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
 `;
 
 /** 팔로우 취소 컨펌 모달창 */

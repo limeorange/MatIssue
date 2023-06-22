@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import ConfirmModal from "../UI/ConfirmModal";
 import LoginConfirmModal from "../UI/LoginConfirmModal";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type UserFollowItemProps = {
   userId: string;
@@ -30,8 +32,6 @@ const UserFollowItem = ({
 }: UserFollowItemProps) => {
   const client = useQueryClient();
 
-  console.log(initialCurrentChef);
-
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
@@ -41,6 +41,9 @@ const UserFollowItem = ({
   // 팔로우 취소 모달 상태 관리
   const [followDeleteConfirmModal, setFollowDeleteConfirmModal] =
     useState(false);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   /** 팔로우 버튼 클릭 핸들러 */
   const followButtonHandler = async () => {
@@ -181,8 +184,8 @@ const UserFollowItem = ({
 
           {/* 유저 아이디, 유저 닉네임 */}
           <UserInfo>
-            <UserId>{userId}</UserId>
-            <UserNickname>{userNickname}</UserNickname>
+            <UserId isDarkMode={isDarkMode}>{userId}</UserId>
+            <UserNickname isDarkMode={isDarkMode}>{userNickname}</UserNickname>
           </UserInfo>
         </UserInfoWrapper>
 
@@ -239,14 +242,18 @@ const UserInfo = styled.div`
 `;
 
 /** 유저 아이디 Span */
-const UserId = styled.span`
+const UserId = styled.span<{ isDarkMode: boolean }>`
   font-size: 14px;
   font-weight: 600;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : props.theme.brown};
 `;
 
 /** 유저 닉네임 Span */
-const UserNickname = styled.span`
+const UserNickname = styled.span<{ isDarkMode: boolean }>`
   font-size: 14px;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : props.theme.brown};
 `;
 
 /** 팔로우 or 팔로잉 버튼 우측 정렬 시키기 위한 Div */

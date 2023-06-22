@@ -55,14 +55,13 @@ const NavItem = styled.li<{ clicked: boolean }>`
   padding: 1.3rem 1.3rem 0.9rem 1.3rem;
   font-size: 14px;
   font-weight: 600;
-  color: #4f3d21;
   cursor: pointer;
-    ${(props) => props.clicked && "color: #f8b551;"}
-    ${(props) => props.clicked && "border-bottom: 0.4rem solid #f8b551;"}
-    ${(props) => props.clicked && "transition: all 0.2s ease-in-out;"}
-  }
+  color: "#4F3D21";
 
-  @media (min-width: 1024px) {
+  ${(props) => props.clicked && "color: #f8b551;"}
+  ${(props) => props.clicked && "border-bottom: 0.4rem solid #f8b551;"}
+    ${(props) => props.clicked && "transition: all 0.2s ease-in-out;"} @media
+    (min-width: 1024px) {
     font-size: 18px;
     border-bottom: 0.35rem solid #ffffff;
     &:hover {
