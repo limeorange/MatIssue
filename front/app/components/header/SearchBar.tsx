@@ -1,10 +1,11 @@
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState, useEffect, useRef } from "react";
+import React, { ChangeEvent, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { useRecoilValue } from "recoil";
 import darkModeAtom from "@/app/store/darkModeAtom";
-import { iconColor } from "@/app/constants/darkMode.constants";
+import { whiteBrownToggle } from "@/app/constants/darkMode.constants";
+import RecentSearchItem from "./RecentSearchItem";
 
 /** 헤더 검색바 컴포넌트 */
 const SearchBar = () => {
@@ -13,7 +14,7 @@ const SearchBar = () => {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [showRecentSearches, setShowRecentSearches] = useState(false);
   const isDarkMode = useRecoilValue(darkModeAtom);
-  const searchRef = useRef(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   // 로컬 스토리지에서 최근 검색어를 가져옴
   useEffect(() => {
@@ -22,7 +23,6 @@ const SearchBar = () => {
   }, []);
 
   useEffect(() => {
-    // Listen for clicks outside of the search bar
     const handleClickOutside = (e: MouseEvent) => {
       if (
         searchRef.current &&
@@ -52,7 +52,7 @@ const SearchBar = () => {
     }
   };
 
-  const searchDeleteHandler = (e: React.MouseEvent) => {
+  const recentSearchDeleteHandler = (e: React.MouseEvent) => {
     e.stopPropagation();
     const searches = e.currentTarget.id;
     const newSearches = recentSearches.filter((item) => item !== searches);
@@ -100,32 +100,13 @@ const SearchBar = () => {
                 전체 삭제
               </DeleteAll>
             </RecentSearchItemHeader>
-            {recentSearches.map((search, index) => (
+            {recentSearches.map((search: string, index: number) => (
               <RecentSearchItem
-                isDarkMode={isDarkMode}
                 key={index}
-                onClick={() => router.push(`/recipes/search?query=${search}`)}
-              >
-                <Image
-                  src="/images/searchIcon.svg"
-                  width={12}
-                  height={12}
-                  alt="searchIcon"
-                />
-                <span>{search}</span>
-                <IconWrapper
-                  isDarkMode={isDarkMode}
-                  id={search}
-                  onClick={searchDeleteHandler}
-                >
-                  <Image
-                    src="/images/xBtn.png"
-                    width={10}
-                    height={10}
-                    alt="searchIcon"
-                  />
-                </IconWrapper>
-              </RecentSearchItem>
+                search={search}
+                index={index}
+                recentSearchDeleteHandler={recentSearchDeleteHandler}
+              />
             ))}
           </RecentSearchesList>
         </>
@@ -226,37 +207,6 @@ const RecentSearchItemHeader = styled.li`
   border-radius: 0.5rem;
   align-items: center;
   justify-content: space-between;
-`;
-
-const RecentSearchItem = styled.li<{ isDarkMode: boolean }>`
-  display: flex;
-  padding: 0.2rem 1.6rem;
-  gap: 1rem;
-  border-radius: 0.5rem;
-  align-items: center;
-
-  &:hover {
-    background-color: ${(props) => (props.isDarkMode ? "#2c344d" : "#FFF1C0")};
-    cursor: pointer;
-  }
-
-  span {
-    flex-grow: 1;
-  }
-`;
-
-const IconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 2.1rem;
-  padding-left: 1rem;
-  z-index: 1;
-  filter: ${iconColor};
-
-  :hover {
-    transform: scale(1.1);
-  }
 `;
 
 const DeleteAll = styled.span`
