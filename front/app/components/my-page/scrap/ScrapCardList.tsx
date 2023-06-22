@@ -196,7 +196,7 @@ const ScrapTitle = styled.span<{ isDarkMode: boolean }>`
 const ScrapCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 700;
-  color: ${(props) => (props.isDarkMode ? "#ccc" : "#fff")};
+  color: ${(props) => (props.isDarkMode ? "#ccc" : "#666")};
   @media (min-width: 1024px) {
     font-size: 17px;
   }
