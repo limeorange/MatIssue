@@ -13,6 +13,7 @@ import { useRecoilValue } from "recoil";
 
 type User = {
   password: string;
+  user_id: string;
 };
 
 const ChangePassword = () => {
@@ -21,6 +22,7 @@ const ChangePassword = () => {
     password: "",
     confirmPassword: "",
   });
+  console.log(currentUserInfo);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isDarkMode = useRecoilValue(darkModeAtom);
@@ -61,9 +63,10 @@ const ChangePassword = () => {
 
   async function modifyUser() {
     const modifyUserInfo = {
-      ...currentUserInfo,
       password: password.password,
+      user_id: currentUserInfo?.user_id,
     };
+    console.log(modifyUserInfo);
     try {
       const response = await axiosBase.patch("users", modifyUserInfo);
       toast.success("비밀번호가 변경되었습니다.");

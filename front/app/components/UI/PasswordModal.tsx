@@ -122,13 +122,12 @@ const CancelButton = styled.div`
 const PasswordInput = styled.input`
   width: 100%;
   margin-top: 1.5rem;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
+  font-size: 16px;
   border: 1px solid #e5e5e5;
   border-radius: 1rem;
-  font-size: 2.6rem;
   &::placeholder {
     color: #c4c4c4;
-    font-size: 1.6rem;
   }
   -webkit-autocomplete: off;
   -moz-autocomplete: off;

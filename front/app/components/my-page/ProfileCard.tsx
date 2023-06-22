@@ -9,6 +9,8 @@ import { getRecipeByCurrentId } from "@/app/api/recipe";
 import getCurrentUser from "@/app/api/user";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type MemoItemProps = {
   created_at: string;
@@ -40,6 +42,7 @@ const ProfileCard = () => {
   );
 
   const [parsedMemo, setParsedMemo] = useState<ScrapItemProps[]>([]);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const router = useRouter();
 
@@ -56,14 +59,13 @@ const ProfileCard = () => {
   }, []);
 
   return (
-    <ProfileContainer>
+    <ProfileContainer isDarkMode={isDarkMode}>
       <ProfileWrapper>
         <LinkBtn
           onClick={() => {
             router.push("/my-page/notification");
           }}
-        >
-        </LinkBtn>
+        ></LinkBtn>
 
         <ProfileBox>
           <ImageAndNickNameWrapper>
@@ -84,7 +86,7 @@ const ProfileCard = () => {
                 <Follower>팔로워</Follower>
                 <FollowerCount>{currentUser?.fans.length}</FollowerCount>
               </FollowerAndCountBox>
-              <FollowDivider />
+              <FollowDivider isDarkMode={isDarkMode} />
               <FollowingAndCountBox>
                 <Following>팔로잉</Following>
                 <FollowingCount>
@@ -120,11 +122,17 @@ const ProfileCard = () => {
                 }}
               >
                 <RecipeAndScrapIcon
-                  src="/images/my-page/my_recipe.svg"
+                  src={
+                    isDarkMode
+                      ? "/images/dark_mode_myrecipe.svg"
+                      : "/images/my-page/my_recipe.svg"
+                  }
                   alt="레시피 아이콘"
                 />
                 <RecipeAndScrapTitle>My 레시피</RecipeAndScrapTitle>
-                <RecipeAndScrapCount>{currentUserRecipes?.length}</RecipeAndScrapCount>
+                <RecipeAndScrapCount>
+                  {currentUserRecipes?.length}
+                </RecipeAndScrapCount>
               </LinkBtn>
 
               {/* 나의 스크랩 버튼 */}
@@ -134,7 +142,11 @@ const ProfileCard = () => {
                 }}
               >
                 <RecipeAndScrapIcon
-                  src="/images/recipe-view/scrap_full.svg"
+                  src={
+                    isDarkMode
+                      ? "/images/dark_mode_myscrap.svg"
+                      : "/images/recipe-view/scrap_full.svg"
+                  }
                   alt="스크랩 아이콘"
                 />
                 <RecipeAndScrapTitle>My 스크랩</RecipeAndScrapTitle>
@@ -168,7 +180,7 @@ const ProfileCard = () => {
 
 export default ProfileCard;
 
-const ProfileContainer = styled.div`
+const ProfileContainer = styled.div<{ isDarkMode: boolean }>`
   height: 23.7rem;
   border-bottom: 0.1rem solid rgb(200, 200, 200);
   @media (min-width: 1024px) {
@@ -179,6 +191,8 @@ const ProfileContainer = styled.div`
     height: 49.5rem;
     margin-right: 4rem;
     margin-top: 4.1rem;
+    background-color: ${(props) =>
+      props.isDarkMode ? "rgba(255, 255, 255, 0.1)" : "#fff"};
   }
 `;
 
@@ -193,7 +207,7 @@ const ProfileWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+    
 `;
 
 const LinkBtn = styled.div`
@@ -240,11 +254,10 @@ const RoundImage = styled.div`
   }
 `;
 
-const NickName = styled.h1`
+const NickName = styled.h5`
   font-size: 17px;
   font-weight: 600;
   margin-bottom: 2rem;
-  color: #4f3d21;
   @media (min-width: 1024px) {
     font-size: 26px;
     margin: 1rem;
@@ -255,7 +268,6 @@ const ProfileContentsBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
-
   @media (min-width: 1024px) {
     align-items: center;
   }
@@ -272,24 +284,21 @@ const FollowerAndCountBox = styled.div`
   gap: 0.4rem;
 `;
 
-const Follower = styled.h4`
+const Follower = styled.h2`
   font-size: 14px;
   font-weight: 550;
-  color: #4f3d21;
 `;
 
-const FollowerCount = styled.h4`
+const FollowerCount = styled.h3`
   font-size: 14px;
   font-weight: 500;
-  color: #4f3d21;
 `;
 
-const FollowDivider = styled.div`
-  border-left: 1px solid black;
+const FollowDivider = styled.div<{ isDarkMode: boolean }>`
+  border-left: 1px solid ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
   height: 2.5em;
   display: inline-block;
   margin: 0.2rem 0.8rem 0;
-  color: #4f3d21;
 `;
 
 const FollowingAndCountBox = styled.div`
@@ -297,18 +306,15 @@ const FollowingAndCountBox = styled.div`
   gap: 0.4rem;
 `;
 
-const Following = styled.h4`
+const Following = styled.h2`
   font-size: 14px;
   font-weight: 550;
-  color: #4f3d21;
 `;
 
-const FollowingCount = styled.h4`
+const FollowingCount = styled.h3`
   font-size: 14px;
   font-weight: 500;
-  color: #4f3d21;
 `;
-
 
 const ModifyUserButtonWrapper = styled.div`
   display: none;
@@ -347,16 +353,14 @@ const RecipeAndScrapIcon = styled.img`
   height: 2.8rem;
 `;
 
-const RecipeAndScrapTitle = styled.h4`
+const RecipeAndScrapTitle = styled.h2`
   font-size: 13px;
   font-weight: 550;
-  color: #4f3d21;
 `;
 
-const RecipeAndScrapCount = styled.h4`
+const RecipeAndScrapCount = styled.h3`
   font-size: 15px;
   font-weight: 500;
-  color: #4f3d21;
   @media (min-width: 1024px) {
     font-size: 18px;
     font-weight: 600;
@@ -370,5 +374,3 @@ const UploadRecipeButton = styled.div`
     width: 14rem;
   }
 `;
-
-
