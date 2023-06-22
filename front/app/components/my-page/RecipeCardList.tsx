@@ -133,7 +133,7 @@ const RecipeCards = ({
                 <RecipeCardWrapper key={recipe.recipe_id}>
                   <StyledRecipeCard recipe={recipe} />
                   <DeleteButtonWrapper onClick={() => handleOpenModal(recipe)}>
-                    <DeleteButtonImage src="/images/x-box.svg" alt="X-box" />
+                    <DeleteButtonImage src="/images/egg-x.svg" alt="X-box" />
                   </DeleteButtonWrapper>
                 </RecipeCardWrapper>
               ))}
