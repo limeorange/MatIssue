@@ -171,12 +171,10 @@ const UserFollowItem = ({
             <Image
               src={userImg ? userImg : "/images/recipe-view/기본 프로필.PNG"}
               alt={`${userNickname}님의 프로필 이미지`}
-              width={40}
-              height={40}
+              width={100}
+              height={100}
               style={{
                 objectFit: "cover",
-                cursor: "pointer",
-                borderRadius: "50%",
               }}
             />
           </ProfileImage>
@@ -220,16 +218,17 @@ const UserInfoWrapper = styled.div`
   display: flex;
   cursor: pointer;
   width: 23rem;
+  gap: 1rem;
 `;
 
 /** 프로필 이미지 감싸는 Div */
 const ProfileImage = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 8rem;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 /** 유저 아이디, 닉네임 감싸는 Div */
