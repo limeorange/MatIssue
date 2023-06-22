@@ -183,28 +183,28 @@ const MobileUserModal = (props: MobileUserModalProps) => {
           <AdditionalMenuWrapper isShow={isShowAdditional}>
             <AdditionalCategoryItem
               onClick={() =>
-                router.push("/recipes/category/한식?category=korean")
+                routerHandler("/recipes/category/한식?category=korean")
               }
             >
               한식
             </AdditionalCategoryItem>
             <AdditionalCategoryItem
               onClick={() =>
-                router.push("/recipes/category/양식?category=western")
+                routerHandler("/recipes/category/양식?category=western")
               }
             >
               양식
             </AdditionalCategoryItem>
             <AdditionalCategoryItem
               onClick={() =>
-                router.push("/recipes/category/일식?category=japanese")
+                routerHandler("/recipes/category/일식?category=japanese")
               }
             >
               일식
             </AdditionalCategoryItem>
             <AdditionalCategoryItem
               onClick={() =>
-                router.push("/recipes/category/중식?category=chinese")
+                routerHandler("/recipes/category/중식?category=chinese")
               }
             >
               중식
