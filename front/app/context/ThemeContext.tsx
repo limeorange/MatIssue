@@ -1,40 +1,27 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { useRecoilValue } from "recoil";
 import { ThemeProvider } from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import darkModeAtom from "../store/darkModeAtom";
-
-export type Theme = {
-  deepYellow: string;
-  yellow: string;
-  lightYellow: string;
-  brown: string;
-  deepNavy: string;
-  lightNavy: string;
-  grey: string;
-  lightGrey: string;
-  white: string;
-  blue: string;
-  red: string;
-};
+import { Theme } from "../types/darkMode";
 
 const theme = {
   deepYellow: "#F8B551",
   yellow: "#FBD26A",
   lightYellow: "#FFF1C0",
   brown: "#4F3D21",
+  lightBrown: "#B08038",
   deepNavy: "#212739",
   navy: "#2C344D",
   lightNavy: "#404353",
+  deepGrey: "#666",
   grey: "#ccc",
   lightGrey: "#ddd",
   white: "#fff",
-  blue: "rgb(32, 28, 224)",
-  red: "#e11717",
 
-  // 여기에 추가적으로 사용할 색상들을 정의할 수 있습니다.
+  // 여기에 추가적으로 사용할 색상들을 정의
 };
 
 type Props = {
@@ -42,68 +29,81 @@ type Props = {
 };
 
 function StyledTheme({ children }: Props) {
+  /** 다크모드 리코일 상태값  */
   const isDarkMode = useRecoilValue(darkModeAtom);
 
-  const GlobalStyle = createGlobalStyle<{ isDarkMode: boolean }>`
-  h2 {
-    color: ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
-  }
+  /**  스타일드 컴포넌트 전역 CSS 설정 */
+  const GlobalStyle = createGlobalStyle<{ isDarkMode: boolean; theme: Theme }>`
+  ${(props) => {
+    const { isDarkMode, theme } = props;
+    const {
+      deepYellow,
+      yellow,
+      lightYellow,
+      brown,
+      lightBrown,
+      deepNavy,
+      navy,
+      lightNavy,
+      deepGrey,
+      grey,
+      lightGrey,
+      white,
+    } = theme;
+    return `
+      body {
+        background-color : ${isDarkMode ? deepNavy : white};
+        color : ${isDarkMode ? white : brown};
+      }
 
-  h3 {
-    color: ${(props) => (props.isDarkMode ? "#ccc" : "#666")};
-  }
-  span {
-    color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
-  }
-  input {
-    background-color : ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
-    border : ${(props) =>
-      props.isDarkMode ? "0.05rem solid #ddd" : "0.1rem solid #ccc"};
-    color : ${(props) => (props.isDarkMode ? "#fff" : "#333")};
-    &:focus {
-      border : ${(props) =>
-        props.isDarkMode ? "0.05rem solid #fbd26a" : "0.1rem solid #fbd26a"};
-      outline : 0.2rem solid #fbd26a
-    }
-  }
+      h2 {
+        color: ${isDarkMode ? white : brown};
+      }
 
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus {
-    -webkit-box-shadow: ${(props) =>
-      props.isDarkMode
-        ? "0 0 0 1000px #404353 inset"
-        : "0 0 0 1000px #fff inset"};
-    -webkit-text-fill-color: ${(props) =>
-      props.isDarkMode ? "#fff" : "#4F3D21"};
-      font-size: 16px; 
-  }
+      h3 {
+        color: ${isDarkMode ? grey : deepGrey};
+      }
 
+      span {
+        color : ${isDarkMode ? white : brown};
+      }
 
-  label {
-    color : ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
-  }
-  textarea {
-    background-color: ${(props) => (props.isDarkMode ? "#404353" : "#fff")};
-    border : ${(props) =>
-      props.isDarkMode ? "0.05rem solid #ccc" : "0.1rem solid #ccc"};
-    &:focus {
-      border : ${(props) =>
-        props.isDarkMode ? "0.05rem solid #fbd26a" : "0.1rem solid #fbd26a"};
-      outline : 0.2rem solid #fbd26a;
-    }
-  }
+      label {
+        color : ${isDarkMode ? white : brown};
+      }
+
+      input {
+        background-color : ${isDarkMode ? lightNavy : white};
+        border : ${
+          isDarkMode ? `0.05rem solid ${lightGrey}` : `0.1rem solid ${grey}`
+        };
+        color : ${isDarkMode ? white : brown};
+        &:focus {
+          border : ${isDarkMode ? "0.05rem" : "0.1rem"} solid ${yellow};
+          outline : 0.2rem solid ${yellow}
+        }
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover, 
+        &:-webkit-autofill:focus {
+          -webkit-box-shadow: 0 0 0 1000px ${
+            isDarkMode ? lightNavy : white
+          } inset;
+          -webkit-text-fill-color: ${isDarkMode ? white : brown};
+          font-size: 16px; 
+        }
+      }
+
+      textarea {
+        background-color: ${isDarkMode ? lightNavy : white};
+        border : ${isDarkMode ? "0.05rem" : "0.1rem"} solid ${grey};
+        &:focus {
+          border : ${isDarkMode ? "0.05rem" : "0.1rem"} solid ${yellow};
+          outline : 0.2rem solid ${yellow};
+        }
+      }
+    `;
+  }}
 `;
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.style.backgroundColor = "#212739";
-      document.body.style.color = "#fff";
-    } else {
-      document.body.style.backgroundColor = "#fff";
-      document.body.style.color = "#4F3D21";
-    }
-  }, [isDarkMode]);
 
   return (
     <ThemeProvider theme={theme}>
