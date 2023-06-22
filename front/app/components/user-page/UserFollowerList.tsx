@@ -2,34 +2,39 @@ import UserFollowSearch from "./UserFollowSearch";
 import UserFollowItem from "./UserFollowItem";
 import { useRef, useState } from "react";
 import styled from "styled-components";
+import { User } from "@/app/types";
 
-type CurrentChefFansProps = {
-  user_id: string;
-  username: string;
-  img: string;
+type UserFollowersProps = {
+  currentChefFans: {
+    user_id: string;
+    username: string;
+    img: string;
+  }[];
+  loggedInUserSubscriptions: string[];
+  loggedInUserId: string;
+  initialCurrentChef: User;
 };
 
 /** 유저 팔로워 목록 컴포넌트 */
-const UserFollowersList = ({
-  currentChefFans,
-}: {
-  currentChefFans: CurrentChefFansProps[];
-}) => {
+const UserFollowersList = (props: UserFollowersProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchValue, setSearchValue] = useState("");
 
   // 검색 값에 따라 팬 목록 필터링
-  const filteredFans = currentChefFans.filter(
+  const filteredFans = props.currentChefFans.filter(
     (fan) =>
       fan.user_id.includes(searchValue) || fan.username.includes(searchValue)
   );
+
+  // 로그인된 유저의 팔로잉 목록 정보
+  const loggedInUserSubscriptions = props.loggedInUserSubscriptions;
   return (
     <>
       <Container>
         {/* 팔로워, 팔로워 수 Title */}
         <TitleCountWrapper>
           <h2>팔로워</h2>
-          <BoldCount>{currentChefFans.length}</BoldCount>
+          <BoldCount>{props.currentChefFans.length}</BoldCount>
         </TitleCountWrapper>
 
         <SearchListWrapper>
@@ -43,14 +48,23 @@ const UserFollowersList = ({
           >
             {Array.isArray(filteredFans) &&
               filteredFans.length > 0 &&
-              filteredFans.map((fan, index) => (
-                <UserFollowItem
-                  key={index}
-                  userId={fan.user_id}
-                  userNickname={fan.username}
-                  userImg={fan.img}
-                ></UserFollowItem>
-              ))}
+              filteredFans.map((fan, index) => {
+                // 목록 속 유저를 팔로우 하는지 여부
+                const isFollowing = loggedInUserSubscriptions.includes(
+                  fan.user_id
+                );
+                return (
+                  <UserFollowItem
+                    key={index}
+                    userId={fan.user_id}
+                    userNickname={fan.username}
+                    userImg={fan.img}
+                    isFollowing={isFollowing}
+                    loggedInUserId={props.loggedInUserId}
+                    initialCurrentChef={props.initialCurrentChef}
+                  />
+                );
+              })}
           </FollowerList>
         </SearchListWrapper>
       </Container>

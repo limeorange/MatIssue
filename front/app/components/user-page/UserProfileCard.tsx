@@ -34,7 +34,6 @@ const UserProfileCard = ({
       initialData: initialCurrentChef,
     }
   );
-  console.log("currentChef...", currentChef);
 
   const client = useQueryClient();
   const isHeaderVisible = useMovingContentByScrolling();

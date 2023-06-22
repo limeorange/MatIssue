@@ -16,6 +16,7 @@ type FollowingProps = {
     username: string;
     img: string;
   }[];
+  initialCurrentUser: User;
 };
 
 /** 팔로잉 페이지 컴포넌트 */
@@ -23,18 +24,25 @@ const Following = ({
   initialCurrentChef,
   userProfileId,
   currentChefSubscriptions,
+  initialCurrentUser,
 }: FollowingProps) => {
-  // 캐시에 저장된 현재 로그인한 유저 정보 가져옴
-  const { data: currentUser } = useQuery<User>(["currentUser"], () =>
-    getCurrentUser()
+  // currentUser : 현재 로그인한 유저 정보
+  const { data: currentUser } = useQuery<User>(
+    ["currentUser"],
+    () => getCurrentUser(),
+    { initialData: initialCurrentUser }
   );
-  const loggedInUserId: string | undefined = currentUser?.user_id;
+  const loggedInUserId: string = currentUser.user_id;
 
   // 로그인된 유저가 자신의 유저페이지에 접근하는 경우 마이페이지로 이동
   const router = useRouter();
   if (userProfileId === loggedInUserId) {
     router.push("/my-page");
   }
+
+  // 로그인된 유저가 팔로잉하는 유저 목록
+  const loggedInUserSubscriptions: string[] = currentUser.subscriptions;
+
   return (
     <Container>
       <Wrapper>
@@ -47,6 +55,9 @@ const Following = ({
         {/* 유저 팔로잉 리스트 */}
         <UserFollowingList
           currentChefSubscriptions={currentChefSubscriptions}
+          loggedInUserSubscriptions={loggedInUserSubscriptions}
+          loggedInUserId={loggedInUserId}
+          initialCurrentChef={initialCurrentChef}
         />
       </Wrapper>
     </Container>
