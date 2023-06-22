@@ -99,7 +99,7 @@ const Title = styled.div<{ isDarkMode: boolean }>`
     top: 13.5rem;
     text-decoration: underline;
     color: ${(props) =>
-      props.isDarkMode ? props.theme.lightYellow : props.theme.red};
+      props.isDarkMode ? props.theme.lightYellow : "#e11717"};
     margin-left: 0;
   }
 `;
