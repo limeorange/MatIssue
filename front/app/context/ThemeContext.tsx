@@ -101,6 +101,10 @@ function StyledTheme({ children }: Props) {
           outline : 0.2rem solid ${yellow};
         }
       }
+
+      div {
+        color: ${isDarkMode ? lightGrey : brown};
+      }
     `;
   }}
 `;
