@@ -6,12 +6,19 @@ import Image from "next/image";
 import styled from "styled-components";
 import Button from "@/app/components/UI/Button";
 import Logo from "../components/header/Logo";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { EIState, JPState, SNState, TFState } from "@/app/store/mbtiAtom";
+import darkModeAtom from "../store/darkModeAtom";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
 };
+
+type isDarkModeProps = {
+  isDarkMode: boolean;
+};
+
+type CombinedProps = StyledComponentProps & isDarkModeProps;
 
 const StartPage = () => {
   const router = useRouter();
@@ -25,17 +32,20 @@ const StartPage = () => {
   // 첫 렌더링 애니메이션 상태
   const [isAnimateOut, setIsAnimateOut] = useState(false);
 
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   return (
     <>
-      <StratPageWrapper>
+      <StratPageLayout>
         <Logo />
         <StartPageTitle isAnimateOut={isAnimateOut}>
-          M<span>uk</span>BTI 테스트
+          M<span style={{ color: "#fbd26a" }}>uk</span>BTI 테스트
         </StartPageTitle>
-        <StartPageMessage isAnimateOut={isAnimateOut}>
+        <StartPageMessage isAnimateOut={isAnimateOut} isDarkMode={isDarkMode}>
           나에게 어울리는 음식은?
         </StartPageMessage>
-        <ImageBox isAnimateOut={isAnimateOut}>
+        <StartPageImgWrapper isAnimateOut={isAnimateOut}>
           <Image
             src={"/images/mbti/foodIcon.png"}
             alt="음식 아이콘 이미지"
@@ -43,8 +53,8 @@ const StartPage = () => {
             height={200}
             style={{ marginRight: "2rem", marginTop: "15rem" }}
           />
-        </ImageBox>
-        <ButtonBox isAnimateOut={isAnimateOut}>
+        </StartPageImgWrapper>
+        <StartButtonWrapper isAnimateOut={isAnimateOut}>
           <Button
             isBgColor={true}
             isBorderColor={false}
@@ -62,15 +72,15 @@ const StartPage = () => {
           >
             테스트 시작하기
           </Button>
-        </ButtonBox>
-      </StratPageWrapper>
+        </StartButtonWrapper>
+      </StratPageLayout>
     </>
   );
 };
 
 export default StartPage;
 
-const StratPageWrapper = styled.div`
+const StratPageLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -115,9 +125,10 @@ const StartPageTitle = styled.p<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
 
-const StartPageMessage = styled.p<StyledComponentProps>`
+const StartPageMessage = styled.p<CombinedProps>`
   font-size: 17px;
-  color: #4f3d21;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
 
   animation: ${(props) =>
     props.isAnimateOut
@@ -126,7 +137,7 @@ const StartPageMessage = styled.p<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.3s")};
 `;
 
-const ImageBox = styled.div<StyledComponentProps>`
+const StartPageImgWrapper = styled.div<StyledComponentProps>`
   animation: ${(props) =>
     props.isAnimateOut
       ? "slideOut 1.5s ease-in-out"
@@ -134,7 +145,7 @@ const ImageBox = styled.div<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.4s")};
 `;
 
-const ButtonBox = styled.div<StyledComponentProps>`
+const StartButtonWrapper = styled.div<StyledComponentProps>`
   margin-top: 6rem;
 
   & Button {

@@ -11,6 +11,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import styled from "styled-components";
 import { useSearchParams } from "next/navigation";
 import { Recipe } from "@/app/types";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilState } from "recoil";
 
 // 필터링 요소 타입
 export type Filter = {
@@ -56,6 +58,9 @@ const difficulty = [
 
 // 레시피 리스트 출력 컴포넌트
 const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes); // 레시피 데이터 필터링 상태
 
   // 최신, 인기순 버튼 정렬 기본 상태 null로 설정
@@ -265,8 +270,8 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
   return (
     <>
-      <MainWrapper>
-        <FilterBarBox>
+      <MainLayout>
+        <div>
           <FilterBar
             setFilter={setFilter}
             removeTag={removeTag}
@@ -280,7 +285,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
             duration={duration}
             difficulty={difficulty}
           />
-        </FilterBarBox>
+        </div>
         <FilterTag
           search={searchQuery}
           filter={filter}
@@ -313,6 +318,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
                     onClick={() =>
                       setSortMethod((prev) => (prev === "date" ? null : "date"))
                     }
+                    isDarkMode={isDarkMode}
                   >
                     최신순
                   </SortButton>
@@ -323,6 +329,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
                         prev === "likes" ? null : "likes"
                       )
                     }
+                    isDarkMode={isDarkMode}
                   >
                     인기순
                   </SortButton>
@@ -344,7 +351,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
                     fontSize: "16px",
                     textAlign: "center",
                     margin: "2rem",
-                    color: "#F8B551",
+                    color: isDarkMode ? "#FFF1C0" : "#F8B551",
                   }}
                 >
                   <b>{`마지막 레시피 입니다 :)`}</b>
@@ -375,15 +382,14 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
         ) : (
           <NonRecipePage />
         )}
-      </MainWrapper>
+      </MainLayout>
     </>
   );
 };
 
 export default ListingRecipe;
 
-// styled-components
-const MainWrapper = styled.div`
+const MainLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -446,25 +452,41 @@ const SortButtonContainer = styled.div`
   }
 `;
 
-const SortButton = styled.button<{ selected: boolean }>`
+const SortButton = styled.button<{ selected: boolean; isDarkMode: boolean }>`
   padding: 0.5rem 0 0.5rem 0.5rem;
   font-size: 15.5px;
-  color: ${(props) => (props.selected ? "#fbd26a" : "normal")};
+  color: ${(props) =>
+    props.selected
+      ? props.isDarkMode
+        ? props.theme.lightYellow
+        : props.theme.yellow
+      : "normal"};
+
   font-weight: ${(props) => (props.selected ? "bold" : "normal")};
 
   @media (min-width: 768px) {
     margin: 0.5rem;
     padding: 0.5rem 2.5rem;
-    color: black;
+    color: ${(props) =>
+      props.selected
+        ? props.isDarkMode
+          ? props.theme.deepNavy
+          : props.theme.brown
+        : "normal"};
     font-weight: normal;
     border-radius: 10rem;
     background-color: ${(props) =>
-      props.selected ? "#fbd26a" : "transparent"};
+      props.selected
+        ? props.isDarkMode
+          ? props.theme.lightYellow
+          : props.theme.yellow
+        : "transparent"};
 
     &:hover {
-      background-color: #fbd26a;
+      background-color: ${(props) =>
+        props.isDarkMode ? props.theme.lightYellow : props.theme.yellow};
+      color: ${(props) =>
+        props.isDarkMode ? props.theme.deepNavy : props.theme.brown};
     }
   }
 `;
-
-const FilterBarBox = styled.div``;

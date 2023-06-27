@@ -9,6 +9,8 @@ export default async function getCurrentUser() {
       const response = await axiosBase.get(`users/me`);
       return response.data;
     } catch (err: any) {
+      Cookies.remove("session-id");
+      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
       return null;
     }
   }
@@ -50,8 +52,11 @@ export async function getUserSubscriptions(user_id: string) {
 
 export async function getChefByUserId(user_id: string) {
   try {
-    const reponse = await axiosBase.get(`/users/${user_id}`);
-    return reponse.data;
+    const response = await axiosBase.get(`/users/${user_id}`);
+    if (response.data === undefined) {
+      return [];
+    }
+    return response.data;
   } catch (error) {
     console.log(error);
     return [];

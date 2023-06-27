@@ -22,9 +22,12 @@ import Cookies from "js-cookie";
 import styled from "styled-components";
 import { useQueryClient } from "@tanstack/react-query";
 import getCurrentUser from "@/app/api/user";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const client = useQueryClient();
 
@@ -63,7 +66,7 @@ const LoginClient = () => {
   };
 
   return (
-    <AuthContainer>
+    <AuthContainer isDarkMode={isDarkMode}>
       {isLoading && <LoadingModal />}
       <LoginAuthContainer>
         <Logo />

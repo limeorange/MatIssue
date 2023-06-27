@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type ConfirmModalProps = {
   icon?: React.ReactNode;
@@ -10,16 +12,17 @@ type ConfirmModalProps = {
   showCancelButton?: boolean; // 추가: 취소 버튼을 보여줄지 여부를 결정하는 prop
 };
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({
+const ConfirmModal = ({
   icon,
   message,
   onCancel,
   onConfirm,
   showCancelButton = true, // 추가: 기본값은 true로 설정
-}) => {
+}: ConfirmModalProps) => {
+  const isDarkMode = useRecoilValue(darkModeAtom);
   return (
     <ModalWrapper>
-      <ModalContent>
+      <ModalContent isDarkMode={isDarkMode}>
         <div>{icon}</div>
         <ModalMessage>{message}</ModalMessage>
         <ModalActions>
@@ -71,23 +74,23 @@ const ModalWrapper = styled.div`
   z-index: 99;
 `;
 
-const ModalContent = styled.div`
+const ModalContent = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 31rem;
   height: 19rem;
-  background-color: white;
   padding: 2rem;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#fff"};
   border-radius: 1.3rem;
 `;
 
-const ModalMessage = styled.p`
+const ModalMessage = styled.h2`
   margin-top: 1rem;
   font-size: 19px;
   font-weight: 600;
-  color: #4f3d21;
 `;
 
 const ModalActions = styled.div`

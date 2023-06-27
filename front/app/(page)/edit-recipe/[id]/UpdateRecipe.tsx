@@ -13,6 +13,8 @@ import { updateRecipe } from "@/app/api/recipe";
 import { toast } from "react-hot-toast";
 import LoadingModal from "@/app/components/UI/LoadingModal";
 import ConfirmModal from "@/app/components/UI/ConfirmModal";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type Recipe = {
   recipe_category: string;
@@ -99,6 +101,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 종류
   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -375,8 +378,8 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
   return (
     <FormLayout>
       {isLoading && <LoadingModal />}
-      <Title>레시피 수정하기</Title>
-      <MainContainer>
+      <Title isDarkMode={isDarkMode}>레시피 수정하기</Title>
+      <ThumbnailAndCategoryAndInfoContainer>
         <ImageWrapper>
           <ThumbnailUpload
             selectedImage={state.selectedImage}
@@ -397,7 +400,7 @@ const UpdateRecipeForm = ({ recipe }: { recipe: Recipe }) => {
           times={times}
           difficulties={difficulties}
         />
-      </MainContainer>
+      </ThumbnailAndCategoryAndInfoContainer>
       <RecipeTitleWrapper>
         <Label>레시피 제목</Label>
         <Input
@@ -487,7 +490,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
 
@@ -503,7 +505,7 @@ const Input = styled.input`
   box-sizing: border-box;
   width: 100%;
   height: 3.6rem;
-  border: 0.1rem solid #d9d9d9;
+
   border-radius: 1.5rem;
   padding-left: 1rem;
   font-family: "Pretendard";
@@ -511,11 +513,6 @@ const Input = styled.input`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.9rem;
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
-  }
 
   @media (min-width: 1024px) {
     width: 57.2rem;
@@ -526,7 +523,7 @@ const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
   height: 10rem;
-  border: 0.1rem solid #d9d9d9;
+
   border-radius: 1.5rem;
   padding: 1rem;
   font-family: "Pretendard";
@@ -535,13 +532,9 @@ const TextArea = styled.textarea`
   font-size: 16px;
   line-height: 1.9rem;
   resize: none;
+
   ::placeholder {
     color: #a9a9a9;
-  }
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 
   @media (min-width: 1024px) {
@@ -567,7 +560,7 @@ const FormLayout = styled.form`
   }
 `;
 
-const Title = styled.h2`
+const Title = styled.h2<{ isDarkMode: boolean }>`
   width: 16.8rem;
   height: 2.7rem;
   font-family: "Inter";
@@ -575,11 +568,11 @@ const Title = styled.h2`
   font-weight: 600;
   font-size: 22px;
   line-height: 2.7rem;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? "#fff" : "#333")};
   margin: 0;
 `;
 
-const MainContainer = styled.div`
+const ThumbnailAndCategoryAndInfoContainer = styled.div`
   flex-direction: column;
 
   @media (min-width: 1024px) {

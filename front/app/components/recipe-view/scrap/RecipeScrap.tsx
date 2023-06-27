@@ -1,7 +1,9 @@
 "use client";
 
+import darkModeAtom from "@/app/store/darkModeAtom";
 import Image from "next/image";
 import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 type UserScrapProps = {
@@ -31,14 +33,17 @@ type ScrapItemProps = {
 };
 
 /** 게시글 스크랩 컴포넌트 */
-const RecipeScrap: React.FC<UserScrapProps> = ({
+const RecipeScrap = ({
   currentUserID,
   scrapClickHandler,
   isBooked,
   isSaved,
   setIsSaved,
   recipe_id,
-}) => {
+}: UserScrapProps) => {
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   // 처음 렌더링 시 클라이언트 사이드에서 로컬스토리지 받아오기 위한 의존성 관리
   // 스크랩 된 메모가 있으면 색칠되어있음
   useEffect(() => {
@@ -55,8 +60,8 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
 
   return (
     <>
-      <ScrapWrapperButton onClick={scrapClickHandler}>
-        <IconDiv>
+      <ScrapButtonWrapper isDarkMode={isDarkMode} onClick={scrapClickHandler}>
+        <ScrapIcon>
           <Image
             src={
               isBooked || isSaved
@@ -68,23 +73,25 @@ const RecipeScrap: React.FC<UserScrapProps> = ({
             height={28}
             style={{ objectFit: "cover", cursor: "pointer" }}
           />
-        </IconDiv>
-        <ScrapTitle>스크랩</ScrapTitle>
-      </ScrapWrapperButton>
+        </ScrapIcon>
+        <ScrapTitle isDarkMode={isDarkMode}>스크랩</ScrapTitle>
+      </ScrapButtonWrapper>
     </>
   );
 };
 
 /** 스크랩 아이콘과 글자 묶는 Button */
-const ScrapWrapperButton = styled.button`
+const ScrapButtonWrapper = styled.button<{ isDarkMode: boolean }>`
   display: flex;
   width: 10rem;
   height: 4.2rem;
   border-radius: 1.5rem;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
+
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
 
   @media (min-width: 1024px) {
     width: 12rem;
@@ -94,7 +101,7 @@ const ScrapWrapperButton = styled.button`
 `;
 
 /** 스크랩 아이콘 Div */
-const IconDiv = styled.div`
+const ScrapIcon = styled.div`
   width: 2.5rem;
   height: 2rem;
   margin-right: 0.6rem;
@@ -108,8 +115,9 @@ const IconDiv = styled.div`
 `;
 
 /** 스크랩 글자 Span */
-const ScrapTitle = styled.span`
+const ScrapTitle = styled.span<{ isDarkMode: boolean }>`
   font-size: 16px;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 
   @media (min-width: 1024px) {
     font-size: 18px;

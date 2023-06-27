@@ -1,3 +1,5 @@
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 /** 요리 정보 Props */
@@ -11,10 +13,7 @@ type RecipeInfoProps = {
 };
 
 /** 요리 정보 (인원, 시간, 난이도, 종류) 컴포넌트 */
-const RecipeInfo: React.FC<RecipeInfoProps> = ({
-  recipe_info,
-  recipe_category,
-}) => {
+const RecipeInfo = ({ recipe_info, recipe_category }: RecipeInfoProps) => {
   const { serving, time, level } = recipe_info;
 
   // level에 따른 라벨링 작업
@@ -36,38 +35,50 @@ const RecipeInfo: React.FC<RecipeInfoProps> = ({
   };
   const categoryText = categoryLabel[recipe_category];
 
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   return (
     <>
-      <ContainerDiv>
-        <RecipeInfoElementDiv>
-          <h2>{serving}</h2>
-          <span>인분</span>
-        </RecipeInfoElementDiv>
+      <RecipeInfoContainer isDarkMode={isDarkMode}>
+        <RecipeInfoElement>
+          <Content isDarkMode={isDarkMode}>{serving}</Content>
+          <Item isDarkMode={isDarkMode}>인분</Item>
+        </RecipeInfoElement>
         <Divider />
-        <RecipeInfoElementDiv>
-          {time === 61 ? <h2>1시간</h2> : <h2>{time}</h2>}
-          {time === 61 ? <span>이상</span> : <span>분</span>}
-        </RecipeInfoElementDiv>
+        <RecipeInfoElement>
+          {time === 61 ? (
+            <Content isDarkMode={isDarkMode}>1시간</Content>
+          ) : (
+            <Content isDarkMode={isDarkMode}>{time}</Content>
+          )}
+          {time === 61 ? (
+            <Item isDarkMode={isDarkMode}>이상</Item>
+          ) : (
+            <Item isDarkMode={isDarkMode}>분</Item>
+          )}
+        </RecipeInfoElement>
         <Divider />
-        <RecipeInfoElementDiv>
-          <h2>{levelText}</h2>
-          <span>난이도</span>
-        </RecipeInfoElementDiv>
+        <RecipeInfoElement>
+          <Content isDarkMode={isDarkMode}>{levelText}</Content>
+          <Item isDarkMode={isDarkMode}>난이도</Item>
+        </RecipeInfoElement>
         <Divider />
-        <RecipeInfoElementDiv>
-          <h2>{categoryText}</h2>
-          <span>종류</span>
-        </RecipeInfoElementDiv>
-      </ContainerDiv>
+        <RecipeInfoElement>
+          <Content isDarkMode={isDarkMode}>{categoryText}</Content>
+          <Item isDarkMode={isDarkMode}>종류</Item>
+        </RecipeInfoElement>
+      </RecipeInfoContainer>
     </>
   );
 };
 
 /** 요리 정보 전체 감싸는 Div */
-const ContainerDiv = styled.div`
+const RecipeInfoContainer = styled.div<{ isDarkMode: boolean }>`
   height: 6rem;
   width: 33rem;
-  background-color: #fff6df;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#fff6df"};
   border-radius: 2rem;
   display: flex;
   justify-content: center;
@@ -75,7 +86,7 @@ const ContainerDiv = styled.div`
 `;
 
 /** 요리 정보 요소 감싸는 Div */
-const RecipeInfoElementDiv = styled.div`
+const RecipeInfoElement = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -92,6 +103,16 @@ const RecipeInfoElementDiv = styled.div`
   span {
     font-size: 14px;
   }
+`;
+
+/** 요리 정보 항목 span */
+const Item = styled.span<{ isDarkMode: boolean }>`
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
+`;
+
+/** 요리 정보 항목에 대한 값 h2 */
+const Content = styled.h2<{ isDarkMode: boolean }>`
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
 /** 요리 정보 요소 구분선 */

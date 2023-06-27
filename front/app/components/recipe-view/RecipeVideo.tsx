@@ -20,22 +20,22 @@ const extractVideoId = (url: string): string | null => {
 };
 
 /** 레시피 비디오 컴포넌트 */
-const RecipeVideo: React.FC<RecipeVideoProps> = ({ recipe_video }) => {
+const RecipeVideo = ({ recipe_video }: RecipeVideoProps) => {
   return (
     <>
-      <VideoContainerDiv>
-        <VideoIframe
+      <VideoContainer>
+        <Video
           title="요리 동영상 썸네일"
           src={`https://www.youtube.com/embed/${extractVideoId(recipe_video)}`}
           allowFullScreen
         />
-      </VideoContainerDiv>
+      </VideoContainer>
     </>
   );
 };
 
 /** 비디오 감싸는 Div */
-const VideoContainerDiv = styled.div`
+const VideoContainer = styled.div`
   width: calc(100vw - 3rem);
   height: calc((100vw - 3rem) * (27 / 48));
   max-width: 48rem;
@@ -52,7 +52,7 @@ const VideoContainerDiv = styled.div`
 `;
 
 /** 유튜브 영상 Iframe */
-const VideoIframe = styled.iframe`
+const Video = styled.iframe`
   width: 100%;
   height: 100%;
   border: none;

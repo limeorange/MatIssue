@@ -5,6 +5,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import Button from "@/app/components/UI/Button";
 import Logo from "@/app/components/header/Logo";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "../store/darkModeAtom";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -13,6 +15,7 @@ type StyledComponentProps = {
 const StartPage = () => {
   const [isAnimateOut, setIsAnimateOut] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0); // window width state
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
   const router = useRouter();
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const StartPage = () => {
     <WorldcupLayout>
       <Logo />
       <GameHeader isAnimateOut={isAnimateOut}>레시피 이상형 월드컵!</GameHeader>
-      <StartPageMessage isAnimateOut={isAnimateOut}>
+      <StartPageMessage isDarkMode={isDarkMode} isAnimateOut={isAnimateOut}>
         뭐 먹을지 고민이 될 때!!
       </StartPageMessage>
       <ImageBox isAnimateOut={isAnimateOut}>
@@ -51,8 +54,8 @@ const StartPage = () => {
           style={{ padding: "2rem" }}
         />
       </ImageBox>
-      <ButtonContainer isAnimateOut={isAnimateOut}>
-        <ButtonBoxOne>
+      <ButtonWrapper isAnimateOut={isAnimateOut}>
+        <OptionOneButton>
           <Button
             isBgColor={true}
             isBorderColor={false}
@@ -75,8 +78,8 @@ const StartPage = () => {
           >
             32강 시작
           </Button>
-        </ButtonBoxOne>
-        <ButtonBoxTwo>
+        </OptionOneButton>
+        <OptionTwoButton>
           <Button
             isBgColor={windowWidth <= 1024 ? false : true}
             isBorderColor={windowWidth <= 1024 ? true : false}
@@ -99,8 +102,8 @@ const StartPage = () => {
           >
             8강 시작
           </Button>
-        </ButtonBoxTwo>
-      </ButtonContainer>
+        </OptionTwoButton>
+      </ButtonWrapper>
     </WorldcupLayout>
   );
 };
@@ -151,9 +154,11 @@ const GameHeader = styled.p<StyledComponentProps>`
   }
 `;
 
-const StartPageMessage = styled.p<StyledComponentProps>`
+const StartPageMessage = styled.p<
+  { isDarkMode: boolean } & StyledComponentProps
+>`
   font-size: 17px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   margin-top: 2rem;
 
   animation: ${(props) =>
@@ -171,7 +176,7 @@ const ImageBox = styled.div<StyledComponentProps>`
   animation-delay: ${(props) => (props.isAnimateOut ? "0s" : "0.4s")};
 `;
 
-const ButtonContainer = styled.div<StyledComponentProps>`
+const ButtonWrapper = styled.div<StyledComponentProps>`
   margin-top: 1rem;
   display: flex;
   justify-content: center;
@@ -203,7 +208,7 @@ const ButtonContainer = styled.div<StyledComponentProps>`
   }
 `;
 
-const ButtonBoxOne = styled.div`
+const OptionOneButton = styled.div`
   margin-right: 0;
 
   @media (max-width: 1024px) {
@@ -217,7 +222,7 @@ const ButtonBoxOne = styled.div`
   }
 `;
 
-const ButtonBoxTwo = styled.div`
+const OptionTwoButton = styled.div`
   @media (max-width: 1024px) {
     display: flex;
     flex-direction: column;

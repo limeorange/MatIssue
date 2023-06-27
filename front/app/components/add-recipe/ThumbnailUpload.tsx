@@ -1,6 +1,8 @@
 import React, { useRef, ChangeEvent, ReactElement } from "react";
 import styled from "styled-components";
 import uploadImage from "@/app/api/aws";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type Props = {
   selectedImage: string;
@@ -12,6 +14,7 @@ const ThumbnailUpload = ({
   handleThumbnailChange,
 }: Props): ReactElement => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -22,25 +25,42 @@ const ThumbnailUpload = ({
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-
-      try {
-        const response = await uploadImage(file);
-        const imageUrl = response.imageUrl;
-
-        handleThumbnailChange(imageUrl);
-      } catch (error) {
-        console.error("Image upload failed:", error);
-      }
+      await uploadFile(file);
     }
   };
 
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    await uploadFile(file);
+  };
+
+  const uploadFile = async (file: File) => {
+    try {
+      const response = await uploadImage(file);
+      const imageUrl = response.imageUrl;
+
+      handleThumbnailChange(imageUrl);
+    } catch (error) {
+      console.error("Image upload failed:", error);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
   return (
-    <ImageWrapper>
+    <ImageWrapper
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onClick={handleImageClick}
+    >
       <Label>썸네일 등록</Label>
       {selectedImage ? (
-        <Image src={selectedImage} alt="thumbnail" onClick={handleImageClick} />
+        <Image src={selectedImage} alt="thumbnail" />
       ) : (
-        <EmptyBox onClick={handleImageClick} />
+        <EmptyBox isDarkMode={isDarkMode} />
       )}
       <FileInput
         ref={fileInputRef}
@@ -63,7 +83,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
 
   @media (min-width: 1024px) {
     width: 9.8rem;
@@ -97,11 +116,15 @@ const Image = styled.img`
   }
 `;
 
-const EmptyBox = styled.div`
+const EmptyBox = styled.div<{ isDarkMode: boolean }>`
   width: 100%;
   height: 21rem;
+  border: ${(props) => (props.isDarkMode ? "0.05rem" : "none")} solid #d9d9d9;
   border-radius: 1.5rem;
-  background: #f6f5f5 url("/images/cameraIcon.png") no-repeat center;
+  background: ${(props) =>
+    props.isDarkMode
+      ? "#212739 url('/images/cameraIconDark.png') no-repeat center"
+      : "#f6f5f5 url('/images/cameraIcon.png') no-repeat center"};
   background-size: auto;
 
   @media (min-width: 1024px) {

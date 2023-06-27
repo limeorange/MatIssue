@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type MemoItemProps = {
   created_at: string;
@@ -57,6 +59,9 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
   const hasMemo = memoText ? true : false;
   const router = useRouter();
 
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   /** 해당 스크랩 데이터 로컬스토리지에서 삭제하는 핸들러 */
   const scrapDeleteHandler = (recipe_id: string) => {
     const memoScrapData = localStorage.getItem("scrapMemo");
@@ -77,14 +82,14 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
 
   return (
     <>
-      <ScrapCardContainerDiv>
+      <ScrapCardContainer isDarkMode={isDarkMode}>
         <div
           className="cursor-pointer"
           onClick={() => {
             router.push(`/recipe/${recipe_id}`);
           }}
         >
-          <RecipeTitleDiv>
+          <ScrapTitleWrapper>
             <Image
               src="/images/recipe-view/note.svg"
               alt="스크랩 노트 이모티콘"
@@ -92,14 +97,14 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
               height={35}
               style={{ objectFit: "cover" }}
             />
-            <ScrapTitleSpan>
+            <ScrapTitle isDarkMode={isDarkMode}>
               {recipe_title.length > 15
                 ? `${recipe_title.slice(0, 15)}...`
                 : recipe_title}
-            </ScrapTitleSpan>
-          </RecipeTitleDiv>
+            </ScrapTitle>
+          </ScrapTitleWrapper>
           {/* 레시피 썸네일 */}
-          <RecipeImageDiv>
+          <RecipeImage>
             <Image
               src={recipe_thumbnail}
               alt="스크랩 레시피 썸네일"
@@ -112,16 +117,14 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
                 borderRadius: 15,
               }}
             />
-          </RecipeImageDiv>
+          </RecipeImage>
           {/* 레시피 제목, 작성자, 좋아요 수 */}
-          <RecipeDescriptionDiv>
-            <RecipeTitleH2>{recipe_title}</RecipeTitleH2>
-            <NicknameLikeDiv>
-              <div className="text-[1.35rem] text-[#6F6F6F]">
-                {user_nickname}
-              </div>
-              <LikesWrapperButton>
-                <IconDiv>
+          <RecipeDescriptionWrapper>
+            <RecipeTitle>{recipe_title}</RecipeTitle>
+            <NicknameLikeBox>
+              <Nickname isDarkMode={isDarkMode}>{user_nickname}</Nickname>
+              <LikesButtonWrapper>
+                <LikesIcon>
                   <Image
                     src="/images/recipe-view/heart_full.svg"
                     alt="게시글 좋아요 하트"
@@ -129,83 +132,96 @@ const ScrapCardItem: React.FC<ScrapCardProps> = ({
                     height={24}
                     style={{ objectFit: "cover", cursor: "pointer" }}
                   />
-                </IconDiv>
-                <LikesCount>{recipe_like.length}</LikesCount>
-              </LikesWrapperButton>
-            </NicknameLikeDiv>
-          </RecipeDescriptionDiv>
+                </LikesIcon>
+                <LikesCount isDarkMode={isDarkMode}>
+                  {recipe_like.length}
+                </LikesCount>
+              </LikesButtonWrapper>
+            </NicknameLikeBox>
+          </RecipeDescriptionWrapper>
         </div>
         {/* 스크랩 메모 내용 */}
-        <MemoContainerDiv>
-          <ScrapTextDiv hasMemo={hasMemo}>
+        <MemoWrapper>
+          <ScrapText isDarkMode={isDarkMode} hasMemo={hasMemo}>
             {hasMemo ? memoText : "게시글에서 메모를 입력해보세요!"}
-          </ScrapTextDiv>
-        </MemoContainerDiv>
+          </ScrapText>
+        </MemoWrapper>
         {/* 스크랩 삭제 버튼 */}
-        <ButtonDiv>
-          <DeleteButton onClick={() => scrapDeleteHandler(recipe_id)}>
+        <DeleteButtonBox>
+          <DeleteButton
+            isDarkMode={isDarkMode}
+            onClick={() => scrapDeleteHandler(recipe_id)}
+          >
             삭제
           </DeleteButton>
-        </ButtonDiv>
-      </ScrapCardContainerDiv>
+        </DeleteButtonBox>
+      </ScrapCardContainer>
     </>
   );
 };
 
 /** 스크랩 카드 전체 Div */
-const ScrapCardContainerDiv = styled.div`
+const ScrapCardContainer = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   width: 28rem;
   height: 52rem;
   padding: 2rem;
-  background: #ffffff;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
 `;
 
 /** 스크랩 카드 제목 Div */
-const RecipeTitleDiv = styled.div`
+const ScrapTitleWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 1.7rem;
 `;
 
 /** 스크랩 썸네일 이미지 Div */
-const RecipeImageDiv = styled.div`
+const RecipeImage = styled.div`
   width: 24rem;
   height: 18rem;
   margin-bottom: 1rem;
 `;
 
 /** 스크랩 설명 Div */
-const RecipeDescriptionDiv = styled.div`
+const RecipeDescriptionWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 1.2rem;
 `;
 
 /** 레시피 제목 H2 */
-const RecipeTitleH2 = styled.h2`
+const RecipeTitle = styled.h2`
   font-size: 1.45rem;
 `;
 
 /** 닉네임, 좋아요 감싸는 Div */
-const NicknameLikeDiv = styled.div`
+const NicknameLikeBox = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
+/** 닉네임 Div */
+const Nickname = styled.div<{ isDarkMode: boolean }>`
+  font-size: 13.5px;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#6F6F6F")};
+`;
+
 /** 스크랩 메모하기 제목 Span */
-const ScrapTitleSpan = styled.span`
+const ScrapTitle = styled.span<{ isDarkMode: boolean }>`
   font-size: 16px;
   font-weight: 500;
   margin-left: 0.6rem;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
 /** 좋아요 아이콘과 카운트 묶는 Button */
-const LikesWrapperButton = styled.button`
+const LikesButtonWrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -213,36 +229,52 @@ const LikesWrapperButton = styled.button`
 `;
 
 /** 좋아요 아이콘 Div */
-const IconDiv = styled.div`
+const LikesIcon = styled.div`
   width: 1.6rem;
   height: 1.2rem;
   margin-right: 0.6rem;
 `;
 
 /** 좋아요 개수 Span */
-const LikesCount = styled.span`
+const LikesCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 13px;
-  color: #6f6f6f;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#6F6F6F")};
 `;
 
 /** 메모 입력칸 전체 감싸는 Div */
-const MemoContainerDiv = styled.div`
+const MemoWrapper = styled.div`
   width: 24rem;
   height: 15rem;
   font-size: 15.5px;
 `;
 
 /** 메모 입력하는 Textarea */
-const ScrapTextDiv = styled.div<{ hasMemo: boolean }>`
+const ScrapText = styled.div<{ hasMemo: boolean; isDarkMode: boolean }>`
   outline: none;
   width: 100%;
   height: 100%;
-  background: ${({ hasMemo }) => (hasMemo ? "#fbe2a1" : "#fdeec7")};
-  color: ${({ hasMemo }) => (hasMemo ? "#4f3d21" : "#9ca3af")};
   font-size: 14px;
   resize: none;
   border-radius: 1.5rem;
   padding: 1.3rem;
+
+  background-color: ${({ hasMemo, isDarkMode, theme }) =>
+    hasMemo
+      ? isDarkMode
+        ? theme.lightGrey
+        : "#fdeec7"
+      : isDarkMode
+      ? theme.lightGrey
+      : "#fdeec7"};
+
+  color: ${({ hasMemo, isDarkMode, theme }) =>
+    hasMemo
+      ? isDarkMode
+        ? theme.navy
+        : "#4f3d21"
+      : isDarkMode
+      ? theme.navy
+      : "#9ca3af"};
 
   ::-webkit-scrollbar {
     width: 1rem;
@@ -259,7 +291,7 @@ const ScrapTextDiv = styled.div<{ hasMemo: boolean }>`
 `;
 
 /** 삭제 버튼 감싸는 Div */
-const ButtonDiv = styled.div`
+const DeleteButtonBox = styled.div`
   display: flex;
   gap: 0.8rem;
   margin-top: 2rem;
@@ -267,18 +299,25 @@ const ButtonDiv = styled.div`
 `;
 
 /** 삭제 Button */
-const DeleteButton = styled.button`
+const DeleteButton = styled.button<{ isDarkMode: boolean }>`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
-  border: 2px solid #fbe2a1;
+  border: 2px solid;
+
   font-weight: 500;
   font-size: 16px;
-  color: #4f3d21;
+
+  border-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
 
   &:hover {
-    background-color: #fbe2a1;
+    background: ${(props) =>
+      props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
+    color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4F3D21")};
   }
+
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
 export default ScrapCardItem;

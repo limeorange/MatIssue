@@ -21,6 +21,8 @@ import {
   TwitterIcon,
   TwitterShareButton,
 } from "react-share";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -40,6 +42,7 @@ const ResultPage = () => {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [animation, setAnimation] = useState("opacity-0");
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 현재 페이지 url 주소 받아옴
   let currentPageUrl;
@@ -79,18 +82,20 @@ const ResultPage = () => {
 
   return (
     <>
-      <WorldcupLayout className={animation}>
+      <WorldcupLayout isDarkMode={isDarkMode} className={animation}>
         <Logo />
         <GameHeader>레시피 이상형 월드컵!</GameHeader>
-        <GameProgress>
+        <GameProgressBox isDarkMode={isDarkMode}>
           우승 레시피입니다! <br /> 클릭시 해당 레시피로 이동!
-        </GameProgress>
-        <WorldcupCard>
+        </GameProgressBox>
+        <WorldcupCardContainer isDarkMode={isDarkMode}>
           <Link href={`/recipe/${recipe.recipe_id}`} passHref>
             <CardLink>
-              <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+              <RecipeTitleBox isDarkMode={isDarkMode}>
+                {recipe.recipe_title}
+              </RecipeTitleBox>
               <ImageWrapper>
-                <ImageContainer>
+                <ImageBox>
                   <Image
                     src={recipe.recipe_thumbnail}
                     alt={recipe.recipe_title}
@@ -98,11 +103,11 @@ const ResultPage = () => {
                     objectFit="cover"
                     style={{ borderRadius: "1.5rem" }}
                   />
-                </ImageContainer>
+                </ImageBox>
               </ImageWrapper>
             </CardLink>
           </Link>
-          <ShareText>테스트 공유하기</ShareText>
+          <ShareText isDarkMode={isDarkMode}>테스트 공유하기</ShareText>
           <ShareButtonBox>
             <div onClick={copyToClipboard}>
               <Image
@@ -132,7 +137,7 @@ const ResultPage = () => {
               </StyledEmailShareButton>
             </ShareButtonBox>
           )}
-        </WorldcupCard>
+        </WorldcupCardContainer>
         <RestartButtonBox>
           <Button
             onClick={() => {
@@ -155,7 +160,7 @@ const ResultPage = () => {
 
 export default ResultPage;
 
-const WorldcupLayout = styled.div`
+const WorldcupLayout = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -172,6 +177,9 @@ const WorldcupLayout = styled.div`
   &.opacity-1 {
     opacity: 1;
   }
+
+  background-color: ${(props) =>
+    props.isDarkMode ? "rgba(255, 255, 255, 0.1)" : "#fff"};
 `;
 
 const GameHeader = styled.p<StyledComponentProps>`
@@ -189,9 +197,9 @@ const GameHeader = styled.p<StyledComponentProps>`
   }
 `;
 
-const GameProgress = styled.div`
+const GameProgressBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 35px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   margin-bottom: 1rem;
   margin-top: 2rem;
   font-family: "Dongle-Bold";
@@ -219,9 +227,9 @@ const GameProgress = styled.div`
   }
 `;
 
-const RecipeTitleBox = styled.div`
+const RecipeTitleBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 30px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   white-space: pre-line;
   text-align: center;
   transform-origin: center;
@@ -229,7 +237,7 @@ const RecipeTitleBox = styled.div`
   opacity: 1;
 `;
 
-const WorldcupCard = styled.div`
+const WorldcupCardContainer = styled.div<{ isDarkMode: boolean }>`
   font-family: "Dongle-Bold";
   display: flex;
   flex-direction: column;
@@ -243,6 +251,9 @@ const WorldcupCard = styled.div`
   max-height: 100%;
   padding: 1.5rem 0rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  background-color: ${(props) =>
+    props.isDarkMode ? "rgba(255, 255, 255, 0.2)" : "#fff"};
 `;
 
 const CardLink = styled.div`
@@ -263,7 +274,7 @@ const ImageWrapper = styled.div`
   cursor: pointer;
 `;
 
-const ImageContainer = styled.div`
+const ImageBox = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
@@ -271,11 +282,12 @@ const ImageContainer = styled.div`
   opacity: 1;
 `;
 
-const ShareText = styled.p`
+const ShareText = styled.p<{ isDarkMode: boolean }>`
   font-family: "Dongle-Bold";
   font-size: 30px;
   margin-top: 2rem;
   color: #5c8984;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightYellow : "#5c8984")};
 `;
 
 const ShareButtonBox = styled.div`

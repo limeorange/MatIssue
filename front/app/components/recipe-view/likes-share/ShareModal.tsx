@@ -8,7 +8,7 @@ type ShareModalProps = {
 };
 
 /** 공유하기 모달 컴포넌트 */
-const ShareModal: React.FC<ShareModalProps> = ({ recipe_thumbnail }) => {
+const ShareModal = ({ recipe_thumbnail }: ShareModalProps) => {
   /** url 복사하는 함수 */
   const copyToClipboard = async () => {
     const currentPageUrl = window.location.href;
@@ -21,7 +21,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ recipe_thumbnail }) => {
   };
   return (
     <>
-      <ShareButtonDiv>
+      <ShareButtonWrapper>
         <div onClick={copyToClipboard}>
           <Image
             src="/images/link.png"
@@ -31,13 +31,13 @@ const ShareModal: React.FC<ShareModalProps> = ({ recipe_thumbnail }) => {
           />
         </div>
         <RecipeKakaoShareButton recipe_thumbnail={recipe_thumbnail} />
-      </ShareButtonDiv>
+      </ShareButtonWrapper>
     </>
   );
 };
 
 /** 링크 공유하기 버튼 Div */
-const ShareButtonDiv = styled.div`
+const ShareButtonWrapper = styled.div`
   display: flex;
   position: absolute;
   width: 9rem;

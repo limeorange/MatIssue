@@ -1,4 +1,6 @@
+import darkModeAtom from "@/app/store/darkModeAtom";
 import Link from "next/link";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 const CATEGORY_DATA = [
@@ -10,11 +12,13 @@ const CATEGORY_DATA = [
 
 /** 헤더 카테고리 호버시 뜨는 카테고리바 모달 */
 const CategoryModal = ({ isModal }: { isModal: boolean }) => {
+  const isDarkMode = useRecoilValue(darkModeAtom);
+
   return (
-    <CategoryModalContainer visible={isModal}>
+    <CategoryModalContainer visible={isModal} isDarkMode={isDarkMode}>
       <CategoryModalList>
         {CATEGORY_DATA.map((item, index) => (
-          <CategoryModalItem key={index}>
+          <CategoryModalItem key={index} isDarkMode={isDarkMode}>
             <Link
               href={`/recipes/category/${item.name}?category=${item.qeury}`}
               style={{ width: "100%" }}
@@ -30,11 +34,16 @@ const CategoryModal = ({ isModal }: { isModal: boolean }) => {
 
 export default CategoryModal;
 
-const CategoryModalContainer = styled.div<{ visible: boolean }>`
+const CategoryModalContainer = styled.div<{
+  visible: boolean;
+  isDarkMode: boolean;
+}>`
   position: absolute;
   z-index: 50;
-  color: #4f3d21;
-  background-color: white;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : props.theme.white};
   width: 100%;
   left: 0;
   box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
@@ -62,7 +71,7 @@ const CategoryModalList = styled.ul`
   flex-direction: column;
 `;
 
-const CategoryModalItem = styled.li`
+const CategoryModalItem = styled.li<{ isDarkMode: boolean }>`
   display: flex;
   width: 100%;
   text-align: center;
@@ -70,7 +79,8 @@ const CategoryModalItem = styled.li`
 
   &:hover {
     cursor: pointer;
-    background-color: #fbe2a1;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.lightNavy : props.theme.lightYellow};
   }
 
   transition: background-color 0.2s;

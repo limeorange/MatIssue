@@ -3,6 +3,8 @@ import FilterModal from "./FilterModal";
 import styled from "styled-components";
 import Image from "next/image";
 import { SetFilter, OptionsType } from "../listings/ListingRecipe";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilState } from "recoil";
 
 type FilterBarProps = {
   setFilter: SetFilter;
@@ -35,6 +37,9 @@ const FilterBar = (props: FilterBarProps) => {
   const [isDurationModal, setIsDurationModal] = useState<boolean>(false); // 조리 시간 필터링 모달창
   const [isDifficultyModal, setIsDifficultyModal] = useState<boolean>(false); // 난이도 필터링 모달창
 
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   // 필터바 값에 따른 필터링
   useEffect(() => {
     setFilter({
@@ -45,8 +50,11 @@ const FilterBar = (props: FilterBarProps) => {
   }, [newServings, newDuration, newDifficulty, setFilter]);
 
   return (
-    <FilterBarContainer>
-      <FilterBarLi onClick={() => setIsServingsModal(!isServingsModal)}>
+    <FilterBarLayout>
+      <FilterBarItem
+        onClick={() => setIsServingsModal(!isServingsModal)}
+        isDarkMode={isDarkMode}
+      >
         {isServingsModal && (
           <FilterModal
             options={servings}
@@ -63,9 +71,12 @@ const FilterBar = (props: FilterBarProps) => {
           />
         </div>
         {newServings.name}
-      </FilterBarLi>
+      </FilterBarItem>
       <FilterBarLine></FilterBarLine>
-      <FilterBarLi onClick={() => setIsDurationModal(!isDurationModal)}>
+      <FilterBarItem
+        onClick={() => setIsDurationModal(!isDurationModal)}
+        isDarkMode={isDarkMode}
+      >
         {isDurationModal && (
           <FilterModal
             options={duration}
@@ -82,9 +93,12 @@ const FilterBar = (props: FilterBarProps) => {
           />
         </div>
         {newDuration.name}
-      </FilterBarLi>
+      </FilterBarItem>
       <FilterBarLine></FilterBarLine>
-      <FilterBarLi onClick={() => setIsDifficultyModal(!isDifficultyModal)}>
+      <FilterBarItem
+        onClick={() => setIsDifficultyModal(!isDifficultyModal)}
+        isDarkMode={isDarkMode}
+      >
         {isDifficultyModal && (
           <FilterModal
             options={difficulty}
@@ -101,14 +115,14 @@ const FilterBar = (props: FilterBarProps) => {
           />
         </div>
         {newDifficulty.name}
-      </FilterBarLi>
-    </FilterBarContainer>
+      </FilterBarItem>
+    </FilterBarLayout>
   );
 };
 
 export default FilterBar;
 
-const FilterBarContainer = styled.div`
+const FilterBarLayout = styled.div`
   display: flex;
   align-items: center;
   height: 4rem;
@@ -130,13 +144,14 @@ const FilterBarLine = styled.div`
   border-right: solid #d9d9d9 0.1rem;
 `;
 
-const FilterBarLi = styled.li`
+const FilterBarItem = styled.li<{ isDarkMode: boolean }>`
   display: flex;
   position: relative;
   align-items: center;
   justify-content: center;
   gap: 1.2rem;
-  border-bottom: 0.4rem solid #ffffff;
+  border-bottom: ${(props) =>
+    props.isDarkMode ? "0.4rem solid #212739" : "0.4rem solid #ffffff"};
   padding: 1.3rem 1.3rem 0.9rem 1.3rem;
   margin: 0 auto;
   width: 100%;

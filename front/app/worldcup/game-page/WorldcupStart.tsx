@@ -8,6 +8,8 @@ import { getAllRecipes } from "@/app/api/recipe";
 import Link from "next/link";
 import LoadingModal from "@/app/components/UI/LoadingModal";
 import Logo from "@/app/components/header/Logo";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type StyledComponentProps = {
   isAnimateOut?: boolean;
@@ -31,6 +33,7 @@ const WorldcupGame = () => {
   const [selectedCount, setSelectedCount] = useState(0);
   const [isAnimateOut, setIsAnimateOut] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -83,7 +86,7 @@ const WorldcupGame = () => {
     <WorldcupLayout>
       <Logo />
       <GameHeader>레시피 이상형 월드컵!</GameHeader>
-      <GameProgress>
+      <GameProgressBox isDarkMode={isDarkMode}>
         {stage === 2 ? (
           "결승전"
         ) : (
@@ -93,21 +96,23 @@ const WorldcupGame = () => {
             {`/${stage / 2})`}
           </>
         )}
-      </GameProgress>
+      </GameProgressBox>
       <CardContainer>
         {displays.map((recipe, index) =>
           stage === 1 && displays.length === 1 ? (
             <>
-              {index !== 0 && <VS>VS</VS>}
+              {index !== 0 && <VSBox isDarkMode={isDarkMode}>VS</VSBox>}
               <Link
                 href={`/recipes/${recipe.recipe_id}`}
                 key={recipe.recipe_id}
                 passHref
               >
                 <Card onClick={clickHandler(recipe)}>
-                  <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+                  <RecipeTitleBox isDarkMode={isDarkMode}>
+                    {recipe.recipe_title}
+                  </RecipeTitleBox>
                   <ImageWrapper>
-                    <ImageContainer>
+                    <ImageBox>
                       <Image
                         src={recipe.recipe_thumbnail}
                         alt={recipe.recipe_title}
@@ -115,18 +120,20 @@ const WorldcupGame = () => {
                         objectFit="cover"
                         style={{ borderRadius: "1.5rem" }}
                       />
-                    </ImageContainer>
+                    </ImageBox>
                   </ImageWrapper>
                 </Card>
               </Link>
             </>
           ) : (
             <>
-              {index !== 0 && <VS>VS</VS>}
+              {index !== 0 && <VSBox isDarkMode={isDarkMode}>VS</VSBox>}
               <Card onClick={clickHandler(recipe)} key={recipe.recipe_id}>
-                <RecipeTitleBox>{recipe.recipe_title}</RecipeTitleBox>
+                <RecipeTitleBox isDarkMode={isDarkMode}>
+                  {recipe.recipe_title}
+                </RecipeTitleBox>
                 <ImageWrapper>
-                  <ImageContainer>
+                  <ImageBox>
                     <Image
                       src={recipe.recipe_thumbnail}
                       alt={recipe.recipe_title}
@@ -134,7 +141,7 @@ const WorldcupGame = () => {
                       objectFit="cover"
                       style={{ borderRadius: "1.5rem" }}
                     />
-                  </ImageContainer>
+                  </ImageBox>
                 </ImageWrapper>
               </Card>
             </>
@@ -192,9 +199,9 @@ const GameHeader = styled.p<StyledComponentProps>`
   }
 `;
 
-const GameProgress = styled.div`
+const GameProgressBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 35px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   margin-bottom: 0.5rem;
   font-family: "Dongle-Bold";
   transform-origin: center;
@@ -231,9 +238,9 @@ const CardContainer = styled.div`
   }
 `;
 
-const VS = styled.div`
+const VSBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 25px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   font-family: "Dongle-Bold";
   margin-left: 2rem;
   margin-right: 2rem;
@@ -275,9 +282,9 @@ const Card = styled.div`
   }
 `;
 
-const RecipeTitleBox = styled.div`
+const RecipeTitleBox = styled.div<{ isDarkMode: boolean }>`
   font-size: 20px;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   margin-bottom: 1rem;
   white-space: pre-line;
   text-align: center;
@@ -310,7 +317,7 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
+const ImageBox = styled.div`
   width: 100%;
   height: 100%;
   position: relative;

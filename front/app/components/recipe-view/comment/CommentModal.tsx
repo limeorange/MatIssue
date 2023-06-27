@@ -1,4 +1,6 @@
+import darkModeAtom from "@/app/store/darkModeAtom";
 import { useEffect, useRef } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 type CommentModalProps = {
@@ -8,12 +10,15 @@ type CommentModalProps = {
   deleteClickHandler: () => void;
 };
 
-const CommentModal: React.FC<CommentModalProps> = ({
+const CommentModal = ({
   isModal,
   modalCloseHandler,
   editClickHandler,
   deleteClickHandler,
-}) => {
+}: CommentModalProps) => {
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   // 모달 컨테이너의 ref 생성
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -34,47 +39,55 @@ const CommentModal: React.FC<CommentModalProps> = ({
   }, [isModal, modalCloseHandler]);
 
   return (
-    <CommentModalContainer ref={modalRef}>
-      <CommentModalUl>
-        <CommentModalSpan onClick={editClickHandler}>수정</CommentModalSpan>
-        <CommentModalSpan onClick={deleteClickHandler}>삭제</CommentModalSpan>
-      </CommentModalUl>
+    <CommentModalContainer isDarkMode={isDarkMode} ref={modalRef}>
+      <CommentModalList>
+        <CommentModalItem isDarkMode={isDarkMode} onClick={editClickHandler}>
+          수정
+        </CommentModalItem>
+        <CommentModalItem isDarkMode={isDarkMode} onClick={deleteClickHandler}>
+          삭제
+        </CommentModalItem>
+      </CommentModalList>
     </CommentModalContainer>
   );
 };
 
-const CommentModalContainer = styled.div`
+const CommentModalContainer = styled.div<{ isDarkMode: boolean }>`
   position: absolute;
   right: 1.7rem;
   z-index: 9;
   padding: 0.6rem 0;
-  background-color: white;
   box-shadow: 0rem 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   font-size: 16px;
   font-weight: 400;
-  color: #4f3d21;
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#ffffff"};
 
   @media (min-width: 1024px) {
     right: auto;
   }
 `;
 
-const CommentModalUl = styled.ul`
+const CommentModalList = styled.ul`
   display: flex;
   flex-direction: column;
 `;
 
-const CommentModalSpan = styled.span`
+const CommentModalItem = styled.span<{ isDarkMode: boolean }>`
   display: flex;
   width: 100%;
   text-align: center;
   padding: 0.6rem 1.2rem;
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4f3d21")};
 
   &:hover {
     cursor: pointer;
-    background-color: #fbe2a1;
+    background: ${(props) =>
+      props.isDarkMode ? props.theme.lightNavy : "#fbe2a1"};
+    color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4f3d21")};
   }
 `;
 

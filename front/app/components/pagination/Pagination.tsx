@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilState } from "recoil";
 
 type PaginationProps = {
   recipesPerPage: number;
@@ -17,6 +19,9 @@ const Pagination = (props: PaginationProps) => {
 
   // 화면 너비 상태
   const [windowWidth, setWindowWidth] = useState(0);
+
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 화면 너비에 따른 스크롤 이벤트
   useEffect(() => {
@@ -80,9 +85,9 @@ const Pagination = (props: PaginationProps) => {
 
   return (
     <>
-      <PaginationWrapper>
-        <PaginationUl>
-          <PaginationPrevButtonBox onClick={handlePrevClick}>
+      <PaginationLayout>
+        <PaginationList>
+          <PaginationPrevButtonContainer onClick={handlePrevClick}>
             <PaginationPrevButton onClick={handlePrevClick}>
               <Image
                 src="/images/prevButtonIcon.png"
@@ -91,12 +96,13 @@ const Pagination = (props: PaginationProps) => {
                 height={15}
               />
             </PaginationPrevButton>
-          </PaginationPrevButtonBox>
+          </PaginationPrevButtonContainer>
           {pageNumbers.slice(startIndex, endIndex).map((number) => (
-            <PaginationLi key={number}>
-              <PaginationButtonBox
+            <PaginationItem key={number}>
+              <PaginationButtonWrapper
                 onClick={() => props.paginate(number)}
                 className={props.currentPage === number ? "active" : ""}
+                isDarkMode={isDarkMode}
               >
                 <PaginationButton
                   onClick={() => props.paginate(number)}
@@ -104,10 +110,10 @@ const Pagination = (props: PaginationProps) => {
                 >
                   {number}
                 </PaginationButton>
-              </PaginationButtonBox>
-            </PaginationLi>
+              </PaginationButtonWrapper>
+            </PaginationItem>
           ))}
-          <PaginationNextButtonBox onClick={handleNextClick}>
+          <PaginationNextButtonContainer onClick={handleNextClick}>
             <PaginationNextButton onClick={handleNextClick}>
               <Image
                 src="/images/nextButtonIcon.png"
@@ -116,10 +122,10 @@ const Pagination = (props: PaginationProps) => {
                 height={15}
               />
             </PaginationNextButton>
-          </PaginationNextButtonBox>
-        </PaginationUl>
-      </PaginationWrapper>
-      <PaginationInputDiv>
+          </PaginationNextButtonContainer>
+        </PaginationList>
+      </PaginationLayout>
+      <PaginationInputWrapper>
         <div>
           <Image
             src="/images/bookicon.png"
@@ -134,28 +140,29 @@ const Pagination = (props: PaginationProps) => {
           onChange={(e) => setPageInput(e.target.value)}
           onKeyDown={handlePageInput}
           placeholder="페이지 번호를 입력하세요."
+          isDarkMode={isDarkMode}
         />
-      </PaginationInputDiv>
+      </PaginationInputWrapper>
     </>
   );
 };
 
 export default Pagination;
 
-const PaginationWrapper = styled.div`
+const PaginationLayout = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   padding: 3rem 0;
 `;
 
-const PaginationUl = styled.ul`
+const PaginationList = styled.ul`
   display: flex;
 `;
 
-const PaginationLi = styled.li``;
+const PaginationItem = styled.li``;
 
-const PaginationButtonBox = styled.div`
+const PaginationButtonWrapper = styled.div<{ isDarkMode: boolean }>`
   display: flex;
   width: 4.25rem;
   height: 4rem;
@@ -164,25 +171,28 @@ const PaginationButtonBox = styled.div`
   justify-content: center;
   border-radius: 1rem;
   margin: 0.3rem;
+  color: #ababab;
 
   &: hover {
-    background-color: #e0e0e0;
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.white : "#e0e0e0"};
+    color: ${(props) => (props.isDarkMode ? props.theme.deepNavy : "#ababab")};
     cursor: pointer;
+  }
+
+  &.active {
+    color: ${(props) =>
+      props.isDarkMode ? props.theme.deepYellow : "#4f3d21"};
   }
 `;
 
 const PaginationButton = styled.button`
-  font-size: 1.6rem;
-  color: #ababab;
-
-  &.active {
-    color: #4f3d21;
-  }
+  font-size: 16px;
 `;
 
 const PaginationPrevButton = styled.button``;
 
-const PaginationPrevButtonBox = styled.div`
+const PaginationPrevButtonContainer = styled.div`
   display: flex;
   width: 4.25rem;
   height: 4rem;
@@ -201,7 +211,7 @@ const PaginationPrevButtonBox = styled.div`
 
 const PaginationNextButton = styled.button``;
 
-const PaginationNextButtonBox = styled.div`
+const PaginationNextButtonContainer = styled.div`
   display: flex;
   width: 4.25rem;
   height: 4rem;
@@ -218,7 +228,7 @@ const PaginationNextButtonBox = styled.div`
   }
 `;
 
-const PaginationInputDiv = styled.div`
+const PaginationInputWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 0.8rem 1.6rem;
@@ -236,11 +246,14 @@ const PaginationInputDiv = styled.div`
   }
 `;
 
-const PaginationInput = styled.input`
+const PaginationInput = styled.input<{ isDarkMode: boolean }>`
   width: 100%;
   border: none;
   font-size: 16px;
   font-weight: 400;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : props.theme.white};
+
   &:focus {
     outline: none;
   }

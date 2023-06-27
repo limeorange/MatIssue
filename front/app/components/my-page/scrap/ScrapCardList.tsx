@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import ScrapCardItem from "./ScrapCardItem";
-import NonRecipe from "../../UI/NonRecipe";
 import { useEffect, useState } from "react";
 import NonScrapPage from "../../UI/NonScrap";
 import Pagination from "../../pagination/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser from "@/app/api/user";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type MemoItemProps = {
   created_at: string;
@@ -35,6 +36,7 @@ const ScrapCardList: React.FC = () => {
   const scrapsPerPage = 16;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   // localStorage is not defined 에러 해결
   // 페이지가 client에 마운트될 때까지 기다렸다가 localStorage에 접근
@@ -52,10 +54,6 @@ const ScrapCardList: React.FC = () => {
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
-
-  const indexOfLastScrap = currentPage * scrapsPerPage;
-  const indexOfFirstScrap = indexOfLastScrap - scrapsPerPage;
-  const currentScraps = parsedMemo.slice(indexOfFirstScrap, indexOfLastScrap);
 
   useEffect(() => {
     function handleResize() {
@@ -91,34 +89,52 @@ const ScrapCardList: React.FC = () => {
   return (
     <ScrapListContainer>
       <TitleAndNickname>
-        <ScrapTitleSpan>나의 스크랩</ScrapTitleSpan>
-        <ScrapCountSpan>{currentScrap?.length}</ScrapCountSpan>
+        <ScrapTitle isDarkMode={isDarkMode}>나의 스크랩</ScrapTitle>
+        <ScrapCount isDarkMode={isDarkMode}>{currentScrap?.length}</ScrapCount>
       </TitleAndNickname>
       {currentScrap?.length === 0 ? (
         <NonScrapMsg />
+      ) : isMobile ? (
+        <InfiniteScroll
+          dataLength={currentScrap.length}
+          next={fetchMoreRecipes}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          scrollThreshold={0.5}
+          endMessage={
+            <p
+              style={{
+                fontSize: "16px",
+                textAlign: "center",
+                margin: "2rem",
+                color: "#F8B551",
+              }}
+            >
+              <b>{`마지막 스크랩입니다 :)`}</b>
+            </p>
+          }
+        >
+          <ScrapListGrid>
+            {currentScrap.map((item: ScrapItemProps, index: number) => {
+              const recipeData = item["scrapData"];
+              const memoText = item["memo"];
+              return (
+                <ScrapCardItem
+                  key={index}
+                  recipeData={recipeData}
+                  memoText={memoText}
+                  setParsedMemo={setParsedMemo}
+                ></ScrapCardItem>
+              );
+            })}
+          </ScrapListGrid>
+        </InfiniteScroll>
       ) : (
-        isMobile ? (
-          <InfiniteScroll
-            dataLength={currentScrap.length}
-            next={fetchMoreRecipes}
-            hasMore={hasMore}
-            loader={<h4>Loading...</h4>}
-            scrollThreshold={0.5}
-            endMessage={
-              <p
-                style={{
-                  fontSize: "16px",
-                  textAlign: "center",
-                  margin: "2rem",
-                  color: "#F8B551",
-                }}
-              >
-                <b>{`마지막 스크랩입니다 :)`}</b>
-              </p>
-            }
-          >
-            <ScrapListGrid>
-              {currentScrap.map((item: ScrapItemProps, index: number) => {
+        <>
+          <ScrapListGrid>
+            {currentScrap
+              .slice(0, scrapsPerPage * currentPage)
+              .map((item: ScrapItemProps, index: number) => {
                 const recipeData = item["scrapData"];
                 const memoText = item["memo"];
                 return (
@@ -130,38 +146,18 @@ const ScrapCardList: React.FC = () => {
                   ></ScrapCardItem>
                 );
               })}
-            </ScrapListGrid>
-          </InfiniteScroll>
-        ) : (
-          <>
-            <ScrapListGrid>
-              {currentScrap
-                .slice(0, scrapsPerPage * currentPage)
-                .map((item: ScrapItemProps, index: number) => {
-                  const recipeData = item["scrapData"];
-                  const memoText = item["memo"];
-                  return (
-                    <ScrapCardItem
-                      key={index}
-                      recipeData={recipeData}
-                      memoText={memoText}
-                      setParsedMemo={setParsedMemo}
-                    ></ScrapCardItem>
-                  );
-                })}
-            </ScrapListGrid>
-            <PaginationComponent
-              recipesPerPage={scrapsPerPage}
-              totalRecipes={currentScrap.length}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
-          </>
-        )
+          </ScrapListGrid>
+          <PaginationComponent
+            recipesPerPage={scrapsPerPage}
+            totalRecipes={currentScrap.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </>
       )}
     </ScrapListContainer>
   );
-              }
+};
 
 export default ScrapCardList;
 
@@ -175,6 +171,7 @@ const ScrapListContainer = styled.div`
   }
 `;
 
+/** '나의 스크랩'과 스크랩 개수 표시하는 Div */
 const TitleAndNickname = styled.div`
   padding: 0 1rem 0.6rem 3.7rem;
   @media (min-width: 1024px) {
@@ -183,12 +180,12 @@ const TitleAndNickname = styled.div`
 `;
 
 /** 스크랩 제목 Span */
-const ScrapTitleSpan = styled.span`
+const ScrapTitle = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.01em;
   margin: 0 0.3rem 0 1rem;
-  color: #4f3d21;
+  color: ${(props) => (props.isDarkMode ? "#fff" : "#4F3D21")};
   @media (min-width: 1024px) {
     font-size: 18px;
     margin: 0 0.5rem 0 1.9rem;
@@ -196,10 +193,10 @@ const ScrapTitleSpan = styled.span`
 `;
 
 /** 스크랩 개수 Span */
-const ScrapCountSpan = styled.span`
+const ScrapCount = styled.span<{ isDarkMode: boolean }>`
   font-size: 15px;
   font-weight: 700;
-  color: #545454;
+  color: ${(props) => (props.isDarkMode ? "#ccc" : "#666")};
   @media (min-width: 1024px) {
     font-size: 17px;
   }
@@ -232,11 +229,8 @@ const ScrapListGrid = styled.div`
 const NonScrapMsg = styled(NonScrapPage)``;
 
 const PaginationComponent = styled(Pagination)`
-display: none;
-@media (min-width: 1024px) {
-  margin: 0 auto;
-}
+  display: none;
+  @media (min-width: 1024px) {
+    margin: 0 auto;
+  }
 `;
-
-
-

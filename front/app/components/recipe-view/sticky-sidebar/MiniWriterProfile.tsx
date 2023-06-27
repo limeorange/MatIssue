@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { getChefByUserId, getUserFans } from "@/app/api/user";
+import { getChefByUserId } from "@/app/api/user";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { axiosBase } from "@/app/api/axios";
@@ -9,7 +9,8 @@ import FollowDeleteModal from "../../UI/FollowDeleteModal";
 import { useRouter } from "next/navigation";
 import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { User } from "@/app/types";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type WriterProfileProps = {
   user_id: string;
@@ -17,13 +18,11 @@ type WriterProfileProps = {
 };
 
 /** 작성자 프로필 컴포넌트 */
-const MiniWriterProfile: React.FC<WriterProfileProps> = ({
-  user_id,
-  loggedInUserId,
-}) => {
+const MiniWriterProfile = ({ user_id, loggedInUserId }: WriterProfileProps) => {
   // currentChef에 user 정보가 담김
-  const { data: currentChef } = useQuery(["currentChef", user_id], () =>
-    getChefByUserId(user_id)
+  const { data: currentChef, isLoading } = useQuery(
+    ["currentChef", user_id],
+    () => getChefByUserId(user_id)
   );
 
   const client = useQueryClient();
@@ -31,6 +30,9 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
 
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // userid => 닉네임, 팔로잉, 팔로워, 프로필 사진 받아오는 API
   // 로그인한 유저가 페이지 처음 로드 시 팔로우 여부 판단 의존성 설정
@@ -132,6 +134,16 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
     router.push("auth/login");
   };
 
+  /** 프로필 클릭 핸들러 - 유저 페이지로 이동 */
+  const profileClickHandler = () => {
+    router.push(`user/${currentChef.user_id}`);
+  };
+
+  // currentChef를 받아오기 전 로딩 상태를 표시하는 컴포넌트
+  if (isLoading) {
+    return <div>Loading...</div>; //
+  }
+
   return (
     <>
       {/* 팔로우 취소 모달 */}
@@ -153,82 +165,99 @@ const MiniWriterProfile: React.FC<WriterProfileProps> = ({
           onCancel={loginModalCloseHandler}
         />
       )}
-      <ProfileContainerDiv>
-        <ProfileHeaderDiv>오늘의 쉐프</ProfileHeaderDiv>
-        <ProfileContentsDiv>
-          {/* 프로필 사진 */}
-          <ProfileImageDiv>
-            <Image
-              src={
-                currentChef
-                  ? currentChef.img
-                  : "/images/recipe-view/기본 프로필.PNG"
-              }
-              alt="게시글 작성자 프로필 사진"
-              width={130}
-              height={130}
-              style={{ objectFit: "cover", cursor: "pointer" }}
-            />
-          </ProfileImageDiv>
+      <ProfileContainer isDarkMode={isDarkMode}>
+        <ProfileHeader isDarkMode={isDarkMode}>오늘의 쉐프</ProfileHeader>
+        <ProfileContentsWrapper>
+          <UserProfileClickWrapper onClick={profileClickHandler}>
+            {/* 프로필 사진 */}
+            <ProfileImage>
+              <Image
+                src={
+                  currentChef.img
+                    ? currentChef.img
+                    : "/images/recipe-view/기본 프로필.PNG"
+                }
+                alt="게시글 작성자 프로필 사진"
+                width={130}
+                height={130}
+                style={{ objectFit: "cover", cursor: "pointer" }}
+              />
+            </ProfileImage>
 
-          {/* 닉네임 */}
-          <NicknameSpan>{currentChef?.username}</NicknameSpan>
+            {/* 닉네임 */}
+            <Nickname isDarkMode={isDarkMode}>{currentChef?.username}</Nickname>
 
-          {/* 팔로잉, 팔로워 */}
-          <FollowDiv>
-            <span>팔로워</span>
-            <BoldSpan>{currentChef?.fans.length}</BoldSpan>
-            <span>|</span>
-            <span>팔로잉</span>
-            <BoldSpan>{currentChef?.subscriptions.length}</BoldSpan>
-          </FollowDiv>
+            {/* 팔로잉, 팔로워 */}
+            <FollowBox>
+              <Span isDarkMode={isDarkMode}>팔로워</Span>
+              <BoldCount isDarkMode={isDarkMode}>
+                {currentChef?.fans.length}
+              </BoldCount>
+              <Span isDarkMode={isDarkMode}>|</Span>
+              <Span isDarkMode={isDarkMode}>팔로잉</Span>
+              <BoldCount isDarkMode={isDarkMode}>
+                {currentChef?.subscriptions.length}
+              </BoldCount>
+            </FollowBox>
 
-          {/* 팔로우 버튼 */}
-          <FollowButton onClick={followButtonHandler}>
-            {followButtonText}
-          </FollowButton>
-        </ProfileContentsDiv>
-      </ProfileContainerDiv>
+            {/* 팔로우 버튼 */}
+            <FollowButton isDarkMode={isDarkMode} onClick={followButtonHandler}>
+              {followButtonText}
+            </FollowButton>
+          </UserProfileClickWrapper>
+        </ProfileContentsWrapper>
+      </ProfileContainer>
     </>
   );
 };
 
 /** 프로필 박스 전체 감싸는 Div */
-const ProfileContainerDiv = styled.div`
+const ProfileContainer = styled.div<{
+  isDarkMode: boolean;
+}>`
     display: flex;
     flex-direction: column;
     position: fixed;
     width: 18.5rem;
     height: 32rem;
-    right: 8%;
-    bottom: 14%;
+    right: 3rem;
+    bottom: 10rem;
     box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
     border-radius: 2rem;
-    background-color: #ffffff;
     z-index: 30;
-
-    
+    background-color: ${(props) =>
+      props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
     }
 
   @media (min-width: 1024px) {
     display: none;
 `;
 
+/** 클릭 시 유저 페이지로 이동하는 영역 Div */
+const UserProfileClickWrapper = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 /** 프로필 헤더 박스 Div */
-const ProfileHeaderDiv = styled.div`
+const ProfileHeader = styled.div<{ isDarkMode: boolean }>`
   width: 18.5rem;
   height: 4.3rem;
-  background: #fbe2a1;
   border-radius: 20px 20px 0px 0px;
   font-weight: 500;
   font-size: 17px;
-  color: #4f3d21;
   padding: 1rem;
   padding-left: 1.5rem;
+
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4f3d21")};
 `;
 
 /** 프로필 내용 담는 Div */
-const ProfileContentsDiv = styled.div`
+const ProfileContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -236,7 +265,7 @@ const ProfileContentsDiv = styled.div`
 `;
 
 /** 프로필 이미지 감싸는 Div */
-const ProfileImageDiv = styled.div`
+const ProfileImage = styled.div`
   display: flex;
   width: 12rem;
   height: 12rem;
@@ -247,15 +276,20 @@ const ProfileImageDiv = styled.div`
 `;
 
 /** 닉네임 Span */
-const NicknameSpan = styled.span`
+const Nickname = styled.span<{ isDarkMode: boolean }>`
   font-size: 1.8rem;
   font-weight: 500;
-  color: #4f3d21;
   margin-bottom: 0.4rem;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
+`;
+
+/** 팔로워, 팔로잉 Span */
+const Span = styled.span<{ isDarkMode: boolean }>`
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
 /** 팔로잉, 팔로워 Div */
-const FollowDiv = styled.div`
+const FollowBox = styled.div`
   display: flex;
   color: #4f3d21;
   font-size: 1.5rem;
@@ -264,12 +298,13 @@ const FollowDiv = styled.div`
 `;
 
 /** 팔로잉, 팔로워수 강조 Span */
-const BoldSpan = styled.span`
+const BoldCount = styled.span<{ isDarkMode: boolean }>`
   font-weight: 500;
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
 /** 팔로우 버튼 */
-const FollowButton = styled.button`
+const FollowButton = styled.button<{ isDarkMode: boolean }>`
   width: 14rem;
   height: 3.5rem;
   font-size: 16px;
@@ -278,7 +313,9 @@ const FollowButton = styled.button`
   color: #4f3d21;
   border-radius: 1rem;
   transition: background-color 0.2s ease-in-out;
-
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4F3D21")};
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
   &:hover {
     background-color: #fbd26a;
   }

@@ -5,6 +5,7 @@ import Button from "@/app/components/UI/Button";
 import LoadingModal from "@/app/components/UI/LoadingModal";
 import ConfirmModal from "@/app/components/auth/ConfirmModal";
 import Logo from "@/app/components/header/Logo";
+import darkModeAtom from "@/app/store/darkModeAtom";
 import {
   AuthContainer,
   AuthFormWrapper,
@@ -17,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useRef, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { useRecoilValue } from "recoil";
 import styled, { css } from "styled-components";
 
 type Variant = "아이디" | "비밀번호";
@@ -36,6 +38,7 @@ const FindIdPasswordClient = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [variant, setVariant] = useState<Variant>("아이디");
   const [message, setMessage] = useState<string>("");
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const yearInputRef = useRef<HTMLInputElement>(null);
   const monthInputRef = useRef<HTMLInputElement>(null);
@@ -164,7 +167,7 @@ const FindIdPasswordClient = () => {
   };
 
   return (
-    <AuthContainer>
+    <AuthContainer isDarkMode={isDarkMode}>
       {isLoading && <LoadingModal />}
       {message && (
         <ConfirmModal
@@ -199,7 +202,7 @@ const FindIdPasswordClient = () => {
               비밀번호 찾기
             </VariantBoxItem>
           </VariantBox>
-          <VariantNoticeBar variant={variant} />
+          <VariantNoticeBar variant={variant} isDarkMode={isDarkMode} />
         </VariantWrapper>
         <form onSubmit={handleSubmit(onSubmit)}>
           {variant === "비밀번호" && (
@@ -357,9 +360,11 @@ const VariantBoxItem = styled.div<{ active: boolean }>`
     `};
 `;
 
-const VariantNoticeBar = styled.div<{ variant: Variant }>`
+const VariantNoticeBar = styled.div<{ variant: Variant; isDarkMode: boolean }>`
   width: 50%;
-  border-bottom: 0.3rem solid #f8b551;
+  border-bottom: 0.3rem solid
+    ${(props) =>
+      props.isDarkMode ? props.theme.lightYellow : props.theme.yellow};
   transform: translateX(
     ${(props) => (props.variant === "아이디" ? "0" : "100%")}
   );

@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 import { useState } from "react";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type CheckboxInputProps = {
   isChecked: boolean;
@@ -23,9 +25,7 @@ type IngredientListProps = {
 };
 
 /** 재료 준비 목록 컴포넌트 */
-const IngredientList: React.FC<IngredientListProps> = ({
-  recipe_ingredients,
-}) => {
+const IngredientList = ({ recipe_ingredients }: IngredientListProps) => {
   const [isCheckedList, setIsCheckedList] = useState<boolean[]>(
     Array(recipe_ingredients.length).fill(false)
   );
@@ -37,18 +37,21 @@ const IngredientList: React.FC<IngredientListProps> = ({
     setIsCheckedList(updatedList);
   };
 
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   return (
-    <ContainerDiv>
-      <IngredientUl>
+    <IngredientsContainer isDarkMode={isDarkMode}>
+      <IngredientsList>
         {recipe_ingredients.map((item, index) => (
-          <IngredientItemLi key={index}>
-            <IngredientDiv isChecked={isCheckedList[index]}>
+          <IngredientItem key={index}>
+            <IngredientName isChecked={isCheckedList[index]}>
               {item.name}
-            </IngredientDiv>
-            <IngredientCountDiv isChecked={isCheckedList[index]}>
+            </IngredientName>
+            <IngredientCount isChecked={isCheckedList[index]}>
               {item.amount}
-            </IngredientCountDiv>
-            <CheckboxWrapperDiv>
+            </IngredientCount>
+            <CheckboxWrapper>
               <CheckboxInput
                 type="checkbox"
                 isChecked={isCheckedList[index]}
@@ -58,21 +61,25 @@ const IngredientList: React.FC<IngredientListProps> = ({
                 onClick={() => CheckClickHandler(index)}
                 isChecked={isCheckedList[index]}
               />
-            </CheckboxWrapperDiv>
-          </IngredientItemLi>
+            </CheckboxWrapper>
+          </IngredientItem>
         ))}
-      </IngredientUl>
-    </ContainerDiv>
+      </IngredientsList>
+    </IngredientsContainer>
   );
 };
 
 /** 재료 목록 전체 감싸는 Div */
-const ContainerDiv = styled.div`
+const IngredientsContainer = styled.div<{ isDarkMode: boolean }>`
   width: 100%;
   height: 100%;
-  border: 1rem solid #fff6df;
   border-radius: 2rem;
   padding: 1.7rem;
+
+  border: ${(props) =>
+    props.isDarkMode
+      ? `1rem solid ${props.theme.lightNavy}`
+      : "1rem solid #fff6df"};
 
   @media (min-width: 1024px) {
     width: 40rem;
@@ -81,21 +88,21 @@ const ContainerDiv = styled.div`
 `;
 
 /** 재료 목록 리스트 Ul */
-const IngredientUl = styled.ul`
+const IngredientsList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 `;
 
 /** 재료 목록 Li */
-const IngredientItemLi = styled.li`
+const IngredientItem = styled.li`
   display: flex;
   justify-content: flex-start;
   align-items: center;
 `;
 
 /** 재료명 Div */
-const IngredientDiv = styled.div<{ isChecked: boolean }>`
+const IngredientName = styled.div<{ isChecked: boolean }>`
   font-size: 16px;
   flex-grow: 1;
 
@@ -109,7 +116,7 @@ const IngredientDiv = styled.div<{ isChecked: boolean }>`
 `;
 
 /** 재료 양 Div */
-const IngredientCountDiv = styled.div<{ isChecked: boolean }>`
+const IngredientCount = styled.div<{ isChecked: boolean }>`
   font-size: 16px;
   margin-right: 1rem;
   align-self: flex-start;
@@ -124,7 +131,7 @@ const IngredientCountDiv = styled.div<{ isChecked: boolean }>`
 `;
 
 /** 체크박스 감싸는 Div */
-const CheckboxWrapperDiv = styled.div`
+const CheckboxWrapper = styled.div`
   position: relative;
   margin-bottom: 0.7rem;
   margin-right: 1rem;
@@ -138,6 +145,7 @@ const CheckboxWrapperDiv = styled.div`
 /** 체크박스 Input */
 const CheckboxInput = styled.input<CheckboxInputProps>`
   visibility: hidden;
+
   ${({ isChecked }) =>
     isChecked
       ? css`

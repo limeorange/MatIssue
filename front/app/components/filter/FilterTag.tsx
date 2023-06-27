@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Filter } from "../listings/ListingRecipe";
 import styled from "styled-components";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilState } from "recoil";
 
 type FilterTagProps = {
   search: string | null | undefined;
@@ -18,6 +20,9 @@ type TagListType = {
 
 const FilterTag = (props: FilterTagProps) => {
   const { search, filter, category, onRemove } = props;
+
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 필터 태그 상태 빈 배열로 설정
   const [tagList, setTagList] = useState<TagListType[]>([]);
@@ -79,24 +84,23 @@ const FilterTag = (props: FilterTagProps) => {
 
   return (
     <>
-      <Text>검색결과</Text>
-      <FilterTagBox>
+      <SearchText isDarkMode={isDarkMode}>검색결과</SearchText>
+      <FilterTagLayout isDarkMode={isDarkMode}>
         {tagList.map((item, index) => (
           <span key={index}>
             {item.tag}
             <RemoveButton onClick={() => onRemove(item.type)}>X</RemoveButton>
           </span>
         ))}
-      </FilterTagBox>
+      </FilterTagLayout>
     </>
   );
 };
 
 export default FilterTag;
 
-const FilterTagBox = styled.div`
+const FilterTagLayout = styled.div<{ isDarkMode: boolean }>`
   font-size: 14px;
-  color: #9f783a;
   width: 100%;
   display: flex;
   align-items: center;
@@ -105,16 +109,13 @@ const FilterTagBox = styled.div`
   overflow-x: auto;
   padding-bottom: 1rem;
 
-  & p {
-    color: #4f3d21;
-    text-align: center;
-  }
-
   & span {
     background-color: #fbe2a1;
     border-radius: 10rem;
     padding: 0.2rem 0.9rem;
     flex-shrink: 0;
+    color: ${(props) =>
+      props.isDarkMode ? props.theme.deepNavy : props.theme.brown};
 
     @media (min-width: 1024px) {
       padding: 0.5rem 1.5rem;
@@ -134,10 +135,12 @@ const FilterTagBox = styled.div`
   }
 `;
 
-const Text = styled.p`
+const SearchText = styled.p<{ isDarkMode: boolean }>`
   margin: 1rem auto;
   font-size: 16px;
-  color: #4f3d21;
+
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.lightYellow : props.theme.brown};
 
   @media (min-width: 1024px) {
     margin-top: 2rem;

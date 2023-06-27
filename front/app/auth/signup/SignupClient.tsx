@@ -27,6 +27,8 @@ import {
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
 import LoadingModal from "@/app/components/UI/LoadingModal";
+import { useRecoilValue } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 const SignupClient = () => {
   const {
@@ -52,6 +54,7 @@ const SignupClient = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordConfirm, setShowPasswordConfirm] =
     useState<boolean>(false);
+  const isDarkMode = useRecoilValue(darkModeAtom);
 
   const router = useRouter();
   const yearInputRef = useRef<HTMLInputElement>(null);
@@ -166,7 +169,7 @@ const SignupClient = () => {
   };
 
   return (
-    <AuthContainer>
+    <AuthContainer isDarkMode={isDarkMode}>
       {isLoading && <LoadingModal />}
       <AuthFormWrapper>
         <Logo />
@@ -249,12 +252,13 @@ const SignupClient = () => {
             <StyledLabel htmlFor="password">비밀번호</StyledLabel>
             <div className="relative">
               <ShowIconBox
+                isDarkMode={isDarkMode}
                 onClick={() => {
                   setShowPassword(!showPassword);
                 }}
               >
                 <Image
-                  src="/images/showPasswordIcon.png"
+                  src="/images/auth/showIcon.svg"
                   height={16}
                   width={18}
                   alt="showIcon"
@@ -284,12 +288,13 @@ const SignupClient = () => {
             <SpaceDiv />
             <div className="relative">
               <ShowIconBox
+                isDarkMode={isDarkMode}
                 onClick={() => {
                   setShowPasswordConfirm(!showPasswordConfirm);
                 }}
               >
                 <Image
-                  src="/images/showPasswordIcon.png"
+                  src="/images/auth/showIcon.svg"
                   height={16}
                   width={18}
                   alt="showIcon"
@@ -417,7 +422,7 @@ const SpaceDiv = styled.div`
   height: 1rem;
 `;
 
-const ShowIconBox = styled.div`
+const ShowIconBox = styled.div<{ isDarkMode: boolean }>`
   position: absolute;
   display: flex;
   align-items: center;
@@ -426,6 +431,10 @@ const ShowIconBox = styled.div`
   top: 1.1rem;
   right: 1.1rem;
   cursor: pointer;
+  filter: ${(props) =>
+    props.isDarkMode
+      ? "invert(89%) sepia(27%) saturate(436%) hue-rotate(334deg) brightness(105%) contrast(104%)"
+      : "invert(18%) sepia(10%) saturate(2848%) hue-rotate(357deg) brightness(103%) contrast(82%)"};
 `;
 
 const BirthdayWrapper = styled.div`

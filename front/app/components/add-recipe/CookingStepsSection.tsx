@@ -2,6 +2,8 @@ import React, { ChangeEvent } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import uploadImage from "@/app/api/aws";
+import darkModeAtom from "@/app/store/darkModeAtom";
+import { useRecoilState } from "recoil";
 
 type Step = {
   stepDetail: string;
@@ -27,6 +29,8 @@ const CookingStepsSection = ({
   handleAddStep,
   handleRemoveStep,
 }: CookingStepsSectionProps) => {
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   const handleImageChange = async (
     e: ChangeEvent<HTMLInputElement>,
     index: number
@@ -47,6 +51,31 @@ const CookingStepsSection = ({
       }
     }
   };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+
+    try {
+      const response = await uploadImage(file);
+      let imageUrl = response.imageUrl;
+
+      const timestamp = new Date().getTime();
+      imageUrl += `?${timestamp}`;
+
+      handleStepImageChange(imageUrl, index);
+    } catch (error) {
+      console.error("Image upload failed:", error);
+    }
+  };
+
   return (
     <CookingStepContainer>
       <Label>요리 순서</Label>
@@ -60,7 +89,12 @@ const CookingStepsSection = ({
                 onChange={(e) => handleStepDetailChange(e, index)}
                 placeholder="단계별 요리 방법을 입력해주세요."
               />
-              <ImageUploadBox imgExists={Boolean(stepImages[index])}>
+              <ImageUploadBox
+                isDarkMode={isDarkMode}
+                imgExists={Boolean(stepImages[index])}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, index)}
+              >
                 <FileInput
                   id={`step-image-input-${index}`}
                   type="file"
@@ -97,7 +131,11 @@ const CookingStepsSection = ({
           </StepContainer>
         </div>
       ))}
-      <AddStepButton type="button" onClick={handleAddStep}>
+      <AddStepButton
+        isDarkMode={isDarkMode}
+        type="button"
+        onClick={handleAddStep}
+      >
         + 순서 추가하기
       </AddStepButton>
     </CookingStepContainer>
@@ -112,7 +150,6 @@ const Label = styled.label`
   font-weight: 600;
   font-size: 18px;
   line-height: 2.1rem;
-  color: #4f3d21;
   margin-right: 3rem;
   padding-top: 0.5rem;
 
@@ -127,7 +164,7 @@ const TextArea = styled.textarea`
   box-sizing: border-box;
   width: 100%;
   height: 10rem;
-  border: 0.1rem solid #d9d9d9;
+
   border-radius: 1.5rem;
   padding: 1rem;
   font-family: "Pretendard";
@@ -136,13 +173,9 @@ const TextArea = styled.textarea`
   font-size: 16px;
   line-height: 1.9rem;
   resize: none;
+
   ::placeholder {
     color: #a9a9a9;
-  }
-  &:focus {
-    border: 0.1rem solid #fbd26a;
-    outline: none;
-    box-shadow: 0 0 0 0.2rem #fbd26a;
   }
 
   @media (min-width: 1024px) {
@@ -165,7 +198,7 @@ const CookingStepContainer = styled.div`
 const StepLabel = styled(Label)`
   margin-bottom: 1rem;
   align-self: flex-start;
-  margin-right: -2rem;
+  margin-right: -0.5rem;
 `;
 
 const StepContentsWrapper = styled.div`
@@ -178,14 +211,16 @@ const StepContentsWrapper = styled.div`
   }
 `;
 
-const ImageUploadBox = styled.div<{ imgExists: boolean }>`
+const ImageUploadBox = styled.div<{ isDarkMode: boolean; imgExists: boolean }>`
   width: 100%;
   height: 18.6rem;
   background: ${(props) =>
     props.imgExists
       ? "#f7f5f5"
-      : '#f6f5f5 url("/images/cameraIcon.png") no-repeat center'};
-  background-size: ${(props) => (props.imgExists ? "auto" : "6rem 6rem")};
+      : props.isDarkMode
+      ? "#212739 url('/images/cameraIconDark.png') no-repeat center / 4.2rem 3.5rem"
+      : '#f6f5f5 url("/images/cameraIcon.png") no-repeat center / 6rem 6rem'};
+  border: ${(props) => (props.isDarkMode ? "0.05rem" : "none")} solid #d9d9d9;
   border-radius: 1.5rem;
   display: flex;
   justify-content: center;
@@ -225,14 +260,17 @@ const StepTextArea = styled(TextArea)`
   }
 `;
 
-const AddStepButton = styled.button`
+const AddStepButton = styled.button<{ isDarkMode: boolean }>`
   width: 100%;
   font-family: "Pretendard", sans-serif;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 2.8rem;
-  color: #4f3d21;
+
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.white : props.theme.brown};
+
   border: none;
   cursor: pointer;
   background: transparent;

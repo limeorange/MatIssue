@@ -13,12 +13,14 @@ import LoginConfirmModal from "../../UI/LoginConfirmModal";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
 import { useRouter } from "next/navigation";
 import ConfirmModal from "../../UI/ConfirmModal";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 /** 요리 댓글 단일 Props */
 type RecipeCommentProps = Comments;
 
 /** 요리 댓글 단일 컴포넌트 */
-const RecipeComment: React.FC<RecipeCommentProps> = ({
+const RecipeComment = ({
   comment_author,
   comment_text,
   comment_id,
@@ -28,7 +30,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   updated_at,
   comment_nickname,
   comment_profile_img,
-}) => {
+}: RecipeCommentProps) => {
   // 수정 버튼 눌렀을 때 textarea로 변경하기 위한 상태 관리
   const [isEditing, setIsEditing] = useState(false);
 
@@ -73,6 +75,9 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
   // 댓글 삭제 확인 모달 상태 관리
   const [commentDeleteConfirmModal, setCommentDeleteConfirmModal] =
     useState(false);
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   /** 댓글창 클릭시 상태 업데이트 핸들러 */
   const boxClickHandler = () => {
@@ -214,7 +219,7 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
           />
         )}
 
-        <ProfileImageDiv>
+        <ProfileImageWrapper>
           <Image
             src={comment_profile_img}
             alt="유저 프로필 사진"
@@ -224,22 +229,24 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
               borderRadius: 20,
             }}
           />
-        </ProfileImageDiv>
+        </ProfileImageWrapper>
 
         {/* 작성자, 댓글 수정/삭제바, 댓글 내용 */}
-        <CommentContentsDiv>
-          <AuthorDotsDiv>
+        <CommentContentsWrapper>
+          <AuthorDotsWrapper>
             {/* 작성자, 작성 시간 */}
-            <AuthorTimeDiv>
-              <AuthorNameSpan>{comment_nickname}</AuthorNameSpan>
-              <CreatedTimeSpan>
+            <AuthorTimeBox>
+              <AuthorName isDarkMode={isDarkMode}>
+                {comment_nickname}
+              </AuthorName>
+              <CreatedTime>
                 {koreanCreatedAt.split(":").slice(0, -1).join(":")}
-              </CreatedTimeSpan>
-            </AuthorTimeDiv>
+              </CreatedTime>
+            </AuthorTimeBox>
             {/* 댓글 좋아요, 댓글 수정/삭제바 */}
             <div className="flex items-center">
-              <LikesWrapperButton onClick={heartClickHandler}>
-                <IconDiv>
+              <LikesButtonWrapper onClick={heartClickHandler}>
+                <LikesIcon>
                   <Image
                     src={
                       isCommentLiked
@@ -251,10 +258,10 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
                     height={26}
                     style={{ objectFit: "cover", cursor: "pointer" }}
                   />
-                </IconDiv>
+                </LikesIcon>
                 <LikesCount>{countText}</LikesCount>
-              </LikesWrapperButton>
-              <ThreeDotsImageDiv onClick={() => setIsModal(true)}>
+              </LikesButtonWrapper>
+              <ThreeDotsImageWrapper onClick={() => setIsModal(true)}>
                 {isModal && loggedInUserId === comment_author && (
                   <CommentModal
                     isModal={isModal}
@@ -273,77 +280,64 @@ const RecipeComment: React.FC<RecipeCommentProps> = ({
                       onClick={() => setIsModal(true)}
                     />
                   )}
-              </ThreeDotsImageDiv>
+              </ThreeDotsImageWrapper>
             </div>
-          </AuthorDotsDiv>
+          </AuthorDotsWrapper>
           {/* 댓글 내용 */}
           {/* 수정 버튼 눌렀을 때 textarea로 변경 */}
           {isEditing ? (
             <>
-              <CommentContainerDiv
+              <CommentInputWrapper
                 isCommenting={isCommenting}
                 onClick={boxClickHandler}
+                isDarkMode={isDarkMode}
               >
                 <InputTextArea
                   value={editedCommentText}
                   onChange={commentChangeHandler}
+                  isDarkMode={isDarkMode}
                 />
-              </CommentContainerDiv>
-              <ButtonDiv>
-                <DeleteButton onClick={commentCancelHandler}>취소</DeleteButton>
-                <EditButton onClick={commentSaveHandler}>수정</EditButton>
-              </ButtonDiv>
+              </CommentInputWrapper>
+              <ButtonWrapper>
+                <CancelButton
+                  isDarkMode={isDarkMode}
+                  onClick={commentCancelHandler}
+                >
+                  취소
+                </CancelButton>
+                <EditButton
+                  isDarkMode={isDarkMode}
+                  onClick={commentSaveHandler}
+                >
+                  수정
+                </EditButton>
+              </ButtonWrapper>
             </>
           ) : (
-            <CommentText>{editedCommentText}</CommentText>
+            <CommentText isDarkMode={isDarkMode}>
+              {editedCommentText}
+            </CommentText>
           )}
-        </CommentContentsDiv>
+        </CommentContentsWrapper>
       </CommentContainer>
     </>
   );
 };
 
-const AuthorTimeDiv = styled.div`
+/** 댓글 전체 감싸는 Div */
+const CommentContainer = styled.div`
   display: flex;
-  flex-direction: column;
-
-  @media (min-width: 1024px) {
-    align-items: center;
-    flex-direction: row;
-  }
-`;
-
-/** 수정, 삭제 버튼 감싸는 Div */
-const ButtonDiv = styled.div`
-  display: flex;
-  gap: 0.8rem;
-  justify-content: flex-end;
-`;
-
-/** 수정 Button */
-const EditButton = styled.button`
-  width: 6rem;
-  height: 3.5rem;
-  border-radius: 1rem;
-  background: #fbe2a1;
-  font-weight: 500;
-  font-size: 15.5px;
-  color: #4f3d21;
-`;
-
-/** 삭제 Button */
-const DeleteButton = styled.button`
-  width: 6rem;
-  height: 3.5rem;
-  border-radius: 1rem;
-  border: 2px solid #fbe2a1;
-  font-weight: 500;
-  font-size: 15.5px;
-  color: #4f3d21;
+  width: 100%;
+  padding-bottom: 1.2rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 0.1rem solid #dbd8d0;
 `;
 
 /** 댓글 입력칸 전체 감싸는 Div */
-const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
+const CommentInputWrapper = styled.div<{
+  isCommenting: boolean;
+  isDarkMode: boolean;
+}>`
   display: flex;
   width: 100%;
   border-radius: 1rem;
@@ -357,22 +351,31 @@ const CommentContainerDiv = styled.div<{ isCommenting: boolean }>`
   cursor: pointer;
   border: 0.2rem solid #dbd8d0;
 
-  ${({ isCommenting }) =>
+  ${({ isCommenting, isDarkMode, theme }) =>
     isCommenting &&
     css`
-      border-color: #fbd26a;
       color: #fbd26a;
+      border-color: ${(props) => (isDarkMode ? theme.lightGrey : "#fbd26a")};
     `}
 `;
 
 /** 댓글 입력 텍스트 */
-const InputTextArea = styled.textarea`
+const InputTextArea = styled.textarea<{ isDarkMode: boolean }>`
   outline: none;
   width: 99%;
   color: #9ca3af;
   font-size: 15.5px;
   resize: none;
   padding-right: 0.5rem;
+  border: none;
+
+  &:focus {
+    border: none;
+    outline: none;
+  }
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.deepNavy : "#fffff"};
 
   ::-webkit-scrollbar {
     width: 1rem;
@@ -389,17 +392,8 @@ const InputTextArea = styled.textarea`
   }
 `;
 
-/** 댓글 전체 감싸는 Div */
-const CommentContainer = styled.div`
-  display: flex;
-  width: 100%;
-  padding-bottom: 1.2rem;
-  margin-bottom: 1.2rem;
-  border-bottom: 0.1rem solid #dbd8d0;
-`;
-
 /** 작성자, 댓글 수정/삭제바, 댓글 내용 감싸는 Div */
-const CommentContentsDiv = styled.div`
+const CommentContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 1.2rem;
@@ -407,18 +401,18 @@ const CommentContentsDiv = styled.div`
 `;
 
 /** 작성자 닉네임 Span */
-const AuthorNameSpan = styled.span`
+const AuthorName = styled.span<{ isDarkMode: boolean }>`
   font-size: 14.8px;
-  color: #6f6f6f;
   font-weight: 500;
   margin-right: 0.8rem;
+  color: ${(props) => (props.isDarkMode ? props.theme.grey : "#6f6f6f")};
 
   @media (min-width: 1024px) {
     font-size: 16px;
   }
 `;
 
-const CreatedTimeSpan = styled.span`
+const CreatedTime = styled.span`
   font-size: 11px;
   color: #afafaf;
 
@@ -428,7 +422,7 @@ const CreatedTimeSpan = styled.span`
 `;
 
 /** 프로필 이미지 감싸는 Div */
-const ProfileImageDiv = styled.div`
+const ProfileImageWrapper = styled.div`
   min-width: 4.9rem;
   min-height: 4.9rem;
   width: 4.9rem;
@@ -439,14 +433,14 @@ const ProfileImageDiv = styled.div`
 `;
 
 /** 작성자와 아이콘 감싸는 Div */
-const AuthorDotsDiv = styled.div`
+const AuthorDotsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
 `;
 
 /** 댓글 수정, 삭제 아이콘 감싸는 Div */
-const ThreeDotsImageDiv = styled.div`
+const ThreeDotsImageWrapper = styled.div`
   display: flex;
   cursor: pointer;
   width: 2.5rem;
@@ -454,10 +448,11 @@ const ThreeDotsImageDiv = styled.div`
 `;
 
 /** 댓글 내용 Div */
-const CommentText = styled.div`
+const CommentText = styled.div<{ isDarkMode: boolean }>`
   font-size: 14.5px;
   color: #6f6f6f;
   width: 100%;
+  color: ${(props) => (props.isDarkMode ? props.theme.grey : "#6f6f6f")};
 
   @media (min-width: 1024px) {
     font-size: 15.5px;
@@ -465,7 +460,7 @@ const CommentText = styled.div`
 `;
 
 /** 좋아요 아이콘과 카운트 묶는 Button */
-const LikesWrapperButton = styled.button`
+const LikesButtonWrapper = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -473,7 +468,7 @@ const LikesWrapperButton = styled.button`
 `;
 
 /** 좋아요 아이콘 Div */
-const IconDiv = styled.div`
+const LikesIcon = styled.div`
   width: 1.8rem;
   height: 1.4rem;
   margin-right: 0.6rem;
@@ -483,6 +478,51 @@ const IconDiv = styled.div`
 const LikesCount = styled.span`
   font-size: 14px;
   color: #6f6f6f;
+`;
+
+/** 작성자, 시간 담는 Div */
+const AuthorTimeBox = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 1024px) {
+    align-items: center;
+    flex-direction: row;
+  }
+`;
+
+/** 수정, 취소 버튼 감싸는 Div */
+const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+`;
+
+/** 수정 Button */
+const EditButton = styled.button<{ isDarkMode: boolean }>`
+  width: 6rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  font-weight: 500;
+  font-size: 15.5px;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4F3D21")};
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
+`;
+
+/** 취소 Button */
+const CancelButton = styled.button<{ isDarkMode: boolean }>`
+  width: 6rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  border: 2px solid;
+  font-weight: 500;
+  font-size: 15.5px;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
+  border-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
 `;
 
 /** 댓글 삭제 컨펌 모달창 */

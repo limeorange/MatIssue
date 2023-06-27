@@ -2,10 +2,13 @@
 
 import styled from "styled-components";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Recipe } from "@/app/types";
 import { useQuery } from "@tanstack/react-query";
 import getCurrentUser from "@/app/api/user";
+import React from "react";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 type ScrapModalProps = {
   modalCloseHandler: () => void;
@@ -14,11 +17,11 @@ type ScrapModalProps = {
 };
 
 /** 스크랩 모달 컴포넌트 */
-const ScrapModal: React.FC<ScrapModalProps> = ({
+const ScrapModal = ({
   modalCloseHandler,
   setIsSaved,
   recipe,
-}) => {
+}: ScrapModalProps) => {
   const { data: currentUser } = useQuery(["currentUser"], () =>
     getCurrentUser()
   );
@@ -56,32 +59,41 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
   // 스크랩 메모 내용 유무에 따른 배경, 글자색 변경을 위한 상태 관리
   const hasMemo = memo ? true : false;
 
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   // 스크랩 모달창 자유 이동 설정
   const modalRef = useRef<HTMLDivElement>(null);
   const offsetXRef = useRef<number>(0);
   const offsetYRef = useRef<number>(0);
 
-  const mouseUpHandler = () => {
+  const mouseUpHandler = useCallback(() => {
     setIsDragging(false);
-  };
+  }, []);
 
-  const mouseDownHandler = (event: React.MouseEvent<HTMLDivElement>) => {
-    setIsDragging(true);
-    const { clientX, clientY } = event;
-    const { left, top } = modalRef.current!.getBoundingClientRect();
-    offsetXRef.current = clientX - left;
-    offsetYRef.current = clientY - top;
-  };
-
-  const mouseMoveHandler = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (isDragging) {
+  const mouseDownHandler = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      setIsDragging(true);
       const { clientX, clientY } = event;
-      const newLeft = clientX - offsetXRef.current;
-      const newTop = clientY - offsetYRef.current;
-      modalRef.current!.style.left = `${newLeft}px`;
-      modalRef.current!.style.top = `${newTop}px`;
-    }
-  };
+      const { left, top } = modalRef.current!.getBoundingClientRect();
+      offsetXRef.current = clientX - left;
+      offsetYRef.current = clientY - top;
+    },
+    []
+  );
+
+  const mouseMoveHandler = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      if (isDragging) {
+        const { clientX, clientY } = event;
+        const newLeft = clientX - offsetXRef.current;
+        const newTop = clientY - offsetYRef.current;
+        modalRef.current!.style.left = `${newLeft}px`;
+        modalRef.current!.style.top = `${newTop}px`;
+      }
+    },
+    [isDragging]
+  );
 
   // 기존의 저장된 메모 보여주는 의존성 설정
   useEffect(() => {
@@ -97,7 +109,7 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
         setMemo("");
       }
     }
-  }, []);
+  }, [recipe_id]);
 
   /** 메모 작성 내용 업데이트 핸들러 */
   const memoChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -133,15 +145,16 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
 
   return (
     <>
-      <ScrapContainerDiv
+      <ScrapContainer
         ref={modalRef}
         onMouseDown={mouseDownHandler}
         onMouseMove={mouseMoveHandler}
         onMouseUp={mouseUpHandler}
+        isDarkMode={isDarkMode}
       >
-        <ScrapContentsDiv>
+        <ScrapContentsWrapper>
           {/* 스크랩 메모하기 Title */}
-          <ScrapTitleDiv>
+          <ScrapTitleIconBox>
             <Image
               src="/images/recipe-view/note.svg"
               alt="스크랩 노트 이모티콘"
@@ -149,28 +162,33 @@ const ScrapModal: React.FC<ScrapModalProps> = ({
               height={35}
               style={{ objectFit: "cover" }}
             />
-            <ScrapTitleSpan>스크랩 메모하기</ScrapTitleSpan>
-          </ScrapTitleDiv>
-          <MemoContainerDiv>
+            <ScrapTitle isDarkMode={isDarkMode}>스크랩 메모하기</ScrapTitle>
+          </ScrapTitleIconBox>
+          <MemoBox>
             <ScrapTextArea
               placeholder="마우스로 메모를 원하는 곳에 배치해보세요!"
               value={memo}
               onChange={memoChangeHandler}
               hasMemo={hasMemo}
+              isDarkMode={isDarkMode}
             ></ScrapTextArea>
-          </MemoContainerDiv>
-          <ButtonDiv>
-            <CancelButton onClick={memoCancelHandler}>취소</CancelButton>
-            <SaveButton onClick={memoSaveHandler}>저장</SaveButton>
-          </ButtonDiv>
-        </ScrapContentsDiv>
-      </ScrapContainerDiv>
+          </MemoBox>
+          <ButtonBox>
+            <CancelButton isDarkMode={isDarkMode} onClick={memoCancelHandler}>
+              취소
+            </CancelButton>
+            <SaveButton isDarkMode={isDarkMode} onClick={memoSaveHandler}>
+              저장
+            </SaveButton>
+          </ButtonBox>
+        </ScrapContentsWrapper>
+      </ScrapContainer>
     </>
   );
 };
 
 /** 스크랩 메모 전체 감싸는 Div */
-const ScrapContainerDiv = styled.div`
+const ScrapContainer = styled.div<{ isDarkMode: boolean }>`
   position: fixed;
   top: 35%;
   left: 6%;
@@ -178,11 +196,12 @@ const ScrapContainerDiv = styled.div`
   justify-content: center;
   width: 33rem;
   height: 34.5rem;
-  background: #ffffff;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   z-index: 90;
   cursor: pointer;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
 
   @media (min-width: 1024px) {
     top: 39.1%;
@@ -191,13 +210,13 @@ const ScrapContainerDiv = styled.div`
 `;
 
 /** 스크랩 모달창 컨텐츠 세로 정렬을 위한 Div */
-const ScrapContentsDiv = styled.div`
+const ScrapContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
 /** 스크랩 메모하기 제목 및 아이콘을 담은 Div */
-const ScrapTitleDiv = styled.div`
+const ScrapTitleIconBox = styled.div`
   display: flex;
   text-color: #4f3d21;
   margin-top: 2rem;
@@ -207,9 +226,11 @@ const ScrapTitleDiv = styled.div`
 `;
 
 /** 스크랩 메모하기 제목 Span */
-const ScrapTitleSpan = styled.span`
+const ScrapTitle = styled.span<{ isDarkMode: boolean }>`
   font-size: 16px;
   font-weight: 500;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 
   @media (min-width: 1024px) {
     font-size: 17px;
@@ -217,7 +238,7 @@ const ScrapTitleSpan = styled.span`
 `;
 
 /** 메모 입력칸 전체 감싸는 Div */
-const MemoContainerDiv = styled.div`
+const MemoBox = styled.div`
   width: 29.5rem;
   height: 19.5rem;
   font-size: 15.5px;
@@ -225,17 +246,43 @@ const MemoContainerDiv = styled.div`
 `;
 
 /** 메모 입력하는 Textarea */
-const ScrapTextArea = styled.textarea<{ hasMemo: boolean }>`
+const ScrapTextArea = styled.textarea<{
+  hasMemo: boolean;
+  isDarkMode: boolean;
+}>`
   outline: none;
+  border: none;
   width: 100%;
   height: 100%;
-  background: ${({ hasMemo }) => (hasMemo ? "#fbe2a1" : "#fdeec7")};
-  color: ${({ hasMemo }) => (hasMemo ? "#4f3d21" : "#9ca3af")};
   font-size: 15.5px;
   resize: none;
   border-radius: 1.5rem;
   padding: 1.5rem;
 
+  background-color: ${({ hasMemo, isDarkMode, theme }) =>
+    hasMemo
+      ? isDarkMode
+        ? theme.lightGrey
+        : "#fdeec7"
+      : isDarkMode
+      ? theme.lightGrey
+      : "#fdeec7"};
+
+  color: ${({ hasMemo, isDarkMode, theme }) =>
+    hasMemo
+      ? isDarkMode
+        ? theme.navy
+        : "#4f3d21"
+      : isDarkMode
+      ? theme.navy
+      : "#9ca3af"};
+
+  &:focus {
+    border: none;
+    outline: none;
+  }
+
+  // 스크롤바 관련 설정
   ::-webkit-scrollbar {
     width: 1rem;
   }
@@ -251,7 +298,7 @@ const ScrapTextArea = styled.textarea<{ hasMemo: boolean }>`
 `;
 
 /** 수정, 삭제 버튼 감싸는 Div */
-const ButtonDiv = styled.div`
+const ButtonBox = styled.div`
   display: flex;
   gap: 0.8rem;
   margin-top: 2rem;
@@ -259,25 +306,30 @@ const ButtonDiv = styled.div`
 `;
 
 /** 저장 Button */
-const SaveButton = styled.button`
+const SaveButton = styled.button<{ isDarkMode: boolean }>`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
-  background: #fbe2a1;
   font-weight: 500;
   font-size: 16px;
-  color: #4f3d21;
+
+  color: ${(props) => (props.isDarkMode ? props.theme.navy : "#4F3D21")};
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
 `;
 
 /** 취소 Button */
-const CancelButton = styled.button`
+const CancelButton = styled.button<{ isDarkMode: boolean }>`
   width: 6rem;
   height: 3.5rem;
   border-radius: 1rem;
-  border: 2px solid #fbe2a1;
+  border: 2px solid;
   font-weight: 500;
   font-size: 16px;
-  color: #4f3d21;
+
+  border-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbe2a1"};
+  color: ${(props) => (props.isDarkMode ? props.theme.lightGrey : "#4F3D21")};
 `;
 
-export default ScrapModal;
+export default React.memo(ScrapModal);

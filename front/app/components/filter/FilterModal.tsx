@@ -1,6 +1,8 @@
 "use client";
 
+import darkModeAtom from "@/app/store/darkModeAtom";
 import { useRef, useEffect } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 type FilterModalProps = {
@@ -13,6 +15,9 @@ type FilterModalProps = {
 
 const FilterModal = (props: FilterModalProps) => {
   const { options, setState, onClose } = props;
+
+  // 다크모드 상태
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   // 필터바 모달창 ref
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -34,30 +39,32 @@ const FilterModal = (props: FilterModalProps) => {
   }, [onClose]);
 
   return (
-    <FilterModalContainer ref={modalRef}>
-      <FilterModalUl>
+    <FilterModalLayout ref={modalRef} isDarkMode={isDarkMode}>
+      <FilterModalList>
         {options.map((option) => (
-          <FilterModalLi
+          <FilterModalItem
+            isDarkMode={isDarkMode}
             key={option.value}
             onClick={() => {
               setState(option);
             }}
           >
             {option.name}
-          </FilterModalLi>
+          </FilterModalItem>
         ))}
-      </FilterModalUl>
-    </FilterModalContainer>
+      </FilterModalList>
+    </FilterModalLayout>
   );
 };
 
-const FilterModalContainer = styled.div`
+const FilterModalLayout = styled.div<{ isDarkMode: boolean }>`
   position: absolute;
   top: 4.4rem;
   z-index: 90;
   width: 100%;
   padding: 0.6rem 0;
-  background-color: white;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : props.theme.white};
   box-shadow: 0px 0.1rem 0.3rem rgba(0, 0, 0, 0.25);
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
@@ -66,21 +73,23 @@ const FilterModalContainer = styled.div`
   color: #4f3d21;
 `;
 
-const FilterModalUl = styled.ul`
+const FilterModalList = styled.ul`
   display: flex;
   flex-direction: column;
 `;
 
-const FilterModalLi = styled.li`
+const FilterModalItem = styled.li<{ isDarkMode: boolean }>`
   padding: 1rem;
   text-align: center;
+  color: ${(props) =>
+    props.isDarkMode ? props.theme.grey : props.theme.brown};
 
   &:hover {
     background: #fbe2a1;
     cursor: pointer;
+    color: ${(props) =>
+      props.isDarkMode ? props.theme.deepNavy : props.theme.brown};
   }
 `;
-
-const Backdrop = styled.div``;
 
 export default FilterModal;

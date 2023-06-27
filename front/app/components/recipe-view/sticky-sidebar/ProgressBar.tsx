@@ -1,7 +1,10 @@
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
+import darkModeAtom from "@/app/store/darkModeAtom";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
+/** 페이지 전체 진행바 컴포넌트 */
 const ProgressBar = () => {
   // 스크롤 진행 퍼센트 상태 관리
   const [scrollPercentage, setScrollPercentage] = useState(0);
@@ -9,6 +12,9 @@ const ProgressBar = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   const isHeaderVisible = useMovingContentByScrolling();
+
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
 
   useEffect(() => {
     // 스크롤 진행 퍼센트를 현재 스크롤 위치를 기반으로 계산해주는 핸들러
@@ -51,23 +57,31 @@ const ProgressBar = () => {
   return (
     <>
       {isVisible && (
-        <ProgressBarContainerDiv isHeaderVisible={isHeaderVisible}>
-          <ProgressBarDiv progress={scrollPercentage} />
-        </ProgressBarContainerDiv>
+        <ProgressBarWrapper
+          isDarkMode={isDarkMode}
+          isHeaderVisible={isHeaderVisible}
+        >
+          <ProgressBarBox isDarkMode={isDarkMode} progress={scrollPercentage} />
+        </ProgressBarWrapper>
       )}
     </>
   );
 };
 
 // 스크롤 진행바 전체 박스
-const ProgressBarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
+const ProgressBarWrapper = styled.div<{
+  isHeaderVisible: boolean;
+  isDarkMode: boolean;
+}>`
   position: fixed;
   left: 0;
   top: 13.1rem;
   width: 100%;
   height: 1rem;
-  background-color: #f2f2f2;
   z-index: 40;
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#f2f2f2"};
 
   transform: ${(props) =>
     props.isHeaderVisible ? "translateY(0)" : "translateY(-131px)"};
@@ -75,11 +89,13 @@ const ProgressBarContainerDiv = styled.div<{ isHeaderVisible: boolean }>`
 `;
 
 // 스크롤 진행바
-const ProgressBarDiv = styled.div<{ progress: number }>`
+const ProgressBarBox = styled.div<{ progress: number; isDarkMode: boolean }>`
   height: 100%;
   width: ${({ progress }) => `${progress}%`};
-  background-color: #fbd26a;
   border-radius: 0 1rem 1rem 0;
+
+  background: ${(props) =>
+    props.isDarkMode ? props.theme.lightGrey : "#fbd26a"};
 `;
 
 export default ProgressBar;

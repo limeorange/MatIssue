@@ -10,6 +10,7 @@ export const axiosBase = axios.create({
   // baseURL: "https://matissue-1jim.onrender.com/api/",
   // baseURL: "https://matissue.p-e.kr/api",
   baseURL: "https://mat-issue.onrender.com/api/",
+  // baseURL: "https://kdt-sw-4-team10.elicecoding.com/api/",
   headers: {
     "Content-Type": "application/json",
   },

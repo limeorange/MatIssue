@@ -21,7 +21,7 @@ import { Recipe, User } from "@/app/types";
 import WriterProfile from "@/app/components/recipe-view/sticky-sidebar/WriterProfile";
 import { axiosBase } from "@/app/api/axios";
 import toast from "react-hot-toast";
-import getCurrentUser from "@/app/api/user";
+import getCurrentUser, { getChefByUserId } from "@/app/api/user";
 import useMovingContentByScrolling from "@/app/hooks/useMovingContentByScrolling";
 import { useRouter } from "next/navigation";
 import { AlertImage } from "@/app/styles/my-page/modify-user-info.style";
@@ -29,21 +29,20 @@ import ConfirmModal from "@/app/components/UI/ConfirmModal";
 import ShareModal from "@/app/components/recipe-view/likes-share/ShareModal";
 import MiniWriterProfile from "@/app/components/recipe-view/sticky-sidebar/MiniWriterProfile";
 import LoginConfirmModal from "@/app/components/UI/LoginConfirmModal";
+import { useRecoilState } from "recoil";
+import darkModeAtom from "@/app/store/darkModeAtom";
 
 /** 레시피 데이터 Props */
 type RecipeDataProps = {
   recipe: Recipe;
   recipe_id: string;
+  initialCurrentChef: User;
 };
 
 /** 레시피 조회 페이지 컴포넌트 */
 const RecipeDetail = (props: RecipeDataProps) => {
-  // 캐시에 저장된 현재 레시피 정보를 가져옴
-  const {
-    data: recipe,
-    isLoading,
-    isError,
-  } = useQuery<Recipe>(
+  // currentRecipe : 현재 레시피 정보
+  const { data: recipe } = useQuery<Recipe>(
     ["currentRecipe", props.recipe_id],
     () => getRecipeById(props.recipe_id),
     {
@@ -53,7 +52,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
     }
   );
 
-  // 캐시에 저장된 현재 유저정보를 가져옴
+  // currentUser : 현재 로그인 된 유저정보
   const { data: currentUser } = useQuery<User>(["currentUser"], () =>
     getCurrentUser()
   );
@@ -81,7 +80,6 @@ const RecipeDetail = (props: RecipeDataProps) => {
     // 레시피 작성자 아이디, 이미지, 작성된 시각
     user_id,
     created_at,
-    user_img,
 
     // 요리 재료
     recipe_ingredients,
@@ -94,13 +92,20 @@ const RecipeDetail = (props: RecipeDataProps) => {
     recipe_view,
     recipe_like,
 
-    // 팔로우, 팔로잉 관련
-    user_fan,
-    user_subscription,
-
     // 댓글 관련 data
     comments,
   } = recipe;
+
+  // currentChef : 현재 게시글의 작성자 정보
+  const { data: currentChef } = useQuery(
+    ["currentChef", user_id],
+    () => getChefByUserId(user_id),
+    {
+      refetchOnWindowFocus: false,
+      retry: 0,
+      initialData: props.initialCurrentChef,
+    }
+  );
 
   // 댓글 개수
   const commentCount =
@@ -136,6 +141,9 @@ const RecipeDetail = (props: RecipeDataProps) => {
   // 로그인 유도 모달 상태 관리
   const [loginConfirmModal, setLoginConfirmModal] = useState(false);
 
+  // 다크 모드 상태 관리
+  const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
   /** 좋아요 버튼 클릭 핸들러 */
   const heartClickHandler = async () => {
     try {
@@ -149,7 +157,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
         );
         await axiosBase.patch(`/recipes/${recipe_id}/like`, recipeUpdated);
         setIsLiked(false);
-        setCount(count - 1);
+        setCount((prevCount) => Math.max(prevCount - 1, 0));
         toast.error("좋아요가 취소되었습니다ㅠ.ㅠ");
       }
       // 좋아요를 처음 누른 경우
@@ -157,7 +165,7 @@ const RecipeDetail = (props: RecipeDataProps) => {
         recipe_like.push(loggedInUserId);
         await axiosBase.patch(`/recipes/${recipe_id}/like`, recipe_like);
         setIsLiked(true);
-        setCount(count + 1);
+        setCount((prevCount) => prevCount + 1);
         toast.success("맛이슈와 함께라면 언제든 좋아요!");
       }
       client.invalidateQueries(["currentRecipe"]);
@@ -227,9 +235,14 @@ const RecipeDetail = (props: RecipeDataProps) => {
     router.push("auth/login");
   };
 
+  /** 프로필 클릭 핸들러 - 유저 페이지로 이동 */
+  const profileClickHandler = () => {
+    router.push(`user/${currentChef.user_id}`);
+  };
+
   return (
     <>
-      <ContainerDiv>
+      <ViewPageContainer>
         {/* 게시글 삭제 확인 모달 */}
         {deleteConfirmModal && (
           <StyledConfirmModal
@@ -254,10 +267,10 @@ const RecipeDetail = (props: RecipeDataProps) => {
         <ProgressBar />
 
         {/* 목차 사이드바 */}
-        <StickySideDiv>
+        <StickySideWrapper>
           <StickyProgressBar />
           <StickySideBar />
-        </StickySideDiv>
+        </StickySideWrapper>
 
         {/* 작성자 프로필 */}
         <WriterProfile user_id={user_id} loggedInUserId={loggedInUserId} />
@@ -270,33 +283,38 @@ const RecipeDetail = (props: RecipeDataProps) => {
               loggedInUserId={loggedInUserId}
             />
           )}
-          <ProfileImageDiv onClick={mobileProfileClickHandler}>
+          <ProfileImage onClick={mobileProfileClickHandler}>
             <Image
-              src={user_img ? user_img : "/images/recipe-view/기본 프로필.PNG"}
+              src={
+                currentChef.img
+                  ? currentChef.img
+                  : "/images/recipe-view/기본 프로필.PNG"
+              }
               alt="게시글 작성자 프로필 사진"
               width={150}
               height={150}
               style={{ objectFit: "cover", cursor: "pointer" }}
             />
-          </ProfileImageDiv>
+          </ProfileImage>
         </div>
 
         {/* 요리 대표 이미지 */}
-        <RecipeImg>
+        <RecipeImage>
           <Img src={recipe_thumbnail} alt="요리 대표 사진" />
-        </RecipeImg>
+        </RecipeImage>
 
         {/* 요리 제목, 작성자, 작성 시간, 간단 소개글 */}
         <div>
-          <TitleContainerDiv>
-            <TitleH3>{recipe_title}</TitleH3>
-            <div className="flex justify-between items-center">
+          <TitleContentsWrapper>
+            <RecipeTitle>{recipe_title}</RecipeTitle>
+            <InfoButtonWrapper>
               <div>
-                <AuthorSpan>by {user_nickname}</AuthorSpan>
-                <AuthorSpan>&nbsp;• {created_at.slice(0, 10)}</AuthorSpan>
+                <Time>by </Time>
+                <Author onClick={profileClickHandler}>{user_nickname}</Author>
+                <Time>&nbsp;• {created_at.slice(0, 10)}</Time>
               </div>
               {user_id === loggedInUserId && (
-                <WriterButtonDiv isHeaderVisible={isHeaderVisible}>
+                <WriterButtonBox isHeaderVisible={isHeaderVisible}>
                   <EditButton
                     onClick={() => {
                       router.push(`/edit-recipe/${recipe_id}`);
@@ -307,16 +325,16 @@ const RecipeDetail = (props: RecipeDataProps) => {
                   <DeleteButton onClick={recipeDeleteHandler}>
                     삭제
                   </DeleteButton>
-                </WriterButtonDiv>
+                </WriterButtonBox>
               )}
-            </div>
-          </TitleContainerDiv>
-          <DescriptionDiv>{recipe_description}</DescriptionDiv>
+            </InfoButtonWrapper>
+          </TitleContentsWrapper>
+          <Description>{recipe_description}</Description>
         </div>
 
         {/* 요리 정보 (인원, 시간, 난이도, 종류) */}
         <div id="heading1">
-          <SubtitleH2>요리 정보</SubtitleH2>
+          <Subtitle isDarkMode={isDarkMode}>요리 정보</Subtitle>
           <RecipeInfo
             recipe_category={recipe_category}
             recipe_info={recipe_info}
@@ -325,29 +343,29 @@ const RecipeDetail = (props: RecipeDataProps) => {
 
         {/* 재료 준비 목록 */}
         <div id="heading2">
-          <SubtitleH2>재료 준비</SubtitleH2>
+          <Subtitle isDarkMode={isDarkMode}>재료 준비</Subtitle>
           <IngredientList recipe_ingredients={recipe_ingredients} />
         </div>
 
         {/* 요리 과정 */}
         <div id="heading3">
-          <SubtitleH2>요리 과정</SubtitleH2>
+          <Subtitle isDarkMode={isDarkMode}>요리 과정</Subtitle>
           <RecipeSteps recipe_sequence={recipe_sequence}></RecipeSteps>
         </div>
 
         {/* 요리팁 */}
         <div id="heading4">
-          <SubtitleH2>요리팁</SubtitleH2>
-          <RecipeTipDiv>{recipe_tip}</RecipeTipDiv>
+          <Subtitle isDarkMode={isDarkMode}>요리팁</Subtitle>
+          <RecipeTip>{recipe_tip}</RecipeTip>
         </div>
 
         {/* 요리 동영상 */}
         <div id="heading5">
-          <SubtitleH2>요리 동영상</SubtitleH2>
+          <Subtitle isDarkMode={isDarkMode}>요리 동영상</Subtitle>
           <RecipeVideo recipe_video={recipe_video}></RecipeVideo>
         </div>
 
-        <LikeScrapShareDiv>
+        <LikeScrapShareWrapper>
           {/* 좋아요 */}
           <div onClick={loginConfirmModalHandler}>
             <RecipeUserLikes
@@ -377,8 +395,11 @@ const RecipeDetail = (props: RecipeDataProps) => {
           </div>
 
           {/* 링크, 카카오 공유하기 */}
-          <ShareWrapperButton onClick={shareButtonClickHandler}>
-            <ShareIconDiv>
+          <ShareButtonBox
+            isDarkMode={isDarkMode}
+            onClick={shareButtonClickHandler}
+          >
+            <ShareIcon>
               <Image
                 src="/images/recipe-view/share_goldbrown.png"
                 alt="공유하기 아이콘"
@@ -386,38 +407,38 @@ const RecipeDetail = (props: RecipeDataProps) => {
                 height={22}
                 style={{ objectFit: "cover", cursor: "pointer" }}
               />
-            </ShareIconDiv>
+            </ShareIcon>
             {/* 공유 모달 */}
             {isShareModal && <ShareModal recipe_thumbnail={recipe_thumbnail} />}
-          </ShareWrapperButton>
-        </LikeScrapShareDiv>
+          </ShareButtonBox>
+        </LikeScrapShareWrapper>
 
         {/* 댓글 */}
         <div>
-          <SubtitleH2>
+          <Subtitle isDarkMode={isDarkMode}>
             댓글
-            <CommentIconDiv>
+            <CommentIcon>
               <Image
                 src="/images/recipe-view/comment.svg"
                 alt="댓글 아이콘"
                 width={22}
                 height={22}
               ></Image>
-            </CommentIconDiv>
+            </CommentIcon>
             {commentCount}
-          </SubtitleH2>
+          </Subtitle>
           <RecipeComments comments={comments} />
           <div onClick={loginConfirmModalHandler}>
             <RecipeCommentInput recipe_id={recipe_id} />
           </div>
         </div>
-      </ContainerDiv>
+      </ViewPageContainer>
     </>
   );
 };
 
 /** 전체 감싸는 Div */
-const ContainerDiv = styled.div`
+const ViewPageContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 1.5rem;
@@ -432,8 +453,15 @@ const ContainerDiv = styled.div`
   }
 `;
 
+/** 반응형에서 작성자 정보와 수정, 삭제 버튼 묶는 Div */
+const InfoButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 /** 사이드 목차바 묶는 Div */
-const StickySideDiv = styled.div`
+const StickySideWrapper = styled.div`
   display: none;
 
   @media (min-width: 1024px) {
@@ -442,10 +470,10 @@ const StickySideDiv = styled.div`
 `;
 
 /** 프로필 이미지 감싸는 Div */
-const ProfileImageDiv = styled.div`
+const ProfileImage = styled.div`
   position: fixed;
-  bottom: 2%;
-  right: 8%;
+  bottom: 1.5rem;
+  right: 3rem;
   width: 6rem;
   height: 6rem;
   margin-bottom: 1.3rem;
@@ -461,7 +489,7 @@ const ProfileImageDiv = styled.div`
 `;
 
 /** 게시글 수정, 삭제 버튼 Div */
-const WriterButtonDiv = styled.div<{ isHeaderVisible: boolean }>`
+const WriterButtonBox = styled.div<{ isHeaderVisible: boolean }>`
   display: flex;
 
   @media (min-width: 1024px) {
@@ -530,7 +558,7 @@ const StyledConfirmModal = styled(ConfirmModal)``;
 const StyledLoginConfirmModal = styled(LoginConfirmModal)``;
 
 /** 요리 대표 이미지 */
-const RecipeImg = styled.div`
+const RecipeImage = styled.div`
   position: relative;
   padding-top: 55%;
   border-radius: 0.8rem;
@@ -547,7 +575,7 @@ const Img = styled.img`
 `;
 
 /** 요리 주제 소개 담은 Div */
-const TitleContainerDiv = styled.div`
+const TitleContentsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -563,7 +591,7 @@ const TitleContainerDiv = styled.div`
 `;
 
 /** 레시피 전체 제목 H3 */
-const TitleH3 = styled.h3`
+const RecipeTitle = styled.h3`
   font-size: 20px;
   font-weight: 600;
 
@@ -574,16 +602,24 @@ const TitleH3 = styled.h3`
 `;
 
 /** 작성자 Span */
-const AuthorSpan = styled.span`
+const Author = styled.span`
   color: #6f6f6f;
   font-size: 1.4rem;
 
-  @media (min-width: 1024px) {
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
   }
 `;
 
+/** 작성시간 Span */
+const Time = styled.span`
+  color: #6f6f6f;
+  font-size: 1.4rem;
+`;
+
 /** 요리 간단 소개 Div */
-const DescriptionDiv = styled.div`
+const Description = styled.div`
   margin-top: 1.5rem;
   max-width: 65rem;
   width: 100%;
@@ -591,29 +627,26 @@ const DescriptionDiv = styled.div`
 `;
 
 /** 레시피 소제목 H2 */
-const SubtitleH2 = styled.h2`
+const Subtitle = styled.h2<{ isDarkMode: boolean }>`
   display: flex;
   font-size: 18px;
-  color: #b08038;
+  color: ${(props) => (props.isDarkMode ? props.theme.yellow : "#b08038")};
   font-weight: 500;
   margin-top: 2.5rem;
   margin-bottom: 1rem;
 
   @media (min-width: 1024px) {
-    font-size: 2rem;
-    color: #b08038;
-    font-weight: 500;
-    \
+    font-size: 20px;
   }
 `;
 
 /** 요리팁 Div */
-const RecipeTipDiv = styled.div`
+const RecipeTip = styled.div`
   font-size: 1.6rem;
 `;
 
 /** 댓글 아이콘 Div */
-const CommentIconDiv = styled.div`
+const CommentIcon = styled.div`
   margin-left: 0.5rem;
   margin-right: 0.2rem;
   margin-top: 0.1rem;
@@ -624,7 +657,7 @@ const CommentIconDiv = styled.div`
 `;
 
 /** 공유하기 아이콘 Button */
-const ShareWrapperButton = styled.button`
+const ShareButtonBox = styled.button<{ isDarkMode: boolean }>`
   position: relative;
   display: flex;
   width: 4.2rem;
@@ -632,7 +665,8 @@ const ShareWrapperButton = styled.button`
   border-radius: 1.5rem;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff;
+  background-color: ${(props) =>
+    props.isDarkMode ? props.theme.lightNavy : "#ffffff"};
   box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.3);
 
   @media (min-width: 1024px) {
@@ -643,7 +677,7 @@ const ShareWrapperButton = styled.button`
 `;
 
 /** 공유하기 아이콘 Div */
-const ShareIconDiv = styled.div`
+const ShareIcon = styled.div`
   width: 2.2rem;
 
   @media (min-width: 1024px) {
@@ -655,7 +689,7 @@ const ShareIconDiv = styled.div`
 `;
 
 /** 좋아요, 스크랩, 공유하기 감싸는 Div */
-const LikeScrapShareDiv = styled.div`
+const LikeScrapShareWrapper = styled.div`
   display: flex;
   gap: 1.5rem;
   justify-content: center;
