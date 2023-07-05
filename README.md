@@ -137,9 +137,9 @@ feature/(기능명)으로 개인 작업 브랜치 생성, 기능구현 후 dev�
 - [Figma](https://www.figma.com/file/1T0YMmCs1tyNQ3ud32OELi?embed_host=notion&kind=&node-id=0-1&t=kZbDFgIjnFHXUPtm-0&type=design&viewer=1) : 초반 기획시 빠른 레이아웃을 잡기 위해 사용
 - [Notion](https://www.notion.so/elice/10-67e5d91b15e7404cbfe47c3ff0c40a33) : 팀 페이지, 스크럼 정리, 문서 정리
 - [Gather](https://app.gather.town/app/KsD8E36KLhbcxc03/EliceProject) : 팀원간 커뮤니케이션 및 온라인 스크럼 진행
-- Discord : 팀원간 커뮤니케이션을 위해 사용
-- Gitlab : Code Repository
+- [Gitlab](https://kdt-gitlab.elice.io/sw_track/class_04/web_2_project/team10/dev-fe/-/tree/dev) : Code Repository
 - Gitlab Issue : Trouble Shooting 내역 기제
+- Discord : 팀원간 커뮤니케이션을 위해 사용
 - Swagger : API 테스트 진행
 
 ## 💻 배포
