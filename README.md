@@ -69,7 +69,7 @@
 ![슬라이드16](https://github.com/limeorange/MatIssue/assets/78308684/164d11fa-f2fd-471d-9917-3544566b7019)
 ![슬라이드17](https://github.com/limeorange/MatIssue/assets/78308684/fcbb81ac-f751-4716-b4ec-f452f233f2a1)
 
-### 커밋 컨벤션
+## 📝 커밋 컨벤션
 - `Feat`: 새로운 기능 추가
 - `Fix`: 버그 수정
 - `Docs`: 문서 변경
@@ -85,7 +85,7 @@
 - `!HOTFIX`: 급하게 치명적인 버그를 고쳐야 하는 경우
 - Ex) Feat : 메인페이지 무한스크롤 기능 구현
 
-### 컴포넌트 내 코드 작성 구조
+## 📝 컴포넌트 내 코드 작성 구조
 ```tsx
 import { useEffect, useState, useRef } from "react";
 import route from "next/navigate"
@@ -119,7 +119,7 @@ const Page = (props) => {
 export default Page;
 ``` 
 
-## Git Branch 관리
+## 🌵 Git Branch 관리
 
 ```
 master
@@ -132,7 +132,7 @@ master
 ```
 feature/(기능명)으로 개인 작업 브랜치 생성, 기능구현 후 dev에 PR
 
-## 협업 툴
+## 🌈 협업 툴
 
 - [Figma](https://www.figma.com/file/1T0YMmCs1tyNQ3ud32OELi?embed_host=notion&kind=&node-id=0-1&t=kZbDFgIjnFHXUPtm-0&type=design&viewer=1) : 초반 기획시 빠른 레이아웃을 잡기 위해 사용
 - [Notion](https://www.notion.so/elice/10-67e5d91b15e7404cbfe47c3ff0c40a33) : 팀 페이지, 스크럼 정리, 문서 정리
