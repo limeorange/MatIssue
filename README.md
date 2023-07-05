@@ -4,7 +4,7 @@
   <img src="https://github.com/limeorange/MatIssue/assets/78308684/72f4ac32-0747-4605-b069-cebd397b122f" alt="logo" width="350">
 </a>
 </div>
-<div align="center">로고 클릭 시 맛이슈 홈페이지로 이동합니다 🚗 =3 </div>
+<div align="center">로고 클릭 시 맛이슈 홈페이지로 이동합니다 🚕 =3 </div>
 
 
 ## 🍎 프로젝트 주제 및 기획
