@@ -1,24 +1,23 @@
-# 맛이슈 (MatIssue) : "맛있는 레시피를 제공 및 공유하는 플랫폼"
+# 🍳 맛이슈 (MatIssue) : "세상의 모든 맛있는 이슈를 담다"
+<div align="center">
+<a href="https://www.matissue.com">
+  <img src="https://github.com/limeorange/MatIssue/assets/78308684/72f4ac32-0747-4605-b069-cebd397b122f" alt="logo" width="350">
+</a>
+</div>
+<div align="center">로고 클릭 시 맛이슈 홈페이지로 이동합니다.</div>
 
-## <데모 사이트>
 
-[![logo_2.svg](/uploads/f7162a12b83fe9d781efb64f4dfa9694/logo_2.svg)](https://www.matissue.com)
-<br/>
-**_<div align="center">로고 클릭 시 맛이슈 홈페이지로 이동합니다.</div>_**
+# 🍎 프로젝트 주제 및 기획
+![슬라이드1](https://github.com/limeorange/MatIssue/assets/78308684/a64177c7-d22c-4df2-ae89-a0d82ee8598f)
+![슬라이드7](https://github.com/limeorange/MatIssue/assets/78308684/36252c0d-0711-45ee-9db2-aee5fa4818a6)
+![슬라이드8](https://github.com/limeorange/MatIssue/assets/78308684/bdc3bb14-36e3-44d3-ba48-7dd017ce21df)
+![슬라이드9](https://github.com/limeorange/MatIssue/assets/78308684/8400f5f5-a61e-4f0a-b489-bb303cff65d5)
+![슬라이드10](https://github.com/limeorange/MatIssue/assets/78308684/3975298b-1fe3-4b27-9e73-929236f1b1bb)
+![슬라이드11](https://github.com/limeorange/MatIssue/assets/78308684/9e7e51a9-a3bd-4d54-ac7e-bc91f360f729)
+![슬라이드12](https://github.com/limeorange/MatIssue/assets/78308684/4f7795fc-78c1-47f3-a894-47cc48ba0f26)
 
-## <프로젝트 주제>
-![맛이슈란_](/uploads/f880fe06a1508d3cbc47ebbea85e8e87/맛이슈란_.png)
-![페르소나](/uploads/9cf5a80ca64a541e2c95f4dfc434ce1c/페르소나.png)
-<br/>
-- 목적 : 오늘 뭐 먹지? 고민하는 주부, 자취생 및 요리를 좋아하는 모든 사람들을 위한 레시피를 공유하고 소통할 수 있는 플랫폼을 구축 합니다.
-- 목표 :
-    - 사용자에게 보다 편리한 사용성을 제공하기 위한 UX/UI를 제공합니다.
-    - 모바일 사용자를 위한 반응형 페이지를 제공합니다.
-    - 기존 레시피 공유 사이트의 노후화된 레시피 정보를 최신화 하고, 깔끔하게 재구성 합니다.
-    - CSR과 SSR을 모두 사용한 최적화된 로딩 방식을 통해 사용자에게 더욱 빠른 인터렉션을 제공합니다.
-<br />
 
-## <서비스 소개 및 핵심 기능>
+<!-- ## 서비스 소개 및 핵심 기능
 
 #### 레시피 작성 및 수정, 게시물 스크랩 등 레시피 공유 플랫폼의 핵심 서비스를 구현합니다.
 
@@ -32,23 +31,14 @@
 8. **게시글 및 댓글 좋아요** 기능 제공
 9. **관리자 관련 CRUD**
 10. MBTI, 레시피 이상형 월드컵과 같은 **오락적인 요소** 제공
-11. 모바일 사용자를 위한 **반응형 페이지** 제공
+11. 모바일 사용자를 위한 **반응형 페이지** 제공 -->
 
-## <👪 구성원 역할>
+# 😎 팀원 소개
+![슬라이드4](https://github.com/limeorange/MatIssue/assets/78308684/7a10fe9c-9d24-4192-80a7-65f429c593f2)
+![슬라이드5](https://github.com/limeorange/MatIssue/assets/78308684/5690e395-fd31-4d20-8f74-0f74ef691264)
 
-| 이름 | 담당 업무 |
-| :--: | :------: |
-| ⭐️신유빈⭐️ | BE (👑팀장) |
-| ⭐️송호준⭐️ | BE (👑백엔드 팀장)|
-| ⭐️장윤수⭐️ | FE (👑프론트 팀장)|
-| ⭐️이수현⭐️ | FE |
-| ⭐️이나현⭐️ | FE |
-| ⭐️김동균⭐️ | FE |
-| ⭐️임정훈⭐️ | FE |
-
-#### Front-End
-
-- 장윤수
+## Front-End
+- 장윤수 (FE 팀장)
   - 메인페이지, 헤더 푸터 레이아웃, 로그인 페이지, 회원가입 페이지, 아이디 비밀번호찾기 페이지, 관리자 페이지 
 - 이수현
   - 레시피 조회 페이지, 레시피 스크랩 페이지, 유저 페이지 (유저 레시피 / 팔로워 / 팔로잉)
@@ -61,28 +51,25 @@
   - 게시물 검색 페이지 (웹 및 모바일) 구현
   - (레시피 썸네일 컴포넌트, FilterBar 및 Tag, 정렬 버튼, 페이지네이션, 무한스크롤, 관련 API 연결, MBTI, Kakao API를 이용한 공유 기능)
 
-#### Back-End
+## Back-End
 
-- 신유빈
-  - 어마어마 하게 많은 일
-- 송호준
-  - 어마어마 하게 많은 일
+- 신유빈 (팀장)
+- 송호준 (BE 팀장)
 
-## <기술 스택>
-![기술스택.svg](/uploads/03484eb7ff839fd314d11bc2f85de74e/기술스택.svg)
+# 🌳 기술 스택
+![슬라이드14](https://github.com/limeorange/MatIssue/assets/78308684/24055bf4-2328-4643-909e-953591a494a8)
 
-## <API 문서>
-[ERD](https://www.erdcloud.com/d/AW9MEiXv4g2T9mJHx)
-<br/>
-<br/>
-[Swagger](https://matissue-1jim.onrender.com/docs)
-<br/>
-<br/>
-[Redoc](https://matissue-1jim.onrender.com/redoc)
+# 📑 API 문서
+- [ERD](https://www.erdcloud.com/d/AW9MEiXv4g2T9mJHx)
+- [Swagger](https://matissue-1jim.onrender.com/docs)
+- [Redoc](https://matissue-1jim.onrender.com/redoc)
+![슬라이드15](https://github.com/limeorange/MatIssue/assets/78308684/ff85d4e3-9087-4adc-9b1a-f66fb2f1ce00)
 
-## <팀 컨벤션>
+# 📝 팀 컨벤션
+![슬라이드16](https://github.com/limeorange/MatIssue/assets/78308684/164d11fa-f2fd-471d-9917-3544566b7019)
+![슬라이드17](https://github.com/limeorange/MatIssue/assets/78308684/fcbb81ac-f751-4716-b4ec-f452f233f2a1)
 
-#### 커밋 컨벤션
+## 커밋 컨벤션
 - `Feat`: 새로운 기능 추가
 - `Fix`: 버그 수정
 - `Docs`: 문서 변경
@@ -98,36 +85,7 @@
 - `!HOTFIX`: 급하게 치명적인 버그를 고쳐야 하는 경우
 - Ex) Feat : 메인페이지 무한스크롤 기능 구현
 
-#### 디렉토리 및 파일 컨벤션
-- **디렉토리 명** : **kebab-case**
-- app **폴더 내 라우팅 디렉토리명** : **kebab-case**
-    - `// app/login/page.tsx , app/new-recipe/page.tsx`
-- **컴포넌트 파일명** : **PascalCase**로 작성
-    - `// LoginForm.tsx`
-- **일반 파일명** : **kebab-case**로 작성
-    - `// auth-context.ts || auth-api.ts`
-
-#### 함수 및 변수 컨벤션
-- **컴포넌트** : **함수형**으로 작성
-- **컴포넌트 함수명** : **PascalCase**로 작성
-    - `// const Login  =  ( ) => { }`
-- **일반 함수, 변수명** : **camelCase**로 작성
-    - `// const titleChangeHandler = ( e ) => { }`
-- **file-scope 함수명** : **UPPER_CASE**로 작성
-    - `// DUMMY_DATA = []`
-- **Boolean 타입의 변수명** : **is,has,can** 같은 접두사를 붙임
-    - `// const [ isLoggedIn , setIsLoggedIn ]  =  useState( false )`
-- **핸들러 함수명** : 핸들링하는 **명사 + 동사 + 핸들러** 형태로 작성
-    - `// const title + Change + Handler = ( e ) => { }`
-
-#### TypeScript 컨벤션
-- Type은 **type alias**로 통일 (interface X)
-- Type, enum은 **PascalCase**로 작성
-    - `// type LayoutType = { children : React.ReactNode }`
-- **any** 타입 웬만하면 사용 금지
-- **React.FC** 생략
-
-#### 컴포넌트 내 코드 작성 구조
+## 컴포넌트 내 코드 작성 구조
 ```tsx
 import { useEffect, useState, useRef } from "react";
 import route from "next/navigate"
@@ -159,8 +117,9 @@ const Page = (props) => {
   return <></>;
 };
 export default Page;
-```
-## <Git Branch 관리>
+``` 
+
+## Git Branch 관리
 
 ```
 master
@@ -173,37 +132,21 @@ master
 ```
 feature/(기능명)으로 개인 작업 브랜치 생성, 기능구현 후 dev에 PR
 
-## <협업 툴>
+## 협업 툴
 
-- Figma : 초반 기획시 빠른 레이아웃을 잡기 위해 사용
-- Notion : 팀 페이지, 스크럼 정리, 문서 정리
-- Discord : 팀원간 커뮤니케이션
-- Gather : 팀원간 커뮤니케이션 및 온라인 스크럼 진행
+- [Figma](https://www.figma.com/file/1T0YMmCs1tyNQ3ud32OELi?embed_host=notion&kind=&node-id=0-1&t=kZbDFgIjnFHXUPtm-0&type=design&viewer=1) : 초반 기획시 빠른 레이아웃을 잡기 위해 사용
+- [Notion](https://www.notion.so/elice/10-67e5d91b15e7404cbfe47c3ff0c40a33) : 팀 페이지, 스크럼 정리, 문서 정리
+- [Gather](https://app.gather.town/app/KsD8E36KLhbcxc03/EliceProject) : 팀원간 커뮤니케이션 및 온라인 스크럼 진행
+- Discord : 팀원간 커뮤니케이션을 위해 사용
 - Gitlab : Code Repository
 - Gitlab Issue : Trouble Shooting 내역 기제
 - Swagger : API 테스트 진행
 
-## <스크럼>
-
-- 매일 오전 10시 스크럼 진행 (게더타운을 활용한 온라인 스크럼)
-- 프론트, 백의 개발 진행상황 및 이슈 공유
-
-## <팀 페이지>
-[Nothion](https://www.notion.so/elice/10-67e5d91b15e7404cbfe47c3ff0c40a33)
-<br/>
-<br/>
-[Figma](https://www.figma.com/file/1T0YMmCs1tyNQ3ud32OELi?embed_host=notion&kind=&node-id=0-1&t=kZbDFgIjnFHXUPtm-0&type=design&viewer=1)
-<br/>
-<br/>
-[Gather](https://app.gather.town/app/KsD8E36KLhbcxc03/EliceProject)
-
-## <배포>
-
-#### Front-End
+# 💻 배포
+## Front-End
 - pm2를 이용한 서버 오픈 및 nginx를 활용한 배포
 
-## <서버 실행 방법>
-#### Front-End
+## 서버 실행 방법
 ```bash
 git clone {.....repository_name}.git
 cd {repository_name}
@@ -211,15 +154,11 @@ npm install
 npm run dev
 ```
 
-## <.env 설정>
-#### Front-End
+## .env 설정
 ```
 NEXT_PUBLIC_KAKAO_API_KEY={OUR_KAKAO_KEY}
 NEXT_PUBLIC_AWS_ACCESS_KEY_ID={AWS_KEY}
 NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY={AWS_ACCESS_KEY}
 NEXT_PUBLIC_AWS_BUCKET_NAME={AWS_NAME}
 ```
-## <꿇어라, 그게 맛이슈와 너의 눈높이다.>
-![토끼들.svg](/uploads/d8ecc12258f7d831d1b56dcad080a3be/토끼들.svg)
-
 
