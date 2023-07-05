@@ -1,13 +1,16 @@
 ## 🍳 맛이슈 (MatIssue) : "세상의 모든 맛있는 이슈를 담다"
-<div align="center">
 <a href="https://www.matissue.com">
   <img src="https://github.com/limeorange/MatIssue/assets/78308684/72f4ac32-0747-4605-b069-cebd397b122f" alt="logo" width="350">
 </a>
-</div>
-<div align="center">로고 클릭 시 맛이슈 홈페이지로 이동합니다 🚕 =3 </div>
+<div>로고 클릭 시 맛이슈 홈페이지로 이동합니다 🚕 =3 </div>
 
+## 🏆 엘리스 SW4 2차 프로젝트 대상 수상
+  <img src="https://github.com/limeorange/MatIssue/assets/78308684/8f491ee6-d24d-4e8e-aee4-7bbd234758b4" alt="logo" width="350">
 
 ## 🍎 프로젝트 주제 및 기획
+<h2>
+  <a href="https://github.com/limeorange/MatIssue/files/11956751/2.pdf">발표 전체 PPT</a>
+</h2>
 ![슬라이드1](https://github.com/limeorange/MatIssue/assets/78308684/a64177c7-d22c-4df2-ae89-a0d82ee8598f)
 ![슬라이드7](https://github.com/limeorange/MatIssue/assets/78308684/36252c0d-0711-45ee-9db2-aee5fa4818a6)
 ![슬라이드8](https://github.com/limeorange/MatIssue/assets/78308684/bdc3bb14-36e3-44d3-ba48-7dd017ce21df)
