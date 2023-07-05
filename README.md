@@ -33,11 +33,11 @@
 10. MBTI, 레시피 이상형 월드컵과 같은 **오락적 요소** 제공
 11. 모바일 사용자를 위한 **반응형 페이지** 제공 -->
 
-## 😎 팀원 소개
+## 🍊 팀원 소개
 ![슬라이드4](https://github.com/limeorange/MatIssue/assets/78308684/7a10fe9c-9d24-4192-80a7-65f429c593f2)
 ![슬라이드5](https://github.com/limeorange/MatIssue/assets/78308684/5690e395-fd31-4d20-8f74-0f74ef691264)
 
-### Front-End
+### ✔️ Front-End
 - 장윤수 (FE 팀장)
   - 메인페이지, 헤더 푸터 레이아웃, 로그인 페이지, 회원가입 페이지, 아이디 비밀번호찾기 페이지, 관리자 페이지 
 - 이수현
@@ -51,25 +51,25 @@
   - 게시물 검색 페이지 (웹 및 모바일) 구현
   - (레시피 썸네일 컴포넌트, FilterBar 및 Tag, 정렬 버튼, 페이지네이션, 무한스크롤, 관련 API 연결, MBTI, Kakao API를 이용한 공유 기능)
 
-### Back-End
+### ✔️ Back-End
 
 - 신유빈 (팀장)
 - 송호준 (BE 팀장)
 
-## 🌳 기술 스택
+## 🍋 기술 스택
 ![슬라이드14](https://github.com/limeorange/MatIssue/assets/78308684/24055bf4-2328-4643-909e-953591a494a8)
 
-## 📑 API 문서
+## 🥑 API 문서
 - [ERD](https://www.erdcloud.com/d/AW9MEiXv4g2T9mJHx)
 - [Swagger](https://matissue-1jim.onrender.com/docs)
 - [Redoc](https://matissue-1jim.onrender.com/redoc)
 ![슬라이드15](https://github.com/limeorange/MatIssue/assets/78308684/ff85d4e3-9087-4adc-9b1a-f66fb2f1ce00)
 
-## 📝 팀 컨벤션
+## 🫐 팀 컨벤션
 ![슬라이드16](https://github.com/limeorange/MatIssue/assets/78308684/164d11fa-f2fd-471d-9917-3544566b7019)
 ![슬라이드17](https://github.com/limeorange/MatIssue/assets/78308684/fcbb81ac-f751-4716-b4ec-f452f233f2a1)
 
-## 📝 커밋 컨벤션
+### ✔️ 커밋 컨벤션
 - `Feat`: 새로운 기능 추가
 - `Fix`: 버그 수정
 - `Docs`: 문서 변경
@@ -83,9 +83,8 @@
 - `Remove`: 파일을 삭제하는 작업만 수행한 경우
 - `!BREAKING CHANGE`: 커다란 API 변경의 경우
 - `!HOTFIX`: 급하게 치명적인 버그를 고쳐야 하는 경우
-- Ex) Feat : 메인페이지 무한스크롤 기능 구현
 
-## 📝 컴포넌트 내 코드 작성 구조
+### ✔️ 컴포넌트 내 코드 작성 구조
 ```tsx
 import { useEffect, useState, useRef } from "react";
 import route from "next/navigate"
@@ -119,7 +118,7 @@ const Page = (props) => {
 export default Page;
 ``` 
 
-## 🌵 Git Branch 관리
+### ✔️ Git Branch 관리
 
 ```
 master
@@ -132,7 +131,7 @@ master
 ```
 feature/(기능명)으로 개인 작업 브랜치 생성, 기능구현 후 dev에 PR
 
-## 🌈 협업 툴
+### ✔️ 협업 툴
 
 - [Figma](https://www.figma.com/file/1T0YMmCs1tyNQ3ud32OELi?embed_host=notion&kind=&node-id=0-1&t=kZbDFgIjnFHXUPtm-0&type=design&viewer=1) : 초반 기획시 빠른 레이아웃을 잡기 위해 사용
 - [Notion](https://www.notion.so/elice/10-67e5d91b15e7404cbfe47c3ff0c40a33) : 팀 페이지, 스크럼 정리, 문서 정리
@@ -142,11 +141,11 @@ feature/(기능명)으로 개인 작업 브랜치 생성, 기능구현 후 dev�
 - Swagger : API 테스트 진행
 <!-- - Gitlab Issue : Trouble Shooting 내역 기제 -->
 
-## 💻 배포
-### Front-End
+## 🍆 배포
+### ✔️ Front-End
 - pm2를 이용한 서버 오픈 및 nginx를 활용한 배포
 
-### 서버 실행 방법
+### ✔️ 서버 실행 방법
 ```bash
 git clone {.....repository_name}.git
 cd {repository_name}
@@ -154,7 +153,7 @@ npm install
 npm run dev
 ```
 
-### .env 설정
+### ✔️ .env 설정
 ```
 NEXT_PUBLIC_KAKAO_API_KEY={OUR_KAKAO_KEY}
 NEXT_PUBLIC_AWS_ACCESS_KEY_ID={AWS_KEY}
