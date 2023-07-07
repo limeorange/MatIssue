@@ -24,14 +24,18 @@ import { useQueryClient } from "@tanstack/react-query";
 import getCurrentUser from "@/app/api/user";
 import { useRecoilValue } from "recoil";
 import darkModeAtom from "@/app/store/darkModeAtom";
+import { login } from "@/app/api/auth";
+
+type LoginInputType = {
+  user_id: string;
+  password: string;
+};
 
 const LoginClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const isDarkMode = useRecoilValue(darkModeAtom);
 
-  const client = useQueryClient();
-
-  const { register, handleSubmit } = useForm<FieldValues>({
+  const { register, handleSubmit } = useForm<LoginInputType>({
     defaultValues: {
       user_id: "",
       password: "",
@@ -41,28 +45,9 @@ const LoginClient = () => {
   const router = useRouter();
 
   /** auth 폼 제출 핸들러 */
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit: SubmitHandler<LoginInputType> = async (data) => {
     setIsLoading(true);
-    try {
-      const response = await axiosBase.post("users/login", data);
-      const sessionId = response.data.session_id;
-      Cookies.set("session-id", sessionId);
-
-      const currentUser = await getCurrentUser();
-      client.setQueryData(["currentUser"], currentUser);
-
-      router.back();
-      toast.success("로그인 되었습니다.");
-    } catch (err: any) {
-      const errorMessage = err?.response.data.detail;
-      toast.error(
-        errorMessage
-          ? errorMessage
-          : "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    login(data, () => router.back()).finally(() => setIsLoading(false));
   };
 
   return (
