@@ -17,7 +17,7 @@ const MainBest = ({ initialBestRecipes }: { initialBestRecipes: Recipe[] }) => {
   } = useQuery<Recipe[]>(["bestRecipes"], () => getRecipesByPopularity(), {
     refetchOnWindowFocus: false, // 우리 페이지 focus할때마다 리패치 여부
     retry: 0, // 데이터 패치 실패할때 재시도 횟수
-    initialData: initialBestRecipes, // 데이터 초기값 지정 (page.tsx 에서 패치해온 값)
+    initialData: initialBestRecipes || [], // SS에서 pre-fetch한 값 지정 | 없을경우 빈배열
   });
 
   return (
