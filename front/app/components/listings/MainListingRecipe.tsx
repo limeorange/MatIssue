@@ -45,7 +45,9 @@ const MainListingRecipe = ({
   const isDarkMode = useRecoilValue(darkModeAtom);
 
   const contentsPerPage = 8;
-  const totalRecipesLength = isFilter ? filteredRecipes.length : recipes.length;
+  const totalRecipesLength = isFilter
+    ? filteredRecipes?.length
+    : recipes.length;
   const totalPage = Math.ceil(totalRecipesLength / contentsPerPage);
   const currentDate = dayjs();
   dayjs.extend(isBetween);
