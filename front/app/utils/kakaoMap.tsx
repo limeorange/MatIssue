@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { propsType } from "./landingPage";
-
+import styled from "styled-components";
 interface placeType {
   place_name: string;
   road_address_name: string;
@@ -235,20 +235,96 @@ const KakaoMap = (props: propsType) => {
   }, [props.searchKeyword]);
 
   return (
-    <div className="map-container">
-      <div id="map" style={{ width: "600px", height: "400px" }}></div>
-      <div id="search-result">
-        <p className="result-text">
-          <span className="result-keyword">{props.searchKeyword}</span>
+    <MapContainer>
+      <MapDiv id="map" />
+      <SearchResult id="search-result">
+        <ResultText>
+          <ResultKeyword>{props.searchKeyword}</ResultKeyword>
           검색 결과
-        </p>
-        <div className="scroll-wrapper">
-          <ul id="places-list"></ul>
-        </div>
-        <div id="pagination"></div>
-      </div>
-    </div>
+        </ResultText>
+        <ScrollWrapper>
+          <PlacesList id="places-list"></PlacesList>
+        </ScrollWrapper>
+        <PaginationDiv id="pagination"></PaginationDiv>
+      </SearchResult>
+    </MapContainer>
   );
 };
 
 export default KakaoMap;
+
+const MapContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MapDiv = styled.div`
+  width: 100%;
+  max-width: 75rem;
+  height: 50rem;
+`;
+
+const SearchResult = styled.div`
+  width: 100%;
+  max-width: 60rem;
+  height: 50rem;
+`;
+
+const ResultText = styled.p`
+  font-size: 16px;
+  padding: 0.75rem;
+  background-color: #ecf4f7;
+`;
+
+const ResultKeyword = styled.span`
+  color: #007bff;
+  font-weight: 700;
+  margin-right: 0.25rem;
+`;
+
+const ScrollWrapper = styled.div`
+  height: 43.7rem;
+  overflow-y: scroll;
+  padding: 1rem;
+
+  h5 {
+    font-size: 15px;
+    font-weight: bold;
+  }
+
+  span {
+    display: block;
+    font-size: 13px;
+  }
+
+  span.jibun.gray {
+    color: #84a7a1;
+    margin-bottom: 0.5rem;
+  }
+
+  span.tel {
+    font-size: 12px;
+    color: blue;
+  }
+`;
+
+const PlacesList = styled.ul`
+  li {
+    border-bottom: 1px solid #eee;
+    padding: 1rem;
+  }
+`;
+
+const PaginationDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  background-color: #ecf4f7;
+  font-size: 16px;
+  color: #d0d0d0;
+  a.on {
+    color: blue;
+  }
+`;
