@@ -36,31 +36,21 @@ const LandingPage = (): JSX.Element => {
 
   return (
     <LandingPageContainer>
-      <InnerContainer>
-        <SearchFormContainer>
-          <SearchForm onSubmit={submitKeyword}>
-            <Label htmlFor="place">
-              <Input
-                type="text"
-                id="movie-title"
-                name="place"
-                onChange={keywordChange}
-                placeholder="검색어를 입력해주세요. (ex: 강남 맛집)"
-                required
-              />
-              <ButtonBox>
-                <SubmitButton
-                  type="submit"
-                  value="검색"
-                  onClick={valueChecker}
-                />
-              </ButtonBox>
-            </Label>
-          </SearchForm>
-        </SearchFormContainer>
-        {/* 제출한 검색어 넘기기 */}
-        <KakaoMap searchKeyword={Keyword} />
-      </InnerContainer>
+      <SearchFormContainer>
+        <form onSubmit={submitKeyword}>
+          <Label htmlFor="place">
+            <Input
+              type="text"
+              id="search-input"
+              name="place"
+              onChange={keywordChange}
+              placeholder="검색어를 입력해주세요. (ex: 강남 맛집)"
+              required
+            />
+          </Label>
+        </form>
+      </SearchFormContainer>
+      <KakaoMap searchKeyword={Keyword} />
     </LandingPageContainer>
   );
 };
@@ -68,61 +58,26 @@ const LandingPage = (): JSX.Element => {
 export default LandingPage;
 
 const LandingPageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
-`;
-
-const InnerContainer = styled.div`
-  width: 80%;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  margin-bottom: 1rem;
 `;
 
 const SearchFormContainer = styled.div`
-  margin-bottom: 20px;
-`;
-
-const SearchForm = styled.form`
-  display: flex;
-  justify-content: space-between;
+  width: 100%;
+  max-width: 31rem;
+  padding: 1rem 0 1rem 0;
+  margin-left: 27.8rem;
 `;
 
 const Label = styled.label`
   width: 100%;
+  max-width: 30rem;
 `;
 
 const Input = styled.input`
-  border-radius: 3px;
-  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
-  display: block;
   font-size: 16px;
-  height: 45px;
-  line-height: 45px;
-  padding: 0 15px 0 35px;
   width: 100%;
-`;
-
-const ButtonBox = styled.div`
-  width: 10%;
-  padding-top: 1rem;
-`;
-
-const SubmitButton = styled.input`
-  width: 100%;
-  height: 2rem;
-  padding: 10px;
-  background-color: #3399ff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #007acc;
-  }
+  max-width: 30rem;
+  padding: 2%;
+  text-align: center;
 `;
