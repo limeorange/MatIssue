@@ -147,7 +147,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   // 필터바 및 정렬버튼 로직
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    let result = [...recipes];
+    let result = recipes ? [...recipes] : [];
 
     // 필터바로 레시피 필터링
     if (filter.servings > 0) {
@@ -250,8 +250,8 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
 
   // 모바일에서는 처음부터 현재 페이지의 마지막 레시피까지의 모든 레시피들을 포함
   const currentRecipes = isMobile
-    ? filteredRecipes.slice(0, indexOfLastRecipe)
-    : filteredRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe); // 데스크탑에서는 현재 페이지의 레시피들만 포함
+    ? filteredRecipes?.slice(0, indexOfLastRecipe)
+    : filteredRecipes?.slice(indexOfFirstRecipe, indexOfLastRecipe); // 데스크탑에서는 현재 페이지의 레시피들만 포함
 
   // 레시피 추가 로딩 함수
   const fetchMoreRecipes = async () => {
@@ -266,7 +266,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
   };
 
   // 무한 스크롤 사용 가능 여부
-  const hasMore = currentPage * recipesPerPage < filteredRecipes.length;
+  const hasMore = currentPage * recipesPerPage < filteredRecipes?.length;
 
   return (
     <>
@@ -293,7 +293,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
           onRemove={removeTag}
         />
         <PageHeaderContainer>
-          {currentRecipes.length > 0 && (
+          {currentRecipes?.length > 0 && (
             <p>
               총&nbsp;
               <span
@@ -311,7 +311,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
           <SortButtonContainer>
             {category !== "best" &&
               category !== "newest" &&
-              currentRecipes.length > 0 && (
+              currentRecipes?.length > 0 && (
                 <>
                   <SortButton
                     selected={sortMethod === "date"}
@@ -337,7 +337,7 @@ const ListingRecipe = ({ recipes }: { recipes: Recipe[] }) => {
               )}
           </SortButtonContainer>
         </PageHeaderContainer>
-        {currentRecipes.length > 0 ? (
+        {currentRecipes?.length > 0 ? (
           isMobile ? (
             <InfiniteScroll
               dataLength={currentRecipes.length}
