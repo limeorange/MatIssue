@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { propsType } from "./landingPage";
 import styled from "styled-components";
+import seoulData from "../../data/seoul.json";
+
 interface placeType {
   place_name: string;
   road_address_name: string;
@@ -11,7 +13,7 @@ interface placeType {
 
 const KakaoMap = (props: propsType) => {
   let markers: any[] = [];
-  console.log(window.kakao.maps);
+  let polygons: any = new Map();
 
   useEffect(() => {
     if (window.kakao) {
@@ -24,6 +26,124 @@ const KakaoMap = (props: propsType) => {
         const map = new window.kakao.maps.Map(mapContainer, mapOption);
         const ps = new window.kakao.maps.services.Places();
         const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
+
+        let districtData: { [key: string]: { lat: number; lng: number }[] } =
+          {}; // 결과를 저장할 객체
+
+        // JSON 데이터를 districtData 형식으로 변환
+        seoulData.features.forEach((feature: any) => {
+          let districtName = feature.properties.name; // 구 이름
+          let coords = feature.geometry.coordinates[0]; // 좌표 데이터. 외곽선만 필요하므로 첫 번째 배열을 사용합니다.
+
+          // 좌표 데이터를 원하는 형식으로 변환
+          let formattedCoords = coords.map((coordPair: number[]) => {
+            return { lat: coordPair[1], lng: coordPair[0] }; // 위도와 경도를 각각 lat와 lng로 변환
+          });
+
+          // 결과를 districtData 객체에 저장
+          districtData[districtName] = formattedCoords;
+        });
+
+        // 카카오 맵을 그리는 함수
+        function displayDistrict(
+          map: any,
+          name: string,
+          pathData: { lat: number; lng: number }[]
+        ) {
+          var path = pathData.map(
+            (coords) => new window.kakao.maps.LatLng(coords.lat, coords.lng)
+          );
+
+          var polygon = new window.kakao.maps.Polygon({
+            map: map,
+            path: path,
+            strokeWeight: 2,
+            strokeColor: "#004c80",
+            strokeOpacity: 0.8,
+            fillColor: "#000000",
+            fillOpacity: 0.8,
+          });
+
+          polygons.set(name, polygon);
+
+          var content =
+            '<div class="info">' +
+            '   <div class="title">' +
+            name +
+            "</div>" +
+            '   <div class="size">총 면적 : 약 ' +
+            Math.floor(polygon.getArea()) +
+            " m<sup>2</sup></div>" +
+            "</div>";
+
+          var infowindow = new window.kakao.maps.InfoWindow({
+            position: path[0],
+            content: content,
+          });
+
+          var customOverlay = new window.kakao.maps.CustomOverlay({
+            position: path[0],
+            content: '<div class="area">' + name + "</div>",
+          });
+
+          window.kakao.maps.event.addListener(
+            polygon,
+            "mouseover",
+            function (mouseEvent: { latLng: any }) {
+              polygon.setOptions({ fillColor: "#09f" });
+              customOverlay.setPosition(mouseEvent.latLng);
+              customOverlay.setMap(map);
+            }
+          );
+
+          window.kakao.maps.event.addListener(
+            polygon,
+            "mousemove",
+            function (mouseEvent: { latLng: any }) {
+              customOverlay.setPosition(mouseEvent.latLng);
+            }
+          );
+
+          window.kakao.maps.event.addListener(polygon, "mouseout", function () {
+            polygon.setOptions({ fillColor: "#000000" });
+            customOverlay.setMap(null);
+            infowindow.close();
+          });
+
+          window.kakao.maps.event.addListener(
+            polygon,
+            "click",
+            function (mouseEvent: { latLng: any }) {
+              infowindow.setPosition(mouseEvent.latLng);
+              infowindow.open(map);
+            }
+          );
+        }
+
+        // 변환된 데이터를 이용하여 폴리곤 그리기
+        Object.entries(districtData).forEach(([name, pathData]) => {
+          displayDistrict(
+            map,
+            name,
+            pathData as { lat: number; lng: number }[]
+          );
+        });
+
+        function changeColor(name: string, color: string) {
+          const polygon = polygons.get(name);
+
+          if (polygon) {
+            polygon.setOptions({
+              fillColor: color,
+            });
+          }
+        }
+
+        // 특정 조건에 따라 폴리곤 색상 변경
+        if (districtName ===) {
+          // 실제로는 props.condition을 적절한 조건으로 변경해야 합니다.
+          changeColor("중구", "#09f"); // 색상은 원하는 색상 코드로 변경할 수 있습니다.
+        }
 
         const searchPlaces = () => {
           let keyword = props.searchKeyword;
