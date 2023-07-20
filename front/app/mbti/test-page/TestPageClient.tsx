@@ -49,8 +49,8 @@ const TestPageClient = () => {
   // 첫 렌더링 애니메이션
   const [animation, setAnimation] = useState("opacity-0");
 
-  // 정답 버튼 애니메이션
-  const [answerButtonAnimation, setAnswerButtonAnimation] = useState(false);
+  // 버튼 애니메이션
+  const [buttonAnimation, setButtonAnimation] = useState(false);
 
   // 이전에 클릭한 정답 버튼 상태 배열로 저장
   const [lastButtonNumbers, setLastButtonNumbers] = useState<
@@ -59,6 +59,8 @@ const TestPageClient = () => {
 
   // 다크모드 상태
   const [isDarkMode, setIsDarkMode] = useRecoilState(darkModeAtom);
+
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   // MBTI 질문 및 답변 데이터
   let [data] = useState<DataType>({
@@ -151,54 +153,47 @@ const TestPageClient = () => {
     setMBTI(result);
   };
 
-  // 이전 버튼
-  const goBack = () => {
-    if (count > 1) {
-      setAnswerButtonAnimation(true);
-      setTimeout(() => {
-        setCount((prevCount) => prevCount - 1);
-        setProgressStep((prevStep) => prevStep - 1);
-        // 이전 문제에서 클릭한 버튼 번호를 null로 초기화
-        setLastButtonNumbers((lastButtonNumbers) => {
-          const updatedLastButtonNumbers = lastButtonNumbers.map((num, index) =>
-            index === count - 2 ? null : num
-          );
-          const lastButtonNumber = updatedLastButtonNumbers[count - 2];
-          if (lastButtonNumber !== null) {
-            // lastButtonNumber에 따라 MBTI 성향을 업데이트
-            if (lastButtonNumber === 1) {
-              if (count <= 3) {
-                setEI((EI) => EI - 1);
-              } else if (count >= 4 && count <= 6) {
-                setSN((SN) => SN - 1);
-              } else if (count >= 7 && count <= 9) {
-                setTF((TF) => TF - 1);
-              } else if (count >= 10 && count <= 12) {
-                setJP((JP) => JP - 1);
-              }
-            } else {
-              if (count <= 3) {
-                setEI((EI) => EI + 1);
-              } else if (count >= 4 && count <= 6) {
-                setSN((SN) => SN + 1);
-              } else if (count >= 7 && count <= 9) {
-                setTF((TF) => TF + 1);
-              } else if (count >= 10 && count <= 12) {
-                setJP((JP) => JP + 1);
-              }
-            }
+  // 이전 버튼 상태 업데이트 로직
+  const updateBackButtonState = () => {
+    setCount((prevCount) => prevCount - 1);
+    setProgressStep((prevStep) => prevStep - 1);
+    // 이전 문제에서 클릭한 버튼 번호를 null로 초기화
+    setLastButtonNumbers((lastButtonNumbers) => {
+      const updatedLastButtonNumbers = lastButtonNumbers.map((num, index) =>
+        index === count - 2 ? null : num
+      );
+      const lastButtonNumber = updatedLastButtonNumbers[count - 2];
+      if (lastButtonNumber !== null) {
+        // lastButtonNumber에 따라 MBTI 성향을 업데이트
+        if (lastButtonNumber === 1) {
+          if (count <= 3) {
+            setEI((EI) => EI - 1);
+          } else if (count >= 4 && count <= 6) {
+            setSN((SN) => SN - 1);
+          } else if (count >= 7 && count <= 9) {
+            setTF((TF) => TF - 1);
+          } else if (count >= 10 && count <= 12) {
+            setJP((JP) => JP - 1);
           }
-          return updatedLastButtonNumbers;
-        });
-        setAnswerButtonAnimation(false);
-      }, 300);
-    }
+        } else {
+          if (count <= 3) {
+            setEI((EI) => EI + 1);
+          } else if (count >= 4 && count <= 6) {
+            setSN((SN) => SN + 1);
+          } else if (count >= 7 && count <= 9) {
+            setTF((TF) => TF + 1);
+          } else if (count >= 10 && count <= 12) {
+            setJP((JP) => JP + 1);
+          }
+        }
+      }
+      return updatedLastButtonNumbers;
+    });
+    setButtonAnimation(false);
   };
 
-  // 정답 버튼
-  const goNext = (buttonNumber: number) => {
-    setAnswerButtonAnimation(true);
-
+  // 정답 버튼 상태 업데이트 로직
+  const updateAnswerButtonState = (buttonNumber: number) => {
     // 클릭한 버튼 번호를 lastButtonNumbers에 업데이트
     setLastButtonNumbers((lastButtonNumbers) =>
       lastButtonNumbers.map((num, index) =>
@@ -218,8 +213,8 @@ const TestPageClient = () => {
       } else if (count >= 10 && count <= 12) {
         setJP((JP) => JP + 1);
       }
-      // 버튼 2
     } else {
+      // 버튼 2
       if (count <= 3) {
         setEI((EI) => EI - 1);
       } else if (count >= 4 && count <= 6) {
@@ -231,19 +226,51 @@ const TestPageClient = () => {
       }
     }
 
-    setTimeout(() => {
-      if (count === 12) {
-        setProgressStep((prevStep) => prevStep + 1);
-        setTimeout(() => {
-          calculateMBTI();
-          router.push("/mbti/result-page");
-        }, 300);
-      } else {
-        setCount((prevCount) => prevCount + 1);
-        setProgressStep((prevStep) => prevStep + 1);
-        setAnswerButtonAnimation(false);
-      }
-    }, 300);
+    if (count === 12) {
+      setProgressStep((prevStep) => prevStep + 1);
+      calculateMBTI();
+      router.push("/mbti/result-page");
+    } else {
+      setCount((prevCount) => prevCount + 1);
+      setProgressStep((prevStep) => prevStep + 1);
+      setButtonAnimation(false);
+    }
+  };
+
+  // 버튼 클릭 처리 함수
+  const handleButtonClick = async (updateState: Function) => {
+    if (!isButtonDisabled) {
+      setIsButtonDisabled(true); // 버튼 비활성화 상태로 변경
+
+      setButtonAnimation(true);
+
+      // 기다릴 시간을 정의하는 Promise
+      const wait = (ms: number) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
+
+      // 로직 실행 전에 300ms 기다리기 (애니메이션 살행 시간)
+      await wait(300);
+
+      // 상태 업데이트 로직
+      updateState();
+
+      // 버튼 비활성화를 700ms 동안 유지 (광클 방지)
+      await wait(700);
+
+      setIsButtonDisabled(false); // 버튼 활성화 상태로 변경
+    }
+  };
+
+  // 이전 버튼 클릭 이벤트 함수
+  const clickBackButton = async () => {
+    if (count > 1) {
+      handleButtonClick(updateBackButtonState);
+    }
+  };
+
+  // 정답 버튼 클릭 이벤트 함수
+  const clickAnswerButton = async (buttonNumber: number) => {
+    handleButtonClick(() => updateAnswerButtonState(buttonNumber));
   };
 
   // 시작 버튼 클릭시 페이지 렌더링 애니메이션
@@ -259,7 +286,9 @@ const TestPageClient = () => {
           M<span style={{ color: "#fbd26a" }}>uk</span>BTI 테스트
         </PageTitle>
         <ProgressSectionContainer>
-          <BackButton onClick={goBack}>←</BackButton>
+          <BackButton onClick={clickBackButton} disabled={isButtonDisabled}>
+            ←
+          </BackButton>
           <ProgressBar
             progress={(progressStep / 13) * 100}
             isDarkMode={isDarkMode}
@@ -267,25 +296,25 @@ const TestPageClient = () => {
           <ProgressNumber>{`${count}/12`}</ProgressNumber>
         </ProgressSectionContainer>
         <QuestionNumWrapper
-          className={answerButtonAnimation ? "shrink" : "normal"}
+          className={buttonAnimation ? "shrink" : "normal"}
           isDarkMode={isDarkMode}
         >
           Q{count}.
         </QuestionNumWrapper>
         <QuestionWrapper
-          className={answerButtonAnimation ? "shrink" : "normal"}
+          className={buttonAnimation ? "shrink" : "normal"}
           isDarkMode={isDarkMode}
         >
           {data[count].ques}
         </QuestionWrapper>
         <AnswerButtonContainer
-          className={answerButtonAnimation ? "shrink" : "normal"}
+          className={buttonAnimation ? "shrink" : "normal"}
         >
           <Button
             isBgColor={true}
             isBorderColor={false}
             isHoverColor={false}
-            onClick={() => goNext(1)}
+            onClick={() => clickAnswerButton(1)}
           >
             {data[count].ans1}
           </Button>
@@ -293,7 +322,7 @@ const TestPageClient = () => {
             isBgColor={true}
             isBorderColor={false}
             isHoverColor={false}
-            onClick={() => goNext(2)}
+            onClick={() => clickAnswerButton(2)}
           >
             {data[count].ans2}
           </Button>
