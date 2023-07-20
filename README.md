@@ -4,9 +4,6 @@
 </a>
 <div>로고 클릭 시 <a href="https://www.matissue.com">맛이슈 홈페이지</a>로 이동합니다 🚕 =3</div>
 
-## 🏆 엘리스 SW 4기 2차 프로젝트 대상 수상
-  <img src="https://github.com/limeorange/MatIssue/assets/78308684/8f491ee6-d24d-4e8e-aee4-7bbd234758b4" alt="logo" width="350">
-
 ## 🍎 프로젝트 주제 및 기획
 <h2>
   <a href="https://github.com/limeorange/MatIssue/files/11956751/2.pdf">발표 전체 PPT</a>
@@ -164,4 +161,5 @@ NEXT_PUBLIC_AWS_ACCESS_KEY_ID={AWS_KEY}
 NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY={AWS_ACCESS_KEY}
 NEXT_PUBLIC_AWS_BUCKET_NAME={AWS_NAME}
 ```
-
+## 🏆 엘리스 SW 4기 2차 프로젝트 대상 수상
+  <img src="https://github.com/limeorange/MatIssue/assets/78308684/8f491ee6-d24d-4e8e-aee4-7bbd234758b4" alt="logo" width="350">
