@@ -139,12 +139,6 @@ const KakaoMap = (props: propsType) => {
           }
         }
 
-        // 특정 조건에 따라 폴리곤 색상 변경
-        if (districtName ===) {
-          // 실제로는 props.condition을 적절한 조건으로 변경해야 합니다.
-          changeColor("중구", "#09f"); // 색상은 원하는 색상 코드로 변경할 수 있습니다.
-        }
-
         const searchPlaces = () => {
           let keyword = props.searchKeyword;
 
