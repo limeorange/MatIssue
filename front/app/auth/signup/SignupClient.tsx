@@ -2,16 +2,9 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  FieldError,
-  FieldValues,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Image from "next/image";
-import { axiosBase } from "@/app/api/axios";
 import styled from "styled-components";
-import { toast } from "react-hot-toast";
 
 import Logo from "@/app/components/header/Logo";
 import Button from "@/app/components/UI/Button";
@@ -21,6 +14,7 @@ import {
   AuthFormWrapper,
   AuthNavBox,
   BirthdayInput,
+  BirthdayWrapper,
   ErrorMessageText,
   StyledInput,
   StyledLabel,
@@ -29,6 +23,8 @@ import {
 import LoadingModal from "@/app/components/UI/LoadingModal";
 import { useRecoilValue } from "recoil";
 import darkModeAtom from "@/app/store/darkModeAtom";
+import useBirthForm from "@/app/hooks/useBirthForm";
+import useSignup, { SignupValues } from "@/app/hooks/useSignup";
 
 const SignupClient = () => {
   const {
@@ -38,134 +34,38 @@ const SignupClient = () => {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<SignupValues>({
     defaultValues: {
       user_id: "",
       username: "",
       email: "",
       password: "",
+      password_confirm: "",
       year: "",
       month: "",
       day: "",
     },
   });
+  const { isLoading, signup } = useSignup();
+  const BirthForm = useBirthForm({
+    watch,
+    resetField,
+    setValue,
+    register,
+    isLoading,
+    formState: { errors },
+  });
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordConfirm, setShowPasswordConfirm] =
     useState<boolean>(false);
+
   const isDarkMode = useRecoilValue(darkModeAtom);
-
   const router = useRouter();
-  const yearInputRef = useRef<HTMLInputElement>(null);
-  const monthInputRef = useRef<HTMLInputElement>(null);
-  const dayInputRef = useRef<HTMLInputElement>(null);
-
-  const yearValue = watch("year");
-  const monthValue = watch("month");
-  const dayValue = watch("day");
-
-  const birthError = useCallback(() => {
-    return toast.error("올바른 생년월일을 입력하세요.");
-  }, []);
-
-  /** 4자리 입력시 month인풋으로 포커스이동, 다시 입력해서 5자리이상이되면 year 인풋 리셋 */
-  const yearChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const year = e.target.value;
-    if (year.length > 4) {
-      resetField("year");
-      birthError();
-      return;
-    }
-    if (+year < 0 || +year > 2023) {
-      resetField("year");
-      birthError();
-      yearInputRef.current?.focus();
-      return;
-    }
-    if (year.length === 4) {
-      monthInputRef.current?.focus();
-    }
-
-    setValue("year", year);
-  };
-
-  /** 2자리 입력시 day인풋으로 포커스이동, 다시 입력해서 3자리이상이되면 month 인풋 리셋 */
-  const monthChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const month = e.target.value;
-    if (month.length > 2) {
-      resetField("month");
-      birthError();
-      return;
-    }
-    if (0 > +month || +month > 12) {
-      resetField("month");
-      birthError();
-      monthInputRef.current?.focus();
-      return;
-    }
-
-    if (month.length === 2) {
-      dayInputRef.current?.focus();
-    }
-
-    setValue("month", month);
-  };
-
-  /** 2자리 입력시 day인풋에서 포커스 제거, 다시 입력해서 3자리이상이되면 day 인풋 리셋 */
-  const dayChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const day = e.target.value;
-    if (day.length > 2) {
-      resetField("day");
-      birthError();
-      return;
-    }
-    if (
-      (+monthValue === 1 || 3 || 5 || 7 || 8 || 10 || 12) &&
-      (0 > +day || +day > 32)
-    ) {
-      resetField("day");
-      birthError();
-      dayInputRef.current?.focus();
-      return;
-    } else if ((+monthValue === 4 || 6 || 9 || 11) && (0 > +day || +day > 31)) {
-      resetField("day");
-      birthError();
-      dayInputRef.current?.focus();
-      return;
-    } else if (+monthValue === 2 && (0 > +day || +day > 30)) {
-      resetField("day");
-      birthError();
-      dayInputRef.current?.focus();
-      return;
-    }
-    if (day.length === 2) {
-      dayInputRef.current?.blur();
-    }
-
-    setValue("day", day);
-  };
 
   /** auth 폼 제출 핸들러 */
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    setIsLoading(true);
-    const birthDate = data.year + "-" + data.month + "-" + data.day;
-    const userData = {
-      user_id: data.user_id,
-      username: data.username,
-      email: data.email,
-      password: data.password,
-      img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
-      birth_date: birthDate,
-    };
-
-    axiosBase
-      .post("users/", userData)
-      .then((res) => {
-        router.replace("/auth/signup/complete");
-      })
-      .catch((err) => toast.error(err.response.data.detail))
-      .finally(() => setIsLoading(false));
+  const onSubmit: SubmitHandler<SignupValues> = (data) => {
+    signup(data);
   };
 
   return (
@@ -306,7 +206,7 @@ const SignupClient = () => {
                 disabled={isLoading}
                 {...register("password_confirm", {
                   required: "비밀번호를 한번더 입력해주세요.",
-                  validate: (val: string) => {
+                  validate: (val: string | undefined) => {
                     if (watch("password") != val) {
                       return "비밀번호가 일치하지 않습니다.";
                     }
@@ -341,9 +241,9 @@ const SignupClient = () => {
                   max: 2023,
                 })}
                 maxLength={4}
-                ref={yearInputRef}
-                onChange={yearChangeHandler}
-                value={yearValue || ""}
+                ref={BirthForm.yearInputRef}
+                onChange={BirthForm.yearChangeHandler}
+                value={BirthForm.yearValue || ""}
                 placeholder="YYYY"
               />
               <BirthdayInput
@@ -360,9 +260,9 @@ const SignupClient = () => {
                   minLength: 2,
                 })}
                 maxLength={2}
-                ref={monthInputRef}
-                onChange={monthChangeHandler}
-                value={monthValue || ""}
+                ref={BirthForm.monthInputRef}
+                onChange={BirthForm.monthChangeHandler}
+                value={BirthForm.monthValue || ""}
                 placeholder="MM"
               />
               <BirthdayInput
@@ -378,9 +278,9 @@ const SignupClient = () => {
                   },
                 })}
                 maxLength={2}
-                ref={dayInputRef}
-                onChange={dayChangeHandler}
-                value={dayValue || ""}
+                ref={BirthForm.dayInputRef}
+                onChange={BirthForm.dayChangeHandler}
+                value={BirthForm.dayValue || ""}
                 placeholder="DD"
               />
             </BirthdayWrapper>
@@ -435,9 +335,4 @@ const ShowIconBox = styled.div<{ isDarkMode: boolean }>`
     props.isDarkMode
       ? "invert(89%) sepia(27%) saturate(436%) hue-rotate(334deg) brightness(105%) contrast(104%)"
       : "invert(18%) sepia(10%) saturate(2848%) hue-rotate(357deg) brightness(103%) contrast(82%)"};
-`;
-
-const BirthdayWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;

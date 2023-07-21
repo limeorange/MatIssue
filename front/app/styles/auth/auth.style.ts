@@ -69,6 +69,11 @@ export const StyledInput = styled.input<StyledInputProps>`
   }
 `;
 
+export const BirthdayWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 export const BirthdayInput = styled(StyledInput)<BirthdayInputProps>`
   width: ${(props) => (props.isYear ? "16rem" : "8rem")};
   }
