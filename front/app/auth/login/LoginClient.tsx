@@ -1,10 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { axiosBase } from "@/app/api/axios";
-import toast from "react-hot-toast";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import Logo from "@/app/components/header/Logo";
 import Button from "@/app/components/UI/Button";
@@ -18,20 +15,20 @@ import {
   StyledInput,
   UnderLineLinkDiv,
 } from "@/app/styles/auth/auth.style";
-import Cookies from "js-cookie";
 import styled from "styled-components";
-import { useQueryClient } from "@tanstack/react-query";
-import getCurrentUser from "@/app/api/user";
 import { useRecoilValue } from "recoil";
 import darkModeAtom from "@/app/store/darkModeAtom";
+import useLogin from "@/app/hooks/useLogin";
 
 const LoginClient = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const isDarkMode = useRecoilValue(darkModeAtom);
 
-  const client = useQueryClient();
+  const { isLoading, login } = useLogin();
 
-  const { register, handleSubmit } = useForm<FieldValues>({
+  const { register, handleSubmit } = useForm<{
+    user_id: string;
+    password: string;
+  }>({
     defaultValues: {
       user_id: "",
       password: "",
@@ -41,28 +38,10 @@ const LoginClient = () => {
   const router = useRouter();
 
   /** auth 폼 제출 핸들러 */
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    setIsLoading(true);
-    try {
-      const response = await axiosBase.post("users/login", data);
-      const sessionId = response.data.session_id;
-      Cookies.set("session-id", sessionId);
-
-      const currentUser = await getCurrentUser();
-      client.setQueryData(["currentUser"], currentUser);
-
-      router.back();
-      toast.success("로그인 되었습니다.");
-    } catch (err: any) {
-      const errorMessage = err?.response.data.detail;
-      toast.error(
-        errorMessage
-          ? errorMessage
-          : "등록되지 않은 아이디거나 아이디 또는 비밀번호를 잘못 입력했습니다."
-      );
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit: SubmitHandler<{ user_id: string; password: string }> = async (
+    data
+  ) => {
+    login(data);
   };
 
   return (
