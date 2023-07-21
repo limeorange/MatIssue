@@ -3,7 +3,6 @@ import KakaoMap from "./kakaoMap";
 import styled from "styled-components";
 
 export interface propsType {
-  condition: any;
   searchKeyword: string;
 }
 
