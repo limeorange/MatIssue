@@ -153,42 +153,60 @@ const TestPageClient = () => {
     setMBTI(result);
   };
 
-  // 이전 버튼 상태 업데이트 로직
+  // [ 이전 문제에서 클릭한 버튼의 번호를 가져오는 함수 ]
+  const getLastButtonNumber = (
+    lastButtonNumbers: (number | null)[],
+    count: number
+  ): number | null => {
+    return lastButtonNumbers[count - 2];
+  };
+
+  // [ 가져온 버튼의 번호를 null로 초기화 하는 함수 ]
+  const setLastButtonNumberToNull = (
+    lastButtonNumbers: (number | null)[],
+    count: number
+  ): (number | null)[] => {
+    const updated = [...lastButtonNumbers]; // 배열 복사
+    updated[count - 2] = null;
+    return updated;
+  };
+
+  // [ MBTI 업데이트 로직 ]
+  const updateMBTI = (lastButtonNumber: number, count: number) => {
+    const incrementValue = lastButtonNumber === 1 ? -1 : 1;
+
+    // MBTI 성향 업데이트 함수들을 배열로 정리
+    const updateFunctions = [setEI, setSN, setTF, setJP];
+
+    // count 값에 따른 배열 인덱스를 가져옴
+    const index = Math.floor((count - 1) / 3);
+
+    // 해당 성향 업데이트 함수 실행
+    updateFunctions[index]((prev) => prev + incrementValue);
+  };
+
+  // [ 뒤로가기 버튼 클릭시 실행 로직 (기존의 goBack) ]
   const updateBackButtonState = () => {
+    // 현재 count와 progress step을 감소
     setCount((prevCount) => prevCount - 1);
     setProgressStep((prevStep) => prevStep - 1);
-    // 이전 문제에서 클릭한 버튼 번호를 null로 초기화
-    setLastButtonNumbers((lastButtonNumbers) => {
-      const updatedLastButtonNumbers = lastButtonNumbers.map((num, index) =>
-        index === count - 2 ? null : num
-      );
-      const lastButtonNumber = updatedLastButtonNumbers[count - 2];
-      if (lastButtonNumber !== null) {
-        // lastButtonNumber에 따라 MBTI 성향을 업데이트
-        if (lastButtonNumber === 1) {
-          if (count <= 3) {
-            setEI((EI) => EI - 1);
-          } else if (count >= 4 && count <= 6) {
-            setSN((SN) => SN - 1);
-          } else if (count >= 7 && count <= 9) {
-            setTF((TF) => TF - 1);
-          } else if (count >= 10 && count <= 12) {
-            setJP((JP) => JP - 1);
-          }
-        } else {
-          if (count <= 3) {
-            setEI((EI) => EI + 1);
-          } else if (count >= 4 && count <= 6) {
-            setSN((SN) => SN + 1);
-          } else if (count >= 7 && count <= 9) {
-            setTF((TF) => TF + 1);
-          } else if (count >= 10 && count <= 12) {
-            setJP((JP) => JP + 1);
-          }
-        }
-      }
-      return updatedLastButtonNumbers;
-    });
+
+    // 이전 문제에서 클릭한 버튼의 번호를 가져옴
+    const lastButtonNumber = getLastButtonNumber(lastButtonNumbers, count);
+
+    if (lastButtonNumber !== null) {
+      // MBTI 업데이트 로직을 실행
+      updateMBTI(lastButtonNumber, count);
+    }
+
+    // 가져온 버튼의 번호를 null로 초기화
+    const updatedLastButtonNumbers = setLastButtonNumberToNull(
+      lastButtonNumbers,
+      count
+    );
+    setLastButtonNumbers(updatedLastButtonNumbers);
+
+    // 버튼 애니메이션 상태 업데이트
     setButtonAnimation(false);
   };
 
@@ -237,7 +255,7 @@ const TestPageClient = () => {
     }
   };
 
-  // 버튼 클릭 처리 함수
+  // [ 버튼 클릭 처리 함수 ]
   const handleButtonClick = async (updateState: Function) => {
     if (!isButtonDisabled) {
       setIsButtonDisabled(true); // 버튼 비활성화 상태로 변경
@@ -248,7 +266,7 @@ const TestPageClient = () => {
       const wait = (ms: number) =>
         new Promise((resolve) => setTimeout(resolve, ms));
 
-      // 로직 실행 전에 300ms 기다리기 (애니메이션 살행 시간)
+      // 로직 실행 전에 300ms 기다리기 (애니메이션 실행)
       await wait(300);
 
       // 상태 업데이트 로직
@@ -261,8 +279,9 @@ const TestPageClient = () => {
     }
   };
 
-  // 이전 버튼 클릭 이벤트 함수
+  // [ 이전 버튼 클릭 onClick 이벤트 함수 ]
   const clickBackButton = async () => {
+    // 2번 문제부터 로직 활성화
     if (count > 1) {
       handleButtonClick(updateBackButtonState);
     }
