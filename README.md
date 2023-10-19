@@ -57,8 +57,11 @@
 - 신유빈 (팀장)
 - 송호준 (BE 팀장)
 
-## 🍋 기술 스택
-![슬라이드14](https://github.com/limeorange/MatIssue/assets/78308684/24055bf4-2328-4643-909e-953591a494a8)
+<!-- ![슬라이드14](https://github.com/limeorange/MatIssue/assets/78308684/24055bf4-2328-4643-909e-953591a494a8) -->
+
+## 🍋 아키텍쳐
+![image](https://github.com/limeorange/MatIssue/assets/78308684/785500be-782c-4192-8a68-039d6fb89a21)
+
 
 ## 🥑 API 문서
 - [ERD](https://www.erdcloud.com/d/AW9MEiXv4g2T9mJHx)
